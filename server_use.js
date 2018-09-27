@@ -38,8 +38,8 @@ app.use(bodyParser.json({
 
 // Listen (start app with node server.js)
 var options = {
-    key: fs.readFileSync('openvidukey.pem'),
-    cert: fs.readFileSync('openviducert.pem')
+    key: fs.readFileSync('keys/server.key'),
+    cert: fs.readFileSync('keys/server.crt')
 };
 https.createServer(options, app).listen(5000);
 
