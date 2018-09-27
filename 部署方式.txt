@@ -1,0 +1,14 @@
+
+此项目来自https://github.com/OpenVidu/openvidu-tutorials/tree/master/openvidu-js-node,在源项目更新后，直接替换此项目里面的内容
+
+1：native安装 kms server , 仅限ubuntu16.04 参考: https://openvidu.io/docs/deployment/deploying-ubuntu/
+
+    turnserver 单独安装到 54.255.200.136(vpn服务器)上,其他的kms服务的turnserver使用此turnserver就可以了
+
+2:使用java的方式启动openvidu服务
+
+    java -Dopenvidu.secret=MY_SECRET -Dserver.ssl.key-store=/root/Excoord/Projects/openvidu_java/_.maaee.com.jks -Dserver.ssl.key-store-password=Excoord87651818 -Dserver.ssl.key-alias=1 -Dopenvidu.publicurl=https://kms.maaee.com:4443 -Dkms.uris=[\"ws://10.30.248.188:8888/kurento\",\"ws://10.30.248.170:8888/kurento\",\"ws://10.28.207.199:8888/kurento\"] -jar openvidu-server-2.4.0.jar
+
+3:使用openvidu服务
+
+    node server_use.js kms.maaee.com:4443 MY_SECRET
