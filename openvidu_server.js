@@ -243,4 +243,7 @@ function getBasicAuth() {
     return 'Basic ' + (new Buffer('OPENVIDUAPP:' + OPENVIDU_SECRET).toString('base64'));
 }
 
-/* AUXILIARY METHODS */
+
+process.on('uncaughtException', function(err) {
+    console.log(err);
+});

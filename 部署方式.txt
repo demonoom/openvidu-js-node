@@ -11,4 +11,4 @@
 
 3:使用openvidu服务
 
-    node server_use.js kms.maaee.com:4443 MY_SECRET
+    node openvidu_server.js kms.maaee.com:4443 MY_SECRET
