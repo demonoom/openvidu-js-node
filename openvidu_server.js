@@ -76,6 +76,12 @@ console.log("App listening on port 5000");
 /* CONFIGURATION */
 
 
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    next();
+});
 
 /* REST API */
 
@@ -91,10 +97,6 @@ app.post('/api-login/login', function (req, res) {
                                 userName: userName,
                                 role: OpenViduRole.PUBLISHER
                               };
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.status(200).send();
 });
 
@@ -102,10 +104,6 @@ app.post('/api-login/login', function (req, res) {
 app.post('/api-login/logout', function (req, res) {
     console.log("'" + req.session.loggedUser + "' has logged out");
     req.session.destroy();
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.status(200).send();
 });
 
@@ -113,10 +111,6 @@ app.post('/api-login/logout', function (req, res) {
 app.post('/api-sessions/get-token', function (req, res) {
     if (!isLogged(req.session)) {
         req.session.destroy();
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        res.header('Access-Control-Allow-Headers', 'Content-Type');
         res.status(401).send('User not logged');
     } else {
         // The video-call to connect
@@ -149,10 +143,6 @@ app.post('/api-sessions/get-token', function (req, res) {
                 .then(token => {
                     // Store the new token in the collection of tokens
                     mapSessionNamesTokens[sessionName].push(token);
-                    res.header("Access-Control-Allow-Origin", "*");
-                    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-                    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-                    res.header('Access-Control-Allow-Headers', 'Content-Type');
                     // Return the token to the client
                     res.status(200).send({
                         0: token
@@ -186,10 +176,6 @@ function createSession(res,sessionName,tokenOptions){
                     mapSessionNamesTokens[sessionName].push(token);
                     console.log("generateToken tokenOptions:"+JSON.stringify(tokenOptions)+"----token:"+token+" OpenVidu.hostname:"+OpenVidu.hostname);
 
-                    res.header("Access-Control-Allow-Origin", "*");
-                    res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-                    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-                    res.header('Access-Control-Allow-Headers', 'Content-Type');
                     // Return the Token to the client
                     res.status(200).send({
                         0: token
@@ -209,10 +195,6 @@ function createSession(res,sessionName,tokenOptions){
 app.post('/api-sessions/remove-user', function (req, res) {
     if (!isLogged(req.session)) {
         req.session.destroy();
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        res.header('Access-Control-Allow-Headers', 'Content-Type');
         res.status(401).send('User not logged');
     } else {
         // Retrieve params from POST body
@@ -232,10 +214,6 @@ app.post('/api-sessions/remove-user', function (req, res) {
                 console.log(sessionName + ': ' + tokens.toString());
             } else {
                 var msg = 'Problems in the app server: the TOKEN wasn\'t valid';
-                res.header("Access-Control-Allow-Origin", "*");
-                res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-                res.header("Access-Control-Allow-Headers", "X-Requested-With");
-                res.header('Access-Control-Allow-Headers', 'Content-Type');
                 console.log(msg);
                 res.status(500).send(msg);
             }
@@ -244,17 +222,9 @@ app.post('/api-sessions/remove-user', function (req, res) {
                 console.log(sessionName + ' empty!');
                 delete mapSessions[sessionName];
             }
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-            res.header("Access-Control-Allow-Headers", "X-Requested-With");
-            res.header('Access-Control-Allow-Headers', 'Content-Type');
             res.status(200).send();
         } else {
             var msg = 'Problems in the app server: the SESSION does not exist';
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-            res.header("Access-Control-Allow-Headers", "X-Requested-With");
-            res.header('Access-Control-Allow-Headers', 'Content-Type');
             console.log(msg);
             res.status(500).send(msg);
         }
