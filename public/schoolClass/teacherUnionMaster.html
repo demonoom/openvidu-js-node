@@ -1,0 +1,1746 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=base%>">
+
+<title>联合开课-主讲</title>
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta name="viewport" content="width=device-width,user-scalable=no" />
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/simple_websocket_connection.js?v=1"></script>
+<script type="text/javascript" src="js/clazz_websocket_connection.js?v=20"></script>
+<script type="text/javascript" src="js/uiutils.js"></script>
+<link rel="icon" href="img/logo_title.png" type="image/x-icon">
+<link type="text/css" rel="stylesheet" href="css/live.css?v=307" />
+<link type="text/css" rel="stylesheet" href="css/record_list.css?v=58" />
+<link type="text/css" rel="stylesheet" href="js/jquery-photo-gallery/photoGallery.css" />
+<script type="text/javascript" src="js/jquery-photo-gallery/jquery.photo.gallery.js?v=2"></script>
+
+<script type="text/javascript" src="js/jwplayer-7.1.4/jwplayer.js"></script>
+
+<script type="text/javascript" src="js/layer/layer.js"></script>
+
+<script type="text/javascript" src="js/agora/AgoraRTCSDK-2.3.1.js"></script>
+ 
+<link rel="stylesheet" href="js/agora/vendor/bootstrap.min.css">
+
+<!-- 引入Service类 -->
+<script type="text/javascript" src="js/service.js?v=5"></script>
+
+<script type="text/javascript" src="js/hashset.js"></script>
+<script type="text/javascript" src="js/list.js"></script>
+
+<script type="text/javascript" src="i18n/jquery.i18n.properties.js"></script>
+
+<script type="application/javascript" src="../openvidu-browser-2.4.0.js"></script>
+<script type="application/javascript" src="../ExRTCSDK-2.4.0.js"></script>
+
+<style type="text/css">
+
+.indicator_selected {
+	color: #000;
+	border-bottom: 2px solid #3a9cfc;
+	height: 40px;
+}
+
+video{
+	width: 100%;
+	height: 100%;
+}
+
+</style>
+
+</head>
+<body > 
+   <div id="big_video" class="big_video_new" style="display: none;">
+   </div>
+   
+   <div class="live_left" id="left" onmouseleave="showMaiXuTan(false);">
+	    <div id="video_container">
+		</div>
+		<div class="video_operation_menu video_center">
+		    <a onmouseover="showMaiXuTan(true);" class="video_operation_menu_a" string_id="string_maixu">麦序</a>
+
+		    <a id="dismiss_class" string_id="string_xiake" class="video_operation_menu_a" href="javascript:dismissClass();" ></a>
+		    <div id="maixu_tan" class="maixu_tan" style="display: none;">
+		        <div class="maixu_tan_header">麦序</div>
+		        <div id="mai_list" class="maixu_tan_cont">
+			    </div>
+		    </div>
+		</div>
+	     
+    </div>
+   	
+   	
+	<div class="live_cont" id="right">
+		<div class="live_cont_left" style="width:100%;">
+		 <div class="backleft_i" id="toggle_right" onclick="showTalkDiv();">
+		     <span id="image_message_badge" class="backri_i_red" style="display: none;color:red" ></span>
+		 </div>
+		      <div id="ppt_container">
+		         <div class="ppt_default ppt_default_center" id="ppt_empty">
+		             <div class="ppt_default_img"></div>
+		             <p class="ppt_default_text">您还未打开任何课件</p>
+		             <p class="ppt_default_text2">点击“打开课件”按钮开讲吧</p>
+		         </div>
+		         <iframe name="ppt_frame" id="ppt_frame" style="width: 100%;height: 100%; position: relative; z-index: 2"></iframe>
+		      </div>
+		      <div class="operation_menu_t">
+		         <a href="javascript:openPPT();" class="operation_menu_t_btn"  string_id="string_open_kejian">打开课件</a>
+		         <a href="javascript:openSubjects();" class="operation_menu_t_btn" string_id="string_push_subject">推送题目</a>
+		         <a href="javascript:openSubjectsTongji();" class="operation_menu_t_btn" string_id="string_ketang_tongji">课堂统计</a>
+		         <a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" text='打开讨论区' style="display: none;">关闭讨论区</a>
+		         <a id='language_select' href="javascript:changeLanguage();" class="En_icon_i Chinese_icon_i"></a>
+		      </div>
+		      <div class="questionDiv">
+				    <div class="questionTip">    
+				            <div class="cont">
+				                <div class="head">如何开启同步录制</div>
+				                <div class="text">
+				                    <div>1、<a class="down" href='http://60.205.86.217/upload2/common/小蚂蚁推流助手_v1.9.crx' target='_blank' class='push_contain_wrap_font'>点击此处下载小蚂蚁推流助手插件</a></div>
+				                    <div>2、将此插件拖动到chrome-更多工具-拓展程序中完成安装</div>
+				                    <div>3、点击右上角插件图标 <img src="img/icon_chajian.png"/> 开始同屏录制</div>
+				                </div>
+				            </div>
+				            <div class="rightArrowDiv"><i class="rightArrow"></i></div>
+				    </div>
+				    <div class="questionIcon">录</div>
+			</div>
+		</div>
+		
+		<span id="image_message_badge" style="display: none;color:red" >。</span>
+		
+		<!-- 公屏,麦序,在线区域 -->
+		<div id="gongping_container_parent" class="live_cont_right" style="display: none;">
+		 
+		    <div class="live_cont_right_header">
+		        <div class="live_cont_right_item">
+		        <span name='hudong' class="indicator_selected live_cont_right_item" style="width:100%" onclick="onIndicatorChanged(this);" string_id='string_hudong'>互动</span>
+		        <span id="message_badge" class="live_cont_right_item_red" style="display: none;"></span>
+		        </div>
+		        
+		        <span id="online_number" name='zaixian' class="live_cont_right_item" onclick="onIndicatorChanged(this);" string_id='string_online'>在线</span>
+		    </div>
+
+
+		 	<div id="gongping_totle" style="overflow: hidden;">
+		         <div id="gongping_container" class="live_gongping_t"></div>
+	  		     <div class="live_talk_send live_talk_send_t2">
+	  		     <a id='stop_student_speak' href="javascript:stopStudentSpeak();" class="operation_menu_t_btn"></a>
+	  		     	<input id="danmu_content"  placeholder="请输入讨论内容" class="live_input_t2" style="width:168px" string_id="string_shuru_taolun_neirong"/>
+					<button onclick="sendDanmu();" class="send_btn" string_id="string_send">发送</button>
+				 </div>
+		     </div>
+		     <div id="zaixian_totle" style="display: none;">
+		          <iframe id="zaixian_iframe" class="skin_live_iframe">
+		          </iframe>
+		     </div>
+		</div>
+	</div>
+	
+	<div id="message_text_template">
+		   <div class="live_talk_t">
+		   	  <div class="live_user" onclick="doHandleStudent(this);"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60"  class="green"></div>
+		   	  <div class="live_talk_info">
+		   	  	 <div id="user_name" class="live_name"></div>
+		     	 <div id="msg_content" class="live_info"></div>
+		   	  </div>
+		   </div>
+	</div>
+	
+	<div id="message_img_template">
+	   <div class="live_talk">
+	   	   <div class="live_user" onclick="doHandleStudent(this);"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60"  class="green"></div>
+	       <div class="live_talk_info">
+		   	  	 <div id="user_name" class="live_name"></div>
+		     	 <div id="msg_content" class="live_info"><img id="msg_img" class="topics_zanImg" onclick="showBigImages();"></img></div>
+		   </div>
+	   </div>
+	</div>
+	
+	
+	<div id="mai_user_template" style="display:none;">
+	    <div class="mai_id_t">
+	        <span class="mai_user_name" >张三</span>
+	        <span class="mai_user_state_t" ></span>
+	    </div>
+	</div>
+	
+	<div id="cloud_file_template" style="display: none;">
+	    <li>
+	       <img class="cloud_file_avatar"/>
+	       <span class="cloud_file_name"></span>
+	    </li>
+	</div>
+	
+	<div id="cloud_subjects_template" style="display: none;">
+	    <li>
+	       <img class="cloud_file_avatar"/>
+	       <span class="cloud_file_name"></span>
+	       <input class="checkbox checkbox_right2" type="checkbox" width="50px" height="50px"/>
+	    </li>
+	</div>
+</body>
+
+<script type="text/javascript">
+
+    var i18nLanguage = "zh-CN";
+    var languageUrl= getQueryString("language");
+    var audioSourceId = "";
+    var videoSourceId = "";
+    var speakStatus=false;
+    if("zh-CN"==languageUrl){
+ 	   i18nLanguage="zh-CN";
+    }else if("en"==languageUrl){
+    	i18nLanguage="en";
+    }
+    
+    function loadStrings() {
+		jQuery.i18n.properties({
+		    name:'strings', 
+		    path:'i18n/'+i18nLanguage,
+		    mode:'both',
+		    language:i18nLanguage, 
+		    callback: function() {
+		        loadingStringOk();
+		    }
+		});
+	}
+    
+    loadStrings();
+    
+    function loadingStringOk(){
+    	
+	      $("[string_id='string_change_newui']").text(jQuery.i18n.prop("string_change_newui"));
+	      $("[string_id='string_gaoqing']").text(jQuery.i18n.prop("string_gaoqing"));
+	      $("[string_id='string_biaoqing']").text(jQuery.i18n.prop("string_biaoqing"));
+	      $("[string_id='string_chaoqing']").text(jQuery.i18n.prop("string_chaoqing"));
+	    	
+	      $("[string_id='string_lianmai']").text(jQuery.i18n.prop("string_lianmai"));
+	      $("[string_id='string_duanmai']").text(jQuery.i18n.prop("string_duanmai"));
+	      
+	      $("[string_id='string_hudong']").text(jQuery.i18n.prop("string_hudong"));
+	      $("[string_id='string_online']").text(jQuery.i18n.prop("string_online"));
+	   	  $("[string_id='string_maixu']").text(jQuery.i18n.prop("string_maixu"));
+	      $("[string_id='string_xiake']").text(jQuery.i18n.prop("string_xiake"));
+	      $("[string_id='string_open_kejian']").text(jQuery.i18n.prop("string_open_kejian"));
+	      $("[string_id='string_push_subject']").text(jQuery.i18n.prop("string_push_subject"));
+	      $("[string_id='string_ketang_tongji']").text(jQuery.i18n.prop("string_ketang_tongji"));
+	      $("[string_id='string_close_taolun']").text(jQuery.i18n.prop("string_close_taolun"));
+	      $("[string_id='string_hudong_taolun']").text(jQuery.i18n.prop("string_hudong_taolun"));
+	      $("[string_id='string_send']").text(jQuery.i18n.prop("string_send"));
+	      $("[string_id='string_maiyiyuketang']").text(jQuery.i18n.prop("string_maiyiyuketang"));
+	      $("[string_id='string_shuru_taolun_neirong']").attr("placeholder",(jQuery.i18n.prop("string_shuru_taolun_neirong")));
+	      $("[string_id='string_face_stats']").text(jQuery.i18n.prop("string_face_stats"));
+	      var show_talkText = $("#show_talk").attr("text");
+		  if(show_talkText == '关闭讨论区'){
+				$("#show_talk").text(jQuery.i18n.prop("string_close_taolun"));
+		  }else{
+				$("#show_talk").text(jQuery.i18n.prop("string_open_taolun"));
+		  }
+	      if(i18nLanguage == 'zh-CN'){
+	  		$("#language_select").removeClass("Chinese_icon_i");
+	  		$("#language_select").removeClass("En_icon_i");
+	  		$("#language_select").addClass("En_icon_i");
+	  	  }else{
+	  		$("#language_select").removeClass("Chinese_icon_i");
+	  		$("#language_select").removeClass("En_icon_i");
+	  		$("#language_select").addClass("Chinese_icon_i");
+	  	  }
+	      
+	      changePPTLanguage();
+      
+    }
+    
+    function onIndicatorChanged(element){
+    	var indicator = $(element);
+    	$(".indicator_selected").removeClass("indicator_selected");
+    	indicator.addClass("indicator_selected");
+    	var name = indicator.attr("name");
+    	if(name == 'maixu'){
+    		$("#maixu_totle").show();
+    		$("#gongping_totle").hide();
+    		$("#zaixian_totle").hide();
+    	}else if(name == 'hudong'){
+    		$("#maixu_totle").hide();
+    		$("#gongping_totle").show();
+    		$("#zaixian_totle").hide();
+    		//取消互动消息的红点提示
+    		$("#message_badge").hide();
+    	}else if(name == 'zaixian'){
+    		$("#maixu_totle").hide();
+    		$("#gongping_totle").hide();
+    		$("#zaixian_totle").show();
+    	}
+    }
+    
+    function changePPTLanguage(){
+	       try{//设置ppt内容区域的国际化
+	      	  var pptDocument = window.frames['ppt_frame'].window.document;
+	      	  pptDocument.getElementById("pre_page").innerText = jQuery.i18n.prop("string_pre_page");
+	      	  pptDocument.getElementById("next_page").innerText = jQuery.i18n.prop("string_next_page");
+	      	  pptDocument.getElementById("clear_screen").innerText = jQuery.i18n.prop("string_clear_screen");
+	      	  pptDocument.getElementById("can_shouxie_tip").innerText = jQuery.i18n.prop("string_can_shouxie_tip");
+	      	  pptDocument.getElementById("can_not_shouxie_tip").innerText = jQuery.i18n.prop("string_can_not_shouxie_tip");
+	        }catch (e) {
+	        }
+    }
+    
+    function changeLanguage(){
+	    	if(i18nLanguage == 'zh-CN'){
+	    		i18nLanguage = 'en';
+	    	}else{
+	    		i18nLanguage = 'zh-CN';
+	    	}
+	    	loadStrings();
+    }
+   
+	window.history.pushState(null, null, document.URL);
+	window.addEventListener('popstate', function () {history.pushState(null, null, document.URL);});
+
+    var client, localStream;
+	
+	var streamMap = {};
+	var usersMap = {};
+	var mutedStreamIds = new HashSet();
+
+	function fullScreen(){
+	    $("#gongping_totle").height($(window).height());
+	    $("#gongping_totle").css({"max-height":$(window).height() });
+	}
+	
+	function showTalkDiv(){
+		var text = $("#show_talk").attr("text");
+		if(text == '关闭讨论区'){
+			$("#gongping_container_parent").hide();
+			$(".live_cont_left").css("width","100%");
+			$("#show_talk").attr("text","打开讨论区");
+			$("#show_talk").text(jQuery.i18n.prop("string_open_taolun"));
+			$("#toggle_right").removeClass("backri_i");
+			$("#toggle_right").removeClass("backleft_i");
+			$("#toggle_right").addClass("backleft_i");
+		}else{
+			$("#gongping_container_parent").show();
+			$(".live_cont_left").css("width","calc(100% - 300px)");
+			$("#show_talk").attr("text","关闭讨论区");
+			$("#show_talk").text(jQuery.i18n.prop("string_close_taolun"));
+			$("#toggle_right").removeClass("backri_i");
+			$("#toggle_right").removeClass("backleft_i");
+			$("#toggle_right").addClass("backri_i");
+			
+			$("#image_message_badge").hide();
+		}
+	}
+	
+    function showBigVideo(stream,show,sendCommand){
+    	  if(typeof(stream) == 'undefined'){
+    		  return;
+    	  }
+		  if(show){
+			  var current_stream = $("#big_video").attr("current_stream");
+		      if(current_stream == stream.getId()){
+		    	  $("#big_video").empty();
+		    	  $("#big_video").attr("current_stream","");
+		    	  $("#big_video").hide();
+
+		    	  if(sendCommand){
+		    		  //告诉学生不显示大视频
+			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':0}}" + ')');
+			     	  connection.send(protocal);
+		    	  }
+		    	  
+		      }else{
+		    	  $("#big_video").empty();
+		    	  $("#big_video").attr("current_stream","");
+
+		    	  $("#big_video").attr("current_stream",stream.getId());
+		    	  $("#big_video").show();
+		    	  
+                  $("#big_video").append("<video autoplay width='100%' height='100%' muted></video>");
+                  $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
+		    	  
+		    	  if(sendCommand){
+		    		  //告诉学生显示大视频
+			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':1}}" + ')');
+			     	  connection.send(protocal);
+		    	  }
+		      } 
+		  }else{
+			  var current_stream = $("#big_video").attr("current_stream");
+		      if(current_stream == stream.getId()){
+		    	  $("#big_video").empty();
+		    	  $("#big_video").attr("current_stream","");
+		    	  $("#big_video").hide();
+
+		    	  if(sendCommand){
+		    		  //告诉学生不显示大视频
+			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':0}}" + ')');
+			     	  connection.send(protocal);
+		    	  }
+		      }
+		  }
+	}
+	
+	fullScreen();
+	
+	window.onresize = function(){
+		 fullScreen();
+	};
+	
+	$('#danmu_content').bind('keydown',function(event){
+	    if(event.keyCode == "13") {
+	        sendDanmu();
+	    }
+	});
+  
+  var vid;
+  var userId = getQueryString("userId");
+  var userName = getQueryString("userName");
+  var title = getQueryString("title") ;
+  var livePassword = getQueryString("livePassword");
+  var pushUrl = null;
+  var isPreparedOK = false;
+  
+  var connection = new ClazzConnection();
+  
+  connection.clazzWsListener = {onError:function(errorMsg){
+ 	    //显示error并且回退页面
+	    layer.confirm(errorMsg, {
+		   btn: [jQuery.i18n.prop("string_sure")],
+		   closeBtn: 0
+		}, function(index){
+		   layer.close(index);
+		   window.close();
+		});
+  },onWarn:function(warnMsg){
+	  layer.msg(warnMsg);
+	  console.log("warnMsg:"+warnMsg);
+  },onMessage:function(info){
+ 	 var command = info.command;
+ 	 if(command == 'teacherUnionMasterLogin'){
+ 		 if(isPreparedOK){
+ 			 return;
+ 		 }
+ 		 vid = info.data.vid;
+ 		 var maiList = info.data.vclass_mai_list;
+ 		 var streamIds = info.data.elearing_muted_uids;
+ 		 pushUrl = info.data.push_url;
+ 		 addCurrentMaiList(maiList);
+ 		 addMutedStreamIds(streamIds);
+ 		 prepareVideoRoom(info.data);
+ 		 getVclassPPTOpenInfo(vid);
+ 		 showOnlineUsers(vid);
+ 		 speakStatus=info.data.screen_lock;
+ 		 initStudentSpeak();
+ 		 isPreparedOK = true;
+ 	 }else if(command == 'simpleClassDanmu'){
+		 var message = info.data.message;
+		 showMessage(message);
+	 }else if(command == 'classDanmu'){
+		 var message = info.data.message;
+		 showMessage(message);
+	 }else if(command == 'apply_for_mai'){
+		 var user = info.data.user;
+		 var type = info.data.type;
+		 if(type == 0){
+			 addMaiUser(user, 0); 
+		 }else{
+			 removeMaiUser(user.colUid);
+		 }
+	 }else if(command = 'elearnig_mute_audio'){
+		 var type = info.data.type;
+		 var streamId = info.data.streamId;
+		 //让其静音
+		 if(type == 0){
+			 mutedStreamIds.add(streamId);
+			 try{
+				 streamMap[streamId].disableAudio();
+			 }catch (e) {
+				 console.log(e);
+			 }
+		 }//取消静音
+		 else if(type == 1){
+			 mutedStreamIds.remove(streamId);
+			 try{
+				 streamMap[streamId].enableAudio();
+			 }catch (e) {
+				 console.log(e);
+			 }
+		 }
+	 }
+  }};
+  
+  function addMutedStreamIds(ids){
+	  if(ids.length > 0){
+		  for(var i = 0 ; i < ids.length ; i++){
+			  var streamId = ids[i];
+			  mutedStreamIds.add(streamId);
+		  }
+	  }
+  }
+
+
+  function showMessage(message){
+	  if(message.attachment != null){
+		    var template = $("#message_img_template");
+		    template.find("#user_name").text(message.fromUser.userName);
+		    template.find("#msg_img").attr("src",message.attachment.address);
+		    template.find(".live_user").attr("user_id",message.fromUser.colUid);
+		    template.find(".live_user").attr("user_utype",message.fromUser.colUtype);
+		    template.find(".live_user").attr("user_name",message.fromUser.userName);
+		    var scrollDiv = document.getElementById("gongping_container");
+		    var scrollTop = $("#gongping_container").scrollTop();
+			var scrollHeight = scrollDiv.scrollHeight;
+			if (scrollHeight-$("#gongping_container").height() <= scrollTop) {
+				  $("#gongping_container").append(template.html());
+				  scrollDiv.scrollTop = scrollDiv.scrollHeight;
+			}else{
+				  $("#gongping_container").append(template.html());
+			}
+			
+	  }else{
+		    var template = $("#message_text_template");
+		    template.find("#user_name").text(message.fromUser.userName);
+		    template.find("#msg_content").text(message.content);
+		    template.find(".live_user").attr("user_utype",message.fromUser.colUtype);
+		    template.find(".live_user").attr("user_name",message.fromUser.userName);
+		    template.find(".live_user").attr("user_id",message.fromUser.colUid);
+		    var scrollDiv = document.getElementById("gongping_container");
+		    var scrollTop =    $("#gongping_container").scrollTop();
+			var scrollHeight = scrollDiv.scrollHeight;
+			if (scrollHeight-$("#gongping_container").height() <= scrollTop) {
+				  $("#gongping_container").append(template.html());
+				  scrollDiv.scrollTop = scrollDiv.scrollHeight;
+			}else{
+				  $("#gongping_container").append(template.html());
+			}
+			
+	        
+	  }
+	  var indicatorName = $(".indicator_selected").attr("name");
+	  if(indicatorName == "hudong"){
+		  $("#message_badge").hide();
+	  }else{
+		  $("#message_badge").show();
+	  }
+	  
+	  if($("#gongping_container_parent").is(":hidden")){
+		  $("#image_message_badge").show();
+	  }else{
+		  $("#image_message_badge").hide();
+	  }
+  }
+  
+  
+  function playPPT(html,sendCommand){
+	 try{window.frames['ppt_frame'].window.clearScreen();}catch (e) {} 
+	 
+	 var newHTMLPath = html.replace("http://60.205.86.217","https://www.maaee.com");
+	 newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
+	 var url = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+newHTMLPath; 
+ 	 //var url = "http://192.168.50.34:8080/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt=http://192.168.50.34:8080/Excoord_For_Education/drawboard/ppt/ppt.html"; 
+	 $("#ppt_empty").hide();
+ 	 $("#ppt_container").show();
+ 	 $("#ppt_frame").attr("onload","changePPTLanguage();");
+     $("#ppt_frame").attr("src",url);
+     
+     if(sendCommand){
+    	 var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'"+newHTMLPath+"'}}" + ')');
+    	 connection.send(protocal);
+    	 
+    	 //让新版的学生端显示ppt
+		 var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
+	     connection.send(p1);
+     }
+  }
+
+  function playAntCloudFile(html,sendCommand,fileType){
+		 try{window.frames['ppt_frame'].window.clearScreen();}catch (e) {} 
+		 
+		 var newHTMLPath = html.replace("http://60.205.86.217","https://www.maaee.com");
+		 newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
+		 var url = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+newHTMLPath; 
+		 //var url = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&"+fileType+"="+newHTMLPath; 
+	 	 $("#ppt_empty").hide();
+		 $("#ppt_container").show();
+	 	 $("#ppt_frame").attr("onload","changePPTLanguage();");
+	     $("#ppt_frame").attr("src",url);
+	     
+	     if(sendCommand){
+	    	 var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'"+newHTMLPath+"'}}" + ')');
+	    	 connection.send(protocal);
+	    	 
+	    	 //让新版的学生端显示ppt
+			 var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
+		     connection.send(p1);
+	     }
+  }
+
+  function getVclassPPTOpenInfo(vid){
+	     var service = new Service();
+ 	     var param = {"method":'getVclassPPTOpenInfo',"vid" : vid+""};
+		 service.doWebService(JSON.stringify(param), {
+	 		   onResponse : function(result) {
+	 			    if(!result.success){
+	 			        return;
+	 			    }
+	 			    var openInfo = result.response;
+	 			    if(openInfo != null){
+	 			    	//打开课堂中的ppt
+	 			    	playPPT(openInfo.pptUrl,false);
+	 			    	//更换当前页
+	 			    	setTimeout(function(){
+	 			    		window.frames['ppt_frame'].window.pptCheckPage(openInfo.currentPage);
+	 			    	}, 1000);
+	 			    }
+	 			},
+	 			onError : function(error) {
+	 				
+	 			}
+		 });
+  }
+  
+  
+  function sendDanmu(){
+	  var content = $("#danmu_content").val();
+	  $("#danmu_content").val('');
+	  if(content != '' && content.length > 0){
+		  var protocal = eval('(' + "{'command':'simpleClassDanmu','data':{'content':'"+content+"'}}" + ')');
+		  connection.send(protocal); 
+	  }
+  }
+  
+  function showBigImages(){
+	  var e = window.event;
+	  $.openPhotoGallery(e.target,".live_gongping_t");
+  }
+  
+  function isTheUserVideoOnline(userId){
+	  var connectedMaiUsers = $(".mai_stream_user");
+	  var connectedUids = new HashSet();
+	  if(connectedMaiUsers != null && connectedMaiUsers.length > 0){
+		  for(var i = 0 ; i < connectedMaiUsers.length ; i++){
+			  var uid = $(connectedMaiUsers[i]).attr("uid");
+			  if(uid == null || uid == "" || typeof(uid) == 'undefined') {
+			     continue;
+			  }
+			  connectedUids.add(uid);
+		  }
+	  }
+	  return connectedUids.contains(userId+"");
+  }
+  
+  function showMaiList(){
+	  //所有麦序上的用户节点
+	  var allMaiUsers = $(".mai_id_t");
+	  var allUids = new HashSet();
+	  if(allMaiUsers != null && allMaiUsers.length > 0){
+		  for(var i = 0 ; i<allMaiUsers.length ; i++){
+			  var uid = $(allMaiUsers[i]).attr("uid");
+			  allUids.add(uid);
+		  }
+	  }
+	  
+	  //所有已连接的用户节点
+	  var connectedMaiUsers = $(".mai_stream_user");
+	  var connectedUids = new HashSet();
+	  if(connectedMaiUsers != null && connectedMaiUsers.length > 0){
+		  for(var i = 0 ; i < connectedMaiUsers.length ; i++){
+			  var uid = $(connectedMaiUsers[i]).attr("uid");
+			  if(uid == null || uid == "" || typeof(uid) == 'undefined') {
+			     continue;
+			  }
+			  connectedUids.add(uid);
+			  $("#mai_"+uid).find(".mai_user_state_t").text(jQuery.i18n.prop("string_duanmai"));
+			  $("#mai_"+uid).find(".mai_user_state_t").attr("onclick","updateMaiUserState("+uid+",0)");
+			  if(allUids.contains(uid)){
+				  allUids.remove(uid);
+			  }else{
+				  addMaiUser(usersMap[uid], 1);
+			  }
+		  }
+	  }
+	  
+	  allUids.each(function(uid){
+		  $("#mai_"+uid).find(".mai_user_state_t").text(jQuery.i18n.prop("string_lianmai"));
+		  $("#mai_"+uid).find(".mai_user_state_t").attr("string_id","string_lianmai");
+		  $("#mai_"+uid).find(".mai_user_state_t").attr("onclick","updateMaiUserState("+uid+",1)");
+	  });
+	  var html = $("#mai_list").html();
+	  var tabId = layer.tab({
+		  type: 1, 
+		  success: function (layero, index) {
+		  },		  
+		  area: ['420px', '240px'], //宽高
+		  tab: [{
+		    title: jQuery.i18n.prop("string_maixu"),
+		    content:"<div>"+html+"</div>",
+		  }, {
+		    title: '<span id="aliveNumber">在线人数</span>',
+		    type: 1, 
+		    content: '<iframe src="https://www.maaee.com/Excoord_PhoneService/elearning/getVclassMember/'+vid+'" class="skin_live_iframe"></iframe>'
+		  }]
+		});
+	  $("#layui-layer"+tabId+" .layui-layer-content").css("width","100%");
+  }
+
+  //打开课件-->只能打开ppt课件,而且ppt课件的htmlPath有值 完了之后调用 playPPT()方法
+  function openPPT(){
+	  //直接蚁盘中选择课件
+	  openKejianFromYipan();
+  }
+  function openKejianFromTeachSchedule(){
+	  layer.closeAll();
+	  teachSchedulsService = new Service();
+	  var optType="courseWare";
+	  var schedulsSpans="";
+	  getTeachScheduls(optType,schedulsSpans);
+  }
+  
+  var listCloudFileId = -1;
+  var clickStack = new List();
+  function goHistoryFile(fileId){
+	  cloudFileClick1(fileId);
+	  $("#history"+fileId).nextAll().remove();
+  }
+
+  function openKejianFromYipan(){
+	   layer.closeAll();
+	   cloudFileService = new Service();
+	   var historyHtml='<div id="historyFileLists" class="check_img_history">';
+	       historyHtml+='</span><span onclick="goHistoryFile(-1);" id="history-1">'+jQuery.i18n.prop("string_yipan")+'<i class="check_img_history2">></i></span>';
+		   historyHtml+='</div>';
+		   listCloudFileId=-1;
+		   var layerContent= $("<div>"+historyHtml+"<div id='cloud_file_container' class='yichao_ul'></div><div><span id='cloud_file_loading' class='more_font' loading_end_text='"+jQuery.i18n.prop("string_no_loading_more")+"' >"+jQuery.i18n.prop("string_loading_more")+"</span></div></div>").html();
+
+		var tabId=layer.tab({
+			  type: 1, 
+			  success: function (layero, index) {
+				  $("#cloud_file_loading").click(function(){
+					  listCloudFile(-1);
+				  });
+			  },
+			  area: ['616px', '540px'], //宽高
+			  skin:'check_images_title',
+			  tab: [{
+			    title: '<span class="check_images_title_le" id="checkFileTile1" onclick="exchangeColor(1);">'+jQuery.i18n.prop("string_xuanze_kejian")+'</span>',
+			    area: ['750px', '500px'], //宽高
+			    skin:'push_class_yichao',
+			    content:"<div>"+layerContent+"</div>",
+			  }, {
+			    title: '<span class="check_images_title_ri" id="checkFileTile2" onclick="exchangeColor(2);">'+jQuery.i18n.prop("string_xuanze_tupian")+'</span><span id="kejianImageNumer"></span>',
+			    type: 1, 
+			    content: '<iframe src="https://www.maaee.com/Excoord_PhoneService/elearning/checkImagesKejian/'+userId+'/'+vid+'/17?lang='+i18nLanguage+'" class="skin_live_iframe check_images_iframe"></iframe>'
+			  }]
+		});
+		$("#layui-layer"+tabId+" .layui-layer-content").css("width","100%");
+		$("#layui-layer"+tabId+" .layui-layer-content").css("overflow","hidden");
+		clickStack.clear();
+		clickStack.add(-1);
+		listCloudFile(-1);
+  }
+
+  function exchangeColor(i){
+	  if(i!=1){
+		  $("#checkFileTile1").removeClass("check_images_title_le").addClass("check_images_title_le_select");
+		  $("#checkFileTile2").removeClass("check_images_title_ri").addClass("check_images_title_ri_select");
+	  }else{
+		   $("#checkFileTile1").removeClass("check_images_title_le_select").addClass("check_images_title_le");
+		  $("#checkFileTile2").removeClass("check_images_title_ri_select").addClass("check_images_title_ri"); 
+	  }
+  }
+
+  function cancel(){
+	  var lay=parent.layer;
+	  parent.layer.close(0);
+  }
+
+  function listCloudFile(cloudFileId){
+	  var data = null;
+	  if(cloudFileId == -1){
+		  data = {'method':'getUserRootCloudFiles','userId':userId+''};
+	  }else{
+		  data = {'method':'listFiles','operateUserId':userId+'','cloudFileId':cloudFileId+'','queryConditionJson':''};
+	  }
+	  cloudFileService.doLoadingListWebService(data, $("#cloud_file_loading"), {onResponse:function(result){
+          if(!result.success){
+        	  alert(result.msg);
+        	  return;
+          }
+          var files = result.response;
+          if(files != null && files.length > 0){
+        	  for(var i = 0 ; i < files.length ; i++){
+        		  var file = files[i];
+        		  var template = $("#cloud_file_template");
+        		  if(file.fileType == 0){
+        			  if(file.name.endWith(".jpg")||file.name.endWith(".JPG")||file.name.endWith(".png")||file.name.endWith(".PNG")){
+        				  continue;
+        			  }
+        			  //文件
+        			  template.find(".cloud_file_avatar").attr("src","img/cloud_icon_web1.png");
+        			  template.find(".cloud_file_name").attr("onclick","cloudSingleFileClick('"+JSON.stringify(file)+"');");
+        		  }else{
+        			  //文件夹
+        			  template.find(".cloud_file_avatar").attr("src","img/cloud_icon_web.png");
+        			  template.find(".cloud_file_name").attr("onclick","cloudFileClick("+file.id+",true,'"+file.name+"');");
+        		  }
+        		  template.find(".cloud_file_name").text(file.name);
+        		  $("#cloud_file_container").append(template.html());
+        	  }
+          }
+      },onError:function(result){
+          alert(result);
+      }});
+  }
+
+  function warmTip(){
+	  layer.msg("仅支持音频文件");
+  }
+
+  function listCloudMusicFile(cloudFileId){
+	  var data = null;
+	  if(cloudFileId == -1){
+		  data = {'method':'getUserRootCloudFiles','userId':userId+''};
+	  }else{
+		  data = {'method':'listFiles','operateUserId':userId+'','cloudFileId':cloudFileId+'','queryConditionJson':''};
+	  }
+	  cloudFileService.doLoadingListWebService(data,$("#cloud_file_loading"), {onResponse:function(result){
+          if(!result.success){
+        	  alert(result.msg);
+        	  return;
+          }
+          var files = result.response;
+          if(files != null && files.length > 0){
+        	  for(var i = 0 ; i < files.length ; i++){
+        		  var file = files[i];
+        		  var template = $("#cloud_file_template");
+        		  if(file.fileType == 0){
+        			  if(file.name.endWith(".mp3")||file.name.endWith(".mp4")||file.name.endWith(".MP3")||file.name.endWith(".MP4")){
+        			  //文件
+	        			  template.find(".cloud_file_avatar").attr("src","img/cloud_icon_web1.png");
+	        			  template.find(".cloud_file_name").attr("onclick","cloudSingleFileClick('"+JSON.stringify(file)+"');");
+        			  }else{
+	       				  template.find(".cloud_file_avatar").attr("src","img/cloud_icon_web1.png");
+	           			  template.find(".cloud_file_name").attr("onclick","warmTip();"); 
+        			  }
+        		  }else{
+        			  //文件夹
+        			  template.find(".cloud_file_avatar").attr("src","img/cloud_icon_web.png");
+        			  template.find(".cloud_file_name").attr("onclick","musicFileClick("+file.id+",true,'"+file.name+"');");
+        		  }
+        		  template.find(".cloud_file_name").text(file.name);
+        		  $("#cloud_file_container").append(template.html());
+        	  }
+          }
+      },onError:function(result){
+          alert(result);
+      }});
+  }
+
+  function cloudSingleFileClick(file){
+	  file = JSON.parse(file);
+	  if(file.name.endWith(".ppt") || file.name.endWith(".pptx")){
+		  var htmlPath = file.htmlPath;
+		  if(typeof(htmlPath)!="undefined" && htmlPath!=null){
+			  layer.closeAll();
+			  playPPT(htmlPath,true);
+		  }else{
+			  layer.msg(jQuery.i18n.prop("string_no_zhuanma"));
+		  }
+	  }else if(file.name.endWith(".doc") || file.name.endWith(".docx")){
+		  var htmlPath = file.pdfPath;
+		  if(typeof(htmlPath)!="undefined" && htmlPath!=null){
+			  layer.closeAll();
+			  playAntCloudFile(htmlPath,true,'pdf');
+		  }else{
+			  layer.msg(jQuery.i18n.prop("string_no_zhuanma"));
+		  }
+	  }else if(file.name.endWith(".pdf")){
+		  var htmlPath = file.pdfPath;
+		  if(typeof(htmlPath)!="undefined" && htmlPath!=null){
+			  layer.closeAll();
+			  playAntCloudFile(htmlPath,true,'pdf');
+		  }else{
+			  layer.msg(jQuery.i18n.prop("string_no_zhuanma"));
+		  }
+	  }else if(file.name.endWith(".jpg")){
+		  var htmlPath = file.path;
+		  if(typeof(htmlPath)!="undefined" && htmlPath!=null){
+			  layer.closeAll();
+			  playAntCloudFile(htmlPath,true,'images');
+		  }else{
+			  layer.msg(jQuery.i18n.prop("string_no_zhuanma"));
+		  }
+	  }else if(file.name.endWith(".mp3")||file.name.endWith(".mp4")||file.name.endWith(".MP3")||file.name.endWith(".MP4")){
+		  var htmlPath = file.path;
+		  if(typeof(htmlPath)!="undefined" && htmlPath!=null){
+			  layer.closeAll();
+			  addEclassBackgroundMusic(file.name,file.path);
+		  }else{
+			  layer.msg(jQuery.i18n.prop("string_no_zhuanma"));
+		  }
+	  }else{
+		  layer.msg(jQuery.i18n.prop("string_only_ppt"));
+	  }
+	  var id=file.id;
+	  if(!(file.name.endWith(".mp3")||file.name.endWith(".mp4")||file.name.endWith(".MP3")||file.name.endWith(".MP4"))){
+	      asynClassReview(id);
+	  }
+  }
+
+  function asynClassReview(fileIds){
+	var param = {
+            "method": 'useCloudFileInClass',
+            "vclassId": vid,
+            "cid": fileIds,
+        };
+        var asynClassReviewService = new Service();
+        asynClassReviewService.doWebService(JSON.stringify(param),{onResponse : function(result) {
+			var data = result.response;
+            if (!result.success) {
+            	 UiUtils.toast(result.msg);
+                return;
+            }
+           console.log(data);
+		}}); 
+  }
+
+  function cloudFileClick(fileId,isUserClick,name){
+	  cloudFileService = new Service();
+	  listCloudFileId = fileId;
+	  $("#cloud_file_container").empty();
+	  $("#cloud_file_loading").text(jQuery.i18n.prop("string_loading_more"));
+	  if(fileId!=-1){
+		    $("#historyFileLists").append("<span id='history"+fileId+"' onclick='goHistoryFile("+fileId+")'>"+name+"<span class='check_img_history2'>></span>"+"</span>");
+		  }
+	  //$("#cloud_file_loading").remove()
+	  $("#cloud_file_loading").unbind("click");
+	  $("#cloud_file_loading").click(function(){
+		  listCloudFile(fileId);
+		});
+	  if(isUserClick){
+		  clickStack.add(fileId);
+	  }
+	  listCloudFile(listCloudFileId);
+  }
+
+  function musicFileClick(fileId,isUserClick,name){
+	  cloudFileService = new Service();
+	  listCloudFileId = fileId;
+	  $("#cloud_file_container").empty();
+	  $("#cloud_file_loading").text(jQuery.i18n.prop("string_loading_more"));
+	  if(fileId!=-1){
+		    $("#historyFileLists").append("<span id='history"+fileId+"' onclick='goHistoryFile("+fileId+")'>"+name+"<span class='check_img_history2'>></span>"+"</span>");
+		  }
+	  $("#cloud_file_loading").unbind("click");
+	  $("#cloud_file_loading").click(function(){
+		  listCloudMusicFile(fileId);
+		});
+	  if(isUserClick){
+		  clickStack.add(fileId);
+	  }
+	  listCloudMusicFile(listCloudFileId);
+  }
+  function cloudFileClick1(fileId,name){
+	  cloudFileService = new Service();
+	  listCloudFileId = fileId;
+	  $("#cloud_file_container").empty();
+	  $("#cloud_file_loading").text(jQuery.i18n.prop("string_loading_more"));
+	  listCloudFile(listCloudFileId);
+  }
+  function cloudMusicFileClick1(fileId,name){
+	  cloudFileService = new Service();
+	  listCloudFileId = fileId;
+	  $("#cloud_file_container").empty();
+	  $("#cloud_file_loading").text(jQuery.i18n.prop("string_loading_more"));
+	  listCloudMusicFile(listCloudFileId);
+  }
+  function cloudFileBack(){
+	  if(clickStack.size() <= 1){
+		  return;
+	  }
+	  clickStack.removeIndex(clickStack.size() - 1);
+	  var current = clickStack.get(clickStack.size() - 1);
+	  cloudFileClick(current,false,name);
+  }
+  
+  /**************************************************/
+  
+   function openSubjectFromYipan(){
+	    layer.closeAll();
+	    cloudFileService = new Service();
+	    var layerContent= $("<div><span onclick='cloudSubjectsFileBack();' class='elearning_back'><img src='img/elerning_back_web.png' ></span><div id='cloud_file_container' class='yichao_ul' style='height:369px'></div><div><span id='cloud_file_loading' class='more_font' loading_end_text='"+jQuery.i18n.prop("string_no_loading_more")+"' onclick='listCloudFileSubjects("+listCloudFileId+");'>"+jQuery.i18n.prop("string_loading_more")+"</span></div><div class='teacher_modol_foot'><span onclick='pushYipanSubjets();'>推送题目</span></div></div>").html();
+		layer.open({
+			type: 1,
+			title: jQuery.i18n.prop("string_select_subjects_from_yipan")+'',
+			area: ['750px', '500px'], //宽高
+			content: layerContent,
+			shade: 0.0,
+			skin:'push_class_yichao'
+		});
+		clickStack.clear();
+		clickStack.add(-1);
+		listCloudFileSubjects(-1);
+  }
+
+  /**
+  *题目详情
+  */
+
+  function listCloudFileSubjects(cloudFileId){
+	  var data = null;
+	  if(cloudFileId == -1){
+		  data = {'method':'getUserRootCloudSubjects','userId':userId+''};
+	  }else{
+		  data = {'method':'listCloudSubject','cloudFileId':cloudFileId+''}; 
+	  }
+	  cloudFileService.doLoadingListWebService(data, $("#cloud_file_loading"), {onResponse:function(result){
+          if(!result.success){
+        	  alert(result.msg);
+        	  return;
+          }
+          var files = result.response;
+          if(files != null && files.length > 0){
+        	  for(var i = 0 ; i < files.length ; i++){
+        		  var file = files[i];
+        		  var template = $("#cloud_subjects_template");
+        		  template.find(".cloud_file_name").empty();
+        		  if(file.fileType == 2){
+        			  //题目
+        			  template.find(".cloud_file_avatar").attr("src","img/subject_icon.png");
+        			  template.find(".cloud_file_name").removeAttr("onclick");
+        			  template.find(".checkbox").css("display","inline-block");
+        			  template.find(".checkbox").attr("subjectId",file.subject.id);
+        			  template.find(".cloud_file_name").append("<div>"+file.name+"</div>");
+        		  }else if(file.fileType == 1){
+        			  //文件夹
+        			  template.find(".cloud_file_avatar").attr("src","img/cloud_icon_web.png");
+        			  template.find(".cloud_file_name").attr("onclick","cloudFileSubjectClick("+file.id+",true);");
+        			  template.find(".cloud_file_name").append(file.name);
+        			  template.find(".checkbox").hide();
+        		  }
+        		  
+        		  $("#cloud_file_container").append(template.html());
+        	  }
+          }
+      },onError:function(result){
+          alert(result);
+      }});
+  }
+  
+  function cloudFileSubjectClick(fileId,isUserClick){
+	  cloudFileService = new Service();
+	  listCloudFileId = fileId;
+	  $("#cloud_file_container").empty();
+	  $("#cloud_file_loading").text(jQuery.i18n.prop("string_loading_more"));
+	  if(isUserClick){
+		  clickStack.add(fileId);
+	  }
+	  listCloudFileSubjects(listCloudFileId);
+  }
+  
+  function cloudSubjectsFileBack(){
+	  if(clickStack.size() <= 1){
+		  return;
+	  }
+	  clickStack.removeIndex(clickStack.size() - 1);
+	  var current = clickStack.get(clickStack.size() - 1);
+	  cloudFileSubjectClick(current,false);
+  }
+  
+  /**************************************************/
+  
+  
+  //打开题目，选中后可以选择推送
+  function openSubjects(){
+	  //直接全部从蚁盘选题目，之前的逻辑丢掉
+	  openSubjectFromYipan();
+  }
+  
+  function openSubjectsTongji(){
+	  var url = "https://www.maaee.com/ant_service/edu/subject_result_web?uid="+userId+"&vid="+vid+"";
+	  layer.open({
+		  type: 2,
+		  title: jQuery.i18n.prop("string_ketang_tongji")+'',
+		  shade: 0.8,
+		  area: ['35%', '95%'],
+		  content:url //iframe的url
+		}); 
+  }
+
+  function dismissClass(){
+	  
+	  layer.confirm(jQuery.i18n.prop("string_queding_xiake"), {
+		     btn: [jQuery.i18n.prop("string_sure")],
+		     closeBtn: 1,
+		     title:jQuery.i18n.prop("string_xiake")
+	   }, function(index){
+		     leave();
+		     var protocal = eval('(' + "{'command':'classOver'}" + ')');
+			 connection.send(protocal);
+		     connection.disconnect();
+		     layer.close(index);
+		     window.close();
+	   });
+  }
+
+  //检查直播环境
+  function checkDevice(){
+	  layer.open({
+		  type: 1,
+		  title: '音视频设备检测',
+		  shadeClose: false,
+		  shade: 0.2,
+		  skin:'device_wrap',
+		  closeBtn:0,
+		  area: ['380px', '260px'],
+		  content: "<iframe width='100%' height='100%' src='html/device/device_check.html?v=3' onload='onCheckResult(this);'></iframe>" //iframe的url
+	   });
+  }
+  
+  function onCheckResult(iframe){
+	  iframe.contentWindow.start({"onMediaOK":function(media){
+		  audioSourceId = media.audioInputSource;
+		  videoSourceId = media.videoSource;
+		  
+		  //只有环境OK，才能进行后面的操作
+		  var loginProtocol={};
+		  loginProtocol.command='teacherUnionMasterLogin';
+		  loginProtocol.data={};
+		  loginProtocol.data.userId=userId;
+		  loginProtocol.data.liveTitle=title;
+          loginProtocol.data.livePassword=livePassword;
+          loginProtocol.data.clazzId = getQueryString("clazzId");
+		  connection.connect(loginProtocol);
+		  setTimeout(function(){
+			  layer.closeAll();
+		  }, 500);
+	  },"onMediaError":function(){
+		  iframe.contentWindow.showErrorPage();
+	  }});
+  }
+  
+  //检查设备
+  checkDevice();
+ 
+  function addCurrentMaiList(maiList){
+	 if(maiList != null && maiList.length > 0){
+		 for(var i = 0 ;i < maiList.length ; i++){
+			 var maiObject = maiList[i];
+			 addMaiUser(maiObject.user,maiObject.state);
+		 }
+	 }
+  }
+  
+  //0申请连麦 1正在连麦
+  function addMaiUser(user,state){
+	 if(user == 'undefined' || typeof(user) == 'undefined'){
+		 return;
+	 }
+	//已经有此人了，就不能重复添加了
+	if(document.getElementById("mai_"+user.colUid)){
+		return;
+	}
+	var template = $("#mai_user_template");
+	if (user.schoolName != null && typeof(user.schoolName) != "undefined"){
+		template.find(".mai_user_name").text(user.userName+"("+user.schoolName+")");
+	}else{
+		template.find(".mai_user_name").text(user.userName);
+	}
+	template.find(".mai_id_t").attr("id","mai_"+user.colUid);
+	template.find(".mai_id_t").attr("uid",user.colUid);
+	if(state == 0){
+		template.find(".mai_user_state_t").text(jQuery.i18n.prop("string_lianmai"));
+		template.find(".mai_user_state_t").attr("string_id","string_lianmai");
+		template.find(".mai_user_state_t").attr("onclick","updateMaiUserState("+user.colUid+",1)");
+	}else{
+		template.find(".mai_user_state_t").text(jQuery.i18n.prop("string_duanmai"));
+		template.find(".mai_user_state_t").attr("string_id","string_duanmai");
+		template.find(".mai_user_state_t").attr("onclick","updateMaiUserState("+user.colUid+",0)");
+	}
+	$("#mai_list").prepend(template.html());
+	template.find(".mai_id_t").attr("id","mai_template");
+	template.find(".mai_id_t").attr("uid","");
+	usersMap[user.colUid] = user;
+	if($("#mai_list").children().length > 0){
+		$("#lianmai_empty").hide();
+	}else{
+		$("#lianmai_empty").show();
+	}
+  }
+ 
+  function removeMaiUser(userId){
+	 $("#mai_"+userId).remove();
+	 if($("#mai_list").children().length > 0){
+		$("#lianmai_empty").hide();
+	 }else{
+		$("#lianmai_empty").show();
+	 }
+  }
+ 
+  function updateMaiUserState(userId,state){
+	 layer.closeAll();
+	 if(state == 0){
+		 if(!isTheUserVideoOnline(userId)){
+			 $("#mai_"+userId).find(".mai_user_state_t").text(jQuery.i18n.prop("string_lianmai"));
+			 $("#mai_"+userId).find(".mai_user_state_t").attr("string_id","string_lianmai");
+			 $("#mai_"+userId).find(".mai_user_state_t").attr("onclick","updateMaiUserState("+userId+",1)");
+		 }
+		 //进行断麦处理
+		 disconnectMai(userId);
+		 layer.closeAll();
+		 UiUtils.toastPC(jQuery.i18n.prop("string_duanmai_ing"));
+	 }else if(state == 1){
+		 //进行连麦处理
+		 agreeConnectMai(userId);
+		 layer.closeAll();
+		 UiUtils.toastPC(jQuery.i18n.prop("string_lianmai_ing"));
+	 }
+  }
+ 
+  function disconnectMai(userId){
+	 var protocal = eval('(' + "{'command':'disconnect_mai','data':{'userId':"+userId+"}}" + ')');
+	 connection.send(protocal);
+	 $('#agora_remote' + userId).remove();
+  }
+ 
+  function agreeConnectMai(userId){
+	 var protocal = eval('(' + "{'command':'agree_connect_mai','data':{'userId':"+userId+"}}" + ')');
+	 connection.send(protocal);
+  }
+
+
+  function playLocalVideo(){
+		   console.log("getUserMedia successfully");
+
+		   try{
+			 $("#agora_local").parent().remove();
+		   }catch(e){}
+
+		   $("#video_container").prepend("<div><div id='agora_local' uid='"+userId+"' style='width: 230px; height: 160px; position: relative;margin: 12px 5px 0 5px;'><div style='position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px'>主讲</div><img id='audio_"+userId+"' style='color:red;' class='radio_no' text='' onclick='toggleMuteAudio("+userId+");'/></div></div>");
+
+		   client.publish(null, "agora_local");
+
+		   client.on('stream-published', function (evt) {
+               localStream = evt.stream;
+               streamMap[localStream.getId()] = localStream;
+
+               try{$('#agora_local').unbind("click");}catch(e){}
+               $('#agora_local').click(function(){
+                   showBigVideo(localStream,true,true);
+               });
+			   //检查当前的大流是谁
+			   showEclassCurrentBigStreamId();
+
+               //如果它已经被静音，则在此处设置让其静音
+               if(mutedStreamIds.contains(localStream.getId())){
+                   localStream.disableAudio();
+               };
+               onAudioMutedStateChange(localStream.getId());
+		   });
+  }
+ 
+ 
+  function prepareVideoRoom(data){
+	     client = new ExRTC();
+
+	 　   client.join(vid+"", userId,userName, function() {
+			 console.log("User " + userId + " join channel successfully");
+			 playLocalVideo();
+	 　　 }, function() {
+		　	 console.log("Join channel failed");
+	  　  });
+
+
+	    client.on('stream-added', function (evt) {
+		      var stream = evt.stream;
+		      if(stream.getId() <= 1){
+		    	  return;
+		      }
+		      console.log("New stream added: " + stream.getId());
+		      console.log("Subscribe ", stream);
+
+              var userName = evt.user.userName;
+              $('div#video_container #agora_remote'+stream.getId()).remove();
+              $('div#video_container').append('<div class="mai_stream_user" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative;margin: 12px 5px 0 5px;"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div><span onclick="updateMaiUserState(' + stream.getId() +', 0)" style="position:absolute; right:0; bottom:0; color:#fff; background:rgba(34, 34, 34, 0.6); z-index:1; text-align:center; width:45px; height:24px;line-height:24px;  overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" href="javascript:void(0)" string_id="string_duanmai">断麦</span></div>');
+
+
+              client.subscribe(stream,"agora_remote"+stream.getId());
+
+		      $("#mai_"+stream.getId()).find(".mai_user_state_t").text(jQuery.i18n.prop("string_duanmai"));
+		      $("#mai_"+stream.getId()).find(".mai_user_state_t").attr("string_id","string_duanmai");
+			  $("#mai_"+stream.getId()).find(".mai_user_state_t").attr("onclick","updateMaiUserState("+stream.getId()+",0)");
+	    });
+
+	    client.on('stream-subscribed', function (evt) {
+		      var stream = evt.stream;
+		      console.log("Subscribe remote stream successfully: " + stream.getId());
+			  //添加stream和stream id的对应关系
+			  streamMap[stream.getId()] = stream;
+			  try{$('#agora_remote' + stream.getId()).unbind("click");}catch(e){}
+			  $('#agora_remote' + stream.getId()).click(function(){
+				  showBigVideo(stream,true,true);
+			  });
+			  //如果它已经被静音，则在此处设置让其静音
+			  if(mutedStreamIds.contains(stream.getId())){
+				  stream.disableAudio();
+			  };
+			  onAudioMutedStateChange(stream.getId());
+			  //计算当前的大流
+			  showEclassCurrentBigStreamId();
+	    });
+
+	    client.on('stream-removed', function (evt) {
+		      var stream = evt.stream;
+			  $('#agora_remote' + stream.getId()).remove();
+			  console.log("Remote stream is removed " + stream.getId());
+			  showBigVideo(stream,false,false);
+			  //stream.stop();
+
+			  $("#mai_"+stream.getId()).find(".mai_user_state_t").text(jQuery.i18n.prop("string_lianmai"));
+			  $("#mai_"+stream.getId()).find(".mai_user_state_t").attr("string_id","string_lianmai");
+			  $("#mai_"+stream.getId()).find(".mai_user_state_t").attr("onclick","updateMaiUserState("+stream.getId()+",1)");
+		      //计算当前的大流
+		      showEclassCurrentBigStreamId();
+	    });
+
+  }
+ 
+
+  function onAudioMutedStateChange(streamId){
+	  var isMuted = mutedStreamIds.contains(Number(streamId));
+	  if(isMuted){
+		  $("#audio_"+streamId).attr("src","http://60.205.111.227/upload2/common/mute.png");
+		  $("#audio_"+streamId).attr("text","取消静音");
+	  }else{
+		  $("#audio_"+streamId).attr("src","http://60.205.111.227/upload2/common/unmute.png");
+		  $("#audio_"+streamId).attr("text","静音");
+	  }
+  }
+ 
+  function toggleMuteAudio(streamId){
+	 var text = $("#audio_"+streamId).attr("text");
+	 if(text == '静音'){
+		 //do mute
+		 mutedStreamIds.add(streamId);
+		 streamMap[streamId].disableAudio();
+		 onAudioMutedStateChange(streamId);
+		 
+		 //告诉其他人静音此stream
+   	     var protocal = eval('(' + "{'command':'elearnig_mute_audio','data':{'streamId':"+streamId+",'type':0}}" + ')');
+    	 connection.send(protocal);
+		 
+	 }else if(text == '取消静音'){
+		 //do unmute
+		 mutedStreamIds.remove(streamId);
+		 streamMap[streamId].enableAudio();
+		 
+		 onAudioMutedStateChange(streamId);
+		 
+		 //告诉其他人取消静音此stream
+   	     var protocal = eval('(' + "{'command':'elearnig_mute_audio','data':{'streamId':"+streamId+",'type':1}}" + ')');
+    	 connection.send(protocal);
+	 }
+	 var  e= window.event;
+	 e.stopPropagation();
+  }
+ 
+  //推送题目
+  function pushSubjects(sids){
+	 var protocal = eval('(' + "{'command':'pushSubjecShowContentUrl','data':{'sids':'"+sids+"'}}" + ')');
+	 connection.send(protocal);
+	 layer.msg(jQuery.i18n.prop("string_push_ok"));
+  }
+ 
+  function pushYipanSubjets(){
+	 var elements = $(".checkbox_right2");
+	 var ids = "";
+	 for(var i = 0 ; i< elements.length;i++){
+		 var subjectId = $(elements[i]).attr("subjectId");
+		 if(subjectId > 0 && $(elements[i]).is(':checked')){
+			 ids = ids + subjectId + ",";
+		 }
+	 }
+	 if(ids != ""){
+		 pushSubjects(ids);
+	 }else{
+		 layer.msg("请先选择要推送的题目~~");
+	 }
+  }
+ 
+  /****************************************打开课件和推送题目逻辑***************************************************/
+  //获取备课计划的service
+  var teachSchedulsService = new Service();
+  //获取备课计划下课件的service
+  var getMaterialsService = new Service();
+  //获取备课计划下题目的service
+  var getSubjectsService = new Service();
+  
+  var cloudFileService = new Service();
+  
+  /**
+  * 获取老师的备课计划
+  */
+  function getTeachScheduls(optType,schedulsSpans){
+	  var param = {
+  			"method":"getTeachScheduls",
+  			"ident":userId+''
+  	  };
+	  teachSchedulsService.doLoadingListWebService(param,$("#getMoreSchedule_loading"),{onResponse:function(result){
+          if(!result.success){
+        	  alert(result.msg);
+        	  return;
+          }
+          //当前老师的备课计划列表
+          var teachScheduls = result.response;
+          if(teachScheduls.length > 0){
+        	  var scheduleId;
+        	  teachScheduls.forEach(function (teachScheduls) {
+                  var scheduleId = teachScheduls.colTsId;
+                  var courseName = teachScheduls.colTitle;
+                  var courseSpan="<li id=\""+scheduleId+"\" name=\"teachSchedulLi\">"+courseName+"</li>";                  
+                  schedulsSpans+=courseSpan;                  
+              });
+        	  //在窗口中显示当前获取的备课计划
+        	  if(optType=="courseWare"){
+        		  //显示推送课件的窗口
+        		  showScheduleLayer(schedulsSpans);  
+        	  }else{
+        		  //显示推送题目的窗口
+        		  showSubjectLayer(schedulsSpans);
+        	  }
+        	  $("li[name='teachSchedulLi']").click(function(){
+        		  //alert(this.id);
+        		  scheduleId = this.id;
+        		  if(optType=="courseWare"){
+            		  //获取备课计划下的课件资源
+            		  getMaterialsService = new Service();
+        			  getMaterialsBySheduleId(scheduleId);
+            	  }else{
+            		  //获取备课计划下题目的service
+            		  getSubjectsService = new Service();
+            		  //获取备课计划下的题目资源
+            		  getClassSubjects(scheduleId);
+            	  }
+        	  });
+        	  //获取更多的备课计划
+        	  $("#getMoreSchedule_loading").click(function(){
+        		  getTeachScheduls(optType,schedulsSpans);
+        	  });
+        	 //获取更多的备课计划下的课件资源
+        	  $("#getCourseWare_loading").click(function(){
+        		  getMaterialsBySheduleId(scheduleId);
+        	  });
+        	 //获取备课计划下更多的题目资源
+        	 $("#getSubject_loading").click(function(){
+        		 getClassSubjects(scheduleId);
+        	 });
+        	 //推送题目按钮点击时的响应函数
+        	  $("#pushSubjectButton").click(function(){
+        		    var mulitiSelectedTagArray = $("input[name='subjectCheckbox']:checked");
+	      			var selectedSubjectId="";
+	      			for (var i = 0; i < mulitiSelectedTagArray.length; i++) {
+	      				var inputTag = mulitiSelectedTagArray[i];
+	      				if(i!=mulitiSelectedTagArray.length-1){
+	      					selectedSubjectId += inputTag.value+",";	
+	      				}else{
+	      					selectedSubjectId += inputTag.value;
+	      				}
+	      			}
+	      			if(mulitiSelectedTagArray.length > 0){
+	      				pushSubjects(selectedSubjectId);
+	      			}
+        	  });
+          }
+      },onError:function(result){
+          alert(result);
+      }});
+  }
+  
+  /**
+  * 显示推送课件的窗口
+  * 获取到的schedulsSpans，封装了当次查询到的所有的备课计划
+  */
+  function showScheduleLayer(schedulsSpans){
+	  var layerContent= $("<div>"+
+	  		"<div id=\"leftDiv\" style=\"border:0;border-style:groove;width:242px; height:458px; background:#F6FBFF; position:absolute\">"+
+	  			"<div id=\"leftTitle\" style=\"margin-bottom:0px\" class=\"show_schedule_left_title\"><span>"+jQuery.i18n.prop("string_beikejihuan")+"</span><hr class=\"hr_line\"></div>"+
+		  		"<ul id=\"scheduleUl\" class=\"schedule_ul\">"+schedulsSpans+"</ul>"+
+		  		"<div id=\"pageDiv\" style=\"margin-bottom:0px\">"+
+	  			"<div id=\"getMoreSchedule_loading\" loading_end_text='"+jQuery.i18n.prop("string_no_loading_more")+"' class=\"more_font\">"+jQuery.i18n.prop("string_loading_more")+"</div></div>"+
+	  		"</div>"+
+	  		"<div id=\"rightDiv\" style=\"width:488px;margin-left:262px\">"+
+				"<ul id=\"courseWareUl\" class=\"courseWareUl\"></ul>"+
+				"<div id=\"getCourseWare_loading\" loading_end_text='"+jQuery.i18n.prop("string_no_loading_more")+"' class=\"more_font\">"+jQuery.i18n.prop("string_loading_more")+"</div></div>"+
+				"</div>"+
+	  		"</div>").html();
+	  layer.open({
+		  type: 1,
+		  title: jQuery.i18n.prop("string_push_kejian")+'',
+		  area: ['750px', '500px'], //宽高
+		  content: layerContent,
+		  skin:'push_class_5'
+		});
+  }
+  
+  /**
+   * 显示推送题目的窗口
+   * 获取到的schedulsSpans，封装了当次查询到的所有的备课计划
+   */
+   function showSubjectLayer(schedulsSpans){
+ 	  var layerContent=$("<div>"+
+	 	  		"<div id=\"leftDiv\" style=\"border:0px;border-style:groove;width:242px;height:100%; background:#F6FBFF; position:absolute\">"+
+	 	  			"<div id=\"pageDiv\" style=\"margin-bottom:0px\" class=\"show_schedule_left_title\"><span>"+jQuery.i18n.prop("string_beikejihuan")+"</span><hr class=\"hr_line\"></div>"+
+	 	  			"<ul class=\"schedule_ul\">"+schedulsSpans+"</ul>"+
+	 	  			"<div id=\"pageDiv\" style=\"margin-bottom:0px\">"+
+		  			"<div id=\"getMoreSchedule_loading\" loading_end_text='"+jQuery.i18n.prop("string_no_loading_more")+"' class=\"more_font\">"+jQuery.i18n.prop("string_loading_more")+"</div></div>"+
+	 	  		"</div>"+
+	 	  		"<div id=\"rightDiv\" style=\"width:488px;margin-left:262px\">"+
+		 	  		"<div id=\"pushButtonDiv\"><input id=\"pushSubjectButton\" type=\"button\" class=\"courseWareUl_push\" value=\""+jQuery.i18n.prop("string_push")+"\"/></div>"+
+		 	  		"<div><ul id=\"courseWareUl\" class=\"courseWareUl_2\"></ul></div>"+
+		 	  		"<div id=\"getSubject_loading\" loading_end_text='"+jQuery.i18n.prop("string_no_loading_more")+"' class=\"more_font\">"+jQuery.i18n.prop("string_loading_more")+"</div></div>"+
+	 	  		"</div>"+
+ 	  		"</div>").html();
+ 	  layer.open({
+ 		  type: 1,
+ 		 title: jQuery.i18n.prop("string_push_subject")+'',
+ 		  area: ['750px', '500px'], //宽高
+ 		  content: layerContent
+	  });
+   }
+  
+  /**
+  * 根据备课计划名称，获取老师某个备课计划下的课件
+  */
+  function getMaterialsBySheduleId(teachScheduleId){
+	  var param = {
+	  			"method":"getMaterialsBySheduleId",
+	  			"scheduleId":teachScheduleId+'',
+	  };
+	  $("#getCourseWare_loading").text(jQuery.i18n.prop("string_loading_more"));
+	  getMaterialsService.doLoadingListWebService(param,$("#getCourseWare_loading"),{onResponse:function(result){
+	          if(!result.success){
+	        	  alert(result.msg);
+	        	  return;
+	          }
+	          //当前老师的备课计划下的课件列表
+	          var courseWares = result.response;
+	          var courseWareLis="";
+	          if(courseWares.length > 0){
+	        	  courseWares.forEach(function (courseWare) {
+	                  var courseWareId = courseWare.id;
+	                  var fileName = courseWare.name;
+	                  var htmlPath = courseWare.htmlPath;
+	                  var courseWareLi="<li id=\""+courseWareId+"\" htmlPath=\""+htmlPath+"\"  name=\"courseWareLi\">"+fileName+"</li>";                  
+	                  courseWareLis+=courseWareLi;                  
+	              });
+	          }else{
+	        	  courseWareLis="";
+	          }
+	          //在窗口中显示当前获取的备课计划
+        	  $("#courseWareUl")[0].innerHTML=courseWareLis;
+        	  $("li[name='courseWareLi']").click(function(){
+        		  var htmlPath = $(this).attr("htmlPath");
+        		  var mid = $(this).attr("id");
+        		  if(typeof(htmlPath)!="undefined" && htmlPath!=null && htmlPath!="undefined"){
+        			  layer.closeAll();
+        			  useMaterialInclass(mid);
+        			  playPPT(htmlPath,true);
+        		  }else{
+        			  layer.msg(jQuery.i18n.prop("string_only_ppt"));//获取到htmlPath,调用playPPT  
+        		  }
+        	  });
+	      },onError:function(result){
+	          alert(result);
+	      }});
+  }
+  
+  function useMaterialInclass(mid){
+	  var service = new Service();
+	  var param = {"method":'useMaterialInClass',"vclassId" : vid+"","materialId":mid+""};
+	  service.doWebService(JSON.stringify(param), {
+		   onResponse : function(result) {
+		   },
+		   onError : function(error) {
+		   }
+	  });
+  }
+  
+  /**
+   * 根据备课计划名称，获取老师某个备课计划下的题目
+   */
+   function getClassSubjects(teachScheduleId){
+ 	  var param = {
+ 	  			"method":"getClassSubjects",
+ 	  			"ident":userId,
+ 	  			"teachScheduleId":teachScheduleId+'',
+	  };
+ 	  $("#getSubject_loading").text(jQuery.i18n.prop("string_loading_more"));
+ 	  getSubjectsService.doLoadingListWebService(param,$("#getSubject_loading"),{onResponse:function(result){
+ 	          if(!result.success){
+ 	        	  alert(result.msg);
+ 	        	  return;
+ 	          }
+ 	          //当前老师的备课计划下的课件列表
+ 	          var subjects = result.response;
+ 	          var subjectLis="";
+ 	          if(subjects.length > 0){
+ 	        	 subjects.forEach(function (subject) {
+ 	        		var subjectId = subject.id;
+ 	        		var courseWareCheckbox = "<li><input type=\"checkbox\" name=\"subjectCheckbox\" class=\"checkbox_course\"  value=\""+subjectId+"\" /> <article>"
+					+ subject.content + "</article></li>";
+					subjectLis+=courseWareCheckbox;
+ 	              });
+ 	          }else{
+ 	        	 subjectLis="";
+ 	          }
+ 	          //在窗口中显示当前获取的备课计划
+         	  $("#courseWareUl")[0].innerHTML=subjectLis;
+ 	      },onError:function(result){
+ 	          alert(result);
+ 	      }});
+   }
+  
+  
+  String.prototype.endWith=function(str){     
+	  var reg=new RegExp(str+"$");
+	  return reg.test(this);
+  };
+
+  function showOnlineUsers(vid){
+	  $("#zaixian_iframe").attr("src","Excoord_PhoneService/elearning/getVclassMember/"+vid);
+  }
+
+  function showEclassCurrentBigStreamId(){
+	  setTimeout(function(){
+		  var service = new Service();
+	      var param = {"method":'getEclassCurrentBigStreamId',"vid" : vid+""};
+		  service.doWebService(JSON.stringify(param), {
+	 		   onResponse : function(result) {
+	 			    if(!result.success){
+	 			        return;
+	 			    }
+	 			    var currentUid = result.response;
+	 			    if(currentUid > 0){
+	 			    	if(isTheUserVideoOnline(currentUid) || currentUid == userId){
+	 			    		var currentStreamId = $("#big_video").attr("current_stream");
+	 			    		if(typeof(currentStreamId) =='undefined' || currentStreamId == "" || currentStreamId <=0){
+	 			    			showBigVideo(streamMap[currentUid], true,false);
+	 			    		}
+	 			    	}
+	 			    }
+	 			},
+	 			onError : function(error) {
+	 			}
+		   });
+	   }, 800);
+  }
+  
+  function showMaiXuTan(show){
+	  if(show){
+		  $("#maixu_tan").show();
+		  $("#bg_list").hide();
+	  }else{
+		  $("#maixu_tan").hide();
+	  }
+  }
+  
+
+  function getQueryString(name){
+		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r!=null) {
+			return unescape(r[2]);
+		}
+		return null;
+  }
+
+  function leave() {
+	  client.leave();
+  }
+
+  function initStudentSpeak(){
+	  if(typeof(speakStatus)=='undefined'||speakStatus==false){
+			 $("#stop_student_speak").addClass("stop_student_speak1");
+			 $("#stop_student_speak").removeClass("stop_student_speak");
+	  }else{
+			 $("#stop_student_speak").addClass("stop_student_speak");
+			 $("#stop_student_speak").removeClass("stop_student_speak1");
+	  }
+  }
+
+  function stopStudentSpeak(){
+	 if(typeof(speakStatus)=='undefined'||speakStatus==false){
+		 speakStatus=true;
+		 $("#stop_student_speak").addClass("stop_student_speak");
+		 $("#stop_student_speak").removeClass("stop_student_speak1");
+		 UiUtils.toastPC("学生已被禁言，再次点击按钮可关闭禁言功能");
+	 }else{
+		 $("#stop_student_speak").addClass("stop_student_speak1");
+		 $("#stop_student_speak").removeClass("stop_student_speak");
+		 UiUtils.toastPC("学生禁言功能已关闭");
+		 speakStatus=false;
+	 }
+	  var protocal = eval('(' + "{'command':'screen_lock','data':{'screen_lock':"+speakStatus+"}}" + ')');
+	  connection.send(protocal); 
+  }
+
+  function doHandleStudent(el){
+	  var uId = $(el).attr("user_id");
+	  var userName = $(el).attr("user_name");
+	  var userUtype = $(el).attr("user_utype");
+	  if(userId==uId||userUtype!='STUD'){
+		  return;
+	  }
+	  layer.confirm('将学生'+userName+'踢出课堂？', {
+		  btn: ['踢出','取消'] //按钮
+	     ,shade: 0.0
+	     , area: ['260px', '170px'],
+	     skin: 'goOutClassModal', 
+	    }, function(){
+			doHandleStudentCommcand(uId,el);
+	    }, function(){
+	  });
+  }
+
+  function doHandleStudentCommcand(uId,el){
+	  var protocal = eval('(' + "{'command':'pushKickOff','data':{'uid':"+uId+"}}" + ')');
+	  connection.send(protocal); 
+	  layer.closeAll();
+	  $(el).parent().remove();
+  }
+
+  window.addEventListener('message', function(event) {
+  	if (event.source != window)
+          return;
+	    var data = event.data;
+	    if(data.from != 'extension' && data.tabUrl != window.location.href){
+	    	return;
+	    }
+	    if(data.action){
+	    	 if(data.action == 'requestStartCapture'){
+	    		data.action='responseStartCapture';
+	 	    	data.maxWidth = 720;
+	 	    	data.minWidth = 720;
+	 	    	data.maxHeight = 480;
+	 	    	data.minHeight = 480;
+	 	    	data.maxFrameRate = 30;
+	 	    	data.minFrameRate = 30;
+	 	    	data.pushUrl = pushUrl;
+	 	    	data.webSocketUrl = "https://jiaoxue.maaee.com:9003/";
+	 	    	data.from="webpage";
+	 	    	data.timeSlice = 1500;
+	 	    	data.tabUrl = window.location.href;
+		 	    window.postMessage(data, '*');
+	 	    }
+	    }
+	});
+  
+</script>
+
+</html>

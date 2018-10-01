@@ -1,0 +1,259 @@
+@fontColor:#55baff;
+@lineColor:#ededed;
+a:active{
+  color:#ccc;
+}
+body{
+  width: 100%;
+  height:100%;
+}
+.gray {
+  font-size:1rem;
+  color:gray;
+}
+.times{
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+.mask{
+  display: none;
+  width:100%;
+  height:100%;
+  background:rgba(182,182,182,0.5);
+  position:fixed;
+}
+.container {
+  width: 100%;
+  >.title {
+    z-index:999;
+    width:100%;
+    height: 3.5rem;
+    padding:0.8rem;
+    position: fixed;
+    background: white;
+    h3 {
+      display: inline-block;
+      font-size: 1.5rem;
+      color: #535758;
+      position: absolute;
+      left:50%;
+      top:20%;
+      transform:translateX(-50%);
+      font-weight: bold;
+    }
+    a {
+      color:@fontColor;
+      font-weight: bold;
+    }
+    .help {
+      font-size: 1.4rem;
+      position: absolute;
+      right:3%;
+    }
+    .arrow {
+      padding-right: 10%;
+    }
+    .cross {
+      padding-right: 10%;
+      display: none;
+    }
+
+  }
+  >.main {
+    width:100%;
+    overflow: hidden;
+    >.header {
+      height:4.5rem;
+      border-top: 1px solid @lineColor;
+      border-bottom: 1px solid @lineColor;
+      margin-top: 3.5rem;
+      overflow: hidden;
+      >.user {
+        overflow: hidden;
+        height:100%;
+        padding-left: 3%;
+        float: left;
+        padding-top: 0.7rem;
+        .circle{
+          width:3rem;
+          height: 3rem;
+          background: #f36950;
+          color:white;
+          float: left;
+          border-radius:50%;
+          text-align: center;
+          line-height: 3rem;
+          margin-right: 0.8rem;
+        }
+        .name {
+          float:right;
+          margin-top: -0.4rem;
+          >.username {
+            font-size: 1.5rem;
+
+          }
+        }
+      }
+      >.data {
+        height:100%;
+        line-height: 450%;
+        float: right;
+        padding-right: 3%;
+        >.year{
+          margin-right: 0.5rem;
+        }
+      }
+    }
+    >.timer {
+      padding:2rem 1rem 0 1rem;
+      >.record {
+        margin-bottom: 2rem;
+      }
+      .circle2{
+        display: inline-block;
+        width: 0.5rem;
+        height: 0.5rem;
+        background: @fontColor;
+        border-radius: 50%;
+        margin-right: 1.5rem;
+        transform:translate(-30%,-165%)
+      }
+      >ul {
+        margin-top: 1rem;
+        >li{
+          height:12rem;
+          border-left: 1px solid gray;
+          padding-left: 2rem;
+          position: relative;
+          .circle3{
+            display: inline-block;
+            width: 0.5rem;
+            height: 0.5rem;
+            background: gray;
+            position: absolute;
+            top:0;
+            left:-0.3rem;
+            border-radius: 50%;
+          }
+          .location{
+            margin-bottom: 1rem;
+          }
+          a{
+            color:#aaa;
+          }
+        }
+      }
+      >.gray{
+        >span{
+          display: inline-block;
+        }
+      }
+    }
+    >.btnBox{
+      height: 17rem;
+      width:100%;
+      position: absolute;
+      >.btn {
+        .top{
+          font-size:1.2rem;
+          >.together{
+          }
+        }
+
+        >.count{
+          display: block;
+          font-size:0.5rem;
+          margin-top: 0.5rem;
+        }
+        padding:0;
+        border:0;
+        outline:0;
+        background: @fontColor;
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+        position:absolute;
+        left:50%;
+        transform: translateX(-50%);
+        color:white;
+        font-size:1rem;
+        text-align: center;
+      }
+    }
+  }
+}
+.picker{
+  display: none;
+  background: white;
+  z-index:2;
+  position: absolute;
+  top:10rem;
+  left:50%;
+  transform: translateX(-50%);
+}
+.success {
+  display: none;
+  width: 100%;
+  position: fixed;
+  width: 24rem;
+  height: 30rem;
+  background: #7073f9;
+  left:50%;
+  transform: translateX(-50%);
+  top:20%;
+  border-radius: 5px;
+  text-align: center;
+  .successful{
+    height: 10rem;
+    line-height: 10rem;
+    font-size:2.8rem;
+    color:white;
+  }
+  .sst{
+    width: 100%;
+    height: 5rem;
+    .sti{
+      height: 5rem;
+      width: 10rem;
+      background: #f1f2f9;
+      margin:0 auto;
+      border-radius: 5px;
+      font-size:1.5rem;
+    }
+  }
+  .slogan{
+    height: 9rem;
+    margin-top: 3rem;
+    color:white;
+    font-size:1.5rem;
+  }
+  .know{
+    height:3rem;
+    line-height: 3rem;
+    color:white;
+    font-size:1.5rem;
+    border-top: 1px solid #ccc;
+  }
+}
+.footer {
+  height: 4rem;
+  width:100%;
+  border-top: 1px solid #ccc;
+  position: fixed;
+  bottom: 0;
+  border-bottom: 0;
+  display: flex;
+  background: white;
+  >div{
+    flex:1;
+    text-align: center;
+    line-height: 4rem;
+    color:#ccc;
+    margin-top: 0.2rem;
+  }
+  .calc {
+    padding-top: 0.5rem;
+    font-size:1rem;
+  }
+
+}

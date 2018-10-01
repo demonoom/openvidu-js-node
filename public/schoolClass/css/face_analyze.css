@@ -1,0 +1,190 @@
+@charset "utf-8";
+/* CSS Document */
+.face_analyze_title{
+	font-size: 3rem;
+    color: #4a90e2;
+    font-weight: normal;
+    text-align: center;
+    padding: 3rem 0;
+    margin:0
+}
+.face_analyze_people{
+	margin-left:30px;
+	color:#333;
+	font-size:2rem;
+	position: absolute;
+    right: 30px;
+}
+.face_analyze_people span{
+	color:#333
+}
+.face_analyze_people_s{
+	color: #2e9e32;
+    padding: 0 14px;
+    font-size: 4rem;
+    position:relative;
+    top:3px;
+}
+.face_analyze_ul{
+	padding:1rem;
+	height:calc(50% - 4rem)
+}
+.face_analyze_ul2{
+	margin-top:3rem;
+}
+.face_analyze_ul li{
+	list-style:none;
+	flex:1;
+	max-width:25%;
+	text-align:center;
+	color:#000;
+	position:relative;
+}
+.face_analyze_ul li.interval1{
+	margin:0 1rem;
+}
+.face_analyze_ul li.interval2{
+	margin-right:1rem;
+}
+.face_analyze_h4{
+	margin: 55px 0 15px 0;
+    font-size: 2.2rem;
+}
+.face_analyze_grade{
+	font-size: 5rem;
+    line-height: 1;
+}
+.face_analyze_icon{
+	width:62px;
+	height:62px;
+	background:rgba(255, 255, 255, 0.4);
+	border-radius:50%;
+	position: absolute;
+    top:0;
+    left:50%;
+    transform:translate(-50%, -30px);
+    -ms-transform:translate(-50%, -30px); /* IE 9 */
+    -moz-transform:translate(-50%, -30px); /* Firefox */
+    -webkit-transform:translate(-50%, -30px); /* Safari 和 Chrome */
+    -o-transform:translate(-50%, -30px);
+    display:inline-block;
+    text-align:center;
+}
+.face_analyze_icon span{
+	background: rgba(255, 255, 255, 0.6);
+    width: 42px;
+    height: 42px;
+    margin-top: 10px;
+    display: inline-block;
+    border-radius: 50%;
+}
+.face_analyze_icon span i{
+    width: 28px;
+    height: 28px;
+    margin-top: 7px;
+    display: inline-block;
+}
+.face_analyze_icon span i.i1{
+    background: url(../img/face_icon1.png) no-repeat;
+    background-size: 28px;
+}
+.face_analyze_icon span i.i2{
+    background: url(../img/face_icon2.png) no-repeat;
+    background-size: 28px;
+}
+.face_analyze_icon span i.i3{
+    background: url(../img/face_icon3.png) no-repeat;
+    background-size: 28px;
+}
+.face_analyze_icon span i.i4{
+    background: url(../img/face_icon4.png) no-repeat;
+    background-size: 28px;
+}
+.face_analyze_icon span i.i5{
+    background: url(../img/face_icon5.png) no-repeat;
+    background-size: 28px;
+}
+.face_analyze_icon span i.i6{
+    background: url(../img/face_icon6.png) no-repeat;
+    background-size: 28px;
+}
+.face_analyze_icon span i.i7{
+    background: url(../img/face_icon7.png) no-repeat;
+    background-size: 28px;
+}
+.face_analyze_icon span i.i8{
+    background: url(../img/face_icon8.png) no-repeat;
+    background-size: 28px;
+}
+.gradient{
+	width:100%;
+   /*  */ 
+}
+.gradient1{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ffcec9,endcolorstr=#ff5643,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#ffcec9,endcolorstr=#ff5643,gradientType=0);/*IE8*/	
+    background:#ff5643; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, #ffcec9, #ff5643);  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#ffcec9), to(#ff5643));  
+    background:-o-linear-gradient(top, #ffcec9, #ff5643); 
+}
+.gradient2{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#feefc8,endcolorstr=#ffb936,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#feefc8,endcolorstr=#ffb936,gradientType=0);/*IE8*/	
+    background:#ffb936; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, #feefc8, #ffb936);  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#feefc8), to(#ffb936));  
+    background:-o-linear-gradient(top, #feefc8, #ffb936); 
+}
+.gradient3{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#b4edba,endcolorstr=#85e8c6,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#b4edba,endcolorstr=#85e8c6,gradientType=0);/*IE8*/	
+    background:#85e8c6; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, #b4edba, #85e8c6);  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#b4edba), to(#85e8c6));  
+    background:-o-linear-gradient(top, #b4edba, #85e8c6); 
+}
+.gradient4{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7ecffe,endcolorstr=#3d8efd,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7ecffe,endcolorstr=#3d8efd,gradientType=0);/*IE8*/	
+    background:#3d8efd; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, #7ecffe, #3d8efd);  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#7ecffe), to(#3d8efd));  
+    background:-o-linear-gradient(top, #7ecffe, #3d8efd); 
+}
+.gradient5{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#abe7ee,endcolorstr=#4db9ff,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#abe7ee,endcolorstr=#4db9ff,gradientType=0);/*IE8*/	
+    background:#4db9ff; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, #abe7ee, #4db9ff);  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#abe7ee), to(#4db9ff));  
+    background:-o-linear-gradient(top, #abe7ee, #4db9ff); 
+}
+.gradient6{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#c3fda9,endcolorstr=#59c22d,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#c3fda9,endcolorstr=#59c22d,gradientType=0);/*IE8*/	
+    background:#59c22d; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, #c3fda9, #59c22d);  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#c3fda9), to(#59c22d));  
+    background:-o-linear-gradient(top, #c3fda9, #59c22d); 
+}
+.gradient7{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#f1e3f4,endcolorstr=#fa83ed,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#f1e3f4,endcolorstr=#fa83ed,gradientType=0);/*IE8*/	
+    background:#fa83ed; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, #f1e3f4, #fa83ed);  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#f1e3f4), to(#fa83ed));  
+    background:-o-linear-gradient(top, #f1e3f4, #fa83ed); 
+}
+
+.gradient8{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#fff2d0,endcolorstr=#ff8f36,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#fff2d0,endcolorstr=#ff8f36,gradientType=0);/*IE8*/	
+    background:#ff8f36; /* 一些不支持背景渐变的浏览器 */  
+    background:-moz-linear-gradient(top, #fff2d0, #ff8f36);  
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#fff2d0), to(#ff8f36));  
+    background:-o-linear-gradient(top, #fff2d0, #ff8f36); 
+}
+.gradeent_hight{
+	    height: calc(100% - 117px);
+}

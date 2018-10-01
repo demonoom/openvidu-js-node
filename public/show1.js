@@ -48,7 +48,7 @@ function joinSession() {
         localStream = stream;
         initMainVideo(stream.videoElement, stream.user.userId,stream.user.userName);
     });
-	client.on("stream-remove",function(event){
+	client.on("stream-removed",function(event){
         console.log(event);
         var stream = event.stream;
         $("#rtc_video_container #video_stream_"+stream.user.userId).remove();

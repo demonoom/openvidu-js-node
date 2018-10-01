@@ -1,0 +1,235 @@
+body{
+    padding: 0;
+    margin: 0;
+    color: #666;
+    font-family:"Microsoft Yahei", Tahoma, Helvetica, Arial, Verdana;
+    line-height: 1.3em;
+}
+p{
+    padding: 0;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+}
+li{
+    list-style: none;
+}
+.font_big{
+    font-size: 1em;
+}
+.font_big2{
+    font-size: 1.2em;
+}
+.font_medium{
+    font-size: .85em;
+}
+.font_medium2{
+    font-size: .8em;
+}
+.font_small{
+    font-size: .75em;
+}
+.font_dark_grey{
+    color: #333;
+}
+.font_dark_grey2{
+    color: #424242;
+}
+.font_light_grey{
+    color: #888
+}
+.font_date_blue{
+    color: #576a95;
+}
+.font_blue2{
+   color:#5e97f6
+}
+.btn_orange{
+    color:#f90;
+    border:1px solid #f90;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+.attendance_wrap{
+    margin: 0;
+    padding: 0;
+}
+@font-face {
+    font-family: 'iconfont';  /* project id 473179 */
+    src: url('//at.alicdn.com/t/font_473179_iql8pssn1opkqpvi.eot');
+    src: url('//at.alicdn.com/t/font_473179_iql8pssn1opkqpvi.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_473179_iql8pssn1opkqpvi.woff') format('woff'),
+    url('//at.alicdn.com/t/font_473179_iql8pssn1opkqpvi.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_473179_iql8pssn1opkqpvi.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+    margin-right: 6px;
+}
+.icon_orange{
+    color: #ff953e;
+}
+.attendance_title{
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    display: -webkit-flex;
+    padding: 6px 15px;
+}
+.attendance_user{
+    flex: 1;
+    display: flex;
+    display: -webkit-flex;
+}
+.attendance_user img {
+    width: 38px;
+    height: 38px;
+    margin-right: 8px;
+    border-radius: 50%;
+}
+.attendance_name{
+    flex: 1;
+}
+
+
+.attendance_date {
+    width: 100px;
+    align-items: center;
+    justify-content: flex-end;
+    display: inline-flex;
+}
+.arrow_down{
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-top-color: #576a95;
+    position: relative;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+.arrow_down1{
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-top-color: white;
+    position: absolute;
+    margin-top: -9px;
+    margin-left: -8px;
+}
+.encourage{
+    padding: 20px 15px;
+}
+.time_line{
+    padding: 0;
+    margin: 0 15px;
+}
+.time_line li{
+    position: relative;
+    vertical-align: top;
+}
+.steps_tail {
+    position: absolute;
+    left: -1px;
+-    height: 100%;
+    width: 1px;
+    padding: 7px 0 0 0;
+    height: 100%;
+}
+.steps_tail i{
+    height: 100%;
+    width: 1px;
+    background: #e9e9e9;
+    position: relative;
+    display: inline-block;
+}
+.steps_tail i:after{
+    height: 0;
+    width: 100%;
+    position: absolute;
+    content: "";
+    top: 0;
+    width: 0;
+    background: #e9e9e9;
+    height: 100%;
+    opacity: 0;
+}
+.time_date{
+    padding-left: 12px;
+    position: relative;
+    top: -4px;
+    padding-bottom: 30px;
+}
+.time_date_b{
+    margin-bottom: 10px;
+}
+.circle{
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #f90;
+    position: absolute;
+    left: -4px;
+    top: 0;
+}
+.circle_end{
+    background: #5e97f6;
+}
+.radius_time {
+    width: 120px;
+    height: 120px;
+    margin: 20px auto 25px auto;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+.radius_time_filter{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#f8c25b,endcolorstr=#ff953e,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#f8c25b,endcolorstr=#ff953e,gradientType=0);
+    background:-moz-linear-gradient(top, #f8c25b, #ff953e);
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#f8c25b), to(#ff953e));
+    -webkit-box-shadow: 0 10px 20px -10px #ff953e;
+    -moz-box-shadow:  0 10px 20px -10px #ff953e;
+    box-shadow:  0 10px 20px -10px #ff953e;
+    box-shadow: 0 10px 20px -10px #ff953e;
+}
+.radius_time_filter2{
+    filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#35eab1,endcolorstr=#15bd84,gradientType=0);
+    -ms-filter:alpha(opacity=100 finishopacity=50 style=1 startx=0,starty=0,finishx=0,finishy=150) progid:DXImageTransform.Microsoft.gradient(startcolorstr=#35eab1,endcolorstr=#15bd84,gradientType=0);
+    background:-moz-linear-gradient(top, #35eab1, #15bd84);
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#35eab1), to(#15bd84));
+    -webkit-box-shadow: 0 10px 20px -10px #35eab1;
+    -moz-box-shadow:  0 10px 20px -10px #35eab1;
+    box-shadow:  0 10px 20px -10px #35eab1;
+    box-shadow: 0 10px 20px -10px #35eab1;
+}
+.radius_time p{
+    padding-top:5px;
+    opacity:0.7;
+    filter:Alpha(opacity=70); /* IE8 以及更早的浏览器 */
+}
+.radius_time_c{
+    text-align: center;
+}
+.radius_time_b{
+    padding-bottom: 18px;
+}
+.radius_time_cont{
+    margin-left: -13px;
+    border-left: #fff solid 1px;
+}

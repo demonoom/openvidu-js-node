@@ -1,0 +1,122 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	margin:0;
+	padding:0;
+	font-family:"微软雅黑";
+	-moz-user-select: none; 
+	-webkit-user-select: none; 
+	-ms-user-select: none; 
+	-khtml-user-select: none; 
+	user-select: none; 
+}
+a,button,input,span{-webkit-tap-highlight-color:rgba(255,0,0,0);}
+*:focus{
+	outline: none;
+}
+*:focus{
+	outline: none;
+}
+.resource{
+	width:90%;
+	padding:5%;
+	margin:0;
+	font-family:"微软雅黑";
+	line-height:25px;
+}
+.resource_book{
+	width:102px;
+	float:left;
+	padding:2px;
+	border:1px solid #d8d8d8;
+	background:#ffffff;
+	box-shadow:0px 2px 2px #dadada;
+}
+.resource_book_more{
+	margin-left:125px;
+}
+.resource_book_name{
+	font-size:18px;
+	color:#000;
+	padding:0 0 15px 0;
+	border-bottom:1px dotted #dbdbdb
+}
+.resource_book_price{
+	padding:15px 0 15px 0;
+	border-bottom:1px dotted #dbdbdb;	
+}
+.resource_book_price p{
+	margin:0;
+	padding:0;
+}
+.resource_book_tex1{
+	width:60px;
+	color:#999999;
+	font-size:12px;
+	float:left;
+}
+.resource_book_tex2{
+	color:#cc0000;
+	font-size:18px;
+}
+.resource_book_tex3{
+	color:#666666;
+	font-size:12px;
+}
+.resource_view{
+	padding:25px 0 0 0;
+}
+.resource_view a{
+	border-radius:4px;
+	background:#66c53c;
+	border:1px solid #45ab17;
+	padding:6px 28px;
+	color:#fff;
+	font-size:13px;
+	text-decoration:none;
+}
+.resource_view a:hover{
+	background:#37b300;
+	border:1px solid #288300;
+}
+.check_cont{ padding:25px 15px; border-bottom:1px solid #e2e2e2;}
+.check_answer{	
+	color:#ffffff;
+	padding:5px 10px;
+	font-size:15px;
+	line-height:30px;
+	border-radius:20px;
+	margin-right:5px;
+}
+.check_noanswer{ margin:67% auto 0 auto; text-align:center }
+.check_noanswer span{padding:15px 20px; border:1px solid #ff6769; background:#ffe9e9; border-radius:20px; }
+.check_01{
+	background:#54cc52;
+}
+.check_02{
+	background:#29bdd3;
+}
+.check_03{
+	background:#fe8e8e;
+}
+.check_04{
+	background:#8fa0fd;
+}
+.check_05{
+	background:#7fd8bc;
+}
+.check_06{
+	background:#f8b06e;
+}
+.check_07{
+	background:#e5a7f8;
+}
+.check_08{
+	background:#fd90c9;
+}
+.check_tex{ line-height:30px; font-size:18px; }
+.check_gray{line-height:32px; color:#999; font-size:16px; padding:5px 0 8px 0;}
+.check_left{ width:50%; margin-right:20px;}
+.check_right{}
+.check_input{ background:#3695d9; font-size:18px; font-family:"微软雅黑"; color:#fff; line-height:30px; border:1px solid #1275ae; border-radius:4px; padding:2px 20px}
+.check_red{color:#ff6600}

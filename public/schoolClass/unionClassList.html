@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>联合开课列表</title>
+    <script type="application/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="application/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="js/service.js"></script>
+</head>
+<body>
+
+<span onclick="openUnionClass();">开启联合开课</span>
+
+<div id="item_container">
+
+
+</div>
+
+<div id="loading" style="display: none;"> 正在加载...</div>
+
+<div id="item_template" style="display: none;">
+    <div>
+        <div id="title">北京四中和下关四中关于学生品德问题的联合调研</div>
+        <div id="main_teacher_name">张三</div>
+        <div id="union_teacher_name">李四-王五</div>
+    </div>
+</div>
+</body>
+
+<script type="application/javascript">
+
+    var teacherId = Service.getQueryString("teacherId");
+
+    $(document).ready(function(){
+        getUnionClassList();
+    });
+
+
+    function getUnionClassList() {
+       var service = new Service();
+       var data = {};
+       data.method = 'getCurrentUnionClassList';
+       data.userId = teacherId+"";
+       $("#loading").show();
+       $("#loading").text("正在请求数据...");
+       service.doWebService(data,{onResponse:function(result){
+           var infos = result.response;
+           if(infos.length > 0){
+               $("#loading").text("数据加载完毕...");
+               infos.forEach(function(info){
+                   var vid = info.vid;
+                   var title = info.title;
+                   var openTeacher = info.openTeacher;
+                   var unionTeachers = info.unionTeachers;
+
+                   var template = $("#item_template");
+                   $(template.children("div").get(0)).attr("onclick","joinUnionClass("+vid+");");
+                   template.find("#title").text(title);
+                   template.find("#main_teacher_name").text(openTeacher.userName);
+
+                   var unionTeacherNames = "";
+                   if(unionTeachers && unionTeachers.length > 0){
+                       unionTeachers.forEach(function(teacher,index){
+                           if(index == unionTeachers.length - 1){
+                               unionTeacherNames = unionTeacherNames + teacher.userName;
+                           }else{
+                               unionTeacherNames = unionTeacherNames + teacher.userName+"-";
+                           }
+
+                       });
+                   }
+
+                   template.find("#union_teacher_name").text(unionTeacherNames);
+
+                   $("#item_container").append(template.html());
+                   template.attr("info_vid","0");
+               });
+           }else{
+               $("#loading").text("没有获取到数据...");
+           }
+       },onError:function(error){
+
+       }})
+    }
+
+    function openUnionClass(){
+        layer.open({
+            type: 2,
+            title: '开启一个联合开课',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['380px', '90%'],
+            content: 'openUnionClass.html?teacherId='+teacherId+"&userName=wangdan"
+        });
+    }
+
+    function joinUnionClass(vid){
+        window.open("teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName=zhenghui","_blank");
+    }
+
+</script>
+</html>

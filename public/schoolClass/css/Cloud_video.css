@@ -1,0 +1,394 @@
+@charset "utf-8";
+
+body {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
+}
+html, body, ol, ul {
+	margin:0;
+	padding:0
+}
+a{
+	cursor:pointer
+}
+a, a:hover,btn{
+	text-decoration:none;
+}
+ ::-webkit-scrollbar {
+		  width: 8px;
+		  height:8px;
+	} /* 这是针对缺省样式 (必须的) */
+
+
+	::-webkit-scrollbar-thumb {
+		  background-color: #ccc; 
+		  border-radius: 9px;
+		  -webkit-border-radius: 9px;
+	} /* 滑块颜色 */
+
+	::-webkit-scrollbar-button {
+		  background-color: initial;
+	} /* 滑轨两头的监听按钮颜色 */
+
+	/* ::-webkit-scrollbar-corner {
+		  background-color: none;
+	} 横向滚动条和纵向滚动条相交处尖角的颜色 */
+
+.cloud_v_cont{
+	width:100%;
+	height:100%;
+	background:#555;
+	overflow:hidden;
+	z-index:1
+}
+.cloud_v_cont > div{
+	background:#555 !important;
+}
+ .cloud_v_cont_img{
+	width:100%;
+	height:100%;
+}
+ .cloud_v_cont_video{
+ 	width:300px;
+ 	padding:0 30px 30px 30px;
+ 	position:absolute;
+ 	left:0;
+ 	top:30px;
+ 	overflow-y: auto;
+ 	z-index:2;
+ 	height:calc(100% - 30px)
+ }
+ .cloud_v_cont_video_s{
+ 	top:0px !important;
+ }
+  .cloud_v_cont_video video{
+  width:100%;
+  height:150px;
+  background: transparent !important;
+  margin-bottom: 15px;
+  box-shadow:10px 10px 11px rgba(61, 61, 61, 0.88);
+  -moz-box-shadow: 10px 10px 11px rgba(61, 61, 61, 0.88);
+}
+.cloud_v_cont_video, .cloud_v_cont_video > div , .cloud_v_cont_video > div > div, .agora_cloud, .agora_cloud > div{
+	background: transparent !important;
+}
+ .cloud_v_cont_video_ppt{
+ 	height: 34px;
+    text-align: center;
+    position: absolute;
+    top: 40px;
+    z-index: 4;
+    width: 34px;
+    left: 270px;
+ }
+ .cloud_v_cont_video_ppt img{
+ 	height:100%;
+ 	cursor:pointer
+ 	
+ }
+  .cloud_v_cont_video_ppt_n{
+ 	height: 30px;
+    width: 30px;
+    margin-right:18px;
+    display:inline-block
+ }
+ .cloud_v_cont_video_ppt_n img{
+ 	height:100%;
+ 	cursor:pointer
+ 	
+ }
+  .cloud_v_cont_video_ppt div{
+  	box-shadow:10px 10px 11px rgba(123, 123, 123, 0.88);
+  	 margin:0 auto;
+  	 background: #fff;
+  	 width:94%;
+  }
+  .cloud_v_cont_video_ppt div i{
+  	position:absolute;
+  	right:15px;
+  	top:35px;
+  	width:14px;
+  	height:14px;
+  	background: url(../img/cloud_v_add.png) no-repeat;
+  	line-height:14px;
+  	cursor:pointer
+  }
+.cloud_v_cont_video video:last-child{
+	margin-bottom:0
+}
+a.cloud_v_btn_left{
+	width:30px;
+	position:absolute;
+	left:10px;
+	top:50%;
+    left:10px;
+    transform:translate(-10px, -50%);
+    -ms-transform:translate(-10px, -50%); /* IE 9 */
+    -moz-transform:translate(-10px, -50%); /* Firefox */
+    -webkit-transform:translate(-10px, -50%); /* Safari 和 Chrome */
+    -o-transform:translate(-10px, -50%);
+    z-index: 9;
+}
+a.cloud_v_btn_left img, .cloud_v_btn_talk img, .cloud_v_btn_stop img, .cloud_v_btn_talk2 img{
+	width:100%;
+}
+.cloud_v_menu{
+	height:150px;
+	position:absolute;
+	bottom:0;
+	right: 165px;
+	width: calc(100% - 380px);
+	margin: 0;
+	z-index:1000000000
+}
+.cloud_v_menu li{
+	list-style:none;	
+	float:right;
+	cursor: pointer;
+	
+}
+.cloud_v_menu li.m1{
+	margin-top: 32px;
+	max-width: 90px;
+	margin-left: 0px;
+}
+.cloud_v_menu li.m2{
+	margin-left:12%;
+    max-width: 140px;
+    margin-top: 25px;
+}
+.cloud_v_menu li.m3{
+	margin-left: 12%;
+    max-width: 140px;
+    margin-top: 44px;
+}
+.cloud_v_menu li.m4{
+	max-width: 140px;
+    margin-left: 12%;
+    margin-top: 27px;
+}
+.cloud_v_menu li img{
+	width:100%
+}
+.cloud_v_menu li.m5{
+	margin-top: 32px;
+	max-width: 140px;
+	margin-left:0;
+}
+.cloud_v_menu li.m6{
+	margin-top: 62px;
+	max-width: 110px;
+	margin-left: 12%;
+}
+.cloud_v_btn_talk{
+	width: 66px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(-100%, -50%);
+    -ms-transform: translate(-100%, -50%);
+    -moz-transform: translate(-100%, -50%);
+    -webkit-transform: translate(-100%, -50%);
+    -o-transform: translate(-100%, -50%);
+    margin-right: -66px;
+    z-index:2000
+}
+.cloud_v_btn_talk2{
+	width: 66px;
+    position: absolute;
+    right: 300;
+    top: 50%;
+    transform: translate(-100%, -50%);
+    -ms-transform: translate(-100%, -50%);
+    -moz-transform: translate(-100%, -50%);
+    -webkit-transform: translate(-100%, -50%);
+    -o-transform: translate(-100%, -50%);
+    margin-right: -66px;
+    z-index:2000
+}
+.cloud_v_btn_stop{
+	width:34px;
+	position: absolute;
+    right: 12px;
+    top: 12px;
+    z-index:1001;
+    cursor: pointer;
+}
+.cloud_v_btn_old{
+	position: absolute;
+    top: 3px;
+    font-size:12px;
+    color:#000;
+     left: 50%;
+    transform: translate(-50%);
+    -ms-transform: translate(-50%);
+    -moz-transform: translate(-50%);
+    -webkit-transform: translate(-50%);
+    -o-transform: translate(-50%);
+    z-index:1002;
+    text-shadow: 1px 1px 1px #fff;
+}
+.cloud_v_btn_old:hover{
+	color:#111 !important;
+	text-decoration:none;
+	text-shadow: 1px 1px 1px #fff;
+}
+.cloud_v_right_talk{
+	width:300px;
+	position:absolute !important;
+	right:0;
+	top:0;
+	background:url(../img/cloud_v_bg_opacity.png) repeat !important;
+	float:none !important;
+	z-index:1000000009
+}
+.cloud_v_right_talk .live_name{
+	color:#dedede
+}
+.cloud_v_talk_2{
+	position: absolute;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+.cloud_v_live_h3{
+	height:50px !important;
+	color:#fff !important;
+	font-size:15px !important
+}
+.cloud_v_live_talk_send{
+	width:100% !important
+}
+.cloud_v_live_input{
+	width:177px !important
+}
+.cloud_v_ppt_bg{
+	background: url(../img/cloud_v_bg_opacity.png) repeat !important;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 9;
+    left: 0;
+    top: 0;
+}
+.cloud_v_ppt{
+	position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    z-index: 10;
+    background:#fff;
+    width:70%;
+    height:70%
+}
+.cloud_v_i_icon{
+	width:20px;
+	height:20px;
+	position:absolute;
+	top:8px;
+	cursor: pointer;	
+}
+.cloud_v_i_icon i{
+	padding-left:12px;
+	
+}
+.cloud_v_i_del{
+	background:url(../img/del_icon_s.png) no-repeat;
+	background-size: 100%;
+	right:8px;
+}
+.cloud_v_i_del2{
+	background:url(../img/cloud_v_del2.png) no-repeat;
+	background-size:100%;
+	right:38px;
+}
+.layui-layer{
+	box-sizing:border-box;
+  	border:1px solid #e5e5e5;
+	border-radius:0 !important;
+}
+.layui-layer:after, .layui-layer:before {
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    left: 100%;
+    position: absolute;
+    width: 0;
+    left:50%;
+    transform: translate(-50%);
+    -ms-transform: translate(-50%);
+    -moz-transform: translate(-50%);
+    -webkit-transform: translate(-50%);
+    -o-transform: translate(-50%);
+}
+.new_cloud_mu{
+	box-sizing:border-box;
+  	border:15px solid transparent;
+  	background-clip:padding-box,border-box !important;
+  	background-origin:padding-box,border-box;
+  	/* background-image:linear-gradient(-30deg,#fff,#fff),linear-gradient(-30deg,#9abdeb,#80f9b7); */
+	box-shadow:10px 10px 11px rgba(61, 61, 61, 0.88) !important;
+	-moz-box-shadow: 10px 10px 11px rgba(61, 61, 61, 0.88);
+	border-radius:0 !important;
+	-moz-border-image:url(../img/timg_new.jpg) 20 ;	/* Old Firefox */
+	-webkit-border-image:url(../img/timg_new.jpg) 20;	/* Safari and Chrome */
+	-o-border-image:url(../img/timg_new.jpg) 20;		/* Opera */
+	border-image:url(../img/timg_new.jpg) 20;	
+
+}
+
+/* .layui-layer:after{
+	border-width: 8px;
+    border-top-color: #fff;
+    bottom:-20px;
+    } */
+.cloud_v_ppt_new{
+	width:65% !important;
+	height:78% !important;
+	position:absolute;
+	right:50px !important;
+	background:#fff !important;
+	top:20px !important;
+	z-index:1000;
+	box-shadow:10px 10px 11px rgba(123, 123, 123, 0.88);
+	-moz-box-shadow: 10px 10px 11px rgba(123, 123, 123, 0.88);
+	box-sizing:border-box;
+  	border:15px solid transparent;
+  	background-clip:padding-box,border-box !important;
+  	background-origin:padding-box,border-box;
+  	/* background-image:linear-gradient(-30deg,#fff,#fff),linear-gradient(-30deg,#9abdeb,#80f9b7); */
+	box-shadow:10px 10px 11px rgba(61, 61, 61, 0.88) !important;
+	border-radius:0 !important;
+	-moz-border-image:url(../img/timg_new.jpg) 20 ;	/* Old Firefox */
+	-webkit-border-image:url(../img/timg_new.jpg) 20;	/* Safari and Chrome */
+	-o-border-image:url(../img/timg_new.jpg) 20;		/* Opera */
+	border-image:url(../img/timg_new.jpg) 20;
+}
+
+.cloud_v_ppt_new:after, .cloud_v_ppt_new:before {
+    border: solid transparent;
+    content: ' ';
+    height: 0;
+    position: absolute;
+    width: 0;
+    right:65px;
+    transform: translate(-65px);
+    -ms-transform: translate(-65px);
+    -moz-transform: translate(-65px);
+    -webkit-transform: translate(-65px);
+    -o-transform: translate(-65px);
+}
+.cloud_v_ppt_new:before,  .cloud_v_ppt_new:after{
+    bottom: -42px;
+    background:url(../img/cloud_icon_jt.png) no-repeat;
+    width:37px;
+    height:31px;
+    background-size:65%
+    }

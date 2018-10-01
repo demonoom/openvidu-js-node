@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <style type="text/css">
+      body{
+      	margin:0;
+      	padding:0
+      }
+       .device_img{
+         padding:70px 0 10px 0;
+         width:48px;
+         height:48px;
+         margin:0 auto;
+       }
+       .device_img img{
+	       max-width:100%;
+	       max-height:100%
+       }
+      .device_title{
+      	font-size:14px;
+      	line-height:24px;
+      	color:#424242;
+      	text-align:center;
+      }
+       .device_title1{
+      	font-size:14px;
+      	line-height:24px;
+      	color:#000;
+      	text-align:center;
+      }
+      .device_contnet{
+          padding:8px 20px;
+          font-size:14px;
+      	line-height:24px;
+      	color:#424242;
+      	overflow:hidden;
+      }
+      .device_contnet_list{
+      	margin:8px 0
+      }
+      .device_contnet_select label{
+     	 width:100px;
+      }
+      .device_border{
+        border-top: none;
+    }
+    .device_contnet_font{
+    	color:red;
+    	font-size:14px;
+    	margin-top: 20px;
+    }
+    .device_contnet_select select{
+	    background:transparent;
+	    border:none;
+	    padding:4px 0px;
+	    outline:none;
+	    border: solid 1px #ccc;
+	    color:#222;
+	    width:290px;
+	    overflow: hidden;
+	}
+	.device_contnet_p{
+	    margin:0;
+	    padding:0;
+    	font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="init_message" class="device_title">
+  <div class="device_img"><img src="../../img/icon_loading_new.gif"/></div>
+  <p class="device_title1">正在检查音视频设备...</p>
+  </div>
+  <div id="container" class="device_contnet" style="display: none;">
+    <div class="device_contnet_list select">
+      <span for="audioSource">音频：</span><span class="device_contnet_select"><select id="audioSource"></select></span>
+    </div>
+
+    <div class="device_contnet_list select">
+      <span for="videoSource">视频：</span><span class="device_contnet_select"><select id="videoSource"></select></span>
+    </div>
+    <div class="device_title"><video id="video" playsinline autoplay width="150px" height="100px" style="display:none" muted></video></div>
+    <div class="device_contnet_list device_border device_contnet_font">有未正常连接设备，请参考以下方案之一进行设置：</div>
+    <p class="device_contnet_p">1、点击浏览器地址栏多媒体按钮进行音视频设备</p>
+    <p class="device_contnet_p">2、Chrome进入'设置'搜索'麦克风'或'摄像头'进行设置</p>
+    <p class="device_contnet_p">3、360极速进入'选项'搜索'麦克风'或'摄像头'进行设置</p>
+  </div>
+  
+  
+  
+
+  <script src="../../js/jquery.min.js"></script>
+  <script src="js/Device.js?v=27"></script>
+
+</body>
+
+ <script type="text/javascript">
+ 
+     /*
+     start({"onMediaOK":function(media){
+    	       alert(media);
+          },"onMediaError":function(error){
+        	   showErrorPage();
+          }});
+     */
+     
+     function showErrorPage(){
+    	 $("#init_message").hide();
+    	 $("#container").show();
+     }
+     
+ </script>
+</html>

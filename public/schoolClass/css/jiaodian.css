@@ -1,0 +1,205 @@
+body{
+	margin:0 auto;
+	padding:0;
+	text-align:center
+}
+.teacher_pic a img{
+	width:1107px;
+	height:300px;
+	margin:15px auto 0 auto;
+}
+
+/* html页面 start */
+.teacher_tex{
+	padding:10px;
+	line-height:25px;
+	text-align:left !important;
+}
+.teacher_tex img{
+	width:150px;
+	height:200px;
+	padding:0 15px 0px 0;
+	float:left;
+	
+}
+.teacher_tex p{
+	padding:5px 0 10px 0;
+	margin:0;
+}
+
+table
+{
+border-collapse:collapse;
+font-family:"微软雅黑";
+color:#555;
+width:100%;
+margin:0;
+padding:0;
+font-size:12px;
+line-height:20px;
+
+}
+.bg_div{
+	
+	position: fixed;
+	right:38%;
+	top:690px;
+	display:inline-block;
+
+}
+.bg_div1{
+	position:absolute;
+	top:320px;
+	right:36%;
+}
+table{
+	
+		border-radius:8px;
+		text-align:center;
+}
+.til{
+	background:#ff6871;
+	font-size:24px !important;
+	color:#fff;
+	
+	text-align:center;
+	border-radius:8px;
+	padding:24px 0;
+}
+.til_1{
+	font-size:14px !important;
+}
+table tr{
+	padding:20px 0;
+}
+table tr th{
+	padding:20px 0;
+	color:#000;
+	font-weight:normal;
+	
+
+}
+table tr.b1{
+	border-top:#f6ca53 1px solid !important;
+	}
+table tr.b2{
+	border-top:#5a79ff 1px solid !important;
+	}
+table tr.b3{
+	border-top:#38d7cd 1px solid !important;
+	}
+table tr.b4{
+	border-top:#925de1 1px solid !important;
+	}
+table tr.b5{
+	border-top:#ff6a74 1px solid !important;
+	}
+table tr.b6{
+	border-top:#85d958 1px solid !important;
+	}
+table tr.b7{
+	border-top:#55c3fc 1px solid !important;
+	}
+
+
+
+	
+table td{
+	
+	
+	
+	
+	padding:10px 5px;
+	
+}
+
+.bg1{
+	background:#ffd630;
+	color:#fff;
+}
+.bg1_1{
+	background:#fff8e4;
+}
+.bg2{
+	background:#5a79ff;
+	color:#fff;
+}
+.bg2_1{
+	background:#eaeeff;
+}
+.bg3{
+	background:#38d7cd;
+	color:#fff;
+}
+.bg3_1{
+	background:#e9fffe;
+}
+.bg4{
+	background:#925de1;
+	color:#fff;
+}
+.bg4_1{
+	background:#f5edff;
+}
+.bg5{
+	background:#ff6a74;
+	color:#fff;
+}
+.bg5_1{
+	background:#fff3f4;
+}
+.bg6{
+	background:#85d958;
+	color:#fff;
+}
+.bg6_1{
+	background:#efffe6;
+}
+.bg7{
+	background:#55c3fc;
+	color:#fff;
+}
+.bg7_1{
+	background:#e7f7ff;
+}
+.til_span{
+	position:relative;
+	top:-15px;
+	left:15px;
+}
+.bg8{
+	background:#ff99cc;
+	color:#fff;
+}
+.td_pa{
+	padding:10px 0 !important;
+}
+.td_left{
+	text-align:left !important;
+	padding-left:5px;
+}
+.th_1{
+	width:8%;
+}
+.th_2{
+	width:7%;
+}
+.th_3{
+	width:10%;
+}
+.th_4{
+	width:35%;
+}
+.th_5{
+	width:18%;
+}
+.th_6{
+	width:12%;
+}
+.th_7{
+	width:17%;
+
+}
+.th_8{
+	width:18%;
+}

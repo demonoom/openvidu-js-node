@@ -17,9 +17,11 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 var express = require('express');
 var fs = require('fs');
 var session = require('express-session');
+var http = require('http');
 var https = require('https');
 var bodyParser = require('body-parser'); // Pull information from HTML POST (express4)
 var app = express(); // Create our app with express
+var debug = true;
 
 // Server configuration
 app.use(session({
@@ -41,7 +43,12 @@ var options = {
     key: fs.readFileSync('keys/server.key'),
     cert: fs.readFileSync('keys/server.crt')
 };
-https.createServer(options, app).listen(5000);
+if(debug){
+    http.createServer(app).listen(5000);
+}else{
+    https.createServer(options, app).listen(5000);
+}
+
 
 // Mock database
 var users = [{
@@ -76,19 +83,13 @@ console.log("App listening on port 5000");
 /* CONFIGURATION */
 
 
-app.all('*', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Headers","Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-    next();
-});
 
 /* REST API */
 
 // Login
 app.post('/api-login/login', function (req, res) {
 
-    console.log("login request ....");
+    console.log("login request ...."+req.session.id);
 
     var userId = req.body.userId;
     var userName = req.body.userName;
@@ -109,6 +110,7 @@ app.post('/api-login/logout', function (req, res) {
 
 // Get token (add new user to session)
 app.post('/api-sessions/get-token', function (req, res) {
+    console.log("get-token request ...."+req.session.id);
     if (!isLogged(req.session)) {
         req.session.destroy();
         res.status(401).send('User not logged');
@@ -248,6 +250,7 @@ function isLogged(session) {
 function getBasicAuth() {
     return 'Basic ' + (new Buffer('OPENVIDUAPP:' + OPENVIDU_SECRET).toString('base64'));
 }
+
 
 process.on('uncaughtException', function(err) {
     console.log(err);

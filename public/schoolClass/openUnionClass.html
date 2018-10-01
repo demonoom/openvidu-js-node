@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>联合开课列表</title>
+    <script type="application/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="application/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="js/service.js"></script>
+    <style>
+
+        .clazzInfo_selected{
+            background: palevioletred;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div>
+        开课主题:<input id="title"/> <br>
+        邀请码:<input id="password"/> <br>
+        请选择联合开课的班级:
+        <div id="class_container">
+
+
+        </div>
+
+        <button onclick="openUnionClassSubmit();">确认创建</button>
+
+    </div>
+
+</body>
+
+<script type="application/javascript">
+
+    var teacherId = Service.getQueryString("teacherId");
+
+    $(document).ready(function(){
+        getTeacherClasses();
+    });
+
+    function getTeacherClasses(){
+        var service = new Service();
+        var data = {};
+        data.method = 'getTeacherClasses';
+        data.ident = teacherId;
+        service.doWebService(data,{
+            onResponse:function(result){
+               var clazzes = result.response;
+               if(clazzes && clazzes.length > 0){
+                   clazzes.forEach(function(clazz){
+                       var arrray = clazz.split("#");
+                       var name = arrray[1];
+                       var clazzId = arrray[0];
+                       $("#class_container").append("<div clazzId='"+clazzId+"' onclick='changeClazzSelected(this,"+clazzId+");'>"+name+"</div>");
+                   });
+               }else{
+                   $("#class_container").append("<span>请联系管理员为您绑定班级</span>");
+               }
+            },
+            onError:function(error){
+
+            }
+        });
+    }
+
+    function openUnionClassSubmit(){
+        var title = $("#title").val();
+        var password = $("#password").val();
+        if(title == null || title == ''){
+            layer.msg("请输入联合开课主题!");
+            return;
+        }
+        if(password == null || password == ""){
+            layer.msg("请输入6位邀请码");
+            return;
+        }
+        var selectedClazzId = 0;
+        var selected = $(".clazzInfo_selected");
+        if(selected && selected.length > 0){
+            selectedClazzId = $(selected[0]).attr("clazzId");
+        }
+        if(selectedClazzId == 0){
+            layer.msg("请选择要联合开课的班级");
+            return;
+        }
+        window.open("teacherUnionMaster.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password,"_blank");
+        //window.parent.layer.closeAll();
+    }
+
+    function changeClazzSelected(element,clazzId){
+         var selected = $(".clazzInfo_selected");
+         var selectedClazzId = 0;
+         if(selected && selected.length > 0){
+             selectedClazzId = $(selected[0]).attr("clazzId");
+         }
+
+         $(".clazzInfo_selected").removeClass("clazzInfo_selected");
+         if(selectedClazzId == clazzId){
+             return;
+         }
+         $(element).addClass("clazzInfo_selected");
+    }
+
+</script>
+</html>

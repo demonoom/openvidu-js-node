@@ -38,6 +38,9 @@ function ExRTC(){
                     }
                     var serverData = JSON.parse(stream.connection.data.split('%/%')[1]).serverData;
                     var user = {userId:serverData.userId,userName:serverData.userName};
+                    if(user.userId == _this.userId){
+                        return;
+                    }
                     var exrtcStream = new ExRTCStream();
                     var params = {};
                     params.id = user.userId;
@@ -65,7 +68,7 @@ function ExRTC(){
                     exrtcStream.init(params);
                     var evt = {stream:exrtcStream,user:{userId:serverData.userId,userName:serverData.userName}};
 
-                    _this.emit('stream-remove',evt);
+                    _this.emit('stream-removed',evt);
                 });
 
                 _this.userId = uid;
@@ -75,7 +78,7 @@ function ExRTC(){
                         onSuccess();
                     })
                     .catch(error => {
-                        console.warn('There was an error connecting to the session:', error.code, error.message);
+                        console.error('There was an error connecting to the session:', error.code, error.message);
                         onFailure();
                     });
             }
@@ -89,7 +92,7 @@ function ExRTC(){
                 var user = rtcStream.user;
                 var exrtcStream = new ExRTCStream();
                 var params = {};
-                params.id = rtcStream.userId;
+                params.id = rtcStream.user.userId;
                 params.subscriber = subscriber;
                 params.openviduStream = rtcStream.openviduStream;
                 params.videoElement = event.element;
@@ -139,7 +142,7 @@ function ExRTC(){
 
     this.unpublish = function(rtcStream){
         _this.session.unpublish(_this.publisher);
-        _this.emit("stream-remove",{stream:rtcStream,user:rtcStream.user});
+        _this.emit("stream-removed",{stream:rtcStream,user:rtcStream.user});
     }
 
     this.on = function(type,callback){
@@ -181,6 +184,9 @@ function ExRTC(){
     }
 
     this.httpPostRequest = function(url, body, errorMsg, callback) {
+        var protocal = window.location.protocol;
+        var host = window.location.host;
+        url = protocal+"//"+host+"/"+url;
         var http = new XMLHttpRequest();
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/json');
@@ -249,35 +255,67 @@ function ExRTCStream(){
 
     this.enableAudio = function(){
         if(_this.subscriber){
-            _this.subscriber.subscribeToAudio(true);
+            try{
+                _this.subscriber.subscribeToAudio(true);
+            }catch (e){
+                console.error(e);
+            }
         }
         if(_this.publisher){
-            _this.publisher.publishAudio(true);
+            try{
+                _this.publisher.publishAudio(true);
+            }catch (e){
+                console.error(e);
+            }
         }
     }
 
     this.disableAudio = function(){
         if(_this.subscriber){
-            _this.subscriber.subscribeToAudio(false);
+            try{
+                _this.subscriber.subscribeToAudio(false);
+            }catch (e){
+                console.error(e);
+            }
         }
         if(_this.publisher){
-            _this.publisher.publishAudio(false);
+            try{
+                _this.publisher.publishAudio(false);
+            }catch (e){
+                console.error(e);
+            }
         }
     }
     this.enableVideo = function(){
         if(_this.subscriber){
-            _this.subscriber.subscribeToVideo(true);
+            try{
+                _this.subscriber.subscribeToVideo(true);
+            }catch (e){
+                console.error(e);
+            }
         }
         if(_this.publisher){
-            _this.publisher.publishVideo(true);
+            try{
+                _this.publisher.publishVideo(true);
+            }catch (e){
+                console.error(e);
+            }
         }
     }
     this.disableVideo = function(){
         if(_this.subscriber){
-            _this.subscriber.subscribeToVideo(false);
+            try{
+                _this.subscriber.subscribeToVideo(false);
+            }catch (e){
+                console.error(e);
+            }
         }
         if(_this.publisher){
-            _this.publisher.publishVideo(false);
+            try{
+                _this.publisher.publishVideo(false);
+            }catch (e){
+                console.error(e);
+            }
         }
     }
 }

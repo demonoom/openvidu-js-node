@@ -1,0 +1,108 @@
+@charset "UTF-8";
+/* CSS Document */
+body{
+	margin:0;
+	padding:0
+}
+.table_div{
+	padding:0 5px;
+}
+table.list{
+	text-align:center;
+	border-bottom:1px solid #333;
+	border-left:1px solid #333;
+	font-size:14px;
+	margin:15px 0 0 0;
+	width:100%;
+}
+table.list tr th{
+	border-right:1px solid #333;
+	border-top:1px solid #333;
+	background:#9add9a;
+	padding:14px 5px;
+	}
+	
+table.list tr td{
+	border-right:1px solid #333;
+	border-top:1px solid #333;
+	padding:10px 5px;
+}
+.top{
+	margin:15px 0 0 0;
+}
+.div_65{
+	width:70%;
+	border-right:1px solid #333;
+	float:left
+}
+.div_35{
+	width:29%;
+	float:left;
+	
+}
+table.fenbu{
+	width:100%;
+	text-align:left;
+}
+table.fenbu tr td{
+	padding:10px 5px;
+}
+.left{
+	width:105px;
+	font-weight:bold;
+}
+table.list1{
+	text-align:left;
+	border-top:1px solid #333;
+	border-left:1px solid #333;
+	font-size:14px;
+	margin:15px 0 0 0;
+	width:100%;
+}
+table.list1 tr th{
+	border-right:1px solid #333;
+	border-bottom:1px solid #333;
+	background:#9add9a;
+	padding:8px 5px;
+	font-weight:bold;
+	}
+	
+table.list1 tr td{
+	border-right:1px solid #333;
+	border-bottom:1px solid #333;
+	padding:10px 5px;
+}
+table.gray{
+	font-size:14px;
+	font-weight:bold;
+	float:right;
+}
+table.gray tr td{
+	padding:2px 5px;
+	border:none;
+}
+.gray_1{
+	width:70%
+}
+.gray_2{
+	width:40%
+}
+.bo{
+	border:none;
+}
+table.gray tr td.pa{
+	padding:6px 5px
+}
+.text{
+	text-align:right;
+	color:#888;
+	}
+.text1{
+	text-align:right;
+	color:#000;
+	font-weight:bold;
+	}
+.mar{
+	margin:0 !important;
+	border-top:none !important;
+}
