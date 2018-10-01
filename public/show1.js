@@ -9,10 +9,14 @@ function getQueryString(name){
     return null;
 }
 
+var localStream;
+var userId;
+var userName;
+
 function joinSession() {
 	var channel = getQueryString("roomId");
-	var userName = getQueryString("userName");
-	var userId = getQueryString("userId");
+    userName = getQueryString("userName");
+    userId = getQueryString("userId");
 	client.join(channel,userId,userName,function(){
         $('#join').hide();
         $('#session').show();
@@ -22,25 +26,43 @@ function joinSession() {
 	},function(){
 
 	});
-	client.on("stream-add",function(event){
+	client.on("stream-added",function(event){
 		console.log(event);
-        initMainVideo(event.videoElement, event.user.userId,event.user.userName);
+		var stream = event.stream;
+
+        $("#rtc_video_container #video_stream_"+stream.id).remove();
+        $("#rtc_video_container").append("<div id='video_stream_"+stream.user.userId+"'><span>"+stream.user.userName+"</span></div>");
+
+        client.subscribe(stream,"video_stream_"+stream.user.userId);
     });
+
+    client.on("stream-subscribed",function(event){
+        var stream = event.stream;
+        initMainVideo(stream.videoElement, stream.user.userId,stream.user.userName);
+        console.log(event);
+    });
+
     client.on("stream-published",function(event){
         console.log(event);
-        initMainVideo(event.videoElement, event.user.userId,event.user.userName);
+        var stream = event.stream;
+        localStream = stream;
+        initMainVideo(stream.videoElement, stream.user.userId,stream.user.userName);
     });
 	client.on("stream-remove",function(event){
         console.log(event);
+        var stream = event.stream;
+        $("#rtc_video_container #video_stream_"+stream.user.userId).remove();
 	});
 }
 
 function publish(){
-	client.publish(null);
+    $("#rtc_video_container #video_stream_"+userId).remove();
+    $("#rtc_video_container").append("<div id='video_stream_"+userId+"'><span>"+userName+"</span></div>");
+	client.publish(null,"video_stream_"+userId);
 }
 
 function unpublish() {
-    client.unpublish();
+    client.unpublish(localStream);
 }
 
 function muteAudio(){

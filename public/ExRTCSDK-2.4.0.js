@@ -37,18 +37,15 @@ function ExRTC(){
                         return;
                     }
                     var serverData = JSON.parse(stream.connection.data.split('%/%')[1]).serverData;
-
-                    $("#rtc_video_container #video_stream_"+serverData.userId).remove();
-                    $("#rtc_video_container").append("<div id='video_stream_"+serverData.userId+"'><span>"+serverData.userName+"</span></div>");
-
-                    var subscriber = _this.session.subscribe(event.stream, 'video_stream_'+serverData.userId);
-                    subscriber.on('videoElementCreated', (event) => {
-                        setTimeout(function(){
-                            var evt = {videoElement:event.element,user:{userId:serverData.userId,userName:serverData.userName}};
-                            console.log(evt);
-                            _this.emit('stream-add',evt);
-                        },500);
-                    });
+                    var user = {userId:serverData.userId,userName:serverData.userName};
+                    var exrtcStream = new ExRTCStream();
+                    var params = {};
+                    params.id = user.userId;
+                    params.openviduStream = event.stream;
+                    params.user = user;
+                    exrtcStream.init(params);
+                    var evt = {stream:exrtcStream,user:user};
+                    _this.emit('stream-added',evt);
                 });
 
                 _this.session.on('streamPropertyChanged', (event) => {
@@ -58,9 +55,16 @@ function ExRTC(){
                 _this.session.on('streamDestroyed', (event) => {
                     var serverData = JSON.parse(event.stream.connection.data.split('%/%')[1]).serverData;
 
-                    $("#rtc_video_container #video_stream_"+serverData.userId).remove();
+                    var user = {userId:serverData.userId,userName:serverData.userName};
 
-                    var evt = {user:{userId:serverData.userId,userName:serverData.userName}};
+                    var exrtcStream = new ExRTCStream();
+                    var params = {};
+                    params.id = user.userId;
+                    params.openviduStream = event.stream;
+                    params.user = user;
+                    exrtcStream.init(params);
+                    var evt = {stream:exrtcStream,user:{userId:serverData.userId,userName:serverData.userName}};
+
                     _this.emit('stream-remove',evt);
                 });
 
@@ -78,16 +82,33 @@ function ExRTC(){
         );
     }
 
+    this.subscribe = function(rtcStream,elementId){
+        var subscriber = _this.session.subscribe(rtcStream.openviduStream, elementId);
+        subscriber.on('videoElementCreated', (event) => {
+            setTimeout(function(){
+                var user = rtcStream.user;
+                var exrtcStream = new ExRTCStream();
+                var params = {};
+                params.id = rtcStream.userId;
+                params.subscriber = subscriber;
+                params.openviduStream = rtcStream.openviduStream;
+                params.videoElement = event.element;
+                params.user = user;
+                exrtcStream.init(params);
+                var evt = {stream:exrtcStream,user:user};
+                console.log(evt);
+                _this.emit('stream-subscribed',evt);
+            },500);
+        });
+    }
 
     this.leave = function(){
         _this.session.disconnect();
         _this.session = null;
     }
 
-    this.publish = function(mediaStream){
-        $("#rtc_video_container #video_stream_"+_this.userId).remove();
-        $("#rtc_video_container").append("<div id='video_stream_"+_this.userId+"'><span>"+_this.userName+"</span></div>");
-        _this.publisher = _this.OV.initPublisher('video_stream_'+_this.userId, {
+    this.publish = function(mediaStream,elmentId){
+        _this.publisher = _this.OV.initPublisher(elmentId, {
             audioSource: undefined, // The source of audio. If undefined default microphone
             videoSource: undefined, // The source of video. If undefined default webcam
             publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
@@ -99,30 +120,26 @@ function ExRTC(){
         });
         _this.publisher.on('videoElementCreated', (event) => {
             console.log("videoElementCreated....");
-            _this.emit("stream-published",{videoElement:event.element,user:{userId:_this.userId,userName:_this.userName}});
+
+            var user = {userId:_this.userId,userName:_this.userName};
+
+            var exrtcStream = new ExRTCStream();
+            var params = {};
+            params.id = _this.userId;
+            params.publisher = _this.publisher;
+            params.openviduStream=event.target.stream;
+            params.user = user;
+            params.videoElement = event.element;
+            exrtcStream.init(params);
+
+            _this.emit("stream-published",{stream:exrtcStream,user:user});
         });
         _this.session.publish(_this.publisher);
     }
 
-    this.unpublish = function(){
+    this.unpublish = function(rtcStream){
         _this.session.unpublish(_this.publisher);
-        $("#rtc_video_container #video_stream_"+_this.userId).remove();
-    }
-
-    this.disableAudio = function(){
-        _this.publisher.publishAudio(false);
-    }
-
-    this.enableAudio = function(){
-        _this.publisher.publishAudio(true);
-    }
-
-    this.disableVieo = function(){
-        _this.publisher.publishVideo(false);
-    }
-
-    this.enableVideo = function(){
-        _this.publisher.publishVideo(true);
+        _this.emit("stream-remove",{stream:rtcStream,user:rtcStream.user});
     }
 
     this.on = function(type,callback){
@@ -192,6 +209,75 @@ function ExRTC(){
             _this.removeUser();
             _this.leave();
             _this.logOut();
+        }
+    }
+}
+
+function ExRTCStream(){
+    var id;
+    var subscriber;
+    var publisher;
+    var openviduStream;
+    var user;
+    var videoElement;
+    var _this = this;
+
+    this.init = function(params){
+        if(params.id){
+            _this.id = params.id;
+        }
+        if(params.subscriber){
+            _this.subscriber = params.subscriber;
+        }
+        if(params.publisher){
+            _this.publisher = params.publisher;
+        }
+        if(params.openviduStream){
+            _this.openviduStream = params.openviduStream;
+        }
+        if(params.user){
+            _this.user = params.user;
+        }
+        if(params.videoElement){
+            _this.videoElement = params.videoElement;
+        }
+    }
+
+    this.getId = function(){
+        return _this.id;
+    }
+
+    this.enableAudio = function(){
+        if(_this.subscriber){
+            _this.subscriber.subscribeToAudio(true);
+        }
+        if(_this.publisher){
+            _this.publisher.publishAudio(true);
+        }
+    }
+
+    this.disableAudio = function(){
+        if(_this.subscriber){
+            _this.subscriber.subscribeToAudio(false);
+        }
+        if(_this.publisher){
+            _this.publisher.publishAudio(false);
+        }
+    }
+    this.enableVideo = function(){
+        if(_this.subscriber){
+            _this.subscriber.subscribeToVideo(true);
+        }
+        if(_this.publisher){
+            _this.publisher.publishVideo(true);
+        }
+    }
+    this.disableVideo = function(){
+        if(_this.subscriber){
+            _this.subscriber.subscribeToVideo(false);
+        }
+        if(_this.publisher){
+            _this.publisher.publishVideo(false);
         }
     }
 }
