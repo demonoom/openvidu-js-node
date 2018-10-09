@@ -2,31 +2,246 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>课堂手机助手</title>
     <script type="application/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="application/javascript" src="js/layer/layer.js"></script>
     <script type="application/javascript" src="js/service.js"></script>
 </head>
+<style>
+.attachment_box{
+background: red;
+width:  100%;
+height:  70%;
+position: absolute;
+bottom: 0;
+left: 0;
+overflow: auto;
+z-index: 2;
+display: none;
+}
+.list-item{
+height: 50px;
+line-height: 50px;
+padding: 0 5px;
+border-bottom: 1px solid #ccc;
+}
+.item-image{
+    /*display: inline-block;*/
+    margin-right: 8px;
+    width: 24px;
+    height: 20px;
+    /*position: relative;*/
+    /*top: -18px;*/
+    /*width: 24px;*/
+    /*max-height: 26px;*/
+    vertical-align: middle;
+}
+.mask{
+width:  100%;
+height: 100%;
+background: #000;
+position: absolute;
+top: 0;
+left: 0;
+opacity: 0.5;
+z-index: 1;
+display:none
+}
+.attachment_bottom{
+text-align: center;
+}
+</style>
 <body>
 
+
+<div id="iframeBox">
+
+</div>
+
+<div class="addAttachment" id="addAttachment" onclick="showAddAttachment()">
+添加
+</div>
+
+
+<div class="attachment_box" id="attachment_box">
+<div class="nav" id="nav"></div>
+<div class="attachment_list" id="attachment_list"></div>
+<div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
+</div>
+<div class="mask" id="mask" onclick="clickMask()"></div>
 </body>
 
 <script>
    var vid = Service.getQueryString("vid");
-
+   var defaultPageNo = 1;
+   var parentId = -1;
+   var parentArray = [{
+       id: -1,
+       name: '蚁盘'
+   }];
+   var HTML_LIST="";
+   getClassOpenedKejian(221079);
+   filterCloudFile();
+   /*
+   通过vid获取课件信息
+    */
    function getClassOpenedKejian(vid){
        var service = new Service();
-       var data = {};
-       data.method = "";
-
+       var data = {
+           method:'getVclassPPTOpenInfo',
+           vid: vid
+       };
        service.doWebService(data,{
-           onResponse:function(res){
+           onResponse:(res) => {
+               console.log(res,'success');
+               if(res.success){
+                   var iframeBox = document.getElementById("iframeBox");
+                   var iframe = document.createElement("iframe");
 
+                   iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+RandomNumBoth(1000000,2000000)+"&role=manager&ppt="+res.response.pptUrl+"")
+//                   iframe.setAttribute("id","ifr")
+//                   iframe.setAttribute("name","first_iframe")
+                   iframeBox.appendChild(iframe);
+                   if(iframe.contentWindow.pptCheckPage){
+                     iframe.contentWindow.pptCheckPage(res.response.currentPage);
+                   }
+//                   console.log(document.getElementById('ifr').contentWindow,'111');
+//                   document.getElementById('ifr').contentWindow.document.getElementById('contentFrame');
+               }
+           },
+           onError:function(error){}
+       });
+   }
+
+   /*
+   * 生成随机数
+    */
+   function RandomNumBoth(Min,Max){
+         var Range = Max - Min;
+         var Rand = Math.random();
+         var num = Min + Math.round(Rand * Range); //四舍五入
+         return num;
+   }
+
+
+
+   /*
+   点击蚁盘文件触发事件
+   */
+   function clickFile(fileType,parent,name,isPush){
+       if(fileType==0){
+           console.log('更换课件功能未开放');
+//           alert('此功能未开放')
+//           getClassOpenedKejian(parent);
+       }else{
+           parentId = parent;
+           if(isPush){
+               parentArray.push({
+                    id: parent,
+                    name: name
+               });
+           }
+           filterCloudFile(true);
+       }
+   }
+
+   /*
+      * 根据userId获取蚁盘文件
+       */
+   function filterCloudFile(clearFlag){
+       var service = new Service();
+       var data = {
+           method:'filterCloudFile',
+           userId: 23836,
+           parentId: parentId,
+           filterOption: -17,
+           pageNo: defaultPageNo,
+
+       };
+       service.doWebService(data,{
+           onResponse:(res) => {
+               console.log(res,'filterCloudFile');
+               if(res.success){
+                   var attachment_list = document.getElementById('attachment_list');
+                   var attachment_bottom = document.getElementById('attachment_bottom');
+                   var nav = document.getElementById('nav');
+                   var data = res.response;
+//                   console.log(data,'filterCloudFile');
+                   var imgSrc,img_height;
+//                   console.log(attachment_list.childNodes,'childNodes');
+//                   console.log(attachment_list.childNodes.length,'attachment_list.childNodes.length');
+
+                   if(clearFlag){
+                       HTML_LIST = '';
+                   }else{
+//                       console.log(HTML_LIST,"HTML")
+                   }
+                   for(var k in data){
+                           imgSrc = data[k].fileType == 0?"./img/cloud_icon_web1.png":"./img/cloud_icon_web.png";
+                           img_height = data[k].fileType == 0?30:20;
+                           HTML_LIST += "" +
+                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true) class='list-item'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span>"+data[k].name+"</span></div>";
+//                       }
+                   }
+//                   console.log(parentArray,'parentArray');
+                   var navHTML = "";
+                   nav.innerHTML = "";
+                   for(var k in parentArray){
+                       navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") >"+parentArray[k].name+" > </span>";
+                   }
+//                   console.log(navHTML,'navHTML')
+                   attachment_bottom.innerText = res.response.length <= 0?"无更多文件":"点击加载更多";;
+                   attachment_list.innerHTML = (HTML_LIST);
+                   nav.innerHTML = navHTML;
+               }
            },
            onError:function(error){
-
+               console.log(error,'error')
            }
        });
    }
+
+
+   //点击导航栏事件
+   function clickNav(parentId,parentName){
+       var indexof = '';
+       for(var k in parentArray){
+           if(parentArray[k].id == parentId){
+               indexof = k;
+           }
+       }
+       parentArray = parentArray.slice(0,indexof+1);
+       clickFile(1,parentId,parentName);
+   }
+
+   //加载更多
+   function onEndedPage(e){
+//       console.log(e.srcElement.innerText,'eeeeeee')
+       if(e.srcElement.innerText == "无更多文件"){
+           return;
+       }
+       defaultPageNo += 1;
+       filterCloudFile();
+   }
+
+   //点击遮罩
+   function clickMask(){
+       AddAttachmentChange('none');
+   }
+
+   //点击添加按钮
+   function showAddAttachment(){
+       AddAttachmentChange('block');
+   }
+
+   //改变蚁盘盒子显示状态
+   function AddAttachmentChange(style){
+       var mask = document.getElementById('mask');
+       var attachment_box = document.getElementById('attachment_box');
+       mask.style.display = style;
+       attachment_box.style.display = style;
+   }
+
 </script>
 </html>
