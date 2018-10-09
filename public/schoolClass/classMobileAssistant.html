@@ -9,8 +9,11 @@
     <script type="application/javascript" src="js/service.js"></script>
 </head>
 <style>
+body{
+overflow: hidden;
+}
 .attachment_box{
-background: red;
+background: white;
 width:  100%;
 height:  70%;
 position: absolute;
@@ -18,7 +21,8 @@ bottom: 0;
 left: 0;
 overflow: auto;
 z-index: 2;
-display: none;
+transform: translateY(100%);
+transition: 0.3s
 }
 .list-item{
 height: 50px;
@@ -51,6 +55,23 @@ display:none
 .attachment_bottom{
 text-align: center;
 }
+.nav{
+margin-top: 10px;
+padding-left: 8px;
+background: #cccccc;
+box-sizing: border-box;
+}
+.add_image{
+width: 100%;
+height: 100%;
+}
+#addAttachment{
+width: 40px;
+height: 40px;
+position: absolute;
+ bottom: 20px;
+ right: 20px;
+}
 </style>
 <body>
 
@@ -60,7 +81,7 @@ text-align: center;
 </div>
 
 <div class="addAttachment" id="addAttachment" onclick="showAddAttachment()">
-添加
+<img class="add_image" src="./img/addAttachment.png" alt="">
 </div>
 
 
@@ -240,7 +261,7 @@ text-align: center;
        var mask = document.getElementById('mask');
        var attachment_box = document.getElementById('attachment_box');
        mask.style.display = style;
-       attachment_box.style.display = style;
+       attachment_box.style.transform = style == 'block'?"translateY(0%)":"translateY(100%)";;
    }
 
 </script>
