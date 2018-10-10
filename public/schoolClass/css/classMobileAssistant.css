@@ -144,9 +144,18 @@ body{
     background: #288AE0;
     border-radius: 50%;
     text-align: center;
-    line-height:48px;
-    font-size: 13px;
+    font-size: 14px;
     color: #fff;
+}
+.courseware-open span{
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    width: 100%;
+    left: 50%;
 }
 .attachment-cont{
     height: calc(100% - 40px);
