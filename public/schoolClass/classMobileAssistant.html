@@ -22,7 +22,10 @@
 
 
 <div class="attachment_box" id="attachment_box">
+<div class="navigate">
 <div class="nav" id="nav"></div>
+<div onclick="clickMask()">退出</div>
+</div>
 <div class="attachment_list" id="attachment_list"></div>
 <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
 </div>
@@ -81,16 +84,11 @@
                    iframe.setAttribute("id","ifr");
                    iframe.setAttribute("name","ifr");
                    setTimeout(()=>{
-//                       console.log(iframe,'iframe')
-//                       var progress_bar_container = iframe.children;
-//                       console.log(progress_bar_container,'progress_bar_container');
-                       var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
-                       console.log(progress_bar_container,'progress_bar_container')
-
-                   },2000)
-
-
-//                   iframe.setAttribute("name","first_iframe")
+                           var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
+                           var progress_bar_wrap = window.frames["ifr"].document.getElementsByClassName("progress_bar_wrap")[0];
+                           progress_bar_wrap.style.borderRadius = "0 0 4px 4px";
+                           progress_bar_container.style.top = 0;
+                   },1000);
                    iframeBox.appendChild(iframe);
                    if(iframe.contentWindow.pptCheckPage){
                      iframe.contentWindow.pptCheckPage(res.response.currentPage);
