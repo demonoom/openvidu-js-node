@@ -12,22 +12,17 @@
 <body>
 
 
-<div id="iframeBox">
-
-</div>
-
-<div class="addAttachment" id="addAttachment" onclick="showAddAttachment()">
-<img class="add_image" src="./img/addAttachment.png" alt="">
-</div>
-
-
+<div id="iframeBox"></div>
+<div class="courseware-open" onclick="showAddAttachment()">课件</div>
 <div class="attachment_box" id="attachment_box">
 <div class="navigate">
-<div class="nav" id="nav"></div>
-<div onclick="clickMask()">退出</div>
+    <div class="nav text-hidden" id="nav"></div>
+    <div onclick="clickMask()" class="nav-back"></div>
 </div>
-<div class="attachment_list" id="attachment_list"></div>
-<div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
+<div class="attachment-cont">
+    <div class="attachment_list" id="attachment_list"></div>
+    <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
+</div>
 </div>
 <div class="mask" id="mask" onclick="clickMask()"></div>
 </body>
@@ -179,7 +174,7 @@
                            imgSrc = data[k].fileType == 0?"./img/cloud_icon_web1.png":"./img/cloud_icon_web.png";
                            img_height = data[k].fileType == 0?30:20;
                            HTML_LIST += "" +
-                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item line_public'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span class='item-text'>"+data[k].name+"</span></div>";
+                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item line_public'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span class='item-text text-hidden'>"+data[k].name+"</span></div>";
 //                       }
                    }
 //                   console.log(parentArray,'parentArray');
