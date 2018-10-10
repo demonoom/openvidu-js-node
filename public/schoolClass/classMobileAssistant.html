@@ -92,6 +92,7 @@ position: absolute;
 </div>
 <div class="mask" id="mask" onclick="clickMask()"></div>
 </body>
+<script src="./js/simple_websocket_connection.js" type="text/javascript"></script>
 
 <script>
    var vid = Service.getQueryString("vid");
@@ -102,8 +103,28 @@ position: absolute;
        name: '蚁盘'
    }];
    var HTML_LIST="";
-   getClassOpenedKejian(221079);
+   var simpleMS = new SimpleConnection();
+   var randomNumber = RandomNumBoth(1000000,2000000);
+
+   vid = 221568;
+   simpleMS.connect();
+   getClassOpenedKejian(vid);
    filterCloudFile();
+
+
+   simpleMS.msgWsListener = {
+        onError: function (errorMsg) {
+
+             console.log(errorMsg,'11111111111')
+
+          }, onWarn: function (warnMsg) {
+
+             console.log(warnMsg,'11111111111')
+
+          }, onMessage: function (info) {
+             console.log(info,'11111111111')
+          }
+        };
    /*
    通过vid获取课件信息
     */
@@ -120,8 +141,8 @@ position: absolute;
                    var iframeBox = document.getElementById("iframeBox");
                    var iframe = document.createElement("iframe");
 
-                   iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+RandomNumBoth(1000000,2000000)+"&role=manager&ppt="+res.response.pptUrl+"")
-//                   iframe.setAttribute("id","ifr")
+                   iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
+                   iframe.setAttribute("id","ifr")
 //                   iframe.setAttribute("name","first_iframe")
                    iframeBox.appendChild(iframe);
                    if(iframe.contentWindow.pptCheckPage){
@@ -150,11 +171,21 @@ position: absolute;
    /*
    点击蚁盘文件触发事件
    */
-   function clickFile(fileType,parent,name,isPush){
+   function clickFile(fileType,parent,name,isPush,suffix,htmlPath,pdfPath){
+       var path = suffix == 'ppt' || suffix == "pptx"?htmlPath:pdfPath;
+       console.log('触发!!!');
        if(fileType==0){
-           console.log('更换课件功能未开放');
-//           alert('此功能未开放')
-//           getClassOpenedKejian(parent);
+           if(path && path != 'null'){
+               console.log(path);
+               var iframe = document.getElementById("ifr");
+               iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+path+"");
+               var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+path+"'}}" + ')');
+               simpleMS.send(protocal);
+               AddAttachmentChange('none');
+           }else{
+              console.log("path为空");
+//              alert("path为空");
+           }
        }else{
            parentId = parent;
            if(isPush){
@@ -171,10 +202,15 @@ position: absolute;
       * 根据userId获取蚁盘文件
        */
    function filterCloudFile(clearFlag){
+       if(clearFlag){
+       HTML_LIST = '';
+       defaultPageNo = 1;
+       document.getElementById('attachment_bottom').innerText= "点击加载更多";
+       }
        var service = new Service();
        var data = {
            method:'filterCloudFile',
-           userId: 23836,
+           userId: 54208,
            parentId: parentId,
            filterOption: -17,
            pageNo: defaultPageNo,
@@ -193,16 +229,12 @@ position: absolute;
 //                   console.log(attachment_list.childNodes,'childNodes');
 //                   console.log(attachment_list.childNodes.length,'attachment_list.childNodes.length');
 
-                   if(clearFlag){
-                       HTML_LIST = '';
-                   }else{
-//                       console.log(HTML_LIST,"HTML")
-                   }
+
                    for(var k in data){
                            imgSrc = data[k].fileType == 0?"./img/cloud_icon_web1.png":"./img/cloud_icon_web.png";
                            img_height = data[k].fileType == 0?30:20;
                            HTML_LIST += "" +
-                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true) class='list-item'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span>"+data[k].name+"</span></div>";
+                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span>"+data[k].name+"</span></div>";
 //                       }
                    }
 //                   console.log(parentArray,'parentArray');
