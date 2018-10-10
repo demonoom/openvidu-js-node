@@ -32,7 +32,7 @@
 
 <script>
    var vid = Service.getQueryString("vid");
-   var userId = 54208;
+   var userId = 28551;
    var defaultPageNo = 1;
    var parentId = -1;
    var parentArray = [{
@@ -42,7 +42,7 @@
    var HTML_LIST="";
    var simpleMS = new SimpleConnection();
    var randomNumber = RandomNumBoth(1000000,2000000);
-   vid = 221568;
+   vid = 221822;
    simpleMS.connect();
    getClassOpenedKejian(vid);
    filterCloudFile();
@@ -78,7 +78,18 @@
                    var iframe = document.createElement("iframe");
 
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
-                   iframe.setAttribute("id","ifr")
+                   iframe.setAttribute("id","ifr");
+                   iframe.setAttribute("name","ifr");
+                   setTimeout(()=>{
+//                       console.log(iframe,'iframe')
+//                       var progress_bar_container = iframe.children;
+//                       console.log(progress_bar_container,'progress_bar_container');
+                       var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
+                       console.log(progress_bar_container,'progress_bar_container')
+
+                   },2000)
+
+
 //                   iframe.setAttribute("name","first_iframe")
                    iframeBox.appendChild(iframe);
                    if(iframe.contentWindow.pptCheckPage){
@@ -170,7 +181,7 @@
                            imgSrc = data[k].fileType == 0?"./img/cloud_icon_web1.png":"./img/cloud_icon_web.png";
                            img_height = data[k].fileType == 0?30:20;
                            HTML_LIST += "" +
-                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item line_public'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span>"+data[k].name+"</span></div>";
+                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item line_public'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span class='item-text'>"+data[k].name+"</span></div>";
 //                       }
                    }
 //                   console.log(parentArray,'parentArray');

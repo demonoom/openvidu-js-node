@@ -36,6 +36,9 @@ body{
     top: 50%;
     transform: translateY(-50%);
 }
+.item-text{
+    margin-left: 39px;
+}
 .line_public{
     position: relative;
 }
@@ -92,4 +95,5 @@ body{
 #iframeBox iframe{
     border: none;
     width: 100%;
+    height: 100vh;
 }
