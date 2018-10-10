@@ -4,75 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>课堂手机助手</title>
+    <link href="css/classMobileAssistant.css" type="text/css" rel="stylesheet" />
     <script type="application/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="application/javascript" src="js/layer/layer.js"></script>
     <script type="application/javascript" src="js/service.js"></script>
 </head>
-<style>
-body{
-overflow: hidden;
-}
-.attachment_box{
-background: white;
-width:  100%;
-height:  70%;
-position: absolute;
-bottom: 0;
-left: 0;
-overflow: auto;
-z-index: 2;
-transform: translateY(100%);
-transition: 0.3s
-}
-.list-item{
-height: 50px;
-line-height: 50px;
-padding: 0 5px;
-border-bottom: 1px solid #ccc;
-}
-.item-image{
-    /*display: inline-block;*/
-    margin-right: 8px;
-    width: 24px;
-    height: 20px;
-    /*position: relative;*/
-    /*top: -18px;*/
-    /*width: 24px;*/
-    /*max-height: 26px;*/
-    vertical-align: middle;
-}
-.mask{
-width:  100%;
-height: 100%;
-background: #000;
-position: absolute;
-top: 0;
-left: 0;
-opacity: 0.5;
-z-index: 1;
-display:none
-}
-.attachment_bottom{
-text-align: center;
-}
-.nav{
-margin-top: 10px;
-padding-left: 8px;
-background: #cccccc;
-box-sizing: border-box;
-}
-.add_image{
-width: 100%;
-height: 100%;
-}
-#addAttachment{
-width: 40px;
-height: 40px;
-position: absolute;
- bottom: 20px;
- right: 20px;
-}
-</style>
 <body>
 
 
@@ -96,7 +32,7 @@ position: absolute;
 
 <script>
    var vid = Service.getQueryString("vid");
-   var userId = 54208;
+   var userId = 28551;
    var defaultPageNo = 1;
    var parentId = -1;
    var parentArray = [{
@@ -106,7 +42,7 @@ position: absolute;
    var HTML_LIST="";
    var simpleMS = new SimpleConnection();
    var randomNumber = RandomNumBoth(1000000,2000000);
-   vid = 221568;
+   vid = 221822;
    simpleMS.connect();
    getClassOpenedKejian(vid);
    filterCloudFile();
@@ -142,7 +78,18 @@ position: absolute;
                    var iframe = document.createElement("iframe");
 
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
-                   iframe.setAttribute("id","ifr")
+                   iframe.setAttribute("id","ifr");
+                   iframe.setAttribute("name","ifr");
+                   setTimeout(()=>{
+//                       console.log(iframe,'iframe')
+//                       var progress_bar_container = iframe.children;
+//                       console.log(progress_bar_container,'progress_bar_container');
+                       var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
+                       console.log(progress_bar_container,'progress_bar_container')
+
+                   },2000)
+
+
 //                   iframe.setAttribute("name","first_iframe")
                    iframeBox.appendChild(iframe);
                    if(iframe.contentWindow.pptCheckPage){
@@ -234,7 +181,7 @@ position: absolute;
                            imgSrc = data[k].fileType == 0?"./img/cloud_icon_web1.png":"./img/cloud_icon_web.png";
                            img_height = data[k].fileType == 0?30:20;
                            HTML_LIST += "" +
-                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span>"+data[k].name+"</span></div>";
+                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item line_public'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span class='item-text'>"+data[k].name+"</span></div>";
 //                       }
                    }
 //                   console.log(parentArray,'parentArray');
