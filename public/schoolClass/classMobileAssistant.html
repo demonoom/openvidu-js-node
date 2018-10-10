@@ -96,6 +96,7 @@ position: absolute;
 
 <script>
    var vid = Service.getQueryString("vid");
+   var userId = 54208;
    var defaultPageNo = 1;
    var parentId = -1;
    var parentArray = [{
@@ -105,7 +106,6 @@ position: absolute;
    var HTML_LIST="";
    var simpleMS = new SimpleConnection();
    var randomNumber = RandomNumBoth(1000000,2000000);
-
    vid = 221568;
    simpleMS.connect();
    getClassOpenedKejian(vid);
@@ -210,7 +210,7 @@ position: absolute;
        var service = new Service();
        var data = {
            method:'filterCloudFile',
-           userId: 54208,
+           userId: userId,
            parentId: parentId,
            filterOption: -17,
            pageNo: defaultPageNo,
