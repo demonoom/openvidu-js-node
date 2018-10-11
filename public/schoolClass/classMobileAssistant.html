@@ -94,7 +94,8 @@
 //                   },1000);
                    iframeBox.appendChild(iframe);
                    setTimeout(()=>{
-                       iframe.contentWindow.pptCheckPage(res.response.currentPage);
+//                       iframe.contentWindow.pptCheckPage(res.response.currentPage);
+                         window.frames['ifr'].window.pptCheckPage(res.response.currentPage)
                    },1000);
 
 //                   if(iframe.contentWindow.pptCheckPage){
