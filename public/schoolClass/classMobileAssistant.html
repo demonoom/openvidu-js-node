@@ -46,9 +46,14 @@
        id: -1,
        name: '蚁盘'
    }];
+   var iframeBox = document.getElementById("iframeBox");
+   var iframe = document.createElement("iframe");
+   iframe.setAttribute("id","ifr");
+   iframe.setAttribute("name","ifr");
+   iframeBox.appendChild(iframe);
+   simpleMS.connect();
    getClassOpenedKejian(vid);
    filterCloudFile();
-   simpleMS.connect();
    //监听
 //   simpleMS.msgWsListener = {
 //        onError: function (errorMsg) {
@@ -79,18 +84,14 @@
                if(res.success && res.response){
                    document.getElementById('empty').style.display="none";
                    document.getElementById('iframeBox').style.display="block";
-                   var iframeBox = document.getElementById("iframeBox");
-                   var iframe = document.createElement("iframe");
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
-                   iframe.setAttribute("id","ifr");
-                   iframe.setAttribute("name","ifr");
 //                   setTimeout(()=>{
 //                           var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
 //                           var progress_bar_wrap = window.frames["ifr"].document.getElementsByClassName("progress_bar_wrap")[0];
 //                           progress_bar_wrap.style.borderRadius = "0 0 4px 4px";
 //                           progress_bar_container.style.top = 0;
 //                   },1000);
-                   iframeBox.appendChild(iframe);
+
                    setTimeout(()=>{
 //                       iframe.contentWindow.pptCheckPage(res.response.currentPage);
                          window.frames['ifr'].window.pptCheckPage(res.response.currentPage)
