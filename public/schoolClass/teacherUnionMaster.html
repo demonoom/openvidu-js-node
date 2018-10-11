@@ -1742,7 +1742,7 @@ video{
 
   function initSimpleConnection() {
         try {
-            var simpleConn = new SimpleConnection(${host});
+            var simpleConn = new SimpleConnection();
             simpleConn.clazzWsListener = {
                 onError : function(errorMsg) {
                 },
