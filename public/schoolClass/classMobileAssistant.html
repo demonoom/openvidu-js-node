@@ -18,14 +18,14 @@
             <span>课件</span>
           </div>
           <div class="attachment_box" id="attachment_box">
-          <div class="navigate">
-            <div class="nav text-hidden" id="nav"></div>
-            <div onclick="clickMask()" class="nav-back"></div>
-          </div>
-          <div class="attachment-cont">
-            <div class="attachment_list" id="attachment_list"></div>
-            <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
-          </div>
+            <div class="navigate">
+              <div class="nav text-hidden" id="nav"></div>
+              <div onclick="clickMask()" class="nav-back"></div>
+            </div>
+            <div class="attachment-cont">
+              <div class="attachment_list" id="attachment_list"></div>
+              <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
+            </div>
           </div>
           <div class="mask" id="mask" onclick="clickMask()"></div>
 
@@ -237,7 +237,19 @@
        var mask = document.getElementById('mask');
        var attachment_box = document.getElementById('attachment_box');
        mask.style.display = style;
-       attachment_box.style.transform = style == 'block'?"translateY(0%)":"translateY(100%)";;
+//       if(style == 'block'){
+           attachment_box.style.display = style;
+//       }else{
+//           setTimeout(()=>{
+//             attachment_box.style.display = style;
+//           },500)
+//       }
+       var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
+       window.requestAnimationFrame(function(){
+          attachment_box.style.transform = style == 'block'?"translateY(0%)":"translateY(100%)";
+       })
+
+
    }
 </script>
 </html>
