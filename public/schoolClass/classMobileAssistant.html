@@ -10,55 +10,56 @@
     <script type="application/javascript" src="js/service.js"></script>
 </head>
 <body>
-
-
-<div id="iframeBox"></div>
-<div class="courseware-open" onclick="showAddAttachment()"><span>课件</span></div>
-<div class="attachment_box" id="attachment_box">
-<div class="navigate">
+  <div id="iframeBox"></div>
+  <div class="courseware-open" onclick="showAddAttachment()">
+    <span>课件</span>
+  </div>
+  <div class="attachment_box" id="attachment_box">
+  <div class="navigate">
     <div class="nav text-hidden" id="nav"></div>
     <div onclick="clickMask()" class="nav-back"></div>
-</div>
-<div class="attachment-cont">
+  </div>
+  <div class="attachment-cont">
     <div class="attachment_list" id="attachment_list"></div>
     <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
-</div>
-</div>
-<div class="mask" id="mask" onclick="clickMask()"></div>
+  </div>
+  </div>
+  <div class="mask" id="mask" onclick="clickMask()"></div>
 </body>
-<script src="./js/simple_websocket_connection.js" type="text/javascript"></script>
 
+<script src="./js/simple_websocket_connection.js" type="text/javascript"></script>
 <script>
+//   var userId = 28551;
+//   vid = 221822;
    var vid = Service.getQueryString("vid");
-   var userId = 28551;
+   var userId = Service.getQueryString("userId");
+   var HTML_LIST="";
+   var simpleMS = new SimpleConnection();
+   var randomNumber = RandomNumBoth(1000000,2000000);
    var defaultPageNo = 1;
    var parentId = -1;
    var parentArray = [{
        id: -1,
        name: '蚁盘'
    }];
-   var HTML_LIST="";
-   var simpleMS = new SimpleConnection();
-   var randomNumber = RandomNumBoth(1000000,2000000);
-   vid = 221822;
-   simpleMS.connect();
    getClassOpenedKejian(vid);
    filterCloudFile();
+//   simpleMS.connect();
+   //监听
+//   simpleMS.msgWsListener = {
+//        onError: function (errorMsg) {
+//
+//             console.log(errorMsg,'11111111111')
+//
+//          }, onWarn: function (warnMsg) {
+//
+//             console.log(warnMsg,'11111111111')
+//
+//          }, onMessage: function (info) {
+//             console.log(info,'11111111111')
+//          }
+//        };
 
-
-   simpleMS.msgWsListener = {
-        onError: function (errorMsg) {
-
-             console.log(errorMsg,'11111111111')
-
-          }, onWarn: function (warnMsg) {
-
-             console.log(warnMsg,'11111111111')
-
-          }, onMessage: function (info) {
-             console.log(info,'11111111111')
-          }
-        };
    /*
    通过vid获取课件信息
     */
@@ -74,22 +75,19 @@
                if(res.success){
                    var iframeBox = document.getElementById("iframeBox");
                    var iframe = document.createElement("iframe");
-
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
                    iframe.setAttribute("id","ifr");
                    iframe.setAttribute("name","ifr");
-                   setTimeout(()=>{
-                           var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
-                           var progress_bar_wrap = window.frames["ifr"].document.getElementsByClassName("progress_bar_wrap")[0];
-                           progress_bar_wrap.style.borderRadius = "0 0 4px 4px";
-                           progress_bar_container.style.top = 0;
-                   },1000);
+//                   setTimeout(()=>{
+//                           var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
+//                           var progress_bar_wrap = window.frames["ifr"].document.getElementsByClassName("progress_bar_wrap")[0];
+//                           progress_bar_wrap.style.borderRadius = "0 0 4px 4px";
+//                           progress_bar_container.style.top = 0;
+//                   },1000);
                    iframeBox.appendChild(iframe);
                    if(iframe.contentWindow.pptCheckPage){
                      iframe.contentWindow.pptCheckPage(res.response.currentPage);
                    }
-//                   console.log(document.getElementById('ifr').contentWindow,'111');
-//                   document.getElementById('ifr').contentWindow.document.getElementById('contentFrame');
                }
            },
            onError:function(error){}
@@ -106,25 +104,22 @@
          return num;
    }
 
-
-
    /*
    点击蚁盘文件触发事件
    */
    function clickFile(fileType,parent,name,isPush,suffix,htmlPath,pdfPath){
        var path = suffix == 'ppt' || suffix == "pptx"?htmlPath:pdfPath;
-       console.log('触发!!!');
+       name = unescape(name);
        if(fileType==0){
            if(path && path != 'null'){
-               console.log(path);
                var iframe = document.getElementById("ifr");
                iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+path+"");
                var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+path+"'}}" + ')');
+               //推送通知
                simpleMS.send(protocal);
                AddAttachmentChange('none');
            }else{
               console.log("path为空");
-//              alert("path为空");
            }
        }else{
            parentId = parent;
@@ -164,33 +159,25 @@
                    var attachment_bottom = document.getElementById('attachment_bottom');
                    var nav = document.getElementById('nav');
                    var data = res.response;
-//                   console.log(data,'filterCloudFile');
                    var imgSrc,img_height;
-//                   console.log(attachment_list.childNodes,'childNodes');
-//                   console.log(attachment_list.childNodes.length,'attachment_list.childNodes.length');
-
-
                    for(var k in data){
                            imgSrc = data[k].fileType == 0?"./img/cloud_icon_web1.png":"./img/cloud_icon_web.png";
                            img_height = data[k].fileType == 0?30:20;
                            HTML_LIST += "" +
-                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+data[k].name+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item line_public'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span class='item-text text-hidden'>"+data[k].name+"</span></div>";
-//                       }
+                            "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+escape(data[k].name)+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item line_public'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span class='item-text text-hidden'>"+data[k].name+"</span></div>";
                    }
-//                   console.log(parentArray,'parentArray');
                    var navHTML = "";
                    nav.innerHTML = "";
                    for(var k in parentArray){
                        navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") >"+parentArray[k].name+" > </span>";
                    }
-//                   console.log(navHTML,'navHTML')
                    attachment_bottom.innerText = res.response.length <= 0?"无更多文件":"点击加载更多";;
                    attachment_list.innerHTML = (HTML_LIST);
                    nav.innerHTML = navHTML;
                }
            },
            onError:function(error){
-               console.log(error,'error')
+               console.log(error,'error');
            }
        });
    }
@@ -201,16 +188,15 @@
        var indexof = '';
        for(var k in parentArray){
            if(parentArray[k].id == parentId){
-               indexof = k;
+               indexof = parseInt(k)+1;
            }
        }
-       parentArray = parentArray.slice(0,indexof+1);
+       parentArray = parentArray.slice(0,parseInt(indexof));
        clickFile(1,parentId,parentName);
    }
 
    //加载更多
    function onEndedPage(e){
-//       console.log(e.srcElement.innerText,'eeeeeee')
        if(e.srcElement.innerText == "无更多文件"){
            return;
        }
@@ -228,13 +214,12 @@
        AddAttachmentChange('block');
    }
 
-   //改变蚁盘盒子显示状态
+   //改变蚁盘元素显示状态
    function AddAttachmentChange(style){
        var mask = document.getElementById('mask');
        var attachment_box = document.getElementById('attachment_box');
        mask.style.display = style;
        attachment_box.style.transform = style == 'block'?"translateY(0%)":"translateY(100%)";;
    }
-
 </script>
 </html>
