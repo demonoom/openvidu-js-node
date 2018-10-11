@@ -3,6 +3,7 @@
 body{
     overflow: hidden;
     margin: 0;
+    position: relative;
 }
 .attachment_box{
     background: white;
@@ -14,7 +15,8 @@ body{
     overflow: auto;
     z-index: 2;
     transform: translateY(100%);
-    transition: 0.3s
+    transition: 0.3s;
+    display: none;
 }
 .list-item{
     height: 58px;
@@ -165,9 +167,12 @@ body{
 #empty{
     display:none;
     text-align: center;
-    height: 50px;
-    line-height: 50px;
+    height: 100vh;
+    line-height: 100vh;
     font-size: 18px;
     color: #cccccc;
+}
+#iframeBox{
+    overflow: hidden;
 }
 

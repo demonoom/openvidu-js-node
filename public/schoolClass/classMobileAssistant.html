@@ -13,23 +13,21 @@
     <div id="empty">
     暂无打开的课件
     </div>
-    <div id="page">
-        <div id="iframeBox"></div>
+          <div id="iframeBox"></div>
           <div class="courseware-open" onclick="showAddAttachment()">
             <span>课件</span>
           </div>
           <div class="attachment_box" id="attachment_box">
-          <div class="navigate">
-            <div class="nav text-hidden" id="nav"></div>
-            <div onclick="clickMask()" class="nav-back"></div>
-          </div>
-          <div class="attachment-cont">
-            <div class="attachment_list" id="attachment_list"></div>
-            <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
-          </div>
+            <div class="navigate">
+              <div class="nav text-hidden" id="nav"></div>
+              <div onclick="clickMask()" class="nav-back"></div>
+            </div>
+            <div class="attachment-cont">
+              <div class="attachment_list" id="attachment_list"></div>
+              <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
+            </div>
           </div>
           <div class="mask" id="mask" onclick="clickMask()"></div>
-    </div>
 
 </body>
 
@@ -48,9 +46,14 @@
        id: -1,
        name: '蚁盘'
    }];
+   var iframeBox = document.getElementById("iframeBox");
+   var iframe = document.createElement("iframe");
+   iframe.setAttribute("id","ifr");
+   iframe.setAttribute("name","ifr");
+   iframeBox.appendChild(iframe);
+   simpleMS.connect();
    getClassOpenedKejian(vid);
    filterCloudFile();
-   simpleMS.connect();
    //监听
 //   simpleMS.msgWsListener = {
 //        onError: function (errorMsg) {
@@ -80,30 +83,26 @@
                console.log(res,'success');
                if(res.success && res.response){
                    document.getElementById('empty').style.display="none";
-                   document.getElementById('page').style.display="block";
-                   var iframeBox = document.getElementById("iframeBox");
-                   var iframe = document.createElement("iframe");
+                   document.getElementById('iframeBox').style.display="block";
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
-                   iframe.setAttribute("id","ifr");
-                   iframe.setAttribute("name","ifr");
 //                   setTimeout(()=>{
 //                           var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
 //                           var progress_bar_wrap = window.frames["ifr"].document.getElementsByClassName("progress_bar_wrap")[0];
 //                           progress_bar_wrap.style.borderRadius = "0 0 4px 4px";
 //                           progress_bar_container.style.top = 0;
 //                   },1000);
-                   iframeBox.appendChild(iframe);
+
                    setTimeout(()=>{
 //                       iframe.contentWindow.pptCheckPage(res.response.currentPage);
                          window.frames['ifr'].window.pptCheckPage(res.response.currentPage)
-                   },1000);
+                   },2000);
 
 //                   if(iframe.contentWindow.pptCheckPage){
 
 //                   }
                }else{
                    document.getElementById('empty').style.display="block";
-                   document.getElementById('page').style.display="none";
+                   document.getElementById('iframeBox').style.display="none";
                }
            },
            onError:function(error){}
@@ -136,6 +135,8 @@
                //推送通知
                simpleMS.send(protocal);
                AddAttachmentChange('none');
+               document.getElementById('empty').style.display="none";
+               document.getElementById('iframeBox').style.display="block";
            }else{
               console.log("path为空");
            }
@@ -237,7 +238,19 @@
        var mask = document.getElementById('mask');
        var attachment_box = document.getElementById('attachment_box');
        mask.style.display = style;
-       attachment_box.style.transform = style == 'block'?"translateY(0%)":"translateY(100%)";;
+//       if(style == 'block'){
+           attachment_box.style.display = style;
+//       }else{
+//           setTimeout(()=>{
+//             attachment_box.style.display = style;
+//           },500)
+//       }
+       var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
+       window.requestAnimationFrame(function(){
+          attachment_box.style.transform = style == 'block'?"translateY(0%)":"translateY(100%)";
+       })
+
+
    }
 </script>
 </html>
