@@ -450,6 +450,7 @@ video{
  		 speakStatus=info.data.screen_lock;
  		 initStudentSpeak();
          initAssiantQrcode();
+         initSimpleConnection();
  		 isPreparedOK = true;
  	 }else if(command == 'simpleClassDanmu'){
 		 var message = info.data.message;
@@ -1737,6 +1738,31 @@ video{
   function initAssiantQrcode(){
       var url = window.location.protocol+"//"+window.location.host+"/openvidu/schoolClass/classMobileAssistant.html?vid="+vid+"&userId="+userId;
       new QRCode(document.getElementById('assistant_qr'),url);
+  }
+
+  function initSimpleConnection() {
+        try {
+            var simpleConn = new SimpleConnection(${host});
+            simpleConn.clazzWsListener = {
+                onError : function(errorMsg) {
+                },
+                onWarn : function(warnMsg) {
+                },
+                onMessage : function(info) {
+                    var command = info.command;
+                    if (command == "assistantPlayKejian") {
+                        var roomid = info.data.roomid;
+                        var uid = info.data.userId;
+                        var html = info.data.html;
+                        if (roomid == vid && userId == uid) {
+                            playPPT(html, true);
+                        }
+                    }
+                }
+            };
+            simpleConn.connect();
+        } catch (e) {
+        }
   }
 
   window.addEventListener('message', function(event) {

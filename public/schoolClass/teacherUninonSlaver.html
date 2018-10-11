@@ -409,6 +409,7 @@
 		 checkApplyMaiState(maiList);
 		 initBmIframeSrc(vid);
 		 initAssiantQrcode();
+         initSimpleConnection();
 		 isPreparedOK = true;
 		 getUserPermissionsByUid();
 	 }else if(command == 'agree_connect_mai'){
@@ -1338,6 +1339,31 @@
 	            }
 			}}); 
 	  }
+
+      function initSimpleConnection() {
+			try {
+				var simpleConn = new SimpleConnection(${host});
+				simpleConn.clazzWsListener = {
+					onError : function(errorMsg) {
+					},
+					onWarn : function(warnMsg) {
+					},
+					onMessage : function(info) {
+						var command = info.command;
+						if (command == "assistantPlayKejian") {
+							var roomid = info.data.roomid;
+							var uid = info.data.userId;
+							var html = info.data.html;
+							if (roomid == vid && userId == uid) {
+								playPPT(html, true);
+							}
+						}
+					}
+				};
+				simpleConn.connect();
+			} catch (e) {
+			}
+      }
 </script>
 
 </html>
