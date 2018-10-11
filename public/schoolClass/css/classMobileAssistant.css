@@ -162,4 +162,12 @@ body{
     overflow-y: auto;
     margin-top: 40px;
 }
+#empty{
+    display:none;
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    color: #cccccc;
+}
 

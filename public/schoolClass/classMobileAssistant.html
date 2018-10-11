@@ -10,21 +10,27 @@
     <script type="application/javascript" src="js/service.js"></script>
 </head>
 <body>
-  <div id="iframeBox"></div>
-  <div class="courseware-open" onclick="showAddAttachment()">
-    <span>课件</span>
-  </div>
-  <div class="attachment_box" id="attachment_box">
-  <div class="navigate">
-    <div class="nav text-hidden" id="nav"></div>
-    <div onclick="clickMask()" class="nav-back"></div>
-  </div>
-  <div class="attachment-cont">
-    <div class="attachment_list" id="attachment_list"></div>
-    <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
-  </div>
-  </div>
-  <div class="mask" id="mask" onclick="clickMask()"></div>
+    <div id="empty">
+    暂无打开的课件
+    </div>
+    <div id="page">
+        <div id="iframeBox"></div>
+          <div class="courseware-open" onclick="showAddAttachment()">
+            <span>课件</span>
+          </div>
+          <div class="attachment_box" id="attachment_box">
+          <div class="navigate">
+            <div class="nav text-hidden" id="nav"></div>
+            <div onclick="clickMask()" class="nav-back"></div>
+          </div>
+          <div class="attachment-cont">
+            <div class="attachment_list" id="attachment_list"></div>
+            <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
+          </div>
+          </div>
+          <div class="mask" id="mask" onclick="clickMask()"></div>
+    </div>
+
 </body>
 
 <script src="./js/simple_websocket_connection.js" type="text/javascript"></script>
@@ -72,7 +78,9 @@
        service.doWebService(data,{
            onResponse:(res) => {
                console.log(res,'success');
-               if(res.success){
+               if(res.success && res.response){
+                   document.getElementById('empty').style.display="none";
+                   document.getElementById('page').style.display="block";
                    var iframeBox = document.getElementById("iframeBox");
                    var iframe = document.createElement("iframe");
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
@@ -85,9 +93,16 @@
 //                           progress_bar_container.style.top = 0;
 //                   },1000);
                    iframeBox.appendChild(iframe);
-                   if(iframe.contentWindow.pptCheckPage){
-                     iframe.contentWindow.pptCheckPage(res.response.currentPage);
-                   }
+                   setTimeout(()=>{
+                       iframe.contentWindow.pptCheckPage(res.response.currentPage);
+                   },1000);
+
+//                   if(iframe.contentWindow.pptCheckPage){
+
+//                   }
+               }else{
+                   document.getElementById('empty').style.display="block";
+                   document.getElementById('page').style.display="none";
                }
            },
            onError:function(error){}
@@ -113,8 +128,10 @@
        if(fileType==0){
            if(path && path != 'null'){
                var iframe = document.getElementById("ifr");
-               iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+path+"");
-               var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+path+"'}}" + ')');
+               var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");
+               newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
+               iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+newHTMLPath+"");
+               var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
                //推送通知
                simpleMS.send(protocal);
                AddAttachmentChange('none');
