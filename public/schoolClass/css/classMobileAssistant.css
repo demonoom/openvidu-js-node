@@ -3,6 +3,7 @@
 body{
     overflow: hidden;
     margin: 0;
+    position: relative;
 }
 .attachment_box{
     background: white;
