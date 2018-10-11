@@ -14,7 +14,8 @@ body{
     overflow: auto;
     z-index: 2;
     transform: translateY(100%);
-    transition: 0.3s
+    transition: 0.3s;
+    display: none;
 }
 .list-item{
     height: 58px;
