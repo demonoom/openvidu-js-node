@@ -12,7 +12,6 @@
 <meta name="viewport" content="width=device-width,user-scalable=no" />
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/simple_websocket_connection.js?v=1"></script>
 <script type="text/javascript" src="js/clazz_websocket_connection.js?v=20"></script>
 <script type="text/javascript" src="js/uiutils.js"></script>
 <link rel="icon" href="img/logo_title.png" type="image/x-icon">
@@ -409,7 +408,6 @@
 		 checkApplyMaiState(maiList);
 		 initBmIframeSrc(vid);
 		 initAssiantQrcode();
-         initSimpleConnection();
 		 isPreparedOK = true;
 		 getUserPermissionsByUid();
 	 }else if(command == 'agree_connect_mai'){
@@ -1340,30 +1338,6 @@
 			}}); 
 	  }
 
-      function initSimpleConnection() {
-			try {
-				var simpleConn = new SimpleConnection();
-				simpleConn.clazzWsListener = {
-					onError : function(errorMsg) {
-					},
-					onWarn : function(warnMsg) {
-					},
-					onMessage : function(info) {
-						var command = info.command;
-						if (command == "assistantPlayKejian") {
-							var roomid = info.data.roomid;
-							var uid = info.data.userId;
-							var html = info.data.html;
-							if (roomid == vid && userId == uid) {
-								playPPT(html, true);
-							}
-						}
-					}
-				};
-				simpleConn.connect();
-			} catch (e) {
-			}
-      }
 </script>
 
 </html>
