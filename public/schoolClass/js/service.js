@@ -2,7 +2,7 @@ function Service() {
 	this.requesting = false;
 
 	this.WEBSERVICE_URL = "https://www.maaee.com/Excoord_For_Education/webservice";
-	//this.WEBSERVICE_URL = "http://192.168.50.34:9006/Excoord_ApiServer/webservice";
+	this.WEBSERVICE_URL = "http://192.168.50.34:9006/Excoord_ApiServer/webservice";
 
 	this.pagination = eval('(' + "{'pageNo':0,'pageCount':20,'pageSize':2}" + ')');
 	this.messageElement = $("#loading_message");
@@ -149,7 +149,7 @@ Service.getQueryString = function(name){
     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
     if(r!=null) {
-        return unescape(r[2]);
+        return decodeURIComponent(r[2]);
     }
     return null;
 }

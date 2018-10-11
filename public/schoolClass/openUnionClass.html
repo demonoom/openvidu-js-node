@@ -175,7 +175,9 @@
             layer.msg("请选择要联合开课的班级");
             return;
         }
-        window.open("teacherUnionMaster.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+userName,"_blank");
+        //title = encodeURIComponent(title);
+        var url = "teacherUnionMaster.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+userName;
+        window.open(url,"_blank");
         window.parent.layer.closeAll();
     }
 

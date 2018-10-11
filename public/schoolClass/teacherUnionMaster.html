@@ -5,6 +5,7 @@
 <base href="<%=base%>">
 
 <title>联合开课-主讲</title>
+<meta charset="UTF-8">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">
@@ -413,7 +414,7 @@ video{
   var vid;
   var userId = getQueryString("userId");
   var userName = getQueryString("userName");
-  var title = getQueryString("title") ;
+  var title = getQueryString("title");
   var livePassword = getQueryString("livePassword");
   var pushUrl = null;
   var isPreparedOK = false;
@@ -1674,7 +1675,7 @@ video{
 		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
 		var r = window.location.search.substr(1).match(reg);
 		if(r!=null) {
-			return unescape(r[2]);
+			return decodeURIComponent(r[2]);
 		}
 		return null;
   }
