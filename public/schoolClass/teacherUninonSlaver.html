@@ -18,6 +18,7 @@
 <link type="text/css" rel="stylesheet" href="css/live.css?v=83" />
 <link type="text/css" rel="stylesheet" href="css/Cloud_video.css?v=25" />
 <link type="text/css" rel="stylesheet" href="js/jquery-photo-gallery/photoGallery.css" />
+<link type="text/css" rel="stylesheet" href="css/record_list.css?v=58" />
 <script type="text/javascript" src="js/jquery-photo-gallery/jquery.photo.gallery.js?v=2"></script>
 
 <script type="text/javascript" src="js/jwplayer-7.1.4/jwplayer.js"></script>
@@ -35,6 +36,7 @@
 
 <script type="text/javascript" src="../openvidu-browser-2.4.0.js"></script>
 <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
+<script type="application/javascript" src="./js/qrcode.js"></script>
 
 <style type="text/css">
   
@@ -115,7 +117,16 @@
 		      		<div  class="operation_menu_t">
 		      			<a href="javascript:getClassToDoSubjects();" class="operation_menu_t_btn" string_id="string_todo_timu">待做题</a>
 		      			<a href="javascript:openSubjectAccount();" class="operation_menu_t_btn" string_id="string_ketang_tongji">课堂统计</a>
-		      			<a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" style="display: none;">打开讨论区</a>
+						<div class="phoneHelpDiv">
+							<div class="phoneHelpTip">
+								<div class="helpCont">
+									<div id="assistant_qr" src="img/pc_cloud_icon_web.jpg"></div>
+									<span>使用手机扫描二维码</span>
+								</div>
+							</div>
+							<a  class="phoneHelp operation_menu_t_btn"  >课堂助手</a>
+						</div>
+						<a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" style="display: none;">打开讨论区</a>
 		      			<a id='language_select' href="javascript:changeLanguage();" class="En_icon_i" style="margin-left: 100px"></a>
 		      		</div>
 		      </div>
@@ -397,6 +408,7 @@
 		 var maiList = info.data.vclass_mai_list; 
 		 checkApplyMaiState(maiList);
 		 initBmIframeSrc(vid);
+		 initAssiantQrcode();
 		 isPreparedOK = true;
 		 getUserPermissionsByUid();
 	 }else if(command == 'agree_connect_mai'){
@@ -1315,6 +1327,11 @@
 		  connection.send(protocal); 
 		  layer.closeAll();
 		  $(el).parent().remove();
+	  }
+
+	  function initAssiantQrcode(){
+		  var url = window.location.protocol+"//"+window.location.host+"/schoolClass/classMobileAssistant.html?vid="+vid+"&userId="+userId;
+		  new QRCode(document.getElementById('assistant_qr'),url);
 	  }
 	  
 	  function getUserPermissionsByUid(){

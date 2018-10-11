@@ -1,7 +1,7 @@
 function SimpleConnection(){
 	this.clazzWsListener = null;
 	this.WS_URL = "wss://www.maaee.com:7891/Excoord_SimpleWsServer/simple";
-	// this.WS_URL = "ws://192.168.50.34:8891/Excoord_SimpleWsServer/simple";
+	//this.WS_URL = "ws://192.168.50.34:8891/Excoord_SimpleWsServer/simple";
 	this.ws = null;
 	this.PING_COMMAND = "ping_0123456789_abcdefg";
 	this.PONG_COMMAND = "pong_0123456789_abcdefg";

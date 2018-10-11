@@ -4716,6 +4716,48 @@ br{
 	text-decoration: underline;
 	cursor: pointer;
 }
+.phoneHelpDiv{
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+}
+.phoneHelpTip{
+	position: absolute;
+	bottom: 30px;
+	left: -30px;
+	height: 180px;
+	display: none;
+	z-index: 99;
+}
+
+.phoneHelpDiv:hover .phoneHelpTip {
+	display: block;
+}
+
+
+.helpCont{
+	padding-top: 10px;
+	box-sizing: border-box;
+	width: 162px;
+	height: 162px;
+	text-align: center;
+	background: url("../img/icon_phoneHelp.png") no-repeat;
+	background-size: 100%;
+	padding-bottom: 30px;
+
+}
+.helpCont img{
+	display: block;
+	width: 100px;
+	height: 100px;
+	margin: 0 auto 5px;
+}
+.helpCont span{
+	color: #333;
+	font-size: 12px;
+
+}
+
  .ApprovalAssistant_head {
 	position: fixed;
     width: calc(100% - 4rem);
