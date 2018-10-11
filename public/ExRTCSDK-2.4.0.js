@@ -217,6 +217,9 @@ function ExRTC(){
     this.httpPostRequest = function(url, body, errorMsg, callback) {
         var protocal = window.location.protocol;
         var host = window.location.host;
+        if(host.indexOf("maaee.com") != -1){
+            url = "openvidu/"+url;
+        }
         url = protocal+"//"+host+"/"+url;
         var http = new XMLHttpRequest();
         http.open('POST', url, true);
