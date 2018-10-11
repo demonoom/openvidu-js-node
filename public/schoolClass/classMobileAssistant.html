@@ -13,8 +13,7 @@
     <div id="empty">
     暂无打开的课件
     </div>
-    <div id="page">
-        <div id="iframeBox"></div>
+          <div id="iframeBox"></div>
           <div class="courseware-open" onclick="showAddAttachment()">
             <span>课件</span>
           </div>
@@ -29,7 +28,6 @@
           </div>
           </div>
           <div class="mask" id="mask" onclick="clickMask()"></div>
-    </div>
 
 </body>
 
@@ -80,7 +78,7 @@
                console.log(res,'success');
                if(res.success && res.response){
                    document.getElementById('empty').style.display="none";
-                   document.getElementById('page').style.display="block";
+                   document.getElementById('iframeBox').style.display="block";
                    var iframeBox = document.getElementById("iframeBox");
                    var iframe = document.createElement("iframe");
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
@@ -96,14 +94,14 @@
                    setTimeout(()=>{
 //                       iframe.contentWindow.pptCheckPage(res.response.currentPage);
                          window.frames['ifr'].window.pptCheckPage(res.response.currentPage)
-                   },1000);
+                   },2000);
 
 //                   if(iframe.contentWindow.pptCheckPage){
 
 //                   }
                }else{
                    document.getElementById('empty').style.display="block";
-                   document.getElementById('page').style.display="none";
+                   document.getElementById('iframeBox').style.display="none";
                }
            },
            onError:function(error){}
@@ -136,6 +134,8 @@
                //推送通知
                simpleMS.send(protocal);
                AddAttachmentChange('none');
+               document.getElementById('empty').style.display="none";
+               document.getElementById('iframeBox').style.display="block";
            }else{
               console.log("path为空");
            }

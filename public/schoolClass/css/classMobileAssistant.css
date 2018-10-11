@@ -170,4 +170,7 @@ body{
     font-size: 18px;
     color: #cccccc;
 }
+#iframeBox{
+    overflow: hidden;
+}
 
