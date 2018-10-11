@@ -27,8 +27,6 @@
 
 <script type="text/javascript" src="js/layer/layer.js"></script>
 
-<script type="text/javascript" src="js/agora/AgoraRTCSDK-2.3.1.js"></script>
-
 <!-- 引入Service类 -->
 <script type="text/javascript" src="js/service.js?v=5"></script>
 <link rel="stylesheet" href="js/agora/vendor/bootstrap.min.css">
@@ -36,8 +34,8 @@
 <script type="text/javascript" src="js/hashset.js"></script>
 <script type="text/javascript" src="i18n/jquery.i18n.properties.js"></script>
 
-<script type="text/javascript" src="openvidu/openvidu-browser-2.4.0.js"></script>
-<script type="text/javascript" src="openvidu/ExRTCSDK-2.4.0.js"></script>
+<script type="text/javascript" src="../openvidu-browser-2.4.0.js"></script>
+<script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
 <script type="application/javascript" src="./js/qrcode.js"></script>
 
 <style type="text/css">
@@ -864,25 +862,6 @@
 
   }
 
-  function getDevices() {
-    AgoraRTC.getDevices(function (devices) {
-      for (var i = 0; i !== devices.length; ++i) {
-        var device = devices[i];
-        var option = document.createElement('option');
-        option.value = device.deviceId;
-        if (device.kind === 'audioinput') {
-          option.text = device.label || 'microphone ' + (audioSelect.length + 1);
-          audioSelect.appendChild(option);
-        } else if (device.kind === 'videoinput') {
-          option.text = device.label || 'camera ' + (videoSelect.length + 1);
-          videoSelect.appendChild(option);
-        } else {
-          console.log('Some other kind of source/device: ', device);
-        }
-      }
-    });
-  }
-  
   function applyForMai(){
 	  var text = $("#apply_lianmai").attr('text');
 	  text = typeof(text) == 'undefined' ? "申请连麦" : text;
@@ -946,9 +925,7 @@
   function reduceScale(){
 	  window.frames['ppt_frame'].window.reduceScale();
   }
-  
-  getDevices();
-  
+
 	/**
 	* 显示题目的弹窗
 	*/

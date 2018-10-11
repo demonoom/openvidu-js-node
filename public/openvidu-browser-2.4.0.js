@@ -5910,7 +5910,7 @@ var JsonRpcClient = require('./jsonrpcclient');
 exports.JsonRpcClient = JsonRpcClient;
 
 },{"./jsonrpcclient":40}],40:[function(require,module,exports){
-var RpcBuilder = require('../../../server');
+var RpcBuilder = require('../server');
 var WebSocketWithReconnection = require('./transports/webSocketWithReconnection');
 Date.now = Date.now || function () {
     return +new Date;
