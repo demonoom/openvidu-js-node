@@ -17,15 +17,14 @@
 <body>
 
     <div>
-        开课主题:<input id="title"/> <br>
-        邀请码:<input id="password"/> <br>
+        请输入邀请码:<input id="password"/> <br>
         请选择联合开课的班级:
         <div id="class_container">
 
 
         </div>
 
-        <button onclick="openUnionClassSubmit();">确认创建</button>
+        <button onclick="joinSubmit();">进入</button>
 
     </div>
 
@@ -34,7 +33,7 @@
 <script type="application/javascript">
 
     var teacherId = Service.getQueryString("teacherId");
-    var userName = Service.getQueryString("userName");
+    var vid = Service.getQueryString("vid");
 
     $(document).ready(function(){
         getTeacherClasses();
@@ -65,15 +64,10 @@
         });
     }
 
-    function openUnionClassSubmit(){
-        var title = $("#title").val();
+    function joinSubmit(){
         var password = $("#password").val();
-        if(title == null || title == ''){
-            layer.msg("请输入联合开课主题!");
-            return;
-        }
         if(password == null || password == ""){
-            layer.msg("请输入6位邀请码");
+            layer.msg("请输入邀请码");
             return;
         }
         var selectedClazzId = 0;
@@ -81,26 +75,21 @@
         if(selected && selected.length > 0){
             selectedClazzId = $(selected[0]).attr("clazzId");
         }
-        if(selectedClazzId == 0){
-            layer.msg("请选择要联合开课的班级");
-            return;
-        }
-        window.open("teacherUnionMaster.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+userName,"_blank");
-        window.parent.layer.closeAll();
+        window.parent.joinCheck(vid,password,selectedClazzId);
     }
 
     function changeClazzSelected(element,clazzId){
-        var selected = $(".clazzInfo_selected");
-        var selectedClazzId = 0;
-        if(selected && selected.length > 0){
-            selectedClazzId = $(selected[0]).attr("clazzId");
-        }
+         var selected = $(".clazzInfo_selected");
+         var selectedClazzId = 0;
+         if(selected && selected.length > 0){
+             selectedClazzId = $(selected[0]).attr("clazzId");
+         }
 
-        $(".clazzInfo_selected").removeClass("clazzInfo_selected");
-        if(selectedClazzId == clazzId){
-            return;
-        }
-        $(element).addClass("clazzInfo_selected");
+         $(".clazzInfo_selected").removeClass("clazzInfo_selected");
+         if(selectedClazzId == clazzId){
+             return;
+         }
+         $(element).addClass("clazzInfo_selected");
     }
 
 </script>

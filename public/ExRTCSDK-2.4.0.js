@@ -7,9 +7,12 @@ function ExRTC(){
     var onListeners = new Array();
     var userId;
     var userName;
+    var mediaStream = false;
+    var channel;
     var _this=this;
 
     this.join = function(channel,uid,userName,onSuccess,onFailure){
+        _this.channel = channel;
         _this.httpPostRequest(
             'api-login/login',
             {userId:uid,userName:userName},
@@ -36,7 +39,7 @@ function ExRTC(){
                     if(stream == undefined){
                         return;
                     }
-                    var serverData = JSON.parse(stream.connection.data.split('%/%')[1]).serverData;
+                    var serverData = JSON.parse(stream.connection.data.split('%/%')[0]).clientUser;
                     var user = {userId:serverData.userId,userName:serverData.userName};
                     if(user.userId == _this.userId){
                         return;
@@ -71,15 +74,37 @@ function ExRTC(){
                     _this.emit('stream-removed',evt);
                 });
 
+                //链接恢复后的回调
+                _this.session.on('connectionRecovered', (event) => {
+                    console.log("connectionRecovered  rejoinRoom ....");
+                    _this.session.disconnect();
+                    _this.session = false;
+                    _this.OV = false;
+                    _this.publisher = false;
+                    _this.token =false;
+                    this.innerJoin(_this.channel,_this.userId,_this.userName,onSuccess,onFailure);
+                });
+
+                _this.session.on('sessionDisconnected', (event) => {
+                    console.log("sessionDisconnected  ....");
+                });
+
                 _this.userId = uid;
                 _this.userName = userName;
-                _this.session.connect(_this.token, { clientData: _this.userId })
+                _this.session.connect(_this.token, { clientData: _this.userId ,clientUser:{userId:_this.userId,userName:_this.userName}})
                     .then(() => {
-                        onSuccess();
+                        if(_this.mediaStream){
+                            $("#"+_this.mediaStream.elmentId).find("video").remove();
+                            _this.publish(_this.mediaStream,_this.mediaStream.elmentId);
+                        }else{
+                            onSuccess();
+                        }
                     })
                     .catch(error => {
-                        console.error('There was an error connecting to the session:', error.code, error.message);
-                        onFailure();
+                        if(!_this.mediaStream){
+                            console.error('There was an error connecting to the session:', error.code, error.message);
+                            onFailure();
+                        }
                     });
             }
         );
@@ -107,19 +132,24 @@ function ExRTC(){
 
     this.leave = function(){
         _this.session.disconnect();
+        _this.session.leave(false,"");
         _this.session = null;
     }
 
     this.publish = function(mediaStream,elmentId){
+        mediaStream.elmentId = elmentId;
+        _this.mediaStream = mediaStream;
+        var videoSource = mediaStream.getVideoTracks();
+        var audioSource = mediaStream.getAudioTracks();
         _this.publisher = _this.OV.initPublisher(elmentId, {
-            audioSource: undefined, // The source of audio. If undefined default microphone
-            videoSource: undefined, // The source of video. If undefined default webcam
+            audioSource: audioSource, // The source of audio. If undefined default microphone
+            videoSource: videoSource, // The source of video. If undefined default webcam
             publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
             publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
             resolution: '640x480',  // The resolution of your video
             frameRate: 30,			// The frame rate of your video
             insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
-            mirror: false       	// Whether to mirror your local video or not
+            mirror: true       	// Whether to mirror your local video or not
         });
         _this.publisher.on('videoElementCreated', (event) => {
             console.log("videoElementCreated....");
@@ -141,6 +171,7 @@ function ExRTC(){
     }
 
     this.unpublish = function(rtcStream){
+        _this.mediaStream = false;
         _this.session.unpublish(_this.publisher);
         _this.emit("stream-removed",{stream:rtcStream,user:rtcStream.user});
     }
@@ -212,9 +243,7 @@ function ExRTC(){
 
     window.onbeforeunload = function(){
         if(_this.session){
-            _this.removeUser();
-            _this.leave();
-            _this.logOut();
+           _this.session.disconnect();
         }
     }
 }

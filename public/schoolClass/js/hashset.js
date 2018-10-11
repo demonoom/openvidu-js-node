@@ -21,6 +21,7 @@ function each(fn){
 }
 
 function add(data) {
+    data = data+"";
     if (this.dataStore.indexOf(data) < 0) {
         this.dataStore.push(data);
         return true;
@@ -31,6 +32,7 @@ function add(data) {
 }
 
 function remove(data) {
+    data = data+"";
     var pos = this.dataStore.indexOf(data);
     if (pos > -1) {
         this.dataStore.splice(pos,1);
@@ -50,6 +52,7 @@ function show() {
 }
 
 function contains(data) {
+    data = data+"";
     if (this.dataStore.indexOf(data) > -1) {
         return true;
     }

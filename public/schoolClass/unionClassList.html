@@ -30,6 +30,7 @@
 <script type="application/javascript">
 
     var teacherId = Service.getQueryString("teacherId");
+    var teacherName = Service.getQueryString("teacherName");
 
     $(document).ready(function(){
         getUnionClassList();
@@ -52,9 +53,12 @@
                    var title = info.title;
                    var openTeacher = info.openTeacher;
                    var unionTeachers = info.unionTeachers;
+                   var pass = info.password;
 
                    var template = $("#item_template");
                    $(template.children("div").get(0)).attr("onclick","joinUnionClass("+vid+");");
+                   $(template.children("div").get(0)).attr("id","vclass_"+vid);
+                   $(template.children("div").get(0)).attr("pass",pass);
                    template.find("#title").text(title);
                    template.find("#main_teacher_name").text(openTeacher.userName);
 
@@ -90,12 +94,33 @@
             shadeClose: true,
             shade: 0.8,
             area: ['380px', '90%'],
-            content: 'openUnionClass.html?teacherId='+teacherId+"&userName=wangdan"
+            content: 'openUnionClass.html?teacherId='+teacherId+"&userName="+teacherName
         });
     }
 
     function joinUnionClass(vid){
-        window.open("teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName=zhenghui","_blank");
+        layer.open({
+            type: 2,
+            title: '进入课堂验证',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['380px', '90%'],
+            content: 'joinDialog.html?teacherId='+teacherId+"&vid="+vid
+        });
+    }
+
+
+    function joinCheck(vid,enterPass,selectedClazzIds){
+        if(typeof(selectedClazzIds) == undefined || selectedClazzIds == 0){
+            selectedClazzIds == "";
+        }
+        var pass = $("#vclass_"+vid).attr("pass");
+        if(enterPass == pass){
+            window.open("teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName="+teacherName+"&clazzIds="+selectedClazzIds,"_blank");
+            layer.closeAll();
+        }else{
+            layer.msg("邀请码不正确~");
+        }
     }
 
 </script>

@@ -64,6 +64,7 @@
    video{
 	   width: 100%;
 	   height: 100%;
+	   object-fit:cover;
    }
 
 </style>
@@ -308,6 +309,7 @@
   var vid = Service.getQueryString("vid");
   var userId = Service.getQueryString("userId");
   var userName = Service.getQueryString("userName");
+  var clazzIds = Service.getQueryString("clazzIds");
   var formData = new FormData();
   var subjects = [];
   var workIds="";
@@ -453,6 +455,7 @@
   loginProtocol.data = {};
   loginProtocol.data.userId = userId;
   loginProtocol.data.vid = vid;
+  loginProtocol.data.clazzIds = clazzIds;
   connection.connect(loginProtocol);
 
   function initSubjectWindow(subjectsResponse,workIdsResponse){
@@ -693,7 +696,6 @@
 
   function join() {
     client = new ExRTC();
-    console.log("AgoraRTC client initialized");
     client.join(vid+"", userId,userName, function() {
         console.log("User " + userId + " join channel successfully");
 	}, function() {
@@ -776,7 +778,6 @@
         
         $("#video_container").prepend("<div><div id='agora_local' uid='"+userId+"' style='width: 230px; height: 160px; position: relative;margin: 12px 5px 0 5px;'><div style='position:absolute; right:0; bottom:0; color:#fff; background:rgba(34, 34, 34, 0.6); z-index:1; text-align:center; width:45px; height:24px;line-height:24px' id='definition_state' onclick='changePushDefinition();' state='1'>高清</div><img style='color:red;' class='radio_no' id='audio_"+userId+"'/></div></div>");
 
-        client.publish(null,"agora_local");
         client.on('stream-published', function (evt) {
             localStream = evt.stream;
             try{$('#agora_local').unbind("click");}catch(e){}
@@ -798,6 +799,14 @@
             };
             onAudioMutedStateChange(localStream.getId());
         });
+
+	    navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+          .then(function(stream) {
+              client.publish(stream, "agora_local");
+          })
+          .catch(function(err) {
+
+          });
   }
   
   
