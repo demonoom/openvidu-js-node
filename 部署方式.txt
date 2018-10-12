@@ -13,10 +13,3 @@
 
     node openvidu_server.js kms.maaee.com:4443 MY_SECRET
 
-
-
-
-
-5:对openvidu的修改
-    openvidu-browser-2.4.0.js
-

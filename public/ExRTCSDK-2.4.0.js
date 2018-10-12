@@ -9,6 +9,7 @@ function ExRTC(){
     var userName;
     var mediaStream = false;
     var channel;
+    var streamCreateTimeMap = new HashMap();
     var _this=this;
 
     this.join = function(channel,uid,userName,onSuccess,onFailure){
@@ -41,6 +42,9 @@ function ExRTC(){
                     }
                     var serverData = JSON.parse(stream.connection.data.split('%/%')[0]).clientUser;
                     var user = {userId:serverData.userId,userName:serverData.userName};
+
+                    streamCreateTimeMap.put(user.userId,new Date().getTime());
+
                     if(user.userId == _this.userId){
                         return;
                     }
@@ -55,23 +59,40 @@ function ExRTC(){
                 });
 
                 _this.session.on('streamPropertyChanged', (event) => {
-                   console.log(event);
+                    console.log(event);
                 });
 
                 _this.session.on('streamDestroyed', (event) => {
+
+                    var reason = event.reason;
+
                     var serverData = JSON.parse(event.stream.connection.data.split('%/%')[1]).serverData;
 
                     var user = {userId:serverData.userId,userName:serverData.userName};
 
-                    var exrtcStream = new ExRTCStream();
-                    var params = {};
-                    params.id = user.userId;
-                    params.openviduStream = event.stream;
-                    params.user = user;
-                    exrtcStream.init(params);
-                    var evt = {stream:exrtcStream,user:{userId:serverData.userId,userName:serverData.userName}};
+                    var removeNow = true;
 
-                    _this.emit('stream-removed',evt);
+                    if(reason == 'networkDisconnect'){
+                        var preCreateTime = streamCreateTimeMap.get(user.userId);
+                        if(preCreateTime && (new Date().getTime() - preCreateTime) <= 1000*15){
+                            removeNow = false;
+                        }
+                    }
+
+                    if(removeNow){
+                        var exrtcStream = new ExRTCStream();
+                        var params = {};
+                        params.id = user.userId;
+                        params.openviduStream = event.stream;
+                        params.user = user;
+                        exrtcStream.init(params);
+                        var evt = {stream:exrtcStream,user:{userId:serverData.userId,userName:serverData.userName}};
+
+                        _this.emit('stream-removed',evt);
+
+                        streamCreateTimeMap.remove(user.userId);
+                    }
+
                 });
 
                 //链接恢复后的回调
@@ -82,11 +103,7 @@ function ExRTC(){
                     _this.OV = false;
                     _this.publisher = false;
                     _this.token =false;
-                    this.innerJoin(_this.channel,_this.userId,_this.userName,onSuccess,onFailure);
-                });
-
-                _this.session.on('sessionDisconnected', (event) => {
-                    console.log("sessionDisconnected  ....");
+                    _this.innerJoin(_this.channel,_this.userId,_this.userName,onSuccess,onFailure);
                 });
 
                 _this.userId = uid;
@@ -194,10 +211,10 @@ function ExRTC(){
     this.removeUser = function () {
         _this.httpPostRequest(
             'api-sessions/remove-user',
-            {sessionName: sessionName, token: token},
+            {sessionName: _this.channel, token: _this.token},
             'User couldn\'t be removed from session',
             (response) => {
-                console.warn("You have been removed from session " + sessionName);
+                console.warn("You have been removed from session " + _this.channel);
             }
         );
     }
@@ -350,6 +367,53 @@ function ExRTCStream(){
             }
         }
     }
+}
+
+function HashMap() {
+
+    var mapObj = {};
+
+    this.put = function (key, value) {
+        mapObj[key] = value;
+    };
+
+    this.remove = function (key) {
+        if (mapObj.hasOwnProperty(key)) {
+            delete mapObj[key];
+        }
+    };
+
+    this.get = function (key) {
+        if (mapObj.hasOwnProperty(key)) {
+            return mapObj[key];
+        }
+        return null;
+    };
+
+    this.keys = function () {
+        var keys = [];
+        for(var k in mapObj){
+            keys.push(k);
+        }
+        return keys;
+    };
+
+    // 遍历map
+    this.each = function(fn){
+        for(var key in mapObj){
+            fn(key, mapObj[key]);
+        }
+    };
+
+    this.toString = function () {
+        var str = "{";
+        for(var k in mapObj){
+            str += "\""+ k+"\" : \""+mapObj[k]+"\",";
+        }
+        str = str.substring(0,str.length - 1) ;
+        str += "}";
+        return str;
+    };
 }
 
 
