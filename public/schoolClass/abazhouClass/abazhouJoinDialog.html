@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>阿坝州课程表</title>
+    <script type="application/javascript" src="../js/jquery-1.11.2.min.js"></script>
+    <script type="application/javascript" src="../js/layer/layer.js"></script>
+    <script type="application/javascript" src="../js/service.js"></script>
+    <style>
+
+        .modalCont{
+            padding-left: 52px;
+            padding-top: 20px;
+        }
+        .title{
+            color: #333;
+            font-size: 15px;
+            padding-right: 22px;
+            width: 100px;
+            text-align: right;
+            display: inline-block;
+        }
+        .selectItem{
+            margin-bottom: 30px;
+        }
+        .selectItem input{
+            width: 175px;
+            height: 32px;
+            line-height: 32px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px #E5E5E5 solid;
+        }
+        .myFlex{
+            -webkit-display: flex;
+            -moz-display: flex;
+            -ms-display: flex;
+            -o-display: flex;
+            -khtml-display: flex;
+            display: flex;
+        }
+        #class_container{
+            font-size: 14px;
+            color: #666;
+            padding-left: 4px;
+            width: 300px;
+            height: 136px;
+            overflow-y: auto;
+        }
+        .classItem{
+            margin-bottom: 14px;
+            cursor: pointer;
+        }
+        .classItem i{
+            border: 1px #E5E5E5 solid;
+            width: 12px;
+            height: 12px;
+            display: inline-block;
+            margin-right: 9px;
+            vertical-align: text-bottom;
+        }
+        .clazzInfo_selected i{
+            background: #0084FF;
+            color: white;
+            position: relative;
+            border-color: #0084FF;
+
+        }
+        .clazzInfo_selected i::after{
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 4px;
+            border-left:1px #fff solid;
+            border-bottom: 1px #fff solid;
+            top:2px;
+            left: 2px;
+            -webkit-transform: rotate(310deg);
+            -moz-transform: rotate(310deg);
+            -ms-transform: rotate(310deg);
+            -o-transform: rotate(310deg);
+            transform: rotate(310deg);
+        }
+        .button{
+            border: 0;
+            background-color: #0084FF;
+            color: #fff;
+            font-size: 16px;
+            padding: 9px 0;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            text-align: center;
+            margin: 35px auto 0;
+            width: 140px;
+            cursor: pointer;
+
+        }
+    </style>
+</head>
+<body>
+
+    <div class="modalCont">
+        <div class="selectItem">
+            <span class="title">请输入邀请码</span><input id="password"/>
+        </div>
+        <!--
+        <div class="myFlex">
+            <span class="title">选择班级</span>
+            <div id="class_container">
+
+
+            </div>
+        </div>
+        -->
+
+    </div>
+    <div class="button" onclick="joinSubmit();">进入</div>
+
+</body>
+
+<script type="application/javascript">
+
+    var teacherId = Service.getQueryString("teacherId");
+    var vid = Service.getQueryString("vid");
+
+    $(document).ready(function(){
+        getTeacherClasses();
+    });
+
+    function getTeacherClasses(){
+        var service = new Service();
+        var data = {};
+        data.method = 'getTeacherClasses';
+        data.ident = teacherId;
+        service.doWebService(data,{
+            onResponse:function(result){
+               var clazzes = result.response;
+               if(clazzes && clazzes.length > 0){
+                   clazzes.forEach(function(clazz){
+                       var arrray = clazz.split("#");
+                       var name = arrray[1];
+                       var clazzId = arrray[0];
+                       $("#class_container").append("<div class='classItem' clazzId='"+clazzId+"' onclick='changeClazzSelected(this,"+clazzId+");'><i></i>"+name+"</div>");
+                   });
+               }else{
+                   $("#class_container").append("<span>请联系管理员为您绑定班级</span>");
+               }
+            },
+            onError:function(error){
+
+            }
+        });
+    }
+
+    function joinSubmit(){
+        var password = $("#password").val();
+        if(password == null || password == ""){
+            layer.msg("请输入邀请码");
+            return;
+        }
+        var selectedClazzId = 0;
+        var selected = $(".clazzInfo_selected");
+        if(selected && selected.length > 0){
+            selectedClazzId = $(selected[0]).attr("clazzId");
+        }
+        window.parent.joinCheck(vid,password,selectedClazzId);
+    }
+
+    function changeClazzSelected(element,clazzId){
+         var selected = $(".clazzInfo_selected");
+         var selectedClazzId = 0;
+         if(selected && selected.length > 0){
+             selectedClazzId = $(selected[0]).attr("clazzId");
+         }
+
+         $(".clazzInfo_selected").removeClass("clazzInfo_selected");
+         if(selectedClazzId == clazzId){
+             return;
+         }
+         $(element).addClass("clazzInfo_selected");
+    }
+
+</script>
+</html>

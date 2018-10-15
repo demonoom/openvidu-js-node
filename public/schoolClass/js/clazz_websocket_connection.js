@@ -1,7 +1,7 @@
 function ClazzConnection(){
 	this.clazzWsListener = null;
-	this.WS_URL = "wss://www.maaee.com:7888/Excoord_PushServer/class";
-    //this.WS_URL = "ws://192.168.50.34:8888/Excoord_PushServer/class";
+	//this.WS_URL = "wss://www.maaee.com:7888/Excoord_PushServer/class";
+    this.WS_URL = "ws://192.168.43.210:8888/Excoord_PushServer/class";
 	this.ws = null;
 	this.PING_COMMAND = "ping_0123456789_abcdefg";
 	this.PONG_COMMAND = "pong_0123456789_abcdefg";

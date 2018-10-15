@@ -4,7 +4,7 @@ Scroller.scroll = function(listener) {
 	$(window).scroll(function() {
 		var scrollTop =    $(this).scrollTop();
 		var scrollHeight = $(document).height();
-		var windowHeight = document.body.clientHeight;
+		var windowHeight = $(this).height();
 		if (scrollTop + windowHeight >= scrollHeight - 50) {
 			listener.toBottom();
 		}
