@@ -38,6 +38,8 @@ app.use(bodyParser.json({
     type: 'application/vnd.api+json'
 })); // Parse application/vnd.api+json as json
 
+
+
 // Listen (start app with node server.js)
 var options = {
     key: fs.readFileSync('keys/server.key'),
@@ -232,7 +234,6 @@ app.post('/api-sessions/remove-user', function (req, res) {
         }
     }
 });
-
 /* REST API */
 
 
