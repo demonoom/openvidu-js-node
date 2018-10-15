@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>阿坝州课程表</title>
+    <title>阿坝州科普互联网课程表</title>
     <link type="text/css" src="../css/teacherUnionClass.css">
     <link rel="icon" href="../img/logo_title.png" type="image/x-icon">
     <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
@@ -12,73 +12,110 @@
     <script type="application/javascript" src="../js/scroller.js"></script>
     <style type="text/css">
         body{
-
-            background-color: #F6F6F6;
+            margin: 0 auto;
+            width: 923px;
         }
-        .layui-layer-title{
+        .topCont{
+            background-color: #F5F5F5;
+            padding: 20px 25px 20px 25px;
+        }
+
+        .layui-layer-title {
             font-size: 16px !important;
         }
-        .courseBtn{
-            padding: 0 9px 0 33px;
-            height: 42px;
-            line-height: 42px;
-            color:#fff;
-            background: #0084FF url("../img/icon_add_course.png") no-repeat 10px center;
+
+        .bigTitle{
+            color: #333;
+            font-size: 28px;
+        }
+
+        .courseBtn {
+            float: right;
+            padding: 5px 18px;
+            color: #fff;
+            background: #4285F4;
             background-size: 16px;
             -webkit-border-radius: 4px;
             -moz-border-radius: 4px;
             border-radius: 4px;
             display: inline-block;
-            margin: 6px 0 14px 45px;
+            cursor: pointer;
+            font-size: 16px;
 
         }
-        #item_container{
+
+        #item_container, #review_item_container {
             background-color: white;
-            height: calc(100% - 70px);
-            overflow-y: scroll;
-            padding-left: 45px;
+            padding-left: 18px;
 
         }
-        .item{
-            /*-webkit-display:  flex;*/
-            /*-moz-display: flex;*/
-            /*-ms-display:  flex;*/
-            /*-o-display:  flex;*/
-            /*-khtml-display: flex;*/
-            /*display:  flex;*/
+
+        .item {
             color: #666;
             font-size: 14px;
             line-height: 20px;
-            padding: 20px 18px;
+            padding: 20px 25px;
             border-bottom: 1px #E5E5E5 solid;
         }
-        .item:last-child{
-            border: 0;
+
+        #title {
+            font-size: 26px;
+            color: #000;
+            margin-bottom: 10px;
         }
-        #title{
-            font-size: 15px;
-            color: #333;
-            margin-bottom: 6px;
+
+        #main_teacher_name, #union_teacher_name, #start_time {
+            margin-bottom: 8px;
         }
-        #main_teacher_name,#union_teacher_name{
-            margin-bottom: 6px;
-        }
-        #loading{
+
+        #loading_message {
             font-size: 14px;
             text-align: center;
             color: #888;
             padding: 10px 0;
         }
-        .rightCont{
+
+        .rightCont {
             position: relative;
         }
-        .joinBtn{
+
+        .whiteBg {
+            background-color: white;
+            padding: 20px 0 0;
+        }
+
+        .textTitle {
+            color: #333;
+            font-size: 24px;
+            position: relative;
+            padding-left: 16px;
+            margin-left: 25px;
+
+        }
+
+        .textTitle::before {
+            content: '';
             position: absolute;
-            right: 0;
+            width: 6px;
+            height: 26px;
+            background-color: #4285F4;
+            left: 0;
             top: 50%;
-            border: 1px #0084FF solid;
-            color: #0084FF;
-            padding: 5px 10px;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+        }
+        #join_class{
+            position: absolute;
+            border: 1px #797FFF solid;
+            color: #797FFF;
+            border-radius: 4px;
+            font-size: 16px;
+            padding: 6px 18px;
+            top:50%;
+            right:0;
             -webkit-transform: translateY(-50%);
             -moz-transform: translateY(-50%);
             -ms-transform: translateY(-50%);
@@ -91,26 +128,28 @@
 </head>
 
 <body>
+<div class="topCont">
+    <span class="bigTitle">阿坝州科普互联网课程表</span>
+    <span class="courseBtn" onclick="openUnionClass();" id="create_class" style="display: none;">开启课程</span>
+</div>
 
-<span class="courseBtn" onclick="openUnionClass();">开启联合开课</span>
 
-<div>
-    <span>正在直播:</span>
+<div class="whiteBg">
+
     <div id="item_container">
-
-
+        <div class="textTitle">正在直播</div>
     </div>
 </div>
 
-<div>
-    <span>课程回顾:</span>
+<div class="whiteBg">
+
     <div id="review_item_container">
-
+        <div class="textTitle">课程回顾</div>
     </div>
 </div>
 
 
-<div id="loading_message" > 正在加载...</div>
+<div id="loading_message"> 正在加载...</div>
 
 <div id="item_template" style="display: none;">
     <div class="item">
@@ -131,6 +170,7 @@
             <div id="main_teacher_name">张三</div>
             <div id="start_time">开课时间：2018-10-10 09:25</div>
             <div id="finish_time">结束时间：2018-10-10 09:25</div>
+            <div id="join_class" class="joinBtn">查看回顾</div>
         </div>
     </div>
 </div>
@@ -141,69 +181,78 @@
 
     var teacherId = Service.getQueryString("teacherId");
     var teacherName = Service.getQueryString("teacherName");
+
+    if(teacherId == 163192){
+        $("#create_class").show();
+    }
+
     var reviewService = new Service();
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         getUnionClassList();
         getReviewClassList();
     });
 
     Scroller.scroll({
-        toBottom : function() {
+        toBottom: function () {
             getReviewClassList();
         },
-        toTop : function() {
+        toTop: function () {
         },
-        toMiddle : function() {
+        toMiddle: function () {
         }
     });
 
 
     function getUnionClassList() {
-       var service = new Service();
-       var data = {};
-       data.method = 'getAbazhouCurrentUnionClassList';
-       data.userId = teacherId+"";
-       $("#loading").show();
-       $("#loading").text("正在请求数据...");
-       service.doWebService(data,{onResponse:function(result){
-           var infos = result.response;
-           if(infos.length > 0){
-               infos.forEach(function(info){
-                   var vid = info.vid;
-                   var title = info.title;
-                   var openTeacher = info.openTeacher;
-                   var unionTeachers = info.unionTeachers;
-                   var pass = info.password;
-                   var startTime = datetimeFormat(info.startTime);
+        var service = new Service();
+        var data = {};
+        data.method = 'getAbazhouCurrentUnionClassList';
+        data.userId = teacherId + "";
+        $("#loading").show();
+        $("#loading").text("正在请求数据...");
+        service.doWebService(data, {
+            onResponse: function (result) {
+                var infos = result.response;
+                if (infos.length > 0) {
+                    infos.forEach(function (info) {
+                        var vid = info.vid;
+                        var title = info.title;
+                        var openTeacher = info.openTeacher;
+                        var unionTeachers = info.unionTeachers;
+                        var pass = info.password;
+                        var startTime = datetimeFormat(info.startTime);
 
-                   var template = $("#item_template");
-                   $(template.children("div").get(0)).attr("id","vclass_"+vid);
-                   $(template.children("div").get(0)).attr("pass",pass);
-                   template.find("#title").text(title);
-                   template.find("#main_teacher_name").text("主讲老师 : "+openTeacher.userName);
-                   template.find("#join_class").attr("onclick","joinUnionClass("+vid+");");
-                   template.find("#start_time").text("开课时间 : "+startTime);
+                        var template = $("#item_template");
+                        $(template.children("div").get(0)).attr("id", "vclass_" + vid);
+                        $(template.children("div").get(0)).attr("pass", pass);
+                        template.find("#title").text(title);
+                        template.find("#main_teacher_name").text("主讲老师 : " + openTeacher.userName);
+                        template.find("#join_class").attr("onclick", "joinUnionClass(" + vid + ");");
+                        template.find("#start_time").text("开课时间 : " + startTime);
 
-                   var unionTeacherNames = "";
-                   if(unionTeachers && unionTeachers.length > 0){
-                       unionTeachers.forEach(function(teacher,index){
-                           if(index == unionTeachers.length - 1){
-                               unionTeacherNames = unionTeacherNames + teacher.userName;
-                           }else{
-                               unionTeacherNames = unionTeacherNames + teacher.userName+"-";
-                           }
+                        var unionTeacherNames = "";
+                        if (unionTeachers && unionTeachers.length > 0) {
+                            unionTeachers.forEach(function (teacher, index) {
+                                if (index == unionTeachers.length - 1) {
+                                    unionTeacherNames = unionTeacherNames + teacher.userName;
+                                } else {
+                                    unionTeacherNames = unionTeacherNames + teacher.userName + "-";
+                                }
 
-                       });
-                   }
-                   template.find("#union_teacher_name").text("联合老师 : "+unionTeacherNames);
-                   $("#item_container").append(template.html());
-                   template.attr("info_vid","0");
-               });
-           }
-       },onError:function(error){
+                            });
+                        }
+                        template.find("#union_teacher_name").text("联合老师 : " + unionTeacherNames);
+                        $("#item_container").append(template.html());
+                        template.attr("info_vid", "0");
+                    });
+                }else{
+                    $("#item_container").hide();
+                }
+            }, onError: function (error) {
 
-       }})
+            }
+        })
     }
 
     function getReviewClassList() {
@@ -211,36 +260,54 @@
         data.method = 'getAbazhouUnionClassRecords';
         $("#loading").show();
         $("#loading").text("正在请求数据...");
-        reviewService.doListWebService(data,{onResponse:function(result){
-            var infos = result.response;
-            if(infos.length > 0){
-                infos.forEach(function(info){
-                    var vid = info.vid;
-                    var title = info.title;
-                    var openTeacher = info.openTeacher;
-                    var pass = info.password;
-                    var startTime = datetimeFormat(info.startTime);
-                    var finishTime = datetimeFormat(info.finishTime);
+        reviewService.doListWebService(data, {
+            onResponse: function (result) {
+                var infos = result.response;
+                if (infos.length > 0) {
+                    infos.forEach(function (info) {
+                        var vid = info.vid;
+                        var title = info.title;
+                        var openTeacher = info.openTeacher;
+                        var pass = info.password;
+                        var startTime = datetimeFormat(info.startTime);
+                        var finishTime = datetimeFormat(info.finishTime);
 
-                    var template = $("#review_item_template");
-                    $(template.children("div").get(0)).attr("id","vclass_"+vid);
-                    $(template.children("div").get(0)).attr("pass",pass);
-                    template.find("#title").text(title);
-                    template.find("#main_teacher_name").text("主讲老师 : "+openTeacher.userName);
-                    template.find("#join_class").attr("onclick","joinUnionClass("+vid+");");
-                    template.find("#start_time").text("开课时间 : "+startTime);
-                    template.find("#start_time").text("结束时间 : "+finishTime);
+                        var template = $("#review_item_template");
+                        $(template.children("div").get(0)).attr("id", "vclass_" + vid);
+                        $(template.children("div").get(0)).attr("pass", pass);
+                        template.find("#title").text(title);
+                        template.find("#main_teacher_name").text("主讲老师 : " + openTeacher.userName);
+                        template.find("#join_class").attr("onclick", "joinUnionClass(" + vid + ");");
+                        template.find("#start_time").text("开课时间 : " + startTime);
+                        template.find("#start_time").text("结束时间 : " + finishTime);
 
-                    $("#review_item_container").append(template.html());
-                    template.attr("info_vid","0");
-                });
+                        template.find("#join_class").attr("onclick", "goReview(" + vid + ");");
+
+                        $("#review_item_container").append(template.html());
+                        template.attr("info_vid", "0");
+                    });
+                }else{
+                    $("#review_item_container").hide();
+                }
+            }, onError: function (error) {
+
             }
-        },onError:function(error){
-
-        }})
+        })
     }
 
-    function datetimeFormat(longTypeDate){
+    function goReview(vid){
+        var html = "http://jiaoxue.maaee.com:8093/#/cloundSchoolDetail?vId="+vid+"&userId="+teacherId+"&type=2&name=test";
+        layer.open({
+            type: 2,
+            title: '课程回顾',
+            shadeClose: true,
+            shade: 0.8,
+            area: ['28%', '80%'],
+            content: html
+        });
+    }
+
+    function datetimeFormat(longTypeDate) {
         var dateTypeDate = "";
         var date = new Date();
         date.setTime(longTypeDate);
@@ -252,74 +319,74 @@
         return dateTypeDate;
     }
 
-    function getMonth(date){
+    function getMonth(date) {
         var month = "";
         month = date.getMonth() + 1; //getMonth()得到的月份是0-11
-        if(month<10){
+        if (month < 10) {
             month = "0" + month;
         }
         return month;
     }
 
-    function getDay(date){
+    function getDay(date) {
         var day = "";
         day = date.getDate();
-        if(day<10){
+        if (day < 10) {
             day = "0" + day;
         }
         return day;
     }
 
-    function getHours(date){
+    function getHours(date) {
         var hours = "";
         hours = date.getHours();
-        if(hours<10){
+        if (hours < 10) {
             hours = "0" + hours;
         }
         return hours;
     }
 
-    function getMinutes(date){
+    function getMinutes(date) {
         var minute = "";
         minute = date.getMinutes();
-        if(minute<10){
+        if (minute < 10) {
             minute = "0" + minute;
         }
         return minute;
     }
 
-    function openUnionClass(){
+    function openUnionClass() {
         layer.open({
             type: 2,
             title: '开启一个联合开课',
             shadeClose: true,
             shade: 0.8,
             area: ['600px', '438px'],
-            content: 'abazhouOpenUnionClass.html?teacherId='+teacherId+"&userName="+teacherName
+            content: 'abazhouOpenUnionClass.html?teacherId=' + teacherId + "&userName=" + teacherName
         });
     }
 
-    function joinUnionClass(vid){
+    function joinUnionClass(vid) {
         layer.open({
             type: 2,
             title: '进入课堂验证',
             shadeClose: true,
             shade: 0.8,
             area: ['520px', '379px'],
-            content: 'abazhouJoinDialog.html?teacherId='+teacherId+"&vid="+vid
+            content: 'abazhouJoinDialog.html?teacherId=' + teacherId + "&vid=" + vid
         });
     }
 
 
-    function joinCheck(vid,enterPass,selectedClazzIds){
-        if(typeof(selectedClazzIds) == undefined || selectedClazzIds == 0){
+    function joinCheck(vid, enterPass, selectedClazzIds) {
+        if (typeof(selectedClazzIds) == undefined || selectedClazzIds == 0) {
             selectedClazzIds == "";
         }
-        var pass = $("#vclass_"+vid).attr("pass");
-        if(enterPass == pass){
-            window.open("../teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName="+teacherName+"&clazzIds="+selectedClazzIds,"_blank");
+        var pass = $("#vclass_" + vid).attr("pass");
+        if (enterPass == pass) {
+            window.open("../teacherUninonSlaver.html?userId=" + teacherId + "&vid=" + vid + "&userName=" + teacherName + "&clazzIds=" + selectedClazzIds, "_blank");
             layer.closeAll();
-        }else{
+        } else {
             layer.msg("邀请码不正确~");
         }
     }

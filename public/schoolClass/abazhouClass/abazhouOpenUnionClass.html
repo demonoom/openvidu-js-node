@@ -109,6 +109,7 @@
         <div class="selectItem">
             <span class="title">邀请码</span> <input id="password"/>
         </div>
+        <!--
         <div class="myFlex">
             <span class="title">选择班级</span>
             <div id="class_container">
@@ -116,6 +117,7 @@
 
             </div>
         </div>
+        -->
     </div>
     <div class="button" onclick="openUnionClassSubmit();">确认创建</div>
 
@@ -166,16 +168,7 @@
             layer.msg("请输入6位邀请码");
             return;
         }
-        var selectedClazzId = 0;
-        var selected = $(".clazzInfo_selected");
-        if(selected && selected.length > 0){
-            selectedClazzId = $(selected[0]).attr("clazzId");
-        }
-        if(selectedClazzId == 0){
-            layer.msg("请选择要联合开课的班级");
-            return;
-        }
-        //title = encodeURIComponent(title);
+        var selectedClazzId = 6019;
         var url = "../teacherUnionMaster.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+userName;
         window.open(url,"_blank");
         window.parent.layer.closeAll();
