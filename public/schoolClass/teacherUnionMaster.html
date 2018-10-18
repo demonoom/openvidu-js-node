@@ -65,11 +65,14 @@ video{
    <div class="live_left" id="left" onmouseleave="showMaiXuTan(false);">
 	    <div id="video_container">
 		</div>
-		<div class="video_operation_menu video_center">
+		<div class="video_operation_menu video_center" style="text-align:left; padding-left:8px">
 		    <a onmouseover="showMaiXuTan(true);" class="video_operation_menu_a" string_id="string_maixu">麦序</a>
 
+			<a id="fengping" class="video_operation_menu_a" href="javascript:toggleVideoShowStyle();" >分屏</a>
+
 		    <a id="dismiss_class" string_id="string_xiake" class="video_operation_menu_a" href="javascript:dismissClass();" ></a>
-		    <div id="maixu_tan" class="maixu_tan" style="display: none;">
+
+		    <div id="maixu_tan" class="maixu_tan" style="display: none;" onmouseleave="showMaiXuTan(false);">
 		        <div class="maixu_tan_header">麦序</div>
 		        <div id="mai_list" class="maixu_tan_cont">
 			    </div>
@@ -155,7 +158,7 @@ video{
 		</div>
 	</div>
 
-	<div id="message_text_template">
+	<div id="message_text_template" style="display: none;">
 		   <div class="live_talk_t">
 		   	  <div class="live_user" onclick="doHandleStudent(this);"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60"  class="green"></div>
 		   	  <div class="live_talk_info">
@@ -165,7 +168,7 @@ video{
 		   </div>
 	</div>
 
-	<div id="message_img_template">
+	<div id="message_img_template" style="display: none;">
 	   <div class="live_talk">
 	   	   <div class="live_user" onclick="doHandleStudent(this);"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60"  class="green"></div>
 	       <div class="live_talk_info">
@@ -350,6 +353,10 @@ video{
 	}
 
     function showBigVideo(stream,show,sendCommand){
+          var isFenpingMode = $("#right").is(':hidden');
+          if(show && isFenpingMode){
+              return;
+		  }
     	  if(typeof(stream) == 'undefined'){
     		  return;
     	  }
@@ -383,18 +390,28 @@ video{
 		    	  }
 		      }
 		  }else{
-			  var current_stream = $("#big_video").attr("current_stream");
-		      if(current_stream == stream.getId()){
-		    	  $("#big_video").empty();
-		    	  $("#big_video").attr("current_stream","");
-		    	  $("#big_video").hide();
-
-		    	  if(sendCommand){
-		    		  //告诉学生不显示大视频
-			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':0}}" + ')');
-			     	  connection.send(protocal);
-		    	  }
-		      }
+		      if(stream == null){
+                  $("#big_video").empty();
+                  $("#big_video").attr("current_stream","");
+                  $("#big_video").hide();
+                  if(sendCommand){
+                      //告诉学生不显示大视频
+                      var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':0}}" + ')');
+                      connection.send(protocal);
+                  }
+			  }else{
+                  var current_stream = $("#big_video").attr("current_stream");
+                  if(current_stream == stream.getId()){
+                      $("#big_video").empty();
+                      $("#big_video").attr("current_stream","");
+                      $("#big_video").hide();
+                      if(sendCommand){
+                          //告诉学生不显示大视频
+                          var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':0}}" + ')');
+                          connection.send(protocal);
+                      }
+                  }
+			  }
 		  }
 	}
 
@@ -1221,6 +1238,7 @@ video{
 	 var protocal = eval('(' + "{'command':'disconnect_mai','data':{'userId':"+userId+"}}" + ')');
 	 connection.send(protocal);
 	 $('#agora_remote' + userId).remove();
+	 changeFengpingItemStyle();
   }
 
   function agreeConnectMai(userId){
@@ -1236,7 +1254,7 @@ video{
 			 $("#agora_local").parent().remove();
 		   }catch(e){}
 
-		   $("#video_container").prepend("<div><div id='agora_local' uid='"+userId+"' style='width: 230px; height: 160px; position: relative;margin: 12px 5px 0 5px;'><div style='position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px'>主讲</div><img id='audio_"+userId+"' style='color:red;' class='radio_no' text='' onclick='toggleMuteAudio("+userId+");'/></div></div>");
+		   $("#video_container").prepend("<div class='fenping_video' id='agora_local' uid='"+userId+"' style='width: 230px; height: 160px; position: relative; float:left; margin: 12px 5px 0 5px; overflow:hidden'><div style='position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px'>主讲</div><img id='audio_"+userId+"' style='color:red;' class='radio_no' text='' onclick='toggleMuteAudio("+userId+");'/></div>");
 
 		   client.on('stream-published', function (evt) {
                localStream = evt.stream;
@@ -1254,6 +1272,7 @@ video{
                    localStream.disableAudio();
                };
                onAudioMutedStateChange(localStream.getId());
+               changeFengpingItemStyle();
 		   });
 
 	       navigator.mediaDevices.getUserMedia({ audio: true, video: true })
@@ -1287,7 +1306,7 @@ video{
 
               var userName = evt.user.userName;
               $('div#video_container #agora_remote'+stream.getId()).remove();
-              $('div#video_container').append('<div class="mai_stream_user" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative;margin: 12px 5px 0 5px;"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div><span onclick="updateMaiUserState(' + stream.getId() +', 0)" style="position:absolute; right:0; bottom:0; color:#fff; background:rgba(34, 34, 34, 0.6); z-index:1; text-align:center; width:45px; height:24px;line-height:24px;  overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" href="javascript:void(0)" string_id="string_duanmai">断麦</span></div>');
+              $('div#video_container').append('<div class="mai_stream_user fenping_video" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative; float:left; margin: 12px 5px 0 5px; overflow:hidden"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div><span onclick="updateMaiUserState(' + stream.getId() +', 0)" style="position:absolute; right:0; bottom:0; color:#fff; background:rgba(34, 34, 34, 0.6); z-index:1; text-align:center; width:45px; height:24px;line-height:24px;  overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" href="javascript:void(0)" string_id="string_duanmai">断麦</span></div>');
 
 
               client.subscribe(stream,"agora_remote"+stream.getId());
@@ -1313,6 +1332,7 @@ video{
 			  onAudioMutedStateChange(stream.getId());
 			  //计算当前的大流
 			  showEclassCurrentBigStreamId();
+              changeFengpingItemStyle();
 	    });
 
 	    client.on('stream-removed', function (evt) {
@@ -1763,6 +1783,53 @@ video{
             simpleConn.connect();
         } catch (e) {
         }
+  }
+
+  function toggleVideoShowStyle(){
+       var isHidden = $("#right").is(':hidden');
+       if(isHidden){
+           $("#right").show();
+           $("#left").css("width","240px");
+           $(".fenping_video").css({'width':'230px','height':'160px'});
+
+	   }else{
+           $("#right").hide();
+           $("#left").css("width","100%");
+
+           changeFengpingItemStyle();
+	   }
+      changeFengpingTipName();
+  }
+
+  function changeFengpingTipName(){
+      var isHidden = $("#right").is(':hidden');
+      if(isHidden){
+          $("#fengping").text("取分");
+      }else{
+          $("#fengping").text("分屏");
+	  }
+  }
+
+  function changeFengpingItemStyle(){
+      showBigVideo(null,false,false);
+      var isHidden = $("#right").is(':hidden');
+      if(isHidden){
+          var videoCount = $("#video_container").children().length;
+          var width = "calc(50% - 10px)";
+          var height = "50%";
+          if(videoCount == 1){
+              width = "100%";
+              height = "calc(100% - 12px)";
+          }else if(videoCount == 2){
+              width = "calc(50% - 10px)";
+              height = "calc(100% - 12px)";
+          }else{
+              width = "calc(50% - 10px)";
+              height = "calc(50% - 12px)";
+          }
+          var videos = $(".fenping_video");
+          videos.css({'width':width,'height':height});
+	  }
   }
 
   window.addEventListener('message', function(event) {
