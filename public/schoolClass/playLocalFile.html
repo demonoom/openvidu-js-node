@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>本地课件播放方案</title>
+
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="css/record_list.css?v=35" />
+
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/hashmap.js"></script>
+    <script type="text/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="../openvidu-browser-2.4.0.js"></script>
+    <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
+    <script type="text/javascript" src="js/service.js"></script>
+
+</head>
+<body>
+
+<div id="video_items" class="elearning_videoAdd">
+    <button onclick="selectVideo();" class="elearining_addBtn">添加需要用到的视频</button><input id="upload" type="file" style="display: none;"/>
+</div>
+<div class="elearning_thevideo">
+    <div class="elearning_videoCont">
+        <div id="current_video_name" class="current_video_name">暂无正在使用的视频</div>
+        <div class="elearning_videoCont_wrap">
+            <div id="video_parent">
+                <video width="660px" height="450px" id="play_video" webkit-playsinline="true" playsinline="true" x5-video-player-type="h5" x5-video-player-fullscreen="portraint" controls="controls" controlslist="nodownload" controls="controls" muted></video>
+            </div>
+           <span class="elearning_Video_now" id="live_now" style="display: none;">
+        		<i></i>
+        		<span>正在直播</span>
+        	</span>
+        </div>
+        <div id="join_button_parent">
+            <span id="join_button" onclick="publish();" class="elearining_joinBtn">加入房间</span>
+            <button onclick="reInit();" class="elearining_aginBtn">刷新连接环境</button>
+        </div>
+        <div id="leave_button_parent" style="display: none;">
+            <span id="leave_button" onclick="unpublish();"  class="elearining_joinBtn">离开房间</span>
+            <button onclick="reInit();" class="elearining_aginBtn">刷新连接环境</button>
+        </div>
+
+        <div>
+
+            <button onclick="playShareVideoSource();">共享应用</button>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    var client = new ExRTC();
+    var localStream;
+    var shareStream;
+
+    var vid = Service.getQueryString("vid");
+    var videos  = new HashMap();
+
+    $(document).ready(function(){
+        initPlayerListener();
+        joinRoom();
+    });
+
+    function reInit(){
+        unpublish();
+        leave();
+        joinRoom();
+        layer.msg("环境重新初始化成功~~~");
+    }
+
+    function leave(){
+        try{
+            client.leave();
+            client = null;
+        }catch(e){
+        }
+    }
+
+    function selectVideo(){
+        $("#upload").click();
+        //取消加绑定change事件解决change事件无法控制
+        $("#upload").off("change");
+        $("#upload").change(function () {
+            var file = this.files[0];
+            if(!file){
+                return;
+            }
+            if(file.name.toLowerCase().indexOf(".mp4") == -1){
+                layer.msg("只支持选择mp4视频格式~~~");
+                return;
+            }
+            if(videos.get(file.name)){
+                layer.msg("此文件已经添加过了~~~");
+                return;
+            }
+            videos.put(file.name, file);
+            $("#video_items").append("<div class=\"elearning_videoList\"><span class=\"elearning_useVideo\" onclick=\"useVideo('"+file.name+"');\">"+file.name+"</span><span class=\"elearining_delBtn\" onclick=\"removeVideo('"+file.name+"',this);\">移除</span></div>");
+            $("#upload").val('');
+        });
+    }
+
+    function removeVideo(name,element){
+        videos.remove(name);
+        $(element).parent().remove();
+    }
+
+    function useVideo(name){
+        if(localStream != null){
+            layer.msg("请先离开房间，再使用此视频！");
+            return;
+        }
+        if(shareStream){
+            try{
+                shareStream.close();
+            }catch (e){
+                console.log(e);
+            }
+            shareStream = null;
+        }
+        var file = videos.get(name);
+        var url = window.URL.createObjectURL(file);
+        document.getElementById("play_video").src=url;
+        $("#current_video_name").text("正在使用:"+name);
+    }
+
+    function publish(){
+        if($("#current_video_name").text() == '暂无正在使用的视频'){
+            layer.msg("请先选择要使用的视频~~~");
+            return;
+        }
+        var play_video = document.getElementById("play_video");
+        play_video.play();
+        play_video.muted = true;
+
+        if($("#current_video_name").text() == "共享视频"){
+            localStream = shareStream;
+            client.publish(localStream,"agora_local");
+        }else{
+            localStream = play_video.captureStream(15);
+            client.publish(localStream,"agora_local");
+        }
+
+        $("#join_button_parent").hide();
+        $("#leave_button_parent").show();
+        $("#live_now").show();
+
+    }
+
+    function unpublish(){
+        if(shareStream){
+            $("#video_parent").empty();
+            $("#video_parent").append('<video width="660px" height="450px" id="play_video" webkit-playsinline="true" playsinline="true" x5-video-player-type="h5" x5-video-player-fullscreen="portraint" controls="controls" controlslist="nodownload" controls="controls" muted></video>');
+        }
+        try{
+            client.unpublish(localStream);
+            localStream.close();
+        }catch(e){
+            console.log(e);
+        }
+        try{
+            shareStream.close();
+        }catch (e){
+            console.log(e);
+        }
+        shareStream = null;
+        localStream = null;
+        $("#join_button_parent").show();
+        $("#leave_button_parent").hide();
+        $("#live_now").hide();
+    }
+
+    function random(lower, upper) {
+        return Math.floor(Math.random() * (upper - lower+1)) + lower;
+    }
+
+    function joinRoom(){
+        client = new ExRTC();
+
+        client.join(vid+"", 2,"管家", function() {
+
+        }, function() {
+            console.log("Join channel failed");
+        });
+
+    }
+
+    function initPlayerListener(){
+        var video = document.getElementById("play_video");
+        video.addEventListener("ended", function(){
+            unpublish();
+        });
+    }
+
+    //播放共享视频界面[桌面，应用...]
+    function playShareVideoSource(){
+        isInstallChromeExtension("chrome-extension://bdfcaebpanlnmfhgnackfnmhdpelplgd/images/tabCapture48.png",function(){
+            if(localStream != null){
+                layer.msg("有正在使用的视频，请先离开房间！");
+                return;
+            }
+            console.log("getUserMedia successfully");
+            var data = {};
+            data.action='requestScreenSource';
+            data.from="webpage";
+            window.postMessage(data, '*');
+        },function(){
+            //页面层
+            layer.open({
+                type: 1,
+                title:"插件安装",
+                area: ['420px', '240px'], //宽高
+                content: '<div>请先下载<a href="www.baidu.com">小蚂蚁插件</a>，用来辅助完成此功能</div>'
+            });
+        });
+    }
+
+    function isInstallChromeExtension(sourceId,success,fail){
+        var image = document.createElement('img');
+        image.src = sourceId;
+        image.onload = function(e) {
+            console.log(e);
+            success();
+        };
+        image.onerror = function(e) {
+            console.log(e);
+            fail();
+        };
+    }
+
+    function onScreenStream(sourceId){
+
+        var constraints = {};
+        constraints.mandatory = {};
+        constraints.mandatory.chromeMediaSource == 'screen';
+        constraints.mandatory.chromeMediaSourceId = sourceId;
+        constraints.optional = [{"maxFrameRate":30},{"minFrameRate":30}];
+        constraints.mandatory.maxWidth = 1280;
+        constraints.mandatory.minWidth = 1280;
+        constraints.mandatory.maxHeight = 720;
+        constraints.mandatory.minHeight = 720;
+
+        return navigator.mediaDevices.getUserMedia({
+            video: {
+                mandatory: {
+                    chromeMediaSource: 'desktop',
+                    chromeMediaSourceId: sourceId
+                }
+            }
+        }).then(function(stream) {
+            $("#video_parent").empty();
+            $("#video_parent").append('<video width="660px" height="450px" id="play_video" webkit-playsinline="true" playsinline="true" x5-video-player-type="h5" x5-video-player-fullscreen="portraint" controls="controls" controlslist="nodownload" controls="controls" muted></video>');
+
+            $("#current_video_name").text("共享视频");
+            shareStream = stream;
+            shareStream.getVideoTracks().forEach(function(track) {
+                track.onended = function() {
+                    unpublish();
+                    shareStream = null;
+                };
+            });
+            document.getElementById("play_video").srcObject = stream;
+            document.getElementById("play_video").play();
+        }).catch(function(err) {
+            console.log(err);
+        });
+    }
+
+    window.addEventListener('message', function(event) {
+        if (event.source != window){
+            return;
+        }
+
+        var data = event.data;
+        if(data.from != 'extension'){
+            return;
+        }
+        if(data.action == 'responseScreenSource'){
+            var sourceId = data.sourceId;
+            var canRequestAudioTrack = data.canRequestAudioTrack;
+            onScreenStream(sourceId);
+        }
+    });
+</script>
+
+</html>

@@ -54,6 +54,10 @@ video{
 	height: 100%;
 	object-fit:cover;
 }
+.video_nocover{
+	object-fit:none;
+}
+
 
 </style>
 
@@ -99,7 +103,7 @@ video{
 		         <a href="javascript:openPPT();" class="operation_menu_t_btn"  string_id="string_open_kejian">打开课件</a>
 		         <a href="javascript:openSubjects();" class="operation_menu_t_btn" string_id="string_push_subject">推送题目</a>
 		         <a href="javascript:openSubjectsTongji();" class="operation_menu_t_btn" string_id="string_ketang_tongji">课堂统计</a>
-				  <div class="phoneHelpDiv">
+				 <div class="phoneHelpDiv">
 					  <div class="phoneHelpTip">
 						  <div class="helpCont">
 							  <div id="assistant_qr" src="img/pc_cloud_icon_web.jpg"></div>
@@ -108,9 +112,9 @@ video{
 					  </div>
 					  <a  class="phoneHelp operation_menu_t_btn"  >课堂助手</a>
 				  </div>
-
+				  <a href="javascript:goVideoManaerPage();" class="operation_menu_t_btn" >辅助功能</a>
 				  <a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" text='打开讨论区' style="display: none;">关闭讨论区</a>
-		         <a id='language_select' href="javascript:changeLanguage();" class="En_icon_i Chinese_icon_i"></a>
+		          <a id='language_select' href="javascript:changeLanguage();" class="En_icon_i Chinese_icon_i"></a>
 		      </div>
 		      <div class="questionDiv">
 				    <div class="questionTip">
@@ -382,6 +386,10 @@ video{
 
                   $("#big_video").append("<video autoplay width='100%' height='100%' muted></video>");
                   $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
+
+                  if(stream.getId() <=2 ){
+                      $("#big_video").find("video").css("object-fit","scale-down");
+                  }
 
 		    	  if(sendCommand){
 		    		  //告诉学生显示大视频
@@ -1284,16 +1292,16 @@ video{
 		   });
   }
 
-
   function prepareVideoRoom(data){
-	     client = new ExRTC();
+  	    client = new ExRTC();
 
-	 　   client.join(vid+"", userId,userName, function() {
-			 console.log("User " + userId + " join channel successfully");
-			 playLocalVideo();
-	 　　 }, function() {
+	 　  client.join(vid+"", userId,userName, function() {
+				 console.log("User " + userId + " join channel successfully");
+				 playLocalVideo();
+				 //playShareVideoSource();
+	 　　 	 }, function() {
 		　	 console.log("Join channel failed");
-	  　  });
+	  　 });
 
 
 	    client.on('stream-added', function (evt) {
@@ -1832,12 +1840,26 @@ video{
 	  }
   }
 
+  function goVideoManaerPage(){
+      window.open("playLocalFile.html?vid="+vid,"_blank");
+  }
+
   window.addEventListener('message', function(event) {
-  	if (event.source != window)
-          return;
+		if (event.source != window){
+            return;
+		}
+
 	    var data = event.data;
-	    if(data.from != 'extension' && data.tabUrl != window.location.href){
+	    if(data.from != 'extension'){
 	    	return;
+	    }
+        if(data.action == 'responseScreenSource'){
+           var sourceId = data.sourceId;
+           var canRequestAudioTrack = data.canRequestAudioTrack;
+           onScreenStream(sourceId);
+        }
+	    if(data.tabUrl != window.location.href){
+	        return;
 	    }
 	    if(data.action){
 	    	 if(data.action == 'requestStartCapture'){

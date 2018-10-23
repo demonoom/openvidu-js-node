@@ -156,8 +156,8 @@ function ExRTC(){
     this.publish = function(mediaStream,elmentId){
         mediaStream.elmentId = elmentId;
         _this.mediaStream = mediaStream;
-        var videoSource = mediaStream.getVideoTracks();
-        var audioSource = mediaStream.getAudioTracks();
+        var videoSource = mediaStream.getVideoTracks()[0];
+        var audioSource = mediaStream.getAudioTracks()[0];
         _this.publisher = _this.OV.initPublisher(elmentId, {
             audioSource: audioSource, // The source of audio. If undefined default microphone
             videoSource: videoSource, // The source of video. If undefined default webcam
@@ -166,7 +166,7 @@ function ExRTC(){
             resolution: '640x480',  // The resolution of your video
             frameRate: 30,			// The frame rate of your video
             insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
-            mirror: true       	// Whether to mirror your local video or not
+            mirror: false       	// Whether to mirror your local video or not
         });
         _this.publisher.on('videoElementCreated', (event) => {
             console.log("videoElementCreated....");
