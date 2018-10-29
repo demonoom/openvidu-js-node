@@ -133,7 +133,7 @@
        service.doWebService(data,{onResponse:function(result){
            var infos = result.response;
            if(infos.length > 0){
-               $("#loading").text("数据加载完毕...");
+               $("#loading").text("数据加载完毕");
                infos.forEach(function(info){
                    var vid = info.vid;
                    var title = info.title;
