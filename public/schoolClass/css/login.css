@@ -14,8 +14,8 @@ body,html{
 }
 .login_box{
     position: absolute;
-    width: 452px;
-    height: 430px;
+    width: 412px;
+    height: 480px;
     background: white;
     top: 50%;
     left: 50%;
@@ -45,14 +45,15 @@ body,html{
     vertical-align: text-bottom;
 }
 .tab{
-    color: #1A58FB;
     font-size: 19px;
     cursor: pointer;
 }
 .tab > div{
     width: 50%;
+    color: #666;
     text-align: center;
     padding-bottom: 15px;
+    border-bottom: 1px #E0E0E0 solid;
 }
 .right_font{
     width: 100px;
@@ -90,7 +91,7 @@ input#act{
     border: 0;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 20px;
+    margin-top: 50px;
 }
 #login:hover{
     opacity: 0.9;
@@ -104,9 +105,10 @@ input#act{
     -weibkit-transform:translate(50%,0%) rotate(-45deg);
 }
 
-.active{
+.tab > div.active{
     border-bottom: 1px solid #1757FB;
     position: relative;
+    color: #1A58FB;
 }
 .active::before{
     content: '';
@@ -130,4 +132,8 @@ input#act{
     display: none;
     text-align: center;
     margin-top: 22px;
+}
+.scan div{
+    color: #666;
+    font-size: 14px;
 }
