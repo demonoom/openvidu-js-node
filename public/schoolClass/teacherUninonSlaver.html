@@ -716,9 +716,9 @@
 
     client.on('stream-added', function (evt) {
       var stream = evt.stream;
-      if(stream.getId() <= 1){
-    	  return;
-      }
+//      if(stream.getId() <= 1){
+//    	  return;
+//      }
       $('div#video_container #agora_remote'+stream.getId()).remove();
       $('div#video_container').append('<div class="mai_stream_user" uid="'+stream.getId()+'" id="agora_remote'+stream.getId()+'" style="width: 230px; height: 160px; position: relative;margin: 12px 5px 0 5px;"><img style="color:red;" class="radio_no" id="audio_'+stream.getId()+'"/></div>');
 
