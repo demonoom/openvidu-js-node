@@ -3450,7 +3450,7 @@ var OpenVidu = (function () {
     OpenVidu.prototype.checkSystemRequirements = function () {
         var browser = platform.name;
         var version = platform.version;
-        if ((browser !== 'Chrome') && (browser !== 'Chrome Mobile') &&
+        if ((browser !== 'Chrome') && (browser !== 'Chrome Mobile') &&(browser !== 'Electron') &&
             (browser !== 'Firefox') && (browser !== 'Firefox Mobile') && (browser !== 'Firefox for iOS') &&
             (browser !== 'Opera') && (browser !== 'Opera Mobile') &&
             (browser !== 'Safari')) {

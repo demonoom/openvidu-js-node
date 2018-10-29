@@ -112,7 +112,11 @@ video{
 					  </div>
 					  <a  class="phoneHelp operation_menu_t_btn"  >课堂助手</a>
 				  </div>
+				  <!--
 				  <a href="javascript:goVideoManaerPage();" class="operation_menu_t_btn" >辅助功能</a>
+				  -->
+				  <a id="video_source_peizhi" href="javascript:goVideoSourceSelectPage();" class="operation_menu_t_btn" style="display: none;">视频源设置</a>
+
 				  <a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" text='打开讨论区' style="display: none;">关闭讨论区</a>
 		          <a id='language_select' href="javascript:changeLanguage();" class="En_icon_i Chinese_icon_i"></a>
 		      </div>
@@ -442,6 +446,7 @@ video{
   var livePassword = getQueryString("livePassword");
   var pushUrl = null;
   var isPreparedOK = false;
+  var startType = getQueryString("startType");
 
   var connection = new ClazzConnection();
 
@@ -1130,16 +1135,21 @@ video{
 
   //检查直播环境
   function checkDevice(){
-	  layer.open({
-		  type: 1,
-		  title: '音视频设备检测',
-		  shadeClose: false,
-		  shade: 0.2,
-		  skin:'device_wrap',
-		  closeBtn:0,
-		  area: ['380px', '260px'],
-		  content: "<iframe width='100%' height='100%' src='html/device/device_check.html?v=3' onload='onCheckResult(this);'></iframe>" //iframe的url
-	   });
+      if(startType == '1_n'){
+          $("#video_source_peizhi").show();
+          socketLogin();
+	  }else{
+          layer.open({
+              type: 1,
+              title: '音视频设备检测',
+              shadeClose: false,
+              shade: 0.2,
+              skin:'device_wrap',
+              closeBtn:0,
+              area: ['380px', '260px'],
+              content: "<iframe width='100%' height='100%' src='html/device/device_check.html?v=3' onload='onCheckResult(this);'></iframe>" //iframe的url
+          });
+	  }
   }
 
   function onCheckResult(iframe){
@@ -1147,21 +1157,26 @@ video{
 		  audioSourceId = media.audioInputSource;
 		  videoSourceId = media.videoSource;
 
-		  //只有环境OK，才能进行后面的操作
-		  var loginProtocol={};
-		  loginProtocol.command='teacherUnionMasterLogin';
-		  loginProtocol.data={};
-		  loginProtocol.data.userId=userId;
-		  loginProtocol.data.liveTitle=title;
-          loginProtocol.data.livePassword=livePassword;
-          loginProtocol.data.clazzId = getQueryString("clazzId");
-		  connection.connect(loginProtocol);
+          socketLogin();
+
 		  setTimeout(function(){
 			  layer.closeAll();
 		  }, 500);
 	  },"onMediaError":function(){
 		  iframe.contentWindow.showErrorPage();
 	  }});
+  }
+
+  function socketLogin(){
+      //只有环境OK，才能进行后面的操作
+      var loginProtocol={};
+      loginProtocol.command='teacherUnionMasterLogin';
+      loginProtocol.data={};
+      loginProtocol.data.userId=userId;
+      loginProtocol.data.liveTitle=title;
+      loginProtocol.data.livePassword=livePassword;
+      loginProtocol.data.clazzId = getQueryString("clazzId");
+      connection.connect(loginProtocol);
   }
 
   //检查设备
@@ -1256,8 +1271,10 @@ video{
 
 
   function playLocalVideo(){
+           if(startType == '1_n'){
+               return;
+		   }
 		   console.log("getUserMedia successfully");
-
 		   try{
 			 $("#agora_local").parent().remove();
 		   }catch(e){}
@@ -1842,6 +1859,10 @@ video{
 
   function goVideoManaerPage(){
       window.open("playLocalFile.html?vid="+vid,"_blank");
+  }
+
+  function goVideoSourceSelectPage(){
+      window.open("videoSourceSelect.html?vid="+vid,"_blank");
   }
 
   window.addEventListener('message', function(event) {
