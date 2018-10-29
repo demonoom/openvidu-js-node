@@ -6,6 +6,7 @@
     <script type="application/javascript" src="js/jquery-1.11.2.min.js"></script>
     <script type="application/javascript" src="js/layer/layer.js"></script>
     <script type="application/javascript" src="js/service.js"></script>
+    <script type="application/javascript" src="js/platform.js"></script>
     <style>
 
         .modalCont{
@@ -176,8 +177,13 @@
             return;
         }
         //title = encodeURIComponent(title);
-        var url = "teacherUnionMaster.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+userName;
-        window.open(url,"_blank");
+        var NParams = "";
+        var browser = platform.name;
+        if(browser.indexOf("Electron") != -1){
+            NParams = "&startType=1_n";
+        }
+        var url = "teacherUnionMaster.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+userName+""+NParams;
+        window.open(url,"CLASS_WINDOW");
         window.parent.layer.closeAll();
     }
 

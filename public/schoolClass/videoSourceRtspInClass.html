@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课堂中的视频源</title>
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="css/record_list.css?v=35" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/hashmap.js"></script>
+    <script type="text/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="../openvidu-browser-2.4.0.js"></script>
+    <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
+    <script type="text/javascript" src="js/service.js"></script>
+    <script type="application/javascript" src="https://jsmpeg.com/jsmpeg.min.js"></script>
+</head>
+<body>
+
+ <canvas width="320px" height="240px" autoplay id="rtsp_preview_canvas"></canvas>
+
+</body>
+
+<script type="text/javascript">
+    var client = new ExRTC();
+    var localStream;
+    var jsmepgPlayer;
+
+    var vid = Service.getQueryString("vid");
+    var userName = Service.getQueryString("userName");
+    var rtspUrl = Service.getQueryString("rtspUrl");
+    var wsPort = Service.getQueryString("wsPort");
+
+    $(document).ready(function(){
+        console.log('document ready .....');
+        joinRoom();
+        //playMediaStream();
+    });
+
+    function publish(){
+        var canvas = $("#rtsp_preview_canvas")[0];
+        jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
+
+        const ipc = window.top.ipc;
+        var message = {};
+        message.command = "startRtspStream";
+        message.streamUrl = rtspUrl;
+        message.wsPort = wsPort;
+        ipc.send('onRendererMessage',message);
+
+        setTimeout(function(){
+            localStream = canvas.captureStream(15);
+            console.log('localStream : '+ localStream);
+            client.publish(localStream,"agora_local");
+        },5000);
+    }
+
+    function playMediaStream(){
+        var canvas = $("#rtsp_preview_canvas")[0];
+        jsmepgPlayer = new JSMpeg.Player('ws://localhost:9999',{loop: true, autoplay: true,canvas:canvas});
+    }
+
+    function unpublish(){
+        if(jsmepgPlayer){
+            jsmepgPlayer.destroy();
+        }
+        try{
+            client.unpublish(localStream);
+            localStream.close();
+        }catch(e){
+            console.log(e);
+        }
+        localStream = null;
+
+        const ipc = window.top.ipc;
+        var message = {};
+        message.command = "stopRtspStream";
+        message.wsPort = wsPort;
+        ipc.send('onRendererMessage',message);
+    }
+
+    function random(lower, upper) {
+        return Math.floor(Math.random() * (upper - lower+1)) + lower;
+    }
+
+    function joinRoom(){
+        console.log('joinRoom .....');
+        client = new ExRTC();
+
+        client.join(vid+"", random(-1000000,-2000000),userName, function() {
+            console.log('joinRoom success');
+            publish();
+        }, function() {
+            console.log("Join channel failed");
+        });
+    }
+
+</script>
+
+</html>

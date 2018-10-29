@@ -6,7 +6,7 @@
     <link type="text/css" src="css/teacherUnionClass.css">
     <link rel="icon" href="img/logo_title.png" type="image/x-icon">
     <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
-    <script type="application/javascript" src="js/jquery-1.11.2.min.js"></script>
+    <script type="application/javascript" src="js/jquery.min.js"></script>
     <script type="application/javascript" src="js/layer/layer.js"></script>
     <script type="application/javascript" src="js/service.js"></script>
     <style type="text/css">
@@ -252,7 +252,7 @@
         }
         var pass = $("#vclass_"+vid).attr("pass");
         if(enterPass == pass){
-            window.open("teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName="+teacherName+"&clazzIds="+selectedClazzIds,"_blank");
+            window.open("teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName="+teacherName+"&clazzIds="+selectedClazzIds,"CLASS_WINDOW");
             layer.closeAll();
         }else{
             layer.msg("邀请码不正确~");

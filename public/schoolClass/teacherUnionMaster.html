@@ -54,6 +54,10 @@ video{
 	height: 100%;
 	object-fit:cover;
 }
+.video_nocover{
+	object-fit:none;
+}
+
 
 </style>
 
@@ -65,11 +69,14 @@ video{
    <div class="live_left" id="left" onmouseleave="showMaiXuTan(false);">
 	    <div id="video_container">
 		</div>
-		<div class="video_operation_menu video_center">
+		<div class="video_operation_menu video_center" style="text-align:left; padding-left:8px">
 		    <a onmouseover="showMaiXuTan(true);" class="video_operation_menu_a" string_id="string_maixu">麦序</a>
 
+			<a id="fengping" class="video_operation_menu_a" href="javascript:toggleVideoShowStyle();" >分屏</a>
+
 		    <a id="dismiss_class" string_id="string_xiake" class="video_operation_menu_a" href="javascript:dismissClass();" ></a>
-		    <div id="maixu_tan" class="maixu_tan" style="display: none;">
+
+		    <div id="maixu_tan" class="maixu_tan" style="display: none;" onmouseleave="showMaiXuTan(false);">
 		        <div class="maixu_tan_header">麦序</div>
 		        <div id="mai_list" class="maixu_tan_cont">
 			    </div>
@@ -96,7 +103,7 @@ video{
 		         <a href="javascript:openPPT();" class="operation_menu_t_btn"  string_id="string_open_kejian">打开课件</a>
 		         <a href="javascript:openSubjects();" class="operation_menu_t_btn" string_id="string_push_subject">推送题目</a>
 		         <a href="javascript:openSubjectsTongji();" class="operation_menu_t_btn" string_id="string_ketang_tongji">课堂统计</a>
-				  <div class="phoneHelpDiv">
+				 <div class="phoneHelpDiv">
 					  <div class="phoneHelpTip">
 						  <div class="helpCont">
 							  <div id="assistant_qr" src="img/pc_cloud_icon_web.jpg"></div>
@@ -105,9 +112,13 @@ video{
 					  </div>
 					  <a  class="phoneHelp operation_menu_t_btn"  >课堂助手</a>
 				  </div>
+				  <!--
+				  <a href="javascript:goVideoManaerPage();" class="operation_menu_t_btn" >辅助功能</a>
+				  -->
+				  <a id="video_source_peizhi" href="javascript:goVideoSourceSelectPage();" class="operation_menu_t_btn" style="display: none;">视频源设置</a>
 
 				  <a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" text='打开讨论区' style="display: none;">关闭讨论区</a>
-		         <a id='language_select' href="javascript:changeLanguage();" class="En_icon_i Chinese_icon_i"></a>
+		          <a id='language_select' href="javascript:changeLanguage();" class="En_icon_i Chinese_icon_i"></a>
 		      </div>
 		      <div class="questionDiv">
 				    <div class="questionTip">
@@ -155,7 +166,7 @@ video{
 		</div>
 	</div>
 
-	<div id="message_text_template">
+	<div id="message_text_template" style="display: none;">
 		   <div class="live_talk_t">
 		   	  <div class="live_user" onclick="doHandleStudent(this);"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60"  class="green"></div>
 		   	  <div class="live_talk_info">
@@ -165,7 +176,7 @@ video{
 		   </div>
 	</div>
 
-	<div id="message_img_template">
+	<div id="message_img_template" style="display: none;">
 	   <div class="live_talk">
 	   	   <div class="live_user" onclick="doHandleStudent(this);"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60"  class="green"></div>
 	       <div class="live_talk_info">
@@ -350,6 +361,10 @@ video{
 	}
 
     function showBigVideo(stream,show,sendCommand){
+          var isFenpingMode = $("#right").is(':hidden');
+          if(show && isFenpingMode){
+              return;
+		  }
     	  if(typeof(stream) == 'undefined'){
     		  return;
     	  }
@@ -376,6 +391,10 @@ video{
                   $("#big_video").append("<video autoplay width='100%' height='100%' muted></video>");
                   $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
 
+                  if(stream.getId() <=2 ){
+                      $("#big_video").find("video").css("object-fit","scale-down");
+                  }
+
 		    	  if(sendCommand){
 		    		  //告诉学生显示大视频
 			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':1}}" + ')');
@@ -383,18 +402,28 @@ video{
 		    	  }
 		      }
 		  }else{
-			  var current_stream = $("#big_video").attr("current_stream");
-		      if(current_stream == stream.getId()){
-		    	  $("#big_video").empty();
-		    	  $("#big_video").attr("current_stream","");
-		    	  $("#big_video").hide();
-
-		    	  if(sendCommand){
-		    		  //告诉学生不显示大视频
-			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':0}}" + ')');
-			     	  connection.send(protocal);
-		    	  }
-		      }
+		      if(stream == null){
+                  $("#big_video").empty();
+                  $("#big_video").attr("current_stream","");
+                  $("#big_video").hide();
+                  if(sendCommand){
+                      //告诉学生不显示大视频
+                      var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':0}}" + ')');
+                      connection.send(protocal);
+                  }
+			  }else{
+                  var current_stream = $("#big_video").attr("current_stream");
+                  if(current_stream == stream.getId()){
+                      $("#big_video").empty();
+                      $("#big_video").attr("current_stream","");
+                      $("#big_video").hide();
+                      if(sendCommand){
+                          //告诉学生不显示大视频
+                          var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':0}}" + ')');
+                          connection.send(protocal);
+                      }
+                  }
+			  }
 		  }
 	}
 
@@ -417,6 +446,7 @@ video{
   var livePassword = getQueryString("livePassword");
   var pushUrl = null;
   var isPreparedOK = false;
+  var startType = getQueryString("startType");
 
   var connection = new ClazzConnection();
 
@@ -480,10 +510,18 @@ video{
 		 }//取消静音
 		 else if(type == 1){
 			 mutedStreamIds.remove(streamId);
-			 try{
-				 streamMap[streamId].enableAudio();
-			 }catch (e) {
-				 console.log(e);
+			 if(streamId > 0){
+                 try{
+                     streamMap[streamId].enableAudio();
+                 }catch (e) {
+                     console.log(e);
+                 }
+			 }else{
+                 try{
+                     streamMap[streamId].disableAudio();
+                 }catch (e) {
+                     console.log(e);
+                 }
 			 }
 		 }
 	 }
@@ -1105,16 +1143,21 @@ video{
 
   //检查直播环境
   function checkDevice(){
-	  layer.open({
-		  type: 1,
-		  title: '音视频设备检测',
-		  shadeClose: false,
-		  shade: 0.2,
-		  skin:'device_wrap',
-		  closeBtn:0,
-		  area: ['380px', '260px'],
-		  content: "<iframe width='100%' height='100%' src='html/device/device_check.html?v=3' onload='onCheckResult(this);'></iframe>" //iframe的url
-	   });
+      if(startType == '1_n'){
+          $("#video_source_peizhi").show();
+          socketLogin();
+	  }else{
+          layer.open({
+              type: 1,
+              title: '音视频设备检测',
+              shadeClose: false,
+              shade: 0.2,
+              skin:'device_wrap',
+              closeBtn:0,
+              area: ['380px', '260px'],
+              content: "<iframe width='100%' height='100%' src='html/device/device_check.html?v=3' onload='onCheckResult(this);'></iframe>" //iframe的url
+          });
+	  }
   }
 
   function onCheckResult(iframe){
@@ -1122,21 +1165,26 @@ video{
 		  audioSourceId = media.audioInputSource;
 		  videoSourceId = media.videoSource;
 
-		  //只有环境OK，才能进行后面的操作
-		  var loginProtocol={};
-		  loginProtocol.command='teacherUnionMasterLogin';
-		  loginProtocol.data={};
-		  loginProtocol.data.userId=userId;
-		  loginProtocol.data.liveTitle=title;
-          loginProtocol.data.livePassword=livePassword;
-          loginProtocol.data.clazzId = getQueryString("clazzId");
-		  connection.connect(loginProtocol);
+          socketLogin();
+
 		  setTimeout(function(){
 			  layer.closeAll();
 		  }, 500);
 	  },"onMediaError":function(){
 		  iframe.contentWindow.showErrorPage();
 	  }});
+  }
+
+  function socketLogin(){
+      //只有环境OK，才能进行后面的操作
+      var loginProtocol={};
+      loginProtocol.command='teacherUnionMasterLogin';
+      loginProtocol.data={};
+      loginProtocol.data.userId=userId;
+      loginProtocol.data.liveTitle=title;
+      loginProtocol.data.livePassword=livePassword;
+      loginProtocol.data.clazzId = getQueryString("clazzId");
+      connection.connect(loginProtocol);
   }
 
   //检查设备
@@ -1221,6 +1269,7 @@ video{
 	 var protocal = eval('(' + "{'command':'disconnect_mai','data':{'userId':"+userId+"}}" + ')');
 	 connection.send(protocal);
 	 $('#agora_remote' + userId).remove();
+	 changeFengpingItemStyle();
   }
 
   function agreeConnectMai(userId){
@@ -1230,13 +1279,15 @@ video{
 
 
   function playLocalVideo(){
+           if(startType == '1_n'){
+               return;
+		   }
 		   console.log("getUserMedia successfully");
-
 		   try{
 			 $("#agora_local").parent().remove();
 		   }catch(e){}
 
-		   $("#video_container").prepend("<div><div id='agora_local' uid='"+userId+"' style='width: 230px; height: 160px; position: relative;margin: 12px 5px 0 5px;'><div style='position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px'>主讲</div><img id='audio_"+userId+"' style='color:red;' class='radio_no' text='' onclick='toggleMuteAudio("+userId+");'/></div></div>");
+		   $("#video_container").prepend("<div class='fenping_video' id='agora_local' uid='"+userId+"' style='width: 230px; height: 160px; position: relative; float:left; margin: 12px 5px 0 5px; overflow:hidden'><div style='position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px'>主讲</div><img id='audio_"+userId+"' style='color:red;' class='radio_no' text='' onclick='toggleMuteAudio("+userId+");'/></div>");
 
 		   client.on('stream-published', function (evt) {
                localStream = evt.stream;
@@ -1254,6 +1305,7 @@ video{
                    localStream.disableAudio();
                };
                onAudioMutedStateChange(localStream.getId());
+               changeFengpingItemStyle();
 		   });
 
 	       navigator.mediaDevices.getUserMedia({ audio: true, video: true })
@@ -1265,30 +1317,32 @@ video{
 		   });
   }
 
-
   function prepareVideoRoom(data){
-	     client = new ExRTC();
+  	    client = new ExRTC();
 
-	 　   client.join(vid+"", userId,userName, function() {
-			 console.log("User " + userId + " join channel successfully");
-			 playLocalVideo();
-	 　　 }, function() {
+	 　  client.join(vid+"", userId,userName, function() {
+				 console.log("User " + userId + " join channel successfully");
+				 playLocalVideo();
+				 //playShareVideoSource();
+	 　　 	 }, function() {
 		　	 console.log("Join channel failed");
-	  　  });
+	  　 });
 
 
 	    client.on('stream-added', function (evt) {
 		      var stream = evt.stream;
-		      if(stream.getId() <= 1){
-		    	  return;
-		      }
+
 		      console.log("New stream added: " + stream.getId());
 		      console.log("Subscribe ", stream);
 
               var userName = evt.user.userName;
               $('div#video_container #agora_remote'+stream.getId()).remove();
-              $('div#video_container').append('<div class="mai_stream_user" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative;margin: 12px 5px 0 5px;"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div><span onclick="updateMaiUserState(' + stream.getId() +', 0)" style="position:absolute; right:0; bottom:0; color:#fff; background:rgba(34, 34, 34, 0.6); z-index:1; text-align:center; width:45px; height:24px;line-height:24px;  overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" href="javascript:void(0)" string_id="string_duanmai">断麦</span></div>');
 
+              if(stream.getId() < 0){
+                   $('div#video_container').append('<div class="mai_stream_user fenping_video" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative; float:left; margin: 12px 5px 0 5px; overflow:hidden"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div>');
+              }else{
+                   $('div#video_container').append('<div class="mai_stream_user fenping_video" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative; float:left; margin: 12px 5px 0 5px; overflow:hidden"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div><span onclick="updateMaiUserState(' + stream.getId() +', 0)" style="position:absolute; right:0; bottom:0; color:#fff; background:rgba(34, 34, 34, 0.6); z-index:1; text-align:center; width:45px; height:24px;line-height:24px;  overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" href="javascript:void(0)" string_id="string_duanmai">断麦</span></div>');
+              }
 
               client.subscribe(stream,"agora_remote"+stream.getId());
 
@@ -1306,13 +1360,20 @@ video{
 			  $('#agora_remote' + stream.getId()).click(function(){
 				  showBigVideo(stream,true,true);
 			  });
+
 			  //如果它已经被静音，则在此处设置让其静音
 			  if(mutedStreamIds.contains(stream.getId())){
 				  stream.disableAudio();
 			  };
+
+              //如果是通过视频源设置进来的流，说明是本地流，不订阅他的声音
+              if(stream.getId() < 0){
+                stream.disableAudio();
+              }
 			  onAudioMutedStateChange(stream.getId());
 			  //计算当前的大流
 			  showEclassCurrentBigStreamId();
+              changeFengpingItemStyle();
 	    });
 
 	    client.on('stream-removed', function (evt) {
@@ -1358,8 +1419,9 @@ video{
 	 }else if(text == '取消静音'){
 		 //do unmute
 		 mutedStreamIds.remove(streamId);
-		 streamMap[streamId].enableAudio();
-
+		 if(streamId > 0){
+             streamMap[streamId].enableAudio();
+		 }
 		 onAudioMutedStateChange(streamId);
 
 		 //告诉其他人取消静音此stream
@@ -1765,12 +1827,77 @@ video{
         }
   }
 
+  function toggleVideoShowStyle(){
+       var isHidden = $("#right").is(':hidden');
+       if(isHidden){
+           $("#right").show();
+           $("#left").css("width","240px");
+           $(".fenping_video").css({'width':'230px','height':'160px'});
+
+	   }else{
+           $("#right").hide();
+           $("#left").css("width","100%");
+
+           changeFengpingItemStyle();
+	   }
+      changeFengpingTipName();
+  }
+
+  function changeFengpingTipName(){
+      var isHidden = $("#right").is(':hidden');
+      if(isHidden){
+          $("#fengping").text("取分");
+      }else{
+          $("#fengping").text("分屏");
+	  }
+  }
+
+  function changeFengpingItemStyle(){
+      showBigVideo(null,false,false);
+      var isHidden = $("#right").is(':hidden');
+      if(isHidden){
+          var videoCount = $("#video_container").children().length;
+          var width = "calc(50% - 10px)";
+          var height = "50%";
+          if(videoCount == 1){
+              width = "100%";
+              height = "calc(100% - 12px)";
+          }else if(videoCount == 2){
+              width = "calc(50% - 10px)";
+              height = "calc(100% - 12px)";
+          }else{
+              width = "calc(50% - 10px)";
+              height = "calc(50% - 12px)";
+          }
+          var videos = $(".fenping_video");
+          videos.css({'width':width,'height':height});
+	  }
+  }
+
+  function goVideoManaerPage(){
+      window.open("playLocalFile.html?vid="+vid,"_blank");
+  }
+
+  function goVideoSourceSelectPage(){
+      window.open("videoSourceSelect.html?vid="+vid,"CLASS_VIDEO_SOURCE_SETTING");
+  }
+
   window.addEventListener('message', function(event) {
-  	if (event.source != window)
-          return;
+		if (event.source != window){
+            return;
+		}
+
 	    var data = event.data;
-	    if(data.from != 'extension' && data.tabUrl != window.location.href){
+	    if(data.from != 'extension'){
 	    	return;
+	    }
+        if(data.action == 'responseScreenSource'){
+           var sourceId = data.sourceId;
+           var canRequestAudioTrack = data.canRequestAudioTrack;
+           onScreenStream(sourceId);
+        }
+	    if(data.tabUrl != window.location.href){
+	        return;
 	    }
 	    if(data.action){
 	    	 if(data.action == 'requestStartCapture'){
