@@ -59,9 +59,9 @@ $(function(){
     var teacherName = Service.getQueryString("teacherName");
     getUserById();
 
-        $('#classInfo_iframe').attr('src','http://127.0.0.1:5000/schoolClass/unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
-    // $('#classInfo_iframe').attr('src','https://www.maaee.com/openvidu/schoolClass/unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
-    $('#myFile_iframe').attr('src','http://192.168.50.29:8091/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
+        // $('#classInfo_iframe').attr('src','http://127.0.0.1:5000/schoolClass/unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
+    $('#classInfo_iframe').attr('src','https://www.maaee.com/openvidu/schoolClass/unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
+    $('#myFile_iframe').attr('src','http://jiaoxue.maaee.com:8091/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
 
     $('#classInfo').on('click',function(){
         $('#classInfo').addClass('active');
