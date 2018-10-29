@@ -4,34 +4,82 @@ body{
     border:0;
     /*overflow: hidden;*/
 }
+.my_flex{
+    -webkit-display:  flex;
+    -moz-display: flex;
+    -ms-display:  flex;
+    -o-display:  flex;
+    -khtml-display: flex;
+    display:  flex;
+    align-items: center;
+}
 .nav{
     width: 100%;
-    height: 10%;
-    background: red;
+    height: 56px;
+    background: #122126;
+    overflow: hidden;
 }
 .logo{
     float: left;
 }
+.logo img{
+    height: 30px;
+    margin-top: 13px;
+    margin-left: 22px;
+}
 .userInfo{
     float: right;
+    padding-right: 21px;
+    height: 56px;
+}
+.box_cont{
+    overflow: hidden;
+    height: calc(100% - 56px);
 }
 .left_box{
-    width: 20%;
-    height: 90%;
-    background: blue;
-    display: inline-block;
-    overflow: hidden;
+    width: 180px;
+    height:100%;
+    background: #26343D;
+    float: left;
+    padding-left: 12px;
+    box-sizing: border-box;
+}
+.left_box > div{
+    color: #BDBDBD;
+    font-size: 16px;
+    line-height: 50px;
+    padding-left: 45px;
+    margin-top: 45px;
 }
 .right_box{
-    width: 79%;
-    height: 90%;
+    width: calc(100% - 180px);
+    height: 100%;
     background: lightblue;
-    display: inline-block;
+    float: left;
     overflow: hidden;
 }
-.active{
-    background: white;
-    color: blue;
+.left_box > div.active{
+    position: relative;
+    background: #ECEFF8;
+    color: #4285F4;
+    box-shadow: 3px 0px 20px rgba(0,0,0,0.2);
+}
+.left_box > div.active::before{
+    content: '';
+    position: absolute;
+    left:27px;
+    top:50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #4285F4;
 }
 #classInfo,#myFile{
     cursor: pointer;
@@ -53,15 +101,29 @@ body{
     width: 100%;
     height: 100%;
 }
-#user_avatar{
-    width:100%;
-    height:100%;
-}
 .avatar{
-    width: 30px;
-    height: 30px;
+    overflow: hidden;
+}
+.avatar img{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 13px;
+}
+.username{
+    color: #9DD1E9;
+    font-size: 15px;
 }
 .avatar,.username,.exit{
-    display: inline-block;
     cursor: pointer;
+}
+.exit{
+    background: url("../img/icon_quite.png") no-repeat right center;
+    background-size: 18px;
+    font-size: 0;
+    width: 18px;
+    height: 56px;
+    margin-left: 13px;
 }
