@@ -37,7 +37,7 @@
 
     function publish(){
         var canvas = $("#rtsp_preview_canvas")[0];
-        jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas});
+        jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
 
         const ipc = window.top.ipc;
         var message = {};
@@ -85,7 +85,7 @@
         console.log('joinRoom .....');
         client = new ExRTC();
 
-        client.join(vid+"", random(1000000,2000000),userName, function() {
+        client.join(vid+"", random(-1000000,-2000000),userName, function() {
             console.log('joinRoom success');
             publish();
         }, function() {

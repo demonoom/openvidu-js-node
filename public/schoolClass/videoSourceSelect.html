@@ -115,7 +115,7 @@
         ipc.send('onRendererMessage',message);
 
         var canvas = $("#rtsp_preview_canvas")[0];
-        jsmpegPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas});
+        jsmpegPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio:false});
     }
 
     function useRtspInclass(){

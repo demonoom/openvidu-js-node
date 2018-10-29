@@ -97,12 +97,11 @@ function captureTab(config) {
     needReconnect = true;
 
     const constraints = {
-        // audio: {
-        //     mandatory: {
-        //         chromeMediaSource: 'desktop'
-        //     }
-        // },
-        audio:false,
+        audio: {
+            mandatory: {
+                chromeMediaSource: 'desktop'
+            }
+        },
         video: {
             mandatory: {
                 chromeMediaSource: 'desktop',
@@ -114,33 +113,27 @@ function captureTab(config) {
                 minFrameRate:config.minFrameRate
             }
         }
-    }
+    };
 
-    desktopCapturer.getSources({types: ['screen']}, (error, sources) => {
-        //constraints.audio.mandatory.chromeMediaSourceId = sources[0].id;
-        constraints.video.mandatory.chromeMediaSourceId = sources[0].id;
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(function(tabStream){
-                onTabStream(tabStream,config);
-            })
-            .catch(function(e){
-                console.log(e);
-            });
-    });
-
-
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(tabStream){
+            onTabStream(tabStream,config);
+        })
+        .catch(function(e){
+            console.log(e);
+        });
 }
 
 function onTabStream(tabStream,config){
     streams.push(tabStream);
 
-    var playAudioStream = new MediaStream();
-    tabStream.getAudioTracks().forEach(function(track) {
-        playAudioStream.addTrack(track);
-    });
-    var audio = new Audio();
-    audio.srcObject = playAudioStream;
-    audio.play();
+    // var playAudioStream = new MediaStream();
+    // tabStream.getAudioTracks().forEach(function(track) {
+    //     playAudioStream.addTrack(track);
+    // });
+    // var audio = new Audio();
+    // audio.srcObject = playAudioStream;
+    // audio.play();
 
     navigator.mediaDevices.getUserMedia({audio:{mandatory:{echoCancellation: true}},video:false}).then(function(micStream) {
 

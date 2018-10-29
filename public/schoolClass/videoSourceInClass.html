@@ -14,7 +14,7 @@
 </head>
 <body>
 
- <video width="320px" height="240px" autoplay id="preview_video"></video>
+ <video width="320px" height="240px" autoplay id="preview_video" muted></video>
 
 </body>
 
@@ -81,7 +81,7 @@
     function joinRoom(){
         client = new ExRTC();
 
-        client.join(vid+"", random(1000000,2000000),userName, function() {
+        client.join(vid+"", random(-1000000,-2000000),userName, function() {
             publish();
         }, function() {
             console.log("Join channel failed");

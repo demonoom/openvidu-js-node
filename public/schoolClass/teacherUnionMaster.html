@@ -510,10 +510,18 @@ video{
 		 }//取消静音
 		 else if(type == 1){
 			 mutedStreamIds.remove(streamId);
-			 try{
-				 streamMap[streamId].enableAudio();
-			 }catch (e) {
-				 console.log(e);
+			 if(streamId > 0){
+                 try{
+                     streamMap[streamId].enableAudio();
+                 }catch (e) {
+                     console.log(e);
+                 }
+			 }else{
+                 try{
+                     streamMap[streamId].disableAudio();
+                 }catch (e) {
+                     console.log(e);
+                 }
 			 }
 		 }
 	 }
@@ -1323,16 +1331,18 @@ video{
 
 	    client.on('stream-added', function (evt) {
 		      var stream = evt.stream;
-		      if(stream.getId() <= 1){
-		    	  return;
-		      }
+
 		      console.log("New stream added: " + stream.getId());
 		      console.log("Subscribe ", stream);
 
               var userName = evt.user.userName;
               $('div#video_container #agora_remote'+stream.getId()).remove();
-              $('div#video_container').append('<div class="mai_stream_user fenping_video" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative; float:left; margin: 12px 5px 0 5px; overflow:hidden"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div><span onclick="updateMaiUserState(' + stream.getId() +', 0)" style="position:absolute; right:0; bottom:0; color:#fff; background:rgba(34, 34, 34, 0.6); z-index:1; text-align:center; width:45px; height:24px;line-height:24px;  overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" href="javascript:void(0)" string_id="string_duanmai">断麦</span></div>');
 
+              if(stream.getId() < 0){
+                   $('div#video_container').append('<div class="mai_stream_user fenping_video" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative; float:left; margin: 12px 5px 0 5px; overflow:hidden"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div>');
+              }else{
+                   $('div#video_container').append('<div class="mai_stream_user fenping_video" uid="'+stream.getId()+'"  id="agora_remote'+stream.getId()+'" style="width:230px; height: 160px; position: relative; float:left; margin: 12px 5px 0 5px; overflow:hidden"><img id="audio_'+stream.getId()+'" style="color:red;" class="radio_no"  text="" onclick="toggleMuteAudio('+stream.getId()+');"/><div style="position:absolute; bottom:0; left:30px; background:rgba(0,0,0,0.5); width:146px; text-align:center; z-index:1; overflow:hidden; text-overflow:ellipsis; height:24px; line-height:24px; white-space: nowrap; padding:0 4px;color:#fff; font-size:14px">'+userName+'</div><span onclick="updateMaiUserState(' + stream.getId() +', 0)" style="position:absolute; right:0; bottom:0; color:#fff; background:rgba(34, 34, 34, 0.6); z-index:1; text-align:center; width:45px; height:24px;line-height:24px;  overflow:hidden; text-overflow:ellipsis; white-space: nowrap;" href="javascript:void(0)" string_id="string_duanmai">断麦</span></div>');
+              }
 
               client.subscribe(stream,"agora_remote"+stream.getId());
 
@@ -1350,10 +1360,16 @@ video{
 			  $('#agora_remote' + stream.getId()).click(function(){
 				  showBigVideo(stream,true,true);
 			  });
+
 			  //如果它已经被静音，则在此处设置让其静音
 			  if(mutedStreamIds.contains(stream.getId())){
 				  stream.disableAudio();
 			  };
+
+              //如果是通过视频源设置进来的流，说明是本地流，不订阅他的声音
+              if(stream.getId() < 0){
+                stream.disableAudio();
+              }
 			  onAudioMutedStateChange(stream.getId());
 			  //计算当前的大流
 			  showEclassCurrentBigStreamId();
@@ -1403,8 +1419,9 @@ video{
 	 }else if(text == '取消静音'){
 		 //do unmute
 		 mutedStreamIds.remove(streamId);
-		 streamMap[streamId].enableAudio();
-
+		 if(streamId > 0){
+             streamMap[streamId].enableAudio();
+		 }
 		 onAudioMutedStateChange(streamId);
 
 		 //告诉其他人取消静音此stream
@@ -1862,7 +1879,7 @@ video{
   }
 
   function goVideoSourceSelectPage(){
-      window.open("videoSourceSelect.html?vid="+vid,"_blank");
+      window.open("videoSourceSelect.html?vid="+vid,"CLASS_VIDEO_SOURCE_SETTING");
   }
 
   window.addEventListener('message', function(event) {
