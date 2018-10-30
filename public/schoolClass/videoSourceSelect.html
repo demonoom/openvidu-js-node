@@ -22,12 +22,11 @@
 </head>
 <body>
 <div class="videoSource-wrap">
-    <div class="toolbar"></div>
     <div class="menu">
         <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头</span>
         <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
         <div class="menu-btn">
-            <i class="videoSource-menu3"></i>
+            <i class="videoSource-menu3-2"></i>
             <img src="" id="recordingTipImg"/>
             <span onclick="startServerRecord();" id="recordingTipText">开始录屏</span>
         </div>
@@ -56,8 +55,8 @@
         .then(function(devices) {
             var audios = new Array();
             var videos = new Array();
-            var audioHtml = "音频\n";
-            var videoHtml = "视频\n";
+            var audioHtml = "<div>音频\n</div><div class='right-item'>";
+            var videoHtml = "<div>视频\n</div><div class='right-item'>";
 
             devices.forEach(function(device) {
                 if(device.deviceId == 'default'){
@@ -73,13 +72,16 @@
                 console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
             });
 
+            audioHtml = audioHtml +"</div>";
+            videoHtml = videoHtml +"</div>";
+
             layer.open({
                 type: 1,
                 closeBtn: 0,
                 title:"请选择本地摄像头",
                 skin:"videoSource",
                 area: ['320px', '480px'], //宽高
-                content: "<div class='list-content'><div class='list-item'>"+videoHtml+"</div><div class='list-item'>"+audioHtml+"</div><div class='list-item'>在课堂中的昵称:<input id='nick'  class='right nickname' /></div></div><div class='btn-cont'><span onclick='preView();' class='btn-blue Ghost-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>在课堂中使用</span><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span></div><video id='preview_video' width='320px' height='240px' autoplay></video>"
+                content: "<div class='list-content'><div class='list-item'>"+videoHtml+"</div><div class='list-item'>"+audioHtml+"</div><div class='list-item'>在课堂中的昵称:<input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='299px' height='161px' autoplay></video></div></div><div class='btn-cont'><span onclick='preView();' class='btn-blue Ghost-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span></div>"
             });
 
         }).catch(function(err) {
@@ -88,17 +90,19 @@
     }
 
     function addIpCamera(){
-        var browser = platform.name;
-        if(browser.indexOf("Electron") == -1){
-            layer.msg("请在pc客户端中使用此功能~~");
-            return;
-        }
+        // var browser = platform.name;
+        // if(browser.indexOf("Electron") == -1){
+        //     layer.msg("请在pc客户端中使用此功能~~");
+        //     return;
+        // }
         wsPort = wsPort + 1;
-        var html = "<div>请输入rtsp地址:<input id='rtsp_url' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/></div><div>在课堂中的昵称:<input id='nick'/></div><div><span onclick='rtspPreview();'>预览</span><span onclick='useRtspInclass(this)'>在课堂中使用</span><span onclick='cancelUseRtsp();'>取消</span></div><div><canvas id='rtsp_preview_canvas' width='320px' height='240px'></canvas></div>"
+        var html = "<div class='list-content'><div class='list-item'>请输入rtsp地址:<input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/></div><div class='list-item'>在课堂中的昵称:<input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='rtspPreview();' class='btn-blue Ghost-btn'>预览</span><span onclick='useRtspInclass(this)' class='btn-blue Solid-btn'" +
+                   ">使用</span><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span></div>"
         layer.open({
             type: 1,
-            title:"请选择本地摄像头",
+            title:"请选择网络摄像头",
             closeBtn: 0,
+            skin:"videoSource",
             area: ['320px', '480px'], //宽高
             content: html
         });
@@ -147,7 +151,7 @@
         }
         layer.closeAll();
         var src= "videoSourceRtspInClass.html?vid="+vid+"&userName="+nick+"&wsPort="+wsPort+"&rtspUrl="+rtspUrl;
-        $("#video_sources").append("<div><iframe src='"+src+"'></iframe><span onclick='deleteVideoSource(this);'>离开房间</span></div>");
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='"+src+"'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
 
     }
 
@@ -182,7 +186,7 @@
         }
         layer.closeAll();
         var src= "videoSourceInClass.html?videoDeviceId="+videoDeviceId+"&audioDeviceId="+audioDeviceId+"&vid="+vid+"&userName="+nick;
-        $("#video_sources").append("<div><iframe src='"+src+"'></iframe><span onclick='deleteVideoSource(this);'>离开房间</span></div>");
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='"+src+"'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
     }
     function deleteVideoSource(span){
         var iframe = $(span).parent().find("iframe")[0];
