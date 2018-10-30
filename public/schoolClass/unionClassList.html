@@ -16,6 +16,9 @@
             overflow: hidden;
             height: 100%;
         }
+        .layui-layer-shade{
+            opacity: 0.5 !important;
+        }
         .layui-layer-title{
             font-size: 16px !important;
         }
@@ -90,6 +93,24 @@
             position: relative;
             padding-left: 18px;
         }
+        .emptyCont{
+            position: absolute;
+            left: 50%;
+            top:50%;
+            -webkit-transform: translate(-50%,-50%);
+            -moz-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+            -o-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+            z-index: 20;
+            text-align: center;
+            color: #666;
+            width: 210px;
+        }
+        .emptyCont img{
+            width: 100%;
+            margin-bottom: 5px;
+        }
         .joinBtn{
             position: absolute;
             right: 0;
@@ -125,7 +146,10 @@
 
 
 </div>
-
+<div class='emptyCont' style="display: none">
+    <img src='img/icon_empty.png'/><br/>
+    暂无数据
+</div>
 <div id="loading" style="display: none;"> 正在加载...</div>
 
 <div id="item_template" style="display: none;">
@@ -161,6 +185,7 @@
        service.doWebService(data,{onResponse:function(result){
            var infos = result.response;
            if(infos.length > 0){
+               $(".emptyCont").hide();
                $("#loading").text("数据加载完毕");
                infos.forEach(function(info){
                    var vid = info.vid;
@@ -196,7 +221,8 @@
                    template.attr("info_vid","0");
                });
            }else{
-               $("#loading").text("没有获取到数据...");
+               // $("#loading").text("没有获取到数据...");
+               $(".emptyCont").show();
            }
        },onError:function(error){
 
