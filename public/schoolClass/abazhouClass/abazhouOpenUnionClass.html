@@ -9,7 +9,7 @@
     <style>
 
         .modalCont{
-            padding-left: 22px;
+            padding-left: 15px;
             padding-top: 20px;
         }
         .title{
@@ -32,7 +32,7 @@
             border: 1px #E5E5E5 solid;
         }
         .selectItem input.courseInput{
-            width: 380px;
+            width: 175px;
         }
         .myFlex{
             -webkit-display: flex;
@@ -45,14 +45,18 @@
         #class_container{
             font-size: 14px;
             color: #666;
-            padding-left: 4px;
-            width: 350px;
+            width: 175px;
             height: 136px;
             overflow-y: auto;
         }
         .classItem{
             margin-bottom: 14px;
+            padding-left: 4px;
             cursor: pointer;
+            overflow: hidden;
+            -o-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .classItem i{
             border: 1px #E5E5E5 solid;
