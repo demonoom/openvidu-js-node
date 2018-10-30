@@ -21,18 +21,28 @@
 
 </head>
 <body>
-    <span onclick="addLocalCamera()">添加本机摄像头</span>
-    <span onclick="addIpCamera();">添加网络摄像头</span>
-    <div>
-        <img src="" id="recordingTipImg"/>
-        <span onclick="startServerRecord();" id="recordingTipText">推流加服务器录制</span>
+<div class="videoSource-wrap">
+    <div class="toolbar"></div>
+    <div class="menu">
+        <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头</span>
+        <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
+        <div class="menu-btn">
+            <i class="videoSource-menu3"></i>
+            <img src="" id="recordingTipImg"/>
+            <span onclick="startServerRecord();" id="recordingTipText">开始录屏</span>
+        </div>
     </div>
 
 
-    <div id="video_sources">
 
+    <div id="video_sources" class="videoSource_content">
+        <div class="empty_center">
+            <i class="videoSource-empty"></i>
+            <div class="videoSource-empty-text">视频预览区</div>
+        </div>
 
     </div>
+</div>
 
 </body>
 
@@ -46,8 +56,8 @@
         .then(function(devices) {
             var audios = new Array();
             var videos = new Array();
-            var audioHtml = "音频:\n";
-            var videoHtml = "视频:\n";
+            var audioHtml = "音频\n";
+            var videoHtml = "视频\n";
 
             devices.forEach(function(device) {
                 if(device.deviceId == 'default'){
@@ -55,10 +65,10 @@
                 }
                 if(device.kind == 'audioinput'){
                     audios.push(device);
-                    audioHtml = audioHtml +"<label><input name='audioinput' type='radio' value='"+device.deviceId+"' />"+device.label+"</label>";
+                    audioHtml = audioHtml +"<label class='right'><input class='a-radio' name='audioinput' type='radio' value='"+device.deviceId+"' />"+ "<span class='b-radio'></span>"+ "device.label" +"</label>";
                 }else if(device.kind == 'videoinput'){
                     videos.push(device);
-                    videoHtml = videoHtml +"<label><input name='videoinput' type='radio' value='"+device.deviceId+"' />"+device.label+"</label>";
+                    videoHtml = videoHtml +"<label class='right'><input class='a-radio' name='videoinput' type='radio' value='"+device.deviceId+"' />"+ "<span class='b-radio'></span>" + "device.label" +"</label>";
                 }
                 console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
             });
@@ -67,8 +77,9 @@
                 type: 1,
                 closeBtn: 0,
                 title:"请选择本地摄像头",
+                skin:"videoSource",
                 area: ['320px', '480px'], //宽高
-                content: "<div>"+videoHtml+"</div><div>"+audioHtml+"</div><div>在课堂中的昵称:<input id='nick'/></div><div><span onclick='preView();'>预览</span><span onclick='useInclass();'>在课堂中使用</span><span onclick='layer.closeAll();'>取消</span></div><video id='preview_video' width='320px' height='240px' autoplay></video>"
+                content: "<div class='list-content'><div class='list-item'>"+videoHtml+"</div><div class='list-item'>"+audioHtml+"</div><div class='list-item'>在课堂中的昵称:<input id='nick'  class='right nickname' /></div></div><div class='btn-cont'><span onclick='preView();' class='btn-blue Ghost-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>在课堂中使用</span><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span></div><video id='preview_video' width='320px' height='240px' autoplay></video>"
             });
 
         }).catch(function(err) {

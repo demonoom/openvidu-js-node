@@ -4916,4 +4916,200 @@ br{
     float: right;
     color: #222;
 }
+.videoSource{
+	color: #333;
+	font-size: 14px;
+	line-height: 1;
+	width: 340px !important;
+	height: 400px !important;
+}
+.videoSource .layui-layer-title{
+	padding: 0 15px;
+	height: 41px;
+	line-height: 41px;
+	border-bottom: 1px solid #e5e5e5;
+	font-size: 15px;
+	background-color: #fff;
+	border-radius: 4px 4px 0 0;
+}
 
+.videoSource .layui-layer-content{
+	padding:15px 15px 18px 15px;
+	overflow: hidden !important;
+}
+.videoSource .list-item{
+	margin-bottom: 15px;
+}
+.videoSource .list-item .right{
+	margin-left: 15px;
+}
+.videoSource .list-content{
+	height: 286px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.videoSource .btn-cont{
+	height: 36px;
+	display:-webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-justify-content:space-around;
+	justify-content:space-around;
+	-moz-box-pack:space-around;
+	-webkit--moz-box-pack:space-around;
+	box-pack:space-around;
+	align-items:center;
+	-webkit-align-items:center;
+	box-align:center;
+	-moz-box-align:center;
+	-webkit-box-align:center;
+}
+.videoSource .btn-blue{
+	width:90px;
+	height:36px;
+	border-radius:4px;
+	border:1px solid;
+	font-size: 15px;
+	line-height: 36px;
+	text-align: center;
+}
+.videoSource .Ghost-btn{
+	border-color: #4285F4;
+	color:#4285F4;
+}
+.videoSource .Solid-btn{
+	background: #4285F4;
+	color: #fff;
+}
+.videoSource .nickname{
+	width: 185px;
+	height: 31px;
+	border: 1px solid #e5e5e5;
+	text-indent: 6px;
+}
+
+.videoSource .a-radio{
+	display: none;
+}
+.videoSource .b-radio{
+	display: inline-block;
+	width:16px;
+	height: 16px;
+	vertical-align: middle;
+	margin-right: 5px;
+	position: relative;
+	background: url("../images/b-radio-1.png") no-repeat;
+	background-size: 16px;
+}
+.videoSource .b-radio:before{
+	content: '';
+	font-size: 0;
+	width: 16px;
+	height: 16px;
+	background: url("../images/b-radio-2.png") no-repeat;
+	background-size: 16px;
+	position: absolute;
+	left:50%;
+	top:50%;
+	margin-left: -8px;
+	margin-top: -8px;
+	display: none;
+}
+.videoSource .a-radio:checked~.b-radio:before{
+	display: block;
+}
+.videoSource-wrap{
+	width: 402px;
+	height: 600px;
+	margin: 0 auto;
+	background: #F6F6F6;
+}
+.videoSource-wrap .toolbar{
+	height: 27px;
+	background: #000;
+
+}
+.videoSource-wrap .menu{
+	height: 98px;
+	padding: 0px 31px 12px 26px;
+	background: #fff;
+	display:-webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-justify-content:space-between;
+	justify-content:space-between;
+	-moz-box-pack:space-between;
+	-webkit--moz-box-pack:space-between;
+	box-pack:space-between;
+	align-items:center;
+	-webkit-align-items:center;
+	box-align:center;
+	-moz-box-align:center;
+	-webkit-box-align:center;
+}
+.videoSource-wrap .menu-btn{
+	width:70px;
+	height:98px;
+	border-radius:4px;
+	color: #4285F4;
+	font-size: 12px;
+	display: inline-block;
+	line-height: 37px;
+	margin-top: 12px;
+	text-align: center;
+}
+.videoSource-wrap .menu-btn i{
+	width: 70px;
+	height: 60px;
+	display: block;
+	position: relative;
+	top: 4px;
+	margin: 0 auto;
+}
+.videoSource-wrap .menu-btn i.videoSource-menu1{
+	background: url("../images/videoSource-menu1.png") no-repeat center center;
+	background-size: 70px;
+}
+.videoSource-wrap .menu-btn i.videoSource-menu2{
+	background: url("../images/videoSource-menu2.png") no-repeat center center;
+	background-size: 39px;
+}
+.videoSource-wrap .menu-btn i.videoSource-menu3{
+	background: url("../images/videoSource-menu3.png") no-repeat center center;
+	background-size: 60px;
+}
+.videoSource-wrap .menu-btn i.videoSource-menu3-2{
+	background: url("../images/videoSource-menu3-2.gif") no-repeat center center;
+	background-size: 60px;
+}
+.videoSource-empty{
+	background: url("../images/videoSource-empty.png") no-repeat;
+	background-size: 100% 100%;
+	width: 142px;
+	height: 96px;
+	display: inline-block;
+}
+.empty_center {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%); /* IE 9 */
+	-moz-transform: translate(-50%, -50%); /* Firefox */
+	-webkit-transform: translate(-50%, -50%); /* Safari 和 Chrome */
+	-o-transform: translate(-50%, -50%);
+}
+.videoSource_content{
+	height:463px;
+	position: relative;
+}
+.videoSource-empty-text{
+	color: #999;
+	line-height: 1;
+	margin-top: 20px;
+	text-align: center;
+}
