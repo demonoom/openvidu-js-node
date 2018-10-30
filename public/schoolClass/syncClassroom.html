@@ -6,45 +6,49 @@
   <link rel="stylesheet" href="./css/syncClassroom.css">
 </head>
 <body>
+<div class="wrap">
+    <div class="inner">
+        <div class="nav">
 
-<div class="nav">
+            <div class="logo"><img src="img/icon_yunClassLogo.png"/></div>
 
-<div class="logo"><img src="img/icon_yunClassLogo.png"/></div>
+            <div class="userInfo">
+                <div class="my_flex">
+                    <div class="avatar">
+                        <img id="user_avatar" src="" alt="">
+                    </div>
+                    <div class="username"></div>
+                    <div class="exit">退出</div>
+                </div>
 
-<div class="userInfo">
-    <div class="my_flex">
-        <div class="avatar">
-            <img id="user_avatar" src="" alt="">
+
+            </div>
+
         </div>
-        <div class="username"></div>
-        <div class="exit">退出</div>
+
+
+        <div class="box_cont">
+            <div class="left_box">
+                <div class="header">课堂管理</div>
+                <div id="classInfo" class="active">课程信息</div>
+                <div id="myFile">我的课件</div>
+            </div>
+            <div class="right_box">
+                <!--课程信息 -->
+                <div class="classInfo_box">
+                    <iframe id="classInfo_iframe" src="" frameborder="0"></iframe>
+                </div>
+                <!--我的课件 -->
+                <div class="myFile_box">
+                    <iframe id="myFile_iframe" src="" frameborder="0"></iframe>
+                </div>
+            </div>
+
+
+        </div>
     </div>
-
-
 </div>
 
-</div>
-
-
-<div class="box_cont">
-    <div class="left_box">
-
-        <div id="classInfo" class="active">课程信息</div>
-        <div id="myFile">我的课件</div>
-    </div>
-    <div class="right_box">
-        <!--课程信息 -->
-        <div class="classInfo_box">
-            <iframe id="classInfo_iframe" src="" frameborder="0"></iframe>
-        </div>
-        <!--我的课件 -->
-        <div class="myFile_box">
-            <iframe id="myFile_iframe" src="" frameborder="0"></iframe>
-        </div>
-</div>
-
-
-</div>
 
 </body>
 <script src="./js/jquery-3.2.1.min.js"></script>
