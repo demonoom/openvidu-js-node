@@ -16,13 +16,16 @@
             overflow: hidden;
             height: 100%;
         }
+        .layui-layer-shade{
+            opacity: 0.5 !important;
+        }
         .layui-layer-title{
             font-size: 16px !important;
         }
         .topDiv{
             overflow: hidden;
             border-bottom: 1px #E6E6E6 solid;
-            padding: 25px 36px 0;
+            padding: 15px  36px 15px  40px;
         }
         .topDiv h1{
             color: #333333;
@@ -31,34 +34,30 @@
             margin: 0;
         }
         .courseBtn{
-            padding: 0 9px 0 33px;
-            height: 42px;
-            line-height: 42px;
+            font-size: 14px;
+            padding: 0 17px 0 35px;
+            height: 34px;
+            line-height: 34px;
             color:#fff;
-            background: #0054FF url("img/icon_add_course.png") no-repeat 10px center;
-            background-size: 16px;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
+            background: #4285F4 url("img/icon_add_course1.png") no-repeat 14px 9px;
+            background-size: 14px;
+            -webkit-border-radius: 17px;
+            -moz-border-radius: 17px;
             border-radius: 4px;
             float: right;
             cursor: pointer;
         }
         #item_container{
-            height: calc(100% - 68px);
+            height: calc(100% - 65px);
             overflow-y: scroll;
-            padding-left: 32px;
+            padding-left: 40px;
             padding-right: 20px;
         }
         .item{
             position: relative;
-            /*-webkit-display:  flex;*/
-            /*-moz-display: flex;*/
-            /*-ms-display:  flex;*/
-            /*-o-display:  flex;*/
-            /*-khtml-display: flex;*/
-            /*display:  flex;*/
-            color: #666;
-            font-size: 14px;
+            border-radius: 4px;
+            color: #333;
+            font-size: 15px;
             line-height: 20px;
             padding: 44px 0 20px 0;
             margin-top: 42px;
@@ -67,8 +66,8 @@
         }
         #title{
             font-size: 18px;
-            background-color: #879EFF;
-            color: #fff;
+            background-color: #C4DAFF;
+            color: #333;
             position: absolute;
             top: -66px;
             left: 0;
@@ -94,6 +93,25 @@
             position: relative;
             padding-left: 18px;
         }
+        .emptyCont{
+            position: absolute;
+            left: 50%;
+            top:50%;
+            -webkit-transform: translate(-50%,-50%);
+            -moz-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+            -o-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+            z-index: 20;
+            text-align: center;
+            color: #666;
+            width: 210px;
+            font-size: 14px;
+        }
+        .emptyCont img{
+            width: 100%;
+            margin-bottom: 5px;
+        }
         .joinBtn{
             position: absolute;
             right: 0;
@@ -110,10 +128,7 @@
             -o-transform: translateY(-50%);
             transform: translateY(-50%);
             cursor: pointer;
-            background: -webkit-linear-gradient(left, #5581F1 , #1153FC); /* Safari 5.1 - 6.0 */
-            background: -o-linear-gradient(right, #5581F1, #1153FC); /* Opera 11.1 - 12.0 */
-            background: -moz-linear-gradient(right, #5581F1, #1153FC); /* Firefox 3.6 - 15 */
-            background: linear-gradient(to right, #5581F1 , #1153FC); /* 标准的语法 */
+            background: #4285F4; /* Safari 5.1 - 6.0 */
             border-top-left-radius:21px;
             border-bottom-left-radius:21px;
         }
@@ -124,7 +139,7 @@
 <body>
 <div class="topDiv">
     <h1>正在开课</h1>
-    <span class="courseBtn" onclick="openUnionClass();">开启联合开课</span>
+    <span class="courseBtn" onclick="openUnionClass();">新建课堂</span>
 </div>
 
 
@@ -132,7 +147,10 @@
 
 
 </div>
-
+<div class='emptyCont' style="display: none">
+    <img src='img/icon_empty.png'/><br/>
+    暂无数据
+</div>
 <div id="loading" style="display: none;"> 正在加载...</div>
 
 <div id="item_template" style="display: none;">
@@ -168,6 +186,7 @@
        service.doWebService(data,{onResponse:function(result){
            var infos = result.response;
            if(infos.length > 0){
+               $(".emptyCont").hide();
                $("#loading").text("数据加载完毕");
                infos.forEach(function(info){
                    var vid = info.vid;
@@ -203,7 +222,8 @@
                    template.attr("info_vid","0");
                });
            }else{
-               $("#loading").text("没有获取到数据...");
+               // $("#loading").text("没有获取到数据...");
+               $(".emptyCont").show();
            }
        },onError:function(error){
 
@@ -264,7 +284,7 @@
             title: '开启一个联合开课',
             shadeClose: true,
             shade: 0.8,
-            area: ['600px', '438px'],
+            area: ['400px', '438px'],
             content: 'openUnionClass.html?teacherId='+teacherId+"&userName="+teacherName
         });
     }
@@ -275,7 +295,7 @@
             title: '进入课堂验证',
             shadeClose: true,
             shade: 0.8,
-            area: ['520px', '379px'],
+            area: ['400px', '379px'],
             content: 'joinDialog.html?teacherId='+teacherId+"&vid="+vid
         });
     }

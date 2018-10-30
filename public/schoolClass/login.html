@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>用户登录</title>
-  <link rel="stylesheet" href="./css/login.css">
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <link rel="stylesheet" href="./css/login.css">
 </head>
 <body>
 
 <div class="content">
 
-<div class="login_box">
+    <div class="login_box">
 
-<div class="logo"><img src="img/logo.png"/>同步课堂</div>
-<div class="tab my_flex">
-<div class="btn_left active" id="account">账号登录</div>
-<div class="btn_right" id="scan">扫码登录</div>
-</div>
+        <div class="logo"><img src="img/logo.png"/>同步课堂</div>
+        <div class="tab my_flex">
+            <div class="btn_left active" id="account">账号登录</div>
+            <div class="btn_right" id="scan">扫码登录</div>
+        </div>
 
-<!--账号登录 -->
-<div class="account">
-<input id='act' type="text" placeholder="请输入小蚂蚁账号">
-<input id="pwd" type="password" placeholder="请输入密码">
-<button id="login">登录</button>
-</div>
+        <!--账号登录 -->
+        <div class="account">
+            <input id='act' type="text" placeholder="请输入小蚂蚁账号">
+            <input id="pwd" type="password" placeholder="请输入密码">
+            <button id="login">登录</button>
+        </div>
 
-<!--扫码登录 -->
-<div class="scan">
-<img id="scan_image" src="./img/school.png" alt="">
-  <div>打开手机小蚂蚁教师端扫一扫</div>
-</div>
+        <!--扫码登录 -->
+        <div class="scan">
+            <img id="scan_image" src="./img/school.png" alt="">
+            <div>打开手机小蚂蚁教师端扫一扫</div>
+        </div>
 
 
-</div>
+    </div>
 
 </div>
 
@@ -39,51 +39,97 @@
 <script src="./js/jquery.min.js"></script>
 <script src="./js/simple.js"></script>
 <script type="text/javascript">
-$(function(){
-    var machineId = '';
-    var simple = new SimpleWebsocketConnection();
-    simple.connect();
-    machineId = createMachineId();
-    getLoginTeachSystemEwm();
+    $(function () {
+        var machineId = '';
+        var simple = new SimpleWebsocketConnection();
+        simple.connect();
+        machineId = createMachineId();
+        getLoginTeachSystemEwm();
 
 
-    //socket 监听
-    simple.msgWsListener = {
-           onError: function (errorMsg) {
+        //socket 监听
+        simple.msgWsListener = {
+            onError: function (errorMsg) {
 
-           }, onWarn: function (warnMsg) {
+            }, onWarn: function (warnMsg) {
 
-           }, onMessage: function (info) {
-               var command = info.command;
+            }, onMessage: function (info) {
+                var command = info.command;
                 if (command == "allowLoginTeachSystem") {
-                   var data = info.data;
-                   var uuid = data.uuid;
+                    var data = info.data;
+                    var uuid = data.uuid;
 //                   var user = data.user;
-                   if(uuid == machineId){
-                      window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId='+data.user.colUid+'&teacherName='+data.user.userName+'';
-                   }else{}
-                   console.log("data==============>"+JSON.stringify(data.user));
+                    if (uuid == machineId) {
+
+//                           window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+data.user.colUid+'&teacherName='+data.user.userName+'';
+                        window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
+                    } else {
+                    }
 //
-               }
-           }
-    };
+                }
+            }
+        };
 
-    $('#account').on('click',function(){
-        console.log('账号');
-        $('.account').show();
-        $('#account').addClass('active');
-        $('#scan').removeClass('active');
-        $('.scan').hide();
-    })
+        $('#account').on('click', function () {
+            console.log('账号');
+            $('.account').show();
+            $('#account').addClass('active');
+            $('#scan').removeClass('active');
+            $('.scan').hide();
+        })
 
-    $('#scan').on('click',function(){
-        console.log('扫描');
-        $('.scan').show();
-        $('#scan').addClass('active');
-        $('#account').removeClass('active');
-        $('.account').hide();
-    })
+        $('#scan').on('click', function () {
+            console.log('扫描');
+            $('.scan').show();
+            $('#scan').addClass('active');
+            $('#account').removeClass('active');
+            $('.account').hide();
+        })
 
+
+        //登录事件
+        $('#login').on('click', function () {
+            console.log('开始登录');
+            console.log($('#act').val().trim(), '账号');
+            console.log($('#pwd').val().trim(), '密码');
+            if ($('#act').val().trim() == '') {
+                alert('请输入账号');
+                return;
+            } else if ($('#pwd').val().trim() == '') {
+                alert('请输入密码');
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "https://www.maaee.com/Excoord_For_Education/webservice",
+                data: {
+                    params: JSON.stringify({
+                        "method": "login",
+                        "username": $('#act').val().trim(),
+                        "password": $('#pwd').val().trim()
+                    })
+                },
+                header: {
+                    "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    console.log(res);
+                    if (res.success) {
+                        console.log('登录成功');
+//                     window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+res.response.colUid+'&teacherName='+res.response.userName+'';
+                        window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+
+                    } else {
+                        alert('用户不存在');
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+
+        })
 
     //登录事件
     $('#login').on('click',function(){
@@ -125,54 +171,50 @@ $(function(){
                  console.log(e);
              }
         });
+        //创建uuid
+        function createMachineId() {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+
+            var uuid = s.join("");
+            return uuid;
+        }
+
+
+        //获取二维码接口
+        function getLoginTeachSystemEwm() {
+            $.ajax({
+                type: "POST",
+                url: "https://www.maaee.com/Excoord_For_Education/webservice",
+                data: {
+                    params: JSON.stringify({
+                        "method": "getLoginTeachSystemEwm",
+                        "uuid": machineId,
+                    })
+                },
+                header: {
+                    "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    console.log(res);
+                    if (res.success) {
+                        $('#scan_image').attr('src', res.response)
+                    }
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
 
     })
-
-
-    //创建uuid
-    function createMachineId(){
-        var s = [];
-                var hexDigits = "0123456789abcdef";
-                for (var i = 0; i < 36; i++) {
-                    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-                }
-                s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
-                s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-                s[8] = s[13] = s[18] = s[23] = "-";
-
-                var uuid = s.join("");
-                return uuid;
-    }
-
-
-    //获取二维码接口
-    function getLoginTeachSystemEwm(){
-        $.ajax({
-                     type: "POST",
-                     url: "https://www.maaee.com/Excoord_For_Education/webservice",
-                     data: {
-                           params:JSON.stringify({
-                               "method":"getLoginTeachSystemEwm",
-                               "uuid":machineId,
-                           })
-                     },
-                     header:{
-                         "content-type":"application/x-www-form-urlencoded;charset=UTF-8"
-                     },
-                     success: function(data){
-                         var res = JSON.parse(data);
-                         console.log(res);
-                         if(res.success){
-                             $('#scan_image').attr('src',res.response)
-                         }
-
-                     },
-                     error: function(e){
-                         console.log(e);
-                     }
-                });
-    }
-
-})
 </script>
 </html>

@@ -1,113 +1,172 @@
-body{
-    margin:0;
-    padding:0;
-    border:0;
+body {
+    margin: 0;
+    padding: 0;
+    border: 0;
     /*overflow: hidden;*/
 }
-.my_flex{
-    -webkit-display:  flex;
+
+.wrap {
+    width: 100%;
+    height: 100%;
+    background: url("../img/icon_yunBg.png") no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.inner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1090px;
+    height: 615px;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.my_flex {
+    -webkit-display: flex;
     -moz-display: flex;
-    -ms-display:  flex;
-    -o-display:  flex;
+    -ms-display: flex;
+    -o-display: flex;
     -khtml-display: flex;
-    display:  flex;
+    display: flex;
     align-items: center;
 }
-.nav{
+
+.nav {
     width: 100%;
     height: 56px;
     background: #122126;
     overflow: hidden;
 }
-.logo{
+
+.logo {
     float: left;
 }
-.logo img{
+
+.logo img {
     height: 30px;
     margin-top: 13px;
     margin-left: 22px;
 }
-.userInfo{
+
+.userInfo {
     float: right;
     padding-right: 21px;
     height: 56px;
 }
-.box_cont{
+
+.box_cont {
     overflow: hidden;
     height: calc(100% - 56px);
 }
-.left_box{
+
+.left_box {
     width: 180px;
-    height:100%;
-    background: #26343D;
+    height: 100%;
+    background: #DBDEE6;
     float: left;
-    padding-left: 12px;
     box-sizing: border-box;
 }
-.left_box > div{
-    color: #BDBDBD;
+
+.left_box > div {
+    color: #666666;
     font-size: 16px;
-    line-height: 50px;
-    padding-left: 45px;
-    margin-top: 45px;
+    line-height: 46px;
+    padding-left: 67px;
+    margin-top: 25px;
 }
-.left_box > div:last-child{
+
+.left_box .header {
+    color: #414764;
+    font-size: 16px;
+    margin: 0 10px;
+    padding: 35px 5px 14px;
+    line-height: 1;
+    border-bottom: 1px #B2C4DF solid;
+}
+
+.left_box > div.active {
+    position: relative;
+    color: #333333;
+}
+
+.left_box > div.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background-color: #38C1D5;
+}
+
+#classInfo {
+    background: url("../img/icon_nav_course.png") no-repeat 42px 16px;
+    background-size: 15px;
+}
+
+#myFile {
+    background: url("../img/icon_nav_file.png") no-repeat 42px 16px;
+    background-size: 12px;
+}
+
+#classInfo.active {
+    background: #ebeef5 url("../img/icon_nav_course.png") no-repeat 42px 16px;
+    background-size: 15px;
+}
+
+#myFile.active {
+    background: #ebeef5 url("../img/icon_nav_file.png") no-repeat 42px 16px;
+    background-size: 12px;
+}
+
+.left_box > div:last-child {
     margin-top: 20px;
 }
-.right_box{
+
+.right_box {
     width: calc(100% - 180px);
     height: 100%;
     background: lightblue;
     float: left;
     overflow: hidden;
 }
-.left_box > div.active{
-    position: relative;
-    background: #ECEFF8;
-    color: #4285F4;
-    box-shadow: 3px 0px 20px rgba(0,0,0,0.2);
-}
-.left_box > div.active::before{
-    content: '';
-    position: absolute;
-    left:27px;
-    top:50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    background-color: #4285F4;
-}
-#classInfo,#myFile{
+
+#classInfo, #myFile {
     cursor: pointer;
 }
-.myFile_box{
+
+.myFile_box {
     display: none;
 }
-.classInfo_box{
+
+.classInfo_box {
     height: 100%;
 }
-.classInfo_box > iframe{
+
+.classInfo_box > iframe {
     width: 100%;
     height: 100%;
 }
-.myFile_box{
+
+.myFile_box {
     height: 100%;
 }
-.myFile_box > iframe{
+
+.myFile_box > iframe {
     width: 100%;
     height: 100%;
 }
-.avatar{
+
+.avatar {
     overflow: hidden;
 }
-.avatar img{
+
+.avatar img {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -115,18 +174,21 @@ body{
     vertical-align: middle;
     margin-right: 13px;
 }
-.username{
+
+.username {
     color: #9DD1E9;
     font-size: 15px;
 }
-.avatar,.username,.exit{
+
+.avatar, .username, .exit {
     cursor: pointer;
 }
-.exit{
+
+.exit {
     background: url("../img/icon_quite.png") no-repeat right center;
     background-size: 18px;
     font-size: 0;
     width: 18px;
     height: 56px;
-    margin-left: 13px;
+    margin-left: 45px;
 }
