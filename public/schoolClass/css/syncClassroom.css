@@ -4,8 +4,7 @@ body {
     border: 0;
     height: 100vh;
     overflow: hidden;
-    font-family: "Helvetica Neue","Microsoft Yahei",Helvetica,Arial,"Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
-    /*overflow: hidden;*/
+    font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial;
 }
 
 .wrap {

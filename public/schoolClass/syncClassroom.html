@@ -46,16 +46,35 @@
 <script src="./js/jquery.min.js"></script>
 <script type="application/javascript" src="js/layer/layer.js"></script>
 <script type="application/javascript" src="js/service.js"></script>
+<script type="application/javascript" src="js/simple_websocket_connection.js"></script>
 <script>
     $(function () {
-        //$('body').css({height: $(window).height()});
-
+        var simple = new SimpleConnection();
+        simple.connect();
 
         var teacherId = Service.getQueryString("teacherId");
         var teacherName = Service.getQueryString("teacherName");
         getUserById();
         $('#classInfo_iframe').attr('src','unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
         $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
+
+        //socket 监听
+        simple.clazzWsListener = {
+            onError: function (errorMsg) {
+                console.log(errorMsg,"errorMsg");
+            }, onWarn: function (warnMsg) {
+                console.log(warnMsg,"warnMsg");
+            }, onMessage: function (info) {
+                var command = info.command;
+                var messageData = info.data;
+                if (command == "office2PdfSuccess" && messageData.createUid == teacherId) {
+                    var cloudFileName = messageData.cloudFileName;
+                    var tipMessage = "\""+cloudFileName+"\"已经转码成功!";
+                    layer.alert(tipMessage);
+                }
+            }
+        };
+
         $('#classInfo').on('click', function () {
             $('#classInfo').addClass('active');
             $('#myFile').removeClass('active');
@@ -75,9 +94,8 @@
             layer.confirm('您确定要退出登录?', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                window.location.href = 'https://www.maaee.com/openvidu/schoolClass/login.html'
+                window.location.href = 'login.html'
             }, function () {
-
             });
         })
 
@@ -110,8 +128,6 @@
                 }
             });
         }
-
-
     })
 </script>
 </html>
