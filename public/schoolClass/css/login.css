@@ -142,7 +142,7 @@ input#act{
     background: url("../img/icon_down.png") no-repeat left center;
     background-size: 16px;
     position: absolute;
-    bottom: -34px;
+    bottom: -35px;
     left: 50%;
     line-height: 15px;
     -webkit-transform: translateX(-50%);
@@ -151,4 +151,9 @@ input#act{
     -o-transform: translateX(-50%);
     transform: translateX(-50%);
     padding-left: 21px;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+.downPc:hover{
+    text-decoration: underline;
 }
