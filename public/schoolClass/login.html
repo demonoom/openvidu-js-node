@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>用户登录</title>
     <link rel="stylesheet" href="./css/login.css">
+    <script src="js/platform.js"></script>
 </head>
 <body>
 
@@ -31,7 +32,7 @@
         </div>
 
         <!--下载客户端 -->
-        <a href="" class="downPc">下载PC客户端</a>
+        <a href="" class="downPc" style="display: none;" id="download_pc">下载PC客户端</a>
     </div>
 
 </div>
@@ -41,6 +42,7 @@
 <script src="./js/simple.js"></script>
 <script type="text/javascript">
     $(function () {
+        checkShowPcDownload();
         var machineId = '';
         var simple = new SimpleWebsocketConnection();
         simple.connect();
@@ -59,14 +61,10 @@
                 if (command == "allowLoginTeachSystem") {
                     var data = info.data;
                     var uuid = data.uuid;
-//                   var user = data.user;
                     if (uuid == machineId) {
-
-//                           window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+data.user.colUid+'&teacherName='+data.user.userName+'';
-                        window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
+                        window.location.href = 'syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
                     } else {
                     }
-//
                 }
             }
         };
@@ -118,9 +116,7 @@
                     console.log(res);
                     if (res.success) {
                         console.log('登录成功');
-//                     window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+res.response.colUid+'&teacherName='+res.response.userName+'';
-                        window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
-
+                        window.location.href = 'syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
                     } else {
                         alert('用户不存在');
                     }
@@ -176,7 +172,12 @@
                 }
             });
         }
-
-    })
+        function checkShowPcDownload(){
+            var browser = platform.name;
+            if(browser.indexOf("Electron") == -1){
+               $("#download_pc").show();
+            }
+        }
+    });
 </script>
 </html>

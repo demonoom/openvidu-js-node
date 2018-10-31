@@ -22,8 +22,8 @@ function stopCapture(){
         mediaRecorder.stop();
         mediaRecorder = null;
     }
-    setBadgeText('点击开始推流');
-    setBadgeImg('images/tabCapture22.png');
+    setBadgeText('点击录屏');
+    setBadgeImg('videoSource-menu3');
     recording = false;
     needReconnect = false;
     needAfterReconnectSendFirstFrame = false;
@@ -40,9 +40,6 @@ function stopCapture(){
         });
     }catch (e){
     }
-
-    setBadgeText("");
-
     streams = new Array();
     reconnectCount = 0;
 }
@@ -52,9 +49,9 @@ function onRecording() {
     if(!recording){
         return;
     }
-    setBadgeText("录制中...");
+    setBadgeText("录屏中...");
 
-    setBadgeImg('images/' + recodingImages[recodingImgIndex]);
+    setBadgeImg('videoSource-menu3-2');
 
     if (!reverse) {
         recodingImgIndex++;
@@ -77,15 +74,17 @@ function onRecording() {
         return;
     }
 
-    setBadgeImg("images/tabCapture22.png");
+    setBadgeImg("videoSource-menu3-2");
 }
 
 function setBadgeText(text) {
     $(recordingTipText).text(text);
 }
 
-function setBadgeImg(img){
-    $(recordingTipImg).attr("src",img);
+function setBadgeImg(clazz){
+    $(recordingTipImg).removeClass("videoSource-menu3");
+    $(recordingTipImg).removeClass("videoSource-menu3-2");
+    $(recordingTipImg).addClass(clazz);
 }
 
 function captureTab(config) {
@@ -127,16 +126,7 @@ function captureTab(config) {
 function onTabStream(tabStream,config){
     streams.push(tabStream);
 
-    // var playAudioStream = new MediaStream();
-    // tabStream.getAudioTracks().forEach(function(track) {
-    //     playAudioStream.addTrack(track);
-    // });
-    // var audio = new Audio();
-    // audio.srcObject = playAudioStream;
-    // audio.play();
-
     navigator.mediaDevices.getUserMedia({audio:{mandatory:{echoCancellation: true}},video:false}).then(function(micStream) {
-
 
         var cts = {
             autoGainControl:true,//自动增益控制
@@ -168,7 +158,6 @@ function onTabStream(tabStream,config){
             tabStream.addTrack(track);
         });
 
-
         recording = true;
         onRecording();
         tabStream.onended = function() {
@@ -181,7 +170,6 @@ function onTabStream(tabStream,config){
                 };
             });
         }
-
 
         initSocket(config.webSocketUrl,function(){
             gotStream(tabStream,config.timeSlice);
@@ -266,11 +254,8 @@ function gotStream(stream,timeSlice) {
         return;
     }
 
-    setBadgeText('正在录制中...');
-
     socket.emit('config_rtmpDestination',pushUrl);
     socket.emit('start','start');
-
 
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.start(timeSlice);
