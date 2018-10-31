@@ -3,6 +3,7 @@ body,html{
     width: 100%;
     height: 100%;
     overflow: hidden;
+    font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial;
 }
 .content{
     position: relative;
