@@ -19,8 +19,8 @@
 
         <!--账号登录 -->
         <div class="account">
-            <input id='act' type="text" placeholder="请输入小蚂蚁账号">
-            <input id="pwd" type="password" placeholder="请输入密码">
+            <input id='act' type="text" placeholder="请输入小蚂蚁账号" value="te28551">
+            <input id="pwd" type="password" placeholder="请输入密码" value="bl000000">
             <button id="login">登录</button>
         </div>
 
@@ -58,14 +58,10 @@
                 if (command == "allowLoginTeachSystem") {
                     var data = info.data;
                     var uuid = data.uuid;
-//                   var user = data.user;
                     if (uuid == machineId) {
-
-//                           window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+data.user.colUid+'&teacherName='+data.user.userName+'';
-                        window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
+                        window.location.href = 'syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
                     } else {
                     }
-//
                 }
             }
         };
@@ -117,9 +113,7 @@
                     console.log(res);
                     if (res.success) {
                         console.log('登录成功');
-//                     window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+res.response.colUid+'&teacherName='+res.response.userName+'';
-                        window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
-
+                        window.location.href = 'syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
                     } else {
                         alert('用户不存在');
                     }

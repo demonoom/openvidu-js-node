@@ -4920,25 +4920,27 @@ br{
 	color: #333;
 	font-size: 14px;
 	line-height: 1;
-	width: 340px !important;
+	width: 330px !important;
 	height: 400px !important;
 }
 .videoSource .layui-layer-title{
-	padding: 0 15px;
-	height: 41px;
-	line-height: 41px;
-	border-bottom: 1px solid #e5e5e5;
+	padding: 0 80px 0 20px;
+	height: 42px;
+	line-height: 42px;
+	border-bottom: 1px solid #eee;
 	font-size: 15px;
-	background-color: #fff;
-	border-radius: 4px 4px 0 0;
+	color: #333;
+	overflow: hidden;
+	background-color: #F8F8F8;
+	border-radius: 2px 2px 0 0;
 }
 
 .videoSource .layui-layer-content{
-	padding:15px 0 18px 15px;
+	padding:20px 0 20px 15px;
 	overflow: hidden !important;
 }
 .videoSource .list-item{
-	margin-bottom: 15px;
+	margin-bottom: 20px;
 	clear: both;
 	display:-webkit-box;
 	display: -moz-box;
@@ -4955,9 +4957,19 @@ br{
 .videoSource .list-item-video video{
 	object-fit: cover;
 }
+.videoSource .list-item .left{
+	color: #333;
+	font-size: 15px;
+	width: 82px;
+	text-align: right;
+	display: inline-block;
+}
+.videoSource .list-item .left2{
+	width: 60px;
+}
 .videoSource .list-item .right-item{
-	width:260px;
-	margin-left:15px;
+	width:212px;
+	margin-left:12px;
 	display: inline-block;
 	float: right;
 	display:-webkit-box;
@@ -5007,11 +5019,11 @@ br{
 }
 .videoSource .btn-blue{
 	width:90px;
-	height:36px;
+	height:32px;
 	border-radius:4px;
 	border:1px solid;
 	font-size: 15px;
-	line-height: 36px;
+	line-height: 32px;
 	text-align: center;
 }
 .videoSource .Ghost-btn{
@@ -5019,15 +5031,16 @@ br{
 	color:#4285F4;
 }
 .videoSource .Solid-btn{
-	background: #4285F4;
+	background: #0084FF;
 	color: #fff;
 }
 .videoSource .nickname{
-	width: 185px;
-	height: 31px;
+	width: 163px;
+	height: 28px;
 	border: 1px solid #e5e5e5;
-	text-indent: 6px;
-	margin-left: 15px;
+	margin-left: 12px;
+	padding: 0 6px;
+	font-size: 13.333px;
 }
 
 .videoSource .a-radio{
@@ -5061,8 +5074,8 @@ br{
 	display: block;
 }
 .videoSource-wrap{
-	width: 402px;
-	height: 600px;
+	width: 100%;
+	height: 100vh;
 	margin: 0 auto;
 	background: #F6F6F6;
 }
@@ -5073,7 +5086,7 @@ br{
 }
 .videoSource-wrap .menu{
 	height: 110px;
-	padding: 0px 36px 0 36px;
+	padding: 0px 26px 0 26px;
 	background: #fff;
 	display:-webkit-box;
 	display: -moz-box;
@@ -5107,13 +5120,13 @@ br{
 }
 .videoSource-wrap .menu-btn i.videoSource-menu1{
 	background: url("../images/videoSource-menu1.png") no-repeat center center;
-	background-size: 70px;
-	width: 70px;
+	background-size: 62px;
+	width: 62px;
 }
 .videoSource-wrap .menu-btn i.videoSource-menu2{
 	background: url("../images/videoSource-menu2.png") no-repeat center center;
-	background-size: 39px;
-	width: 39px;
+	background-size: 35px;
+	width: 35px;
 }
 .videoSource-wrap .menu-btn i.videoSource-menu3{
 	background: url("../images/videoSource-menu3.png") no-repeat center center;
@@ -5143,7 +5156,7 @@ br{
 	-o-transform: translate(-50%, -50%);
 }
 .videoSource_content{
-	height:490px;
+	height:calc(100% - 110px);
 	position: relative;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -5167,7 +5180,7 @@ br{
 .videoSource_content-video-right{
 	position: absolute;
 	left: 273px;
-	bottom: 8px;
+	bottom: 10px;
 	font-size: 14px;
 	color: #333;
 	line-height: 1;
@@ -5183,11 +5196,25 @@ br{
 	margin-right: 6px;
 }
 .videoSource-empty-text{
-	color: #999;
+	color: #a9a9a9;
 	line-height: 1;
 	margin-top: 20px;
 	text-align: center;
+	font-size: 12px;
 }
 .preview_video{
 	object-fit: cover;
+}
+span.justify{
+	text-align: justify;
+	width: 54px;
+}
+span.justify > span {
+	display: inline-block /* Opera */; padding-left: 100%;
+}
+.videoSource-wrap .layui-layer-shade{
+	opacity: 0 !important;
+}
+.videoSource-wrap .layui-layer{
+	box-shadow: 0px 6px 50px rgba(0,0,0,0.4) !important;
 }

@@ -2,6 +2,9 @@ body {
     margin: 0;
     padding: 0;
     border: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: "Helvetica Neue","Microsoft Yahei",Helvetica,Arial,"Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
     /*overflow: hidden;*/
 }
 
@@ -17,8 +20,8 @@ body {
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 1090px;
-    height: 615px;
+    width: 100%;
+    height: 100%;
     -webkit-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
@@ -77,18 +80,31 @@ body {
     font-size: 16px;
     line-height: 46px;
     padding-left: 67px;
-    margin-top: 25px;
+    margin-top: 20px;
 }
 
 .left_box .header {
     color: #414764;
-    font-size: 16px;
+    font-size: 18px;
     margin: 0 10px;
-    padding: 35px 5px 14px;
+    padding: 26px 5px 19px 14px;
     line-height: 1;
-    border-bottom: 1px #B2C4DF solid;
+    font-weight: bold;
+    position: relative;
 }
-
+.left_box .header:after{
+    position: absolute;
+    content: "";
+    width: 100%;
+    border-bottom: 1px #cfcfcf solid;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    bottom: 0;
+    left: 0;
+}
 .left_box > div.active {
     position: relative;
     color: #333333;
@@ -191,4 +207,20 @@ body {
     width: 18px;
     height: 56px;
     margin-left: 45px;
+}
+.layui-layer-shade{
+    opacity: 0 !important;
+}
+.layui-layer-btn .layui-layer-btn0{
+    border-color: #0084FF !important;
+    background-color: #0084FF !important;
+    color: #fff;
+    font-size: 15px;
+}
+.layui-layer-dialog .layui-layer-content{
+    font-size: 15px !important;
+    color: #333;
+}
+.layui-layer-title{
+    font-size: 15px !important;
 }
