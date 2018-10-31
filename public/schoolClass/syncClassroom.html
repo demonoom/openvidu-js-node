@@ -46,14 +46,33 @@
 <script src="./js/jquery.min.js"></script>
 <script type="application/javascript" src="js/layer/layer.js"></script>
 <script type="application/javascript" src="js/service.js"></script>
+<script type="application/javascript" src="js/simple_websocket_connection.js"></script>
 <script>
     $(function () {
         $('body').css({height: $(window).height()});
-
+        var simple = new SimpleConnection();
+        simple.connect();
 
         var teacherId = Service.getQueryString("teacherId");
         var teacherName = Service.getQueryString("teacherName");
         getUserById();
+
+        //socket 监听
+        simple.clazzWsListener = {
+            onError: function (errorMsg) {
+                console.log(errorMsg,"errorMsg");
+            }, onWarn: function (warnMsg) {
+                console.log(warnMsg,"warnMsg");
+            }, onMessage: function (info) {
+                var command = info.command;
+                var messageData = info.data;
+                if (command == "office2PdfSuccess" && messageData.createUid == teacherId) {
+                    var cloudFileName = messageData.cloudFileName;
+                    var tipMessage = "\""+cloudFileName+"\"已经转码成功!";
+                    layer.alert(tipMessage);
+                }
+            }
+        };
 
 //        $('#classInfo_iframe').attr('src', 'http://127.0.0.1:5000/schoolClass/unionClassList.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '')
          $('#classInfo_iframe').attr('src','https://www.maaee.com/openvidu/schoolClass/unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
