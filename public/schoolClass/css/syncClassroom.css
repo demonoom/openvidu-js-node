@@ -207,6 +207,26 @@ body {
     height: 56px;
     margin-left: 45px;
 }
+
+.yourclass{
+    background: none !important;
+    text-align: center;
+    box-shadow: none!important;
+}
+
+.yourclass .classText{
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    font-size: 16px;
+    padding: 15px;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
 .layui-layer-shade{
     opacity: 0 !important;
 }
@@ -223,3 +243,4 @@ body {
 .layui-layer-title{
     font-size: 15px !important;
 }
+
