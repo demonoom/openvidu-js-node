@@ -5081,6 +5081,11 @@ br{
 .videoSource .a-radio:checked~.b-radio:before{
 	display: block;
 }
+.videoSource .b-ridioText{
+    width: 184px;
+    float: right;
+    line-height: 16px;
+}
 .videoSource-wrap{
 	width: 100%;
 	height: 100vh;

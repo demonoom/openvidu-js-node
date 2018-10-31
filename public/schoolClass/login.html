@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>用户登录</title>
     <link rel="stylesheet" href="./css/login.css">
+    <script src="js/platform.js"></script>
 </head>
 <body>
 
@@ -19,8 +20,8 @@
 
         <!--账号登录 -->
         <div class="account">
-            <input id='act' type="text" placeholder="请输入小蚂蚁账号" value="te28551">
-            <input id="pwd" type="password" placeholder="请输入密码" value="bl000000">
+            <input id='act' type="text" placeholder="请输入小蚂蚁账号">
+            <input id="pwd" type="password" placeholder="请输入密码">
             <button id="login">登录</button>
         </div>
 
@@ -31,7 +32,7 @@
         </div>
 
         <!--下载客户端 -->
-        <a href="" class="downPc">下载PC客户端</a>
+        <a href="" class="downPc" style="display: none;" id="download_pc">下载PC客户端</a>
     </div>
 
 </div>
@@ -41,6 +42,7 @@
 <script src="./js/simple.js"></script>
 <script type="text/javascript">
     $(function () {
+        checkShowPcDownload();
         var machineId = '';
         var simple = new SimpleWebsocketConnection();
         simple.connect();
@@ -170,7 +172,12 @@
                 }
             });
         }
-
-    })
+        function checkShowPcDownload(){
+            var browser = platform.name;
+            if(browser.indexOf("Electron") == -1){
+               $("#download_pc").show();
+            }
+        }
+    });
 </script>
 </html>

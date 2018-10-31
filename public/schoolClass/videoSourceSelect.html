@@ -32,10 +32,9 @@
     <div class="menu">
         <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头</span>
         <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
-        <div class="menu-btn">
-            <i class="videoSource-menu3-2"></i>
-            <img src="" id="recordingTipImg"/>
-            <span onclick="startServerRecord();" id="recordingTipText">开始录屏</span>
+        <div class="menu-btn" onclick="startServerRecord();">
+            <i class="videoSource-menu3" id="recordingTipImg"></i>
+            <span  id="recordingTipText">点击录屏</span>
         </div>
     </div>
 
@@ -71,10 +70,10 @@
                 }
                 if(device.kind == 'audioinput'){
                     audios.push(device);
-                    audioHtml = audioHtml +"<label class='right'><input class='a-radio' name='audioinput' type='radio' value='"+device.deviceId+"' />"+ "<span class='b-radio'></span>"+ "device.label" +"</label>";
+                    audioHtml = audioHtml +"<label class='right'><input class='a-radio' name='audioinput' type='radio' value='"+device.deviceId+"' />"+ "<span class='b-radio'></span><span class='b-ridioText'>" + device.label +"</span></label>";
                 }else if(device.kind == 'videoinput'){
                     videos.push(device);
-                    videoHtml = videoHtml +"<label class='right'><input class='a-radio' name='videoinput' type='radio' value='"+device.deviceId+"' />"+ "<span class='b-radio'></span>" + "device.label" +"</label>";
+                    videoHtml = videoHtml +"<label class='right'><input class='a-radio' name='videoinput' type='radio' value='"+device.deviceId+"' />"+ "<span class='b-radio'></span><span class='b-ridioText'>" + device.label +"</span></label>";
                 }
                 console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
             });
@@ -97,11 +96,11 @@
     }
 
     function addIpCamera(){
-        // var browser = platform.name;
-        // if(browser.indexOf("Electron") == -1){
-        //     layer.msg("请在pc客户端中使用此功能~~");
-        //     return;
-        // }
+        var browser = platform.name;
+        if(browser.indexOf("Electron") == -1){
+            layer.msg("请在pc客户端中使用此功能~~");
+            return;
+        }
         wsPort = wsPort + 1;
         var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/></div><div class='list-item'><span class='justify left'>昵称<span></span></span><input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' class='btn-blue Solid-btn'" +
                    ">使用</span></div>"
@@ -172,10 +171,8 @@
         var audioSource = audioDeviceId;
         var videoSource = videoDeviceId;
         var constraints = {
-            //audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-            audio:false,
-            //video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-            video:true
+            audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
+            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
         };
         navigator.mediaDevices.getUserMedia(constraints).
         then(function(stream){
@@ -205,21 +202,24 @@
         },100);
     }
 
-
     function startServerRecord(){
-        var config = {};
-        config.maxWidth = 720;
-        config.minWidth = 720;
-        config.maxHeight = 480;
-        config.minHeight = 480;
-        config.maxFrameRate = 30;
-        config.minFrameRate = 30;
-        config.pushUrl = "rtmp://60.205.86.217:19350/live4/119665";
-        config.webSocketUrl = "https://jiaoxue.maaee.com:9003/";
-        config.timeSlice = 1500;
-        config.recordingTipTextId = "recordingTipText",
-        config.recordingTipImgId = "recordingTipImg"
-        captureTab(config);
+        if($("#recordingTipText").text() == '点击录屏'){
+            var config = {};
+            config.maxWidth = 720;
+            config.minWidth = 720;
+            config.maxHeight = 480;
+            config.minHeight = 480;
+            config.maxFrameRate = 30;
+            config.minFrameRate = 30;
+            config.pushUrl = "rtmp://60.205.86.217:19350/live4/119665";
+            config.webSocketUrl = "https://jiaoxue.maaee.com:9003/";
+            config.timeSlice = 1500;
+            config.recordingTipTextId = "recordingTipText",
+            config.recordingTipImgId = "recordingTipImg"
+            captureTab(config);
+        }else{
+            stopCapture();
+        }
     }
 </script>
 
