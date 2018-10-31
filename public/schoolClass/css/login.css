@@ -20,7 +20,6 @@ body,html{
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    overflow: hidden;
     padding: 0 35px;
     box-sizing: border-box;
 }
@@ -136,4 +135,20 @@ input#act{
 .scan div{
     color: #666;
     font-size: 14px;
+}
+.downPc{
+    color: white;
+    font-size: 14px;
+    background: url("../img/icon_down.png") no-repeat left center;
+    background-size: 16px;
+    position: absolute;
+    bottom: -34px;
+    left: 50%;
+    line-height: 15px;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    padding-left: 21px;
 }
