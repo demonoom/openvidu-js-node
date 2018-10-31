@@ -18,7 +18,14 @@
     <script type="text/javascript" src="js/socket.io.js"></script>
     <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
     <script type="text/javascript" src="js/ServerRecord.js"></script>
-
+<style type="text/css">
+    .layui-layer-shade{
+        opacity: 0 !important;
+    }
+    .layui-layer{
+        box-shadow: 0px 6px 50px rgba(0,0,0,0.4) !important;
+    }
+</style>
 </head>
 <body>
 <div class="videoSource-wrap">
@@ -80,8 +87,8 @@
                 closeBtn: 0,
                 title:"请选择本地摄像头",
                 skin:"videoSource",
-                area: ['320px', '480px'], //宽高
-                content: "<div class='list-content'><div class='list-item'>"+videoHtml+"</div><div class='list-item'>"+audioHtml+"</div><div class='list-item'><span class='left left2'>昵称</span><input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='299px' height='161px' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
+                area: ['300px', '480px'], //宽高
+                content: "<div class='list-content'><div class='list-item'>"+videoHtml+"</div><div class='list-item'>"+audioHtml+"</div><div class='list-item'><span class='left left2'>昵称</span><input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
             });
 
         }).catch(function(err) {
@@ -103,7 +110,7 @@
             title:"请选择网络摄像头",
             closeBtn: 0,
             skin:"videoSource",
-            area: ['320px', '480px'], //宽高
+            area: ['300px', '480px'], //宽高
             content: html
         });
     }
