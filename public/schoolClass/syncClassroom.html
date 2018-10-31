@@ -49,13 +49,14 @@
 <script type="application/javascript" src="js/simple_websocket_connection.js"></script>
 <script>
     $(function () {
-        $('body').css({height: $(window).height()});
         var simple = new SimpleConnection();
         simple.connect();
 
         var teacherId = Service.getQueryString("teacherId");
         var teacherName = Service.getQueryString("teacherName");
         getUserById();
+        $('#classInfo_iframe').attr('src','unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
+        $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
 
         //socket 监听
         simple.clazzWsListener = {
@@ -74,29 +75,17 @@
                         type: 1,
                         shade: false,
                         closeBtn: 0,
-                        title: false, //不显示标题
-                        time: 300000, //2秒后自动关闭
-                        content: tipMessageHTML, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
-                    });
-                    /*layer.open({
-                        type: 1,
-                        title: false,
-                        closeBtn: 0,
-                        shadeClose: true,
                         skin: 'yourclass',
                         area: ['100%', '50px'],
-                        time: 3000000, //2秒后自动关闭
-                        offset: 'ct', //右下角弹出
+                        offset:[0,0],
+                        title: false, //不显示标题
+                        time: 3000, //2秒后自动关闭
                         content: tipMessageHTML
-                    });*/
+                    });
                 }
             }
         };
 
-//        $('#classInfo_iframe').attr('src', 'http://127.0.0.1:5000/schoolClass/unionClassList.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '')
-         $('#classInfo_iframe').attr('src','https://www.maaee.com/openvidu/schoolClass/unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
-         $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
-//        $('#myFile_iframe').attr('src', 'http://192.168.50.29:8091/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
         $('#classInfo').on('click', function () {
             $('#classInfo').addClass('active');
             $('#myFile').removeClass('active');
@@ -116,9 +105,8 @@
             layer.confirm('您确定要退出登录?', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                window.location.href = 'https://www.maaee.com/openvidu/schoolClass/login.html'
+                window.location.href = 'login.html'
             }, function () {
-
             });
         })
 
@@ -151,8 +139,6 @@
                 }
             });
         }
-
-
     })
 </script>
 </html>

@@ -55,8 +55,8 @@
         .then(function(devices) {
             var audios = new Array();
             var videos = new Array();
-            var audioHtml = "<div>音频\n</div><div class='right-item'>";
-            var videoHtml = "<div>视频\n</div><div class='right-item'>";
+            var audioHtml = "<span class='left left2'>音频\n</span><div class='right-item'>";
+            var videoHtml = "<span class='left left2'>视频\n</span><div class='right-item'>";
 
             devices.forEach(function(device) {
                 if(device.deviceId == 'default'){
@@ -81,7 +81,7 @@
                 title:"请选择本地摄像头",
                 skin:"videoSource",
                 area: ['320px', '480px'], //宽高
-                content: "<div class='list-content'><div class='list-item'>"+videoHtml+"</div><div class='list-item'>"+audioHtml+"</div><div class='list-item'>在课堂中的昵称:<input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='299px' height='161px' autoplay></video></div></div><div class='btn-cont'><span onclick='preView();' class='btn-blue Ghost-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span></div>"
+                content: "<div class='list-content'><div class='list-item'>"+videoHtml+"</div><div class='list-item'>"+audioHtml+"</div><div class='list-item'><span class='left left2'>昵称</span><input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='299px' height='161px' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
             });
 
         }).catch(function(err) {
@@ -96,8 +96,8 @@
         //     return;
         // }
         wsPort = wsPort + 1;
-        var html = "<div class='list-content'><div class='list-item'>请输入rtsp地址:<input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/></div><div class='list-item'>在课堂中的昵称:<input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='rtspPreview();' class='btn-blue Ghost-btn'>预览</span><span onclick='useRtspInclass(this)' class='btn-blue Solid-btn'" +
-                   ">使用</span><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span></div>"
+        var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/></div><div class='list-item'><span class='justify left'>昵称<span></span></span><input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' class='btn-blue Solid-btn'" +
+                   ">使用</span></div>"
         layer.open({
             type: 1,
             title:"请选择网络摄像头",
@@ -165,8 +165,10 @@
         var audioSource = audioDeviceId;
         var videoSource = videoDeviceId;
         var constraints = {
-            audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+            //audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
+            audio:false,
+            //video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+            video:true
         };
         navigator.mediaDevices.getUserMedia(constraints).
         then(function(stream){

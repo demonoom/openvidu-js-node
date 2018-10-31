@@ -1,0 +1,17 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.excoord.littleantteaching
+copyright: Open Totally
+compression: normal
+productName: 小蚂蚁同步课堂
+nsis:
+  oneClick: true
+  perMachine: true
+  runAfterFinish: true
+win:
+  icon: assets/icons/icon_512_512.png
+publish:
+  - provider: generic
+    url: 'http://http://localhost:5000/winRelease/'
+electronVersion: 3.0.6
