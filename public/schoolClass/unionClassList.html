@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>联合开课列表</title>
-    <link type="text/css" src="css/teacherUnionClass.css">
     <link rel="icon" href="img/logo_title.png" type="image/x-icon">
     <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
     <script type="application/javascript" src="js/jquery.min.js"></script>
@@ -50,9 +49,26 @@
         }
         #item_container{
             height: calc(100% - 65px);
-            overflow-y: scroll;
+            overflow-y: auto;
             padding-left: 40px;
             padding-right: 20px;
+
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 12px;
+        }
+
+        /* 这是针对缺省样式 (必须的) */
+        ::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 9px;
+            -webkit-border-radius: 9px;
+        }
+
+        /* 滑块颜色 */
+        ::-webkit-scrollbar-button {
+            background-color: initial;
         }
         .item{
             position: relative;

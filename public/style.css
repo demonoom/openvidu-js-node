@@ -2,7 +2,22 @@ html {
 	position: relative;
 	min-height: 100%;
 }
+::-webkit-scrollbar {
+	width: 8px;
+	height: 12px;
+}
 
+/* 这是针对缺省样式 (必须的) */
+::-webkit-scrollbar-thumb {
+	background-color: #ccc;
+	border-radius: 9px;
+	-webkit-border-radius: 9px;
+}
+
+/* 滑块颜色 */
+::-webkit-scrollbar-button {
+	background-color: initial;
+}
 nav {
 	height: 50px;
 	width: 100%;
