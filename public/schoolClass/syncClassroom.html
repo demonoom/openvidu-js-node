@@ -46,19 +46,46 @@
 <script src="./js/jquery.min.js"></script>
 <script type="application/javascript" src="js/layer/layer.js"></script>
 <script type="application/javascript" src="js/service.js"></script>
+<script type="application/javascript" src="js/simple_websocket_connection.js"></script>
 <script>
     $(function () {
-        $('body').css({height: $(window).height()});
-
+        var simple = new SimpleConnection();
+        simple.connect();
 
         var teacherId = Service.getQueryString("teacherId");
         var teacherName = Service.getQueryString("teacherName");
         getUserById();
+        $('#classInfo_iframe').attr('src','unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
+        $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
 
-//        $('#classInfo_iframe').attr('src', 'http://127.0.0.1:5000/schoolClass/unionClassList.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '')
-         $('#classInfo_iframe').attr('src','https://www.maaee.com/openvidu/schoolClass/unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
-         $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
-//        $('#myFile_iframe').attr('src', 'http://192.168.50.29:8091/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
+        //socket 监听
+        simple.clazzWsListener = {
+            onError: function (errorMsg) {
+                console.log(errorMsg,"errorMsg");
+            }, onWarn: function (warnMsg) {
+                console.log(warnMsg,"warnMsg");
+            }, onMessage: function (info) {
+                var command = info.command;
+                var messageData = info.data;
+                if (command == "office2PdfSuccess" && messageData.createUid == teacherId) {
+                    var cloudFileName = messageData.cloudFileName;
+                    var tipMessage = "课件\""+cloudFileName+"\"已经转码成功!";
+                    var tipMessageHTML = "<div class='classText'>"+tipMessage+"</div>";
+                    layer.open({
+                        type: 1,
+                        shade: false,
+                        closeBtn: 0,
+                        skin: 'yourclass',
+                        area: ['100%', '50px'],
+                        offset:[0,0],
+                        title: false, //不显示标题
+                        time: 3000, //2秒后自动关闭
+                        content: tipMessageHTML
+                    });
+                }
+            }
+        };
+
         $('#classInfo').on('click', function () {
             $('#classInfo').addClass('active');
             $('#myFile').removeClass('active');
@@ -78,9 +105,8 @@
             layer.confirm('您确定要退出登录?', {
                 btn: ['确定', '取消'] //按钮
             }, function () {
-                window.location.href = 'https://www.maaee.com/openvidu/schoolClass/login.html'
+                window.location.href = 'login.html'
             }, function () {
-
             });
         })
 
@@ -113,8 +139,6 @@
                 }
             });
         }
-
-
     })
 </script>
 </html>
