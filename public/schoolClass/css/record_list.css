@@ -3182,7 +3182,7 @@ hr.course2:before, hr.course3:before{
 border-bottom: 2px solid #F56A55;
 }
 .el_teacher_content{
-	width:100%；
+	width:100%;
 }
 .el_teacher_content_wrap{
     padding: 0 2rem;
@@ -3395,7 +3395,7 @@ border-bottom:1px solid #dfdfdd;
 
 
 .b_radiusn{
-	  -moz-border-radius: opx; /* Firefox */
+	  -moz-border-radius: 0px; /* Firefox */
   -webkit-border-radius: 0px; /* Safari 和 Chrome */
   border-radius: 0px; /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
 	border-radius: 0px;
