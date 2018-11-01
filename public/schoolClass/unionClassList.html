@@ -14,12 +14,12 @@
             background-color: #ECEFF8;
             overflow: hidden;
             height: 100vh;
-            font-family: "Helvetica Neue","Microsoft Yahei",Helvetica,Arial,"Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
+            font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial;
         }
         .layui-layer{
             box-shadow: 0px 6px 50px rgba(0,0,0,0.4) !important;
-            height: 100%;
             font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial;
+            animation: none !important;
         }
         .layui-layer-shade{
             opacity: 0 !important;
@@ -173,6 +173,9 @@
             padding-top: 10px;
             letter-spacing: 0.5px;
         }
+        .layer-anim{
+            animation:none !important;
+        }
 
     </style>
 </head>
@@ -193,6 +196,7 @@
     暂无数据
 </div>
 <div id="loading" style="display: none;"> 正在加载...</div>
+
 <div id="item_template" style="display: none;">
     <div class="item">
         <div class="rightCont">
@@ -257,6 +261,7 @@
                    }
 
                    template.find("#union_teacher_name").text("联合老师 : "+unionTeacherNames);
+
                    $("#item_container").append(template.html());
                    template.attr("info_vid","0");
                });

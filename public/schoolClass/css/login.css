@@ -5,6 +5,13 @@ body,html{
     overflow: hidden;
     font-family: "Microsoft YaHei", "Hiragino Sans GB",  Arial,Helvetica;
 }
+input:-webkit-autofill{
+    box-shadow: 0 0 0px 1000px transparent inset !important;
+}
+:-webkit-autofill {
+    -webkit-text-fill-color: #000 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
 .content{
     position: relative;
     width: 100%;
@@ -117,6 +124,7 @@ input{
     box-sizing: border-box;
     font-size: 15PX;
 }
+
 input:focus{
     box-shadow: 0px 0px 2px #215bef8a;
     border-color: #1757FB;
