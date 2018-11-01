@@ -21,7 +21,11 @@
 
             <!--账号登录 -->
             <div class="account">
-                <input id='act' type="text" placeholder="请输入小蚂蚁账号">
+                <div class="inputWrap">
+                    <input id='act' type="text" placeholder="请输入小蚂蚁账号">
+                    <!--存输入的用户名 -->
+                    <div style="display:none" id="actData"></div>
+                </div>
                 <input id="pwd" type="password" placeholder="请输入密码">
                 <button id="login">登录</button>
             </div>
@@ -36,10 +40,7 @@
             <a href="" class="downPc">下载PC客户端</a>
 
 
-            <!--存输入的用户名 -->
-            <div style="display:none" id="actData">
 
-            </div>
         </div>
 
         <!--下载客户端 -->

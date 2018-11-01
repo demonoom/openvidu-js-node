@@ -5225,3 +5225,33 @@ span.justify{
 span.justify > span {
 	display: inline-block /* Opera */; padding-left: 100%;
 }
+.inputWrap{
+	width: 190px;
+	position: relative;
+}
+.inputWrap #rtsUrl{
+	position: absolute;
+	width: 175px;
+	top: 29px;
+	left: 12px;
+	border: 1px #e5e5e5 solid;
+	background: white;
+	max-height: 222px;
+	overflow-y: auto;
+}
+.inputWrap #rtsUrl > div{
+	padding: 8px 5px 8px 5px;
+	font-size: 13px;
+	color: #666;
+	line-height: 1.2;
+	word-break: break-all;
+	border-bottom: 1px #eee solid;
+	cursor: pointer;
+}
+.inputWrap #rtsUrl > div:last-child{
+	border-bottom: 0;
+}
+.inputWrap #rtsUrl > div:hover{
+	background-color: #edf2ff;
+	color: #333;
+}
