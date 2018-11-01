@@ -169,9 +169,9 @@ app.post('/api-sessions/get-token', function (req, res) {
                     // Generate a new token asynchronously with the recently created tokenOptions
                     session.generateToken(tokenOptions)
                         .then(token => {
+
                             // Store the new token in the collection of tokens
                             mapSessionNamesTokens[sessionName].push(token);
-                            console.log("generateToken tokenOptions:"+JSON.stringify(tokenOptions)+"----token:"+token+" OpenVidu.hostname:"+OpenVidu.hostname);
 
                             // Return the Token to the client
                             res.status(200).send({
