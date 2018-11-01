@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>本地课件播放方案</title>
@@ -18,192 +19,257 @@
     <script type="text/javascript" src="js/socket.io.js"></script>
     <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
     <script type="text/javascript" src="js/ServerRecord.js"></script>
-<style type="text/css">
-    .layui-layer-shade{
-        opacity: 0 !important;
-    }
-    .layui-layer{
-        box-shadow: 0px 6px 50px rgba(0,0,0,0.4) !important;
-    }
-</style>
+    <style type="text/css">
+        .layui-layer-shade {
+            opacity: 0 !important;
+        }
+
+        .layui-layer {
+            box-shadow: 0px 6px 50px rgba(0, 0, 0, 0.4) !important;
+        }
+    </style>
 </head>
+
 <body>
-<div class="videoSource-wrap">
-    <div class="menu">
-        <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头</span>
-        <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
-        <div class="menu-btn" onclick="startServerRecord();">
-            <i class="videoSource-menu3" id="recordingTipImg"></i>
-            <span  id="recordingTipText">点击录屏</span>
-        </div>
-    </div>
+    <div class="videoSource-wrap">
+        <div class="menu">
+            <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头
+            </span>
+            <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
+            <div class="menu-btn" onclick="startServerRecord();">
+                <i class="videoSource-menu3" id="recordingTipImg"></i>
+                <span id="recordingTipText">点击录屏</span>
+            </div>
 
-
-
-    <div id="video_sources" class="videoSource_content">
-        <div class="empty_center">
-            <i class="videoSource-empty"></i>
-            <div class="videoSource-empty-text">视频预览区</div>
         </div>
 
+        <div id="video_sources" class="videoSource_content">
+            <div class="empty_center">
+                <i class="videoSource-empty"></i>
+                <div class="videoSource-empty-text">视频预览区</div>
+            </div>
+
+        </div>
+
     </div>
-</div>
 
 </body>
 
 <script type="text/javascript">
+    //存输入的rts地址
+    var rtspUrlArr = [];
+    rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
     var vid = Service.getQueryString("vid");
     var wsPort = 9999;
     var jsmpegPlayer;
     var ipc = require('electron').ipcRenderer;
-    function addLocalCamera(){
+     
+    function addLocalCamera() {
         navigator.mediaDevices.enumerateDevices()
-        .then(function(devices) {
-            var audios = new Array();
-            var videos = new Array();
-            var audioHtml = "<span class='left left2'>音频\n</span><div class='right-item'>";
-            var videoHtml = "<span class='left left2'>视频\n</span><div class='right-item'>";
+            .then(function (devices) {
+                var audios = new Array();
+                var videos = new Array();
+                var audioHtml = "<span class='left left2'>音频\n</span><div class='right-item'>";
+                var videoHtml = "<span class='left left2'>视频\n</span><div class='right-item'>";
 
-            devices.forEach(function(device) {
-                if(device.deviceId == 'default'){
-                    return;
-                }
-                if(device.kind == 'audioinput'){
-                    audios.push(device);
-                    audioHtml = audioHtml +"<label class='right'><input class='a-radio' name='audioinput' type='radio' value='"+device.deviceId+"' />"+ "<span class='b-radio'></span><span class='b-ridioText'>" + device.label +"</span></label>";
-                }else if(device.kind == 'videoinput'){
-                    videos.push(device);
-                    videoHtml = videoHtml +"<label class='right'><input class='a-radio' name='videoinput' type='radio' value='"+device.deviceId+"' />"+ "<span class='b-radio'></span><span class='b-ridioText'>" + device.label +"</span></label>";
-                }
-                console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
+                devices.forEach(function (device) {
+                    if (device.deviceId == 'default') {
+                        return;
+                    }
+                    if (device.kind == 'audioinput') {
+                        audios.push(device);
+                        audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
+                    } else if (device.kind == 'videoinput') {
+                        videos.push(device);
+                        videoHtml = videoHtml + "<label class='right'><input class='a-radio' name='videoinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
+                    }
+                    console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
+                });
+
+                audioHtml = audioHtml + "</div>";
+                videoHtml = videoHtml + "</div>";
+
+                layer.open({
+                    type: 1,
+                    closeBtn: 0,
+                    title: "请选择本地摄像头",
+                    skin: "videoSource",
+                    area: ['300px', '480px'], //宽高
+                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='left left2'>昵称</span><input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
+                });
+
+            }).catch(function (err) {
+                console.log(err.name + ": " + err.message);
             });
-
-            audioHtml = audioHtml +"</div>";
-            videoHtml = videoHtml +"</div>";
-
-            layer.open({
-                type: 1,
-                closeBtn: 0,
-                title:"请选择本地摄像头",
-                skin:"videoSource",
-                area: ['300px', '480px'], //宽高
-                content: "<div class='list-content'><div class='list-item'>"+videoHtml+"</div><div class='list-item'>"+audioHtml+"</div><div class='list-item'><span class='left left2'>昵称</span><input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
-            });
-
-        }).catch(function(err) {
-            console.log(err.name + ": " + err.message);
-        });
     }
 
-    function addIpCamera(){
-        var browser = platform.name;
-        if(browser.indexOf("Electron") == -1){
-            layer.msg("请在pc客户端中使用此功能~~");
-            return;
-        }
+    function addIpCamera() {
+        // var browser = platform.name;
+        // if(browser.indexOf("Electron") == -1){
+        //     layer.msg("请在pc客户端中使用此功能~~");
+        //     return;
+        // }
         wsPort = wsPort + 1;
-        var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/></div><div class='list-item'><span class='justify left'>昵称<span></span></span><input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' class='btn-blue Solid-btn'" +
-                   ">使用</span></div>"
+        var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>昵称<span></span></span><input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
+            ">使用</span></div>"
         layer.open({
             type: 1,
-            title:"请选择网络摄像头",
+            title: "请选择网络摄像头",
             closeBtn: 0,
-            skin:"videoSource",
+            skin: "videoSource",
             area: ['300px', '480px'], //宽高
             content: html
         });
+        //设置rts的值
+        getRtsUrl = function (url) {
+            $("#rtsp_url").val(url)
+        }
+        //数组去重
+        makeArr = function (arr, properties) {
+            for (var i = 0; i < arr.length - 1; i++) {
+                for (var j = i + 1; j < arr.length; j++) {
+                    if (arr[i][properties] == arr[j][properties]) {
+                        arr.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
+            return arr
+        }
+        rtspUrlArr = makeArr(rtspUrlArr, "url")
+         //显示输入过的值
+        rtspUrlArr.forEach(function (v, i) {
+            $("#rtsUrl").append(`<div onClick='getRtsUrl("${v.url}")'>${v.url}</div>`)
+        })
+        $("#rtsp_url").focus(function () {
+            $("#rtsUrl").css("display", "block");
+        })
+        $("#rtsp_url").blur(function () {
+            setTimeout(function () {
+                $("#rtsUrl").css("display", "none");
+            }, 300)
+        });
+
     }
 
-    function cancelUseRtsp(){
+
+
+
+    function cancelUseRtsp() {
         var message = {};
         message.command = "stopRtspStream";
         message.wsPort = wsPort;
-        ipc.send('onRendererMessage',message);
-        if(jsmpegPlayer){
+        ipc.send('onRendererMessage', message);
+        if (jsmpegPlayer) {
             jsmpegPlayer.destroy();
             jsmpegPlayer = null;
         }
         layer.closeAll();
     }
 
-    function rtspPreview(){
+    function rtspPreview() {
         var rtspUrl = $("#rtsp_url").val();
 
         var message = {};
         message.command = "startRtspStream";
         message.streamUrl = rtspUrl;
         message.wsPort = wsPort;
-        ipc.send('onRendererMessage',message);
+        ipc.send('onRendererMessage', message);
 
         var canvas = $("#rtsp_preview_canvas")[0];
-        jsmpegPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio:false});
+        jsmpegPlayer = new JSMpeg.Player('ws://localhost:' + wsPort, { loop: true, autoplay: true, canvas: canvas, audio: false });
     }
 
-    function useRtspInclass(){
 
+    function useRtspInclass() {
         var nick = $("#nick").val();
         var rtspUrl = $("#rtsp_url").val();
-        if(typeof(nick) == "undefined" || nick == ""){
-            layer.msg("请输入此设备在课堂中的昵称~~");
-            return;
+        // if (typeof (nick) == "undefined" || nick == "") {
+        //     layer.msg("请输入此设备在课堂中的昵称~~");
+        //     return;
+        // }
+        // if (rtspUrl == undefined || rtspUrl == "") {
+        //     layer.msg("请输入网络摄像头流地址~~");
+        //     return;
+        // }
+        // if (jsmpegPlayer) {
+        //     jsmpegPlayer.destroy();
+        //     jsmpegPlayer = null;
+        // }
+        if ($("#rtsp_url").val() != "" || $("#rtsp_url").val() != undefined) {
+            rtspUrlArr.push(
+                {
+                    url: $("#rtsp_url").val()
+                }
+            )
         }
-        if(rtspUrl == undefined || rtspUrl == ""){
-            layer.msg("请输入网络摄像头流地址~~");
-            return;
+        /**
+        * 去重
+        * @param arr    
+        * @returns {*}
+        */
+        makeArr = function (arr, properties) {
+            for (var i = 0; i < arr.length - 1; i++) {
+                for (var j = i + 1; j < arr.length; j++) {
+                    if (arr[i][properties] == arr[j][properties]) {
+                        arr.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
+            return arr
         }
-        if(jsmpegPlayer){
-            jsmpegPlayer.destroy();
-            jsmpegPlayer = null;
-        }
+        rtspUrlArr = makeArr(rtspUrlArr, "url")
+        localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
         layer.closeAll();
-        var src= "videoSourceRtspInClass.html?vid="+vid+"&userName="+nick+"&wsPort="+wsPort+"&rtspUrl="+rtspUrl;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='"+src+"'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
+        var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + wsPort + "&rtspUrl=" + rtspUrl;
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
 
     }
 
-    function preView(){
+    function preView() {
         var videoDeviceId = $("[name='videoinput']").filter(":checked").val();
         var audioDeviceId = $("[name='audioinput']").filter(":checked").val();
-        if(typeof(videoDeviceId) == "undefined"){
+        if (typeof (videoDeviceId) == "undefined") {
             layer.msg("请选择视频设备~~");
             return;
         }
         var audioSource = audioDeviceId;
         var videoSource = videoDeviceId;
         var constraints = {
-            audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+            audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
+            video: { deviceId: videoSource ? { exact: videoSource } : undefined }
         };
         navigator.mediaDevices.getUserMedia(constraints).
-        then(function(stream){
-            $("#preview_video")[0].srcObject = stream;
-        }).catch(function(e){
-            console.log(e);
-        });
+            then(function (stream) {
+                $("#preview_video")[0].srcObject = stream;
+            }).catch(function (e) {
+                console.log(e);
+            });
     }
 
-    function useInclass(){
+    function useInclass() {
         var videoDeviceId = $("[name='videoinput']").filter(":checked").val();
         var audioDeviceId = $("[name='audioinput']").filter(":checked").val();
         var nick = $("#nick").val();
-        if(typeof(nick) == "undefined" || nick == ""){
+        if (typeof (nick) == "undefined" || nick == "") {
             layer.msg("请输入此设备在课堂中的昵称~~");
             return;
         }
         layer.closeAll();
-        var src= "videoSourceInClass.html?videoDeviceId="+videoDeviceId+"&audioDeviceId="+audioDeviceId+"&vid="+vid+"&userName="+nick;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='"+src+"'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
+        var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick;
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
     }
-    function deleteVideoSource(span){
+    function deleteVideoSource(span) {
         var iframe = $(span).parent().find("iframe")[0];
         iframe.contentWindow.unpublish();
-        setTimeout(function(){
+        setTimeout(function () {
             $(span).parent().remove();
-        },100);
+        }, 100);
     }
 
-    function startServerRecord(){
-        if($("#recordingTipText").text() == '点击录屏'){
+    function startServerRecord() {
+        if ($("#recordingTipText").text() == '点击录屏') {
             var config = {};
             config.maxWidth = 720;
             config.minWidth = 720;
@@ -215,9 +281,9 @@
             config.webSocketUrl = "https://jiaoxue.maaee.com:9003/";
             config.timeSlice = 1500;
             config.recordingTipTextId = "recordingTipText",
-            config.recordingTipImgId = "recordingTipImg"
+                config.recordingTipImgId = "recordingTipImg"
             captureTab(config);
-        }else{
+        } else {
             stopCapture();
         }
     }
