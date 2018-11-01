@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>用户登录</title>
     <link rel="stylesheet" href="./css/login.css">
-    <script src="js/platform.js"></script>
+    <script type="application/javascript" src="js/platform.js"></script>
 </head>
+
 <body>
 
-<div class="content">
+    <div class="content">
+        <div class="login_box">
+            <div class="logo"><img src="img/logo.png" />同步课堂</div>
+            <div class="tab my_flex">
+                <div class="btn_left active" id="account">账号登录</div>
+                <div class="btn_right" id="scan">扫码登录</div>
+            </div>
 
-    <div class="login_box">
+            <!--账号登录 -->
+            <div class="account">
+                <div class="inputWrap">
+                    <input id='act' type="text" placeholder="请输入小蚂蚁账号">
+                    <!--存输入的用户名 -->
+                    <div style="display:none" id="actData"></div>
+                </div>
+                <input id="pwd" type="password" placeholder="请输入密码">
+                <button id="login">登录</button>
+            </div>
 
-        <div class="logo"><img src="img/logo.png"/>同步课堂</div>
-        <div class="tab my_flex">
-            <div class="btn_left active" id="account">账号登录</div>
-            <div class="btn_right" id="scan">扫码登录</div>
+            <!--扫码登录 -->
+            <div class="scan">
+                <img id="scan_image" src="./img/school.png" alt="">
+                <div>打开手机小蚂蚁教师端扫一扫</div>
+            </div>
+
+            <!--下载客户端 -->
+            <a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.1.0.exe" class="downPc" style="display: none;" id="download_pc">下载PC客户端</a>
         </div>
-
-        <!--账号登录 -->
-        <div class="account">
-            <input id='act' type="text" placeholder="请输入小蚂蚁账号">
-            <input id="pwd" type="password" placeholder="请输入密码">
-            <button id="login">登录</button>
-        </div>
-
-        <!--扫码登录 -->
-        <div class="scan">
-            <img id="scan_image" src="./img/school.png" alt="">
-            <div>打开手机小蚂蚁教师端扫一扫</div>
-        </div>
-
-        <!--下载客户端 -->
-        <a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.1.0.exe" class="downPc" style="display: none;" id="download_pc">下载PC客户端</a>
     </div>
 
-</div>
-
 </body>
-<script src="./js/jquery-3.2.1.min.js"></script>
+<script src="./js/jquery.min.js"></script>
 <script src="./js/simple.js"></script>
 <script type="text/javascript">
     $(function () {
@@ -48,7 +51,6 @@
         simple.connect();
         machineId = createMachineId();
         getLoginTeachSystemEwm();
-
 
         //socket 监听
         simple.msgWsListener = {
@@ -61,10 +63,14 @@
                 if (command == "allowLoginTeachSystem") {
                     var data = info.data;
                     var uuid = data.uuid;
+                    //                   var user = data.user;
                     if (uuid == machineId) {
                         window.location.href = 'syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
+                        // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
+                        // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
                     } else {
                     }
+                    //
                 }
             }
         };
@@ -85,9 +91,11 @@
             $('.account').hide();
         })
 
-
+        var accountArr = [];
+        accountArr = JSON.parse(localStorage.getItem("accountData")) == null ? accountArr : JSON.parse(localStorage.getItem("accountData"))
         //登录事件
         $('#login').on('click', function () {
+
             console.log('开始登录');
             console.log($('#act').val().trim(), '账号');
             console.log($('#pwd').val().trim(), '密码');
@@ -115,8 +123,19 @@
                     var res = JSON.parse(data);
                     console.log(res);
                     if (res.success) {
+                        if ($("#act").val() !== "" && $("#pwd").val() !== "") {
+                            accountArr.push({
+                                account: $("#act").val(),
+                                password: $("#pwd").val()
+                            });
+                        }
+                        accountArr = makeArr(accountArr, "account")
+                        localStorage.setItem('accountData', JSON.stringify(accountArr));
                         console.log('登录成功');
                         window.location.href = 'syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+                        // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+                        // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+
                     } else {
                         alert('用户不存在');
                     }
@@ -172,12 +191,51 @@
                 }
             });
         }
+        
+        getInputValue = function (account, password) {
+            $("#act").val(account);
+            $("#pwd").val(password);
+        }
+
         function checkShowPcDownload(){
             var browser = platform.name;
             if(browser.indexOf("Electron") == -1){
-               $("#download_pc").show();
+                $("#download_pc").show();
+            }else{
+                $("#download_pc").hide();
             }
         }
-    });
+
+        /**
+   * 去重
+   * @param arr
+   * @returns {*}
+   */
+        makeArr = function (arr, properties) {
+            for (var i = 0; i < arr.length - 1; i++) {
+                for (var j = i + 1; j < arr.length; j++) {
+                    if (arr[i][properties] == arr[j][properties]) {
+                        arr.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
+            return arr
+        }
+        accountArr = makeArr(accountArr, "account")
+        accountArr.forEach(function (v, i) {
+            $("#actData").append(`<div onClick='getInputValue("${v.account}","${v.password}")'>${v.account}</div>`)
+        })
+        $("#act").blur(function () {
+            setTimeout(function () {
+                $("#actData").css("display", "none");
+            }, 300)
+        });
+        $("#act").focus(function () {
+            accountArr = JSON.parse(localStorage.getItem("accountData")) == null ? accountArr : JSON.parse(localStorage.getItem("accountData"))
+            $("#actData").css("display", "block");
+        });
+    })
 </script>
+
 </html>
