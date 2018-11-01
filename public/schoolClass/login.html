@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>用户登录</title>
     <link rel="stylesheet" href="./css/login.css">
+    <script type="application/javascript" src="js/platform.js"></script>
 </head>
 
 <body>
@@ -35,18 +36,16 @@
             </div>
 
             <!--下载客户端 -->
-            <a href="" class="downPc">下载PC客户端</a>
+            <a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.1.0.exe" class="downPc" style="display: none;" id="download_pc">下载PC客户端</a>
         </div>
-
-        <!--下载客户端 -->
-        <a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.1.0.exe" class="downPc" style="display: none;" id="download_pc">下载PC客户端</a>
     </div>
 
 </body>
-<script src="./js/jquery-3.2.1.min.js"></script>
+<script src="./js/jquery.min.js"></script>
 <script src="./js/simple.js"></script>
 <script type="text/javascript">
     $(function () {
+        checkShowPcDownload();
         var machineId = '';
         var simple = new SimpleWebsocketConnection();
         simple.connect();
@@ -197,6 +196,16 @@
             $("#act").val(account);
             $("#pwd").val(password);
         }
+
+        function checkShowPcDownload(){
+            var browser = platform.name;
+            if(browser.indexOf("Electron") == -1){
+                $("#download_pc").show();
+            }else{
+                $("#download_pc").hide();
+            }
+        }
+
         /**
    * 去重
    * @param arr
