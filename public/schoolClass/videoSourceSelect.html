@@ -148,6 +148,7 @@
             $("#rtsUrl").css("display", "block");
         })
         $("#rtsp_url").blur(function () {
+            rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrlArr"))
             setTimeout(function () {
                 $("#rtsUrl").css("display", "none");
             }, 300)
@@ -172,7 +173,32 @@
 
     function rtspPreview() {
         var rtspUrl = $("#rtsp_url").val();
-
+        rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
+        if ($.trim($("#rtsp_url").val()) != "" || $("#rtsp_url").val() != undefined) {
+            rtspUrlArr.push(
+                {
+                    url: $.trim($("#rtsp_url").val())
+                }
+            )
+        }
+         /**
+        * 去重
+        * @param arr    
+        * @returns {*}
+        */
+        makeArr = function (arr, properties) {
+            for (var i = 0; i < arr.length - 1; i++) {
+                for (var j = i + 1; j < arr.length; j++) {
+                    if (arr[i][properties] == arr[j][properties]) {
+                        arr.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
+            return arr
+        }
+        rtspUrlArr = makeArr(rtspUrlArr, "url")
+        localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
         var message = {};
         message.command = "startRtspStream";
         message.streamUrl = rtspUrl;
@@ -199,10 +225,12 @@
             jsmpegPlayer.destroy();
             jsmpegPlayer = null;
         }
-        if ($("#rtsp_url").val() != "" || $("#rtsp_url").val() != undefined) {
+        rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
+        
+        if ($.trim($("#rtsp_url").val()) != "" || $("#rtsp_url").val() != undefined) {
             rtspUrlArr.push(
                 {
-                    url: $("#rtsp_url").val()
+                    url: $.trim($("#rtsp_url").val())
                 }
             )
         }
