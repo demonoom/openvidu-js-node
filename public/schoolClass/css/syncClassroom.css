@@ -259,3 +259,6 @@ body {
     font-size: 15px !important;
 }
 
+.layer-anim{
+    animation:none !important;
+}
