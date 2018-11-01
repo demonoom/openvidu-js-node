@@ -104,11 +104,11 @@
     }
 
     function addIpCamera() {
-        // var browser = platform.name;
-        // if(browser.indexOf("Electron") == -1){
-        //     layer.msg("请在pc客户端中使用此功能~~");
-        //     return;
-        // }
+        var browser = platform.name;
+        if(browser.indexOf("Electron") == -1){
+            layer.msg("请在pc客户端中使用此功能~~");
+            return;
+        }
         wsPort = wsPort + 1;
         var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>昵称<span></span></span><input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
             ">使用</span></div>"
@@ -184,18 +184,18 @@
     function useRtspInclass() {
         var nick = $("#nick").val();
         var rtspUrl = $("#rtsp_url").val();
-        // if (typeof (nick) == "undefined" || nick == "") {
-        //     layer.msg("请输入此设备在课堂中的昵称~~");
-        //     return;
-        // }
-        // if (rtspUrl == undefined || rtspUrl == "") {
-        //     layer.msg("请输入网络摄像头流地址~~");
-        //     return;
-        // }
-        // if (jsmpegPlayer) {
-        //     jsmpegPlayer.destroy();
-        //     jsmpegPlayer = null;
-        // }
+        if (typeof (nick) == "undefined" || nick == "") {
+            layer.msg("请输入此设备在课堂中的昵称~~");
+            return;
+        }
+        if (rtspUrl == undefined || rtspUrl == "") {
+            layer.msg("请输入网络摄像头流地址~~");
+            return;
+        }
+        if (jsmpegPlayer) {
+            jsmpegPlayer.destroy();
+            jsmpegPlayer = null;
+        }
         if ($("#rtsp_url").val() != "" || $("#rtsp_url").val() != undefined) {
             rtspUrlArr.push(
                 {

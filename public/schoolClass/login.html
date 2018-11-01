@@ -10,9 +10,7 @@
 <body>
 
     <div class="content">
-
         <div class="login_box">
-
             <div class="logo"><img src="img/logo.png" />同步课堂</div>
             <div class="tab my_flex">
                 <div class="btn_left active" id="account">账号登录</div>
@@ -38,9 +36,6 @@
 
             <!--下载客户端 -->
             <a href="" class="downPc">下载PC客户端</a>
-
-
-
         </div>
 
         <!--下载客户端 -->
@@ -57,7 +52,6 @@
         simple.connect();
         machineId = createMachineId();
         getLoginTeachSystemEwm();
-
 
         //socket 监听
         simple.msgWsListener = {
@@ -139,7 +133,7 @@
                         accountArr = makeArr(accountArr, "account")
                         localStorage.setItem('accountData', JSON.stringify(accountArr));
                         console.log('登录成功');
-                        window.location.href = 'syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
+                        window.location.href = 'syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
                         // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
                         // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
 
