@@ -62,8 +62,8 @@
 //                   var user = data.user;
                     if (uuid == machineId) {
 
-//                           window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+data.user.colUid+'&teacherName='+data.user.userName+'';
-                        window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
+                          window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+data.user.colUid+'&teacherName='+data.user.userName+'';
+                        // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
                     } else {
                     }
 //
@@ -118,8 +118,8 @@
                     console.log(res);
                     if (res.success) {
                         console.log('登录成功');
-//                     window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+res.response.colUid+'&teacherName='+res.response.userName+'';
-                        window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+                    window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId='+res.response.colUid+'&teacherName='+res.response.userName+'';
+                        // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
 
                     } else {
                         alert('用户不存在');
