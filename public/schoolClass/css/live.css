@@ -1,7 +1,14 @@
 @charset "utf-8";
 /* CSS Document */
 html,body,div,span,h1,h2,h3,h4,h5,h6,p,pre,a,code,em,img,small,strong,sub,sup,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label{	
-	margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent
+	margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+    font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial !important;
 	}
 	button, a, input{
 	outline:none;
@@ -620,7 +627,7 @@ iframe{
  	cursor: pointer;
  }
  #video_container{
- 	height:calc(100% - 50px) !important;
+ 	height:100% !important;
     overflow-x: hidden;
     overflow-y: auto;
  }
@@ -639,6 +646,10 @@ iframe{
  .video_operation_menu{
 	height:50px;
 	line-height:50px;
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     z-index: 10;
 }
  .video_operation_menu a{
 	border: 1px solid #fff;
