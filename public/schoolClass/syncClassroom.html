@@ -56,7 +56,7 @@
         var teacherName = Service.getQueryString("teacherName");
         getUserById();
         $('#classInfo_iframe').attr('src','unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
-        $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8091/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
+        $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
 
         //socket 监听
         simple.clazzWsListener = {
