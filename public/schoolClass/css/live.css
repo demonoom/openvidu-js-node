@@ -627,7 +627,7 @@ iframe{
  	cursor: pointer;
  }
  #video_container{
- 	height:calc(100% - 50px) !important;
+ 	height:100% !important;
     overflow-x: hidden;
     overflow-y: auto;
  }
@@ -646,6 +646,10 @@ iframe{
  .video_operation_menu{
 	height:50px;
 	line-height:50px;
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     z-index: 10;
 }
  .video_operation_menu a{
 	border: 1px solid #fff;
