@@ -13,7 +13,7 @@
     <div id="empty">
     暂无打开的课件
     </div>
-          <div id="iframeBox"></div>
+          <div id="iframeBox" style="overflow: auto;-webkit-overflow-scrolling:touch;width:100%;"></div>
           <div class="courseware-open" onclick="showAddAttachment()">
             <span>课件</span>
           </div>
@@ -52,6 +52,9 @@
    var iframe = document.createElement("iframe");
    iframe.setAttribute("id","ifr");
    iframe.setAttribute("name","ifr");
+    iframe.setAttribute("frameborder","0");
+    iframe.setAttribute("scrolling","no");
+    iframe.setAttribute("style","width: 1px; min-width: 100%; *width: 100%");
    iframeBox.appendChild(iframe);
    simpleMS.connect();
    getClassOpenedKejian(vid);
