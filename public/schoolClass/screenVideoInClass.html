@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课堂中的视频源</title>
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="css/record_list.css?v=35" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/hashmap.js"></script>
+    <script type="text/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="../openvidu-browser-2.6.0.js"></script>
+    <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
+    <script type="text/javascript" src="js/service.js"></script>
+    <style type="text/css">
+        .layui-layer-shade{
+            opacity: 0 !important;
+        }
+        .layui-layer{
+            box-shadow: 0px 6px 50px rgba(0,0,0,0.4) !important;
+        }
+        .layer-anim{
+            animation:none !important;
+        }
+    </style>
+</head>
+<body>
+
+ <video width="230px" height="127px" autoplay class="preview_video" id="preview_video" muted></video>
+
+</body>
+
+<script type="text/javascript">
+    var client = new ExRTC();
+    var localStream;
+
+    var vid = Service.getQueryString("vid");
+    var userName = Service.getQueryString("userName");
+    var videoDeviceId = Service.getQueryString("videoDeviceId");
+    var audioDeviceId = Service.getQueryString("audioDeviceId");
+
+    $(document).ready(function(){
+        joinRoom();
+    });
+
+    function publish(){
+
+        const constraints = {
+            audio: {
+                mandatory: {
+                    chromeMediaSource: 'desktop'
+                }
+            },
+            video: {
+                mandatory: {
+                    chromeMediaSource: 'desktop',
+                    maxWidth:1280,
+                    minWidth:1280,
+                    maxHeight:720,
+                    minHeight:720,
+                    maxFrameRate:30,
+                    minFrameRate:30
+                }
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function(stream){
+                $("#preview_video")[0].srcObject = stream;
+                localStream = stream;
+                client.publish(localStream,"agora_local");
+            })
+            .catch(function(e){
+                console.log(e);
+            });
+    }
+
+    function unpublish(){
+        try{
+            client.unpublish(localStream);
+            localStream.close();
+        }catch(e){
+            console.log(e);
+        }
+        localStream = null;
+    }
+
+    function random(lower, upper) {
+        return Math.floor(Math.random() * (upper - lower+1)) + lower;
+    }
+
+    function joinRoom(){
+        client = new ExRTC();
+
+        client.join(vid+"", random(-1000000,-2000000),userName, function() {
+            publish();
+        }, function() {
+            console.log("Join channel failed");
+        });
+    }
+
+</script>
+
+</html>

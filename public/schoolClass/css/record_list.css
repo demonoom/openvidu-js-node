@@ -5151,11 +5151,16 @@ br{
 	background-size: 60px;
 	width: 60px;
 }
+.videoSource-wrap .menu-btn i.videoSource-menu4{
+	background: url("../images/videoSource-menu4.png") no-repeat center center;
+	background-size: 37px;
+	width: 37px;
+}
 .videoSource-empty{
 	background: url("../images/videoSource-empty.png") no-repeat;
-	background-size: 104px;
-	width: 104px;
-	height: 70px;
+	background-size: 70px;
+	width: 70px;
+	height: 48px;
 	display: inline-block;
 }
 .empty_center {

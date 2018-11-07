@@ -39,6 +39,8 @@
             <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头
             </span>
             <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
+
+            <span onclick="addScreen()" class="menu-btn"><i class="videoSource-menu4"></i>添加桌面</span>
             <div class="menu-btn" onclick="startServerRecord();">
                 <i class="videoSource-menu3" id="recordingTipImg"></i>
                 <span id="recordingTipText">点击录屏</span>
@@ -65,7 +67,7 @@
     var vid = Service.getQueryString("vid");
     var wsPort = 9999;
     var jsmpegPlayer;
-    var ipc = require('electron').ipcRenderer;
+    var ipc = window.top.ipcRenderer;
      
     function addLocalCamera() {
         navigator.mediaDevices.enumerateDevices()
@@ -164,8 +166,13 @@
         message.command = "stopRtspStream";
         message.wsPort = wsPort;
         ipc.send('onRendererMessage', message);
+
         if (jsmpegPlayer) {
-            jsmpegPlayer.destroy();
+            try{
+                jsmpegPlayer.destroy();
+            }catch (e) {
+                console.log(e);
+            }
             jsmpegPlayer = null;
         }
         layer.closeAll();
@@ -222,7 +229,11 @@
             return;
         }
         if (jsmpegPlayer) {
-            jsmpegPlayer.destroy();
+            try{
+                jsmpegPlayer.destroy();
+            }catch (e) {
+                console.log(e);
+            }
             jsmpegPlayer = null;
         }
         rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
@@ -317,6 +328,58 @@
         } else {
             stopCapture();
         }
+    }
+
+    function addScreen(){
+        var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
+        layer.open({
+            type: 1,
+            title: "请选择网络摄像头",
+            closeBtn: 0,
+            skin: "videoSource",
+            area: ['300px', '480px'], //宽高
+            content: html
+        });
+    }
+
+    function useScreenVideoInclass(){
+        var nick = $("#layer_screen_nick").val();
+        if(typeof(nick) == "undefined" || nick == null || nick == ""){
+            layer.msg("请输入昵称~~");
+            return;
+        }
+        layer.closeAll();
+        var src = "screenVideoInClass.html?vid=" + vid + "&userName=" + nick;
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
+    }
+
+    function screenVideoPreview(){
+        const constraints = {
+            audio: {
+                mandatory: {
+                    chromeMediaSource: 'desktop'
+                }
+            },
+            video: {
+                mandatory: {
+                    chromeMediaSource: 'desktop',
+                    maxWidth:1280,
+                    minWidth:1280,
+                    maxHeight:720,
+                    minHeight:720,
+                    maxFrameRate:30,
+                    minFrameRate:30
+                }
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function(stream){
+                document.getElementById("layer_screen_video").srcObject = stream;
+            })
+            .catch(function(e){
+                console.log(e);
+            });
     }
 </script>
 

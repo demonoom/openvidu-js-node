@@ -14,8 +14,6 @@ var streams = new Array();
 var reconnectCount = 0;
 var recordingTipText;
 var recordingTipImg;
-const {desktopCapturer} = require('electron');
-
 
 function stopCapture(){
     if(mediaRecorder){
