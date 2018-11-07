@@ -67,7 +67,7 @@
     var vid = Service.getQueryString("vid");
     var wsPort = 9999;
     var jsmpegPlayer;
-    var ipc = window.top.ipcRenderer;
+    var ipc = require('electron').ipcRenderer;
      
     function addLocalCamera() {
         navigator.mediaDevices.enumerateDevices()
