@@ -267,6 +267,11 @@ function ExRTC(){
         }
     }
 
+    window.onunload = function(e){
+        if(_this.session){
+            _this.session.disconnect();
+        }
+    }
 }
 
 function ExRTCStream(){
