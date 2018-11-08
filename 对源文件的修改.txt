@@ -1,0 +1,29 @@
+
+修改openvidu-browser-*.*.js
+
+OpenVidu.prototype.checkSystemRequirements
+方法中增加:&&(browser !== 'Electron') 逻辑
+
+WebRtcPeer.prototype.start
+
+  if (!!_this.configuration.mediaStream) {
+                  for (var _i = 0, _a = _this.configuration.mediaStream.getTracks(); _i < _a.length; _i++) {
+                     var track = _a[_i];
+                     _this.pc.addTrack(track, _this.configuration.mediaStream);
+                  }
+                  resolve();
+  }
+
+  改为:(主要为解决chome内核)
+
+  if (!!_this.configuration.mediaStream) {
+                  if(typeof _this.pc.addTrack != 'undefined' && _this.pc.addTrack instanceof Function){
+                      for (var _i = 0, _a = _this.configuration.mediaStream.getTracks(); _i < _a.length; _i++) {
+                          var track = _a[_i];
+                          _this.pc.addTrack(track, _this.configuration.mediaStream);
+                      }
+                  }else{
+                      _this.pc.addStream(_this.configuration.mediaStream);
+                  }
+                  resolve();
+  }

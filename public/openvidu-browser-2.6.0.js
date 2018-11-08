@@ -7526,9 +7526,13 @@ var WebRtcPeer = (function () {
                 reject('The peer connection object is in "closed" state. This is most likely due to an invocation of the dispose method before accepting in the dialogue');
             }
             if (!!_this.configuration.mediaStream) {
-                for (var _i = 0, _a = _this.configuration.mediaStream.getTracks(); _i < _a.length; _i++) {
-                    var track = _a[_i];
-                    _this.pc.addTrack(track, _this.configuration.mediaStream);
+                if(typeof _this.pc.addTrack != 'undefined' && _this.pc.addTrack instanceof Function){
+                    for (var _i = 0, _a = _this.configuration.mediaStream.getTracks(); _i < _a.length; _i++) {
+                        var track = _a[_i];
+                        _this.pc.addTrack(track, _this.configuration.mediaStream);
+                    }
+                }else{
+                    _this.pc.addStream(_this.configuration.mediaStream);
                 }
                 resolve();
             }

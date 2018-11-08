@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="schoolClass/js/jquery.min.js"></script>
+</head>
+<body>
+
+
+<video id="vd" width="640px" height="480px" src="http://60.205.86.217:8585/live4/141088/2018-11-04-21-15.mp4" autoplay muted controls></video>
+</body>
+
+<script>
+
+    setTimeout(function () {
+        document.getElementById("vd").muted = false;
+        document.getElementById("vd").play();
+    },5000);
+
+</script>
+</html>
