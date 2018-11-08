@@ -67,6 +67,9 @@
 	   height: 100%;
 	   object-fit:cover;
    }
+   #big_video video{
+  	 object-fit:contain !important;
+   }
 
 </style>
 
@@ -672,7 +675,7 @@
 	    	  $("#big_video").show();
 	    	  
 
-			  $("#big_video").append("<video autoplay width='100%' height='100%' muted></video>");
+			  $("#big_video").append("<video autoplay width='100%' height='100%' style='' muted></video>");
 			  $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
 		  }else{
 			  if(current_stream == stream.getId()){
