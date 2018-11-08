@@ -55,6 +55,9 @@ video{
 	height: 100%;
 	object-fit:cover;
 }
+#big_video video{
+	object-fit:contain !important;
+}
 .video_nocover{
 	object-fit:none;
 }
@@ -398,7 +401,7 @@ video{
                   $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
 
                   if(stream.getId() <=2 ){
-                      $("#big_video").find("video").css("object-fit","scale-down");
+                      $("#big_video").find("video").css("object-fit","contain");
                   }
 
 		    	  if(sendCommand){
