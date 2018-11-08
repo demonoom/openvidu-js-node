@@ -268,7 +268,7 @@ function ExRTC(){
         e.returnValue = false;
     }
 
-    window.addEventListener('beforeunload', function(){
+    window.addEventListener('beforeunload', function(e){
         if(_this.session){
             _this.session.disconnect();
         }
