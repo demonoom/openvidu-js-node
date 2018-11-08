@@ -265,14 +265,12 @@ function ExRTC(){
         if(_this.session){
            _this.session.disconnect();
         }
-        e.returnValue = false;
     }
 
     window.addEventListener('beforeunload', function(e){
         if(_this.session){
             _this.session.disconnect();
         }
-        e.returnValue = false;
     });
 }
 
