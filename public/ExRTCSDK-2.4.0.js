@@ -261,11 +261,19 @@ function ExRTC(){
     }
 
 
-    window.onbeforeunload = function(){
+    window.onbeforeunload = function(e){
         if(_this.session){
            _this.session.disconnect();
         }
+        e.returnValue = false;
     }
+
+    window.addEventListener('beforeunload', function(){
+        if(_this.session){
+            _this.session.disconnect();
+        }
+        e.returnValue = false;
+    });
 }
 
 function ExRTCStream(){
