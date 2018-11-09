@@ -147,3 +147,21 @@ body,html{
     padding-top: 10px;
     letter-spacing: 0.5px;
 }
+.left_image{
+    width: 30%;
+    display: inline-block;
+}
+.middle_content{
+    width: 58%;
+    display: inline-block;
+
+}
+.right_oper{
+    width: 10%;
+    display: inline-block;
+
+}
+.left_image > img{
+    width: 100%;
+    height: 100%;
+}
