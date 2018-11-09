@@ -263,24 +263,3 @@ body {
     -moz-border-radius: 4px;
     border-radius: 4px;
 }
-
-.layui-layer-shade{
-    opacity: 0 !important;
-}
-.layui-layer-btn .layui-layer-btn0{
-    border-color: #0084FF !important;
-    background-color: #0084FF !important;
-    color: #fff;
-    font-size: 15px;
-}
-.layui-layer-dialog .layui-layer-content{
-    font-size: 15px !important;
-    color: #333;
-}
-.layui-layer-title{
-    font-size: 15px !important;
-}
-
-.layer-anim{
-    animation:none !important;
-}

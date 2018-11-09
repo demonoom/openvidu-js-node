@@ -116,6 +116,20 @@
                 }
             });
         }
+
     })
+
+    //子页面调用新建课堂
+    function createClass(){
+        console.log('啊啊啊啊啊啊啊');
+        layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                shadeClose: true,
+                skin: 'yourclass',
+                content: "<div class='class_createContent'>123</div>"
+            });
+    }
 </script>
 </html>
