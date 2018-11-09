@@ -4,29 +4,31 @@ var teacherId = Service.getQueryString("teacherId");
 var teacherName = Service.getQueryString("teacherName");
 
 
-$(document).ready(function(){
+$(document).ready(function () {
     getUnionClassList();
 });
 
-function getUnionClassList(){
+function getUnionClassList() {
     var data = {
-        method:"getCurrentUnionClassList",
-        userId:teacherId
+        method: "getCurrentUnionClassList",
+        userId: teacherId
     };
-    service.doWebService(data,{onResponse:function(result){
-        var infos = result.response;
-        console.log(infos,'infos');
-        if(infos.length > 0){
+    service.doWebService(data, {
+        onResponse: function (result) {
+            var infos = result.response;
+            console.log(infos, 'infos');
+            if (infos.length > 0) {
 
-        }else{
+            } else {
+
+            }
+        }, onError: function (error) {
 
         }
-    },onError:function(error){
-
-    }})
+    })
 }
 
-function createClass(){
+function createClass() {
     console.log(parent.window);
     parent.window.createClass();
 

@@ -6,6 +6,7 @@ body {
     overflow: hidden;
     font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial;
 }
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 12px;
@@ -22,25 +23,28 @@ body {
 ::-webkit-scrollbar-button {
     background-color: initial;
 }
-.out_warp{
+
+.out_warp {
     width: 100%;
     height: 100%;
     background: url("../img/icon_yunBg.png") no-repeat;
     background-size: 100% 100%;
     /*filter:blur(2px);*/
 }
-.out_warp:after{
+
+.out_warp:after {
     content: "";
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
     position: absolute;
-    left:0;
-    top:0;
+    left: 0;
+    top: 0;
     background: inherit;
     filter: blur(3px);
     z-index: 2;
     opacity: 0.5;
 }
+
 .wrap {
     width: 80%;
     height: 80%;
@@ -49,7 +53,7 @@ body {
     position: relative;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     z-index: 112;
 }
 
@@ -129,7 +133,8 @@ body {
     font-weight: bold;
     position: relative;
 }
-.left_box .header:after{
+
+.left_box .header:after {
     position: absolute;
     content: "";
     width: 100%;
@@ -142,6 +147,7 @@ body {
     bottom: 0;
     left: 0;
 }
+
 .left_box > div.active {
     position: relative;
     color: #333333;
@@ -246,14 +252,14 @@ body {
     margin-left: 45px;
 }
 
-.yourclass{
+.yourclass {
     background: none !important;
     text-align: center;
-    box-shadow: none!important;
+    box-shadow: none !important;
 }
 
-.yourclass .classText{
-    background: rgba(0,0,0,0.5);
+.yourclass .classText {
+    background: rgba(0, 0, 0, 0.5);
     color: #fff;
     font-size: 16px;
     padding: 15px;
@@ -263,4 +269,46 @@ body {
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     border-radius: 4px;
+}
+
+/*新建课堂模块*/
+.class_createContent {
+    width: 500px;
+    height: 400px;
+    background: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 6px 31px 0px rgba(0, 0, 0, 0.39);
+    z-index: 200;
+    display: none;
+    overflow: auto;
+}
+
+.mask {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 150;
+    opacity: 0.4;
+    display: none;
+}
+
+.createNav {
+    overflow: hidden;
+    border-bottom: 1px solid #ccc;
+}
+
+.createLeft {
+    float: left;
+}
+
+.createRight {
+    float: right;
+    cursor: pointer;
 }

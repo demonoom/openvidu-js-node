@@ -50,6 +50,59 @@
 
 </div>
 
+<!-- 新建课堂模块 start-->
+<div class="class_createContent">
+<div class="createNav">
+<div class="createLeft">新建课堂</div>
+<div class="createRight">x</div>
+</div>
+<div class=""></div>
+<div class="content">
+<div>
+课程名称: <input id="class_name" type="text">
+</div>
+<div>
+课程封面: <button id="uploadImage">上传</button>
+</div>
+<div>
+课程概述: <textarea id="class_info"></textarea>
+</div>
+</div>
+
+<div class="schedule_content">
+<div>设置课表</div>
+<div class="table">
+<div class="table_title">
+<span>课时</span>
+<span>名称</span>
+<span>授课老师</span>
+<span>授课时间</span>
+<span>操作</span>
+</div>
+<div class="table_data">
+<div class="list_item">
+<span>1</span>
+<span><input type="text"></span>
+<span>授课老师</span>
+<span>授课时间</span>
+<span class="deleteClass">删除</span>
+</div>
+</div>
+<div class="table_bottom">
+<button onclick="addClass()">添加课时</button>
+<input type="checkbox">立即发布
+<div>
+<button>提交</button>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="mask" onclick="maskClick()"></div>
+
+<!-- 新建课堂模块 end-->
+
 </body>
 <script src="../schoolClass/js/jquery.min.js"></script>
 <script type="application/javascript" src="../schoolClass/js/layer/layer.js"></script>
@@ -121,15 +174,31 @@
 
     //子页面调用新建课堂
     function createClass(){
-        console.log('啊啊啊啊啊啊啊');
-        layer.open({
-                type: 1,
-                title: false,
-                closeBtn: 0,
-                shadeClose: true,
-                skin: 'yourclass',
-                content: "<div class='class_createContent'>123</div>"
-            });
+        $('.class_createContent').show(150);
+        $('.mask').show();
     }
+
+    function maskClick(){
+        $('.mask').hide();
+        $('.class_createContent').hide();
+    }
+
+    function addClass(){
+        console.log('添加课时');
+        $('.table_data').append("<div class='list_item'>\n"+
+                                 "                                 <span>1</span>\n"+
+                                 "                                 <span><input type='text'></span>\n"+
+                                 "                                 <span>授课老师</span>\n"+
+                                 "                                 <span>授课时间</span>\n"+
+                                 "                                 <span class='deleteClass'>删除</span>\n"+
+                                 "                                 </div>");
+
+    }
+
+    $('.deleteClass').live('click',function(){
+//        console.log(this);
+//          this.parent.remove();
+          console.log($(this).parent().remove());
+    })
 </script>
 </html>
