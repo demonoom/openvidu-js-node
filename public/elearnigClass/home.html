@@ -11,92 +11,93 @@
 
 <div class="out_warp">
 
-<div class="wrap">
-    <div class="inner">
-        <div class="nav">
-    <!--<div class="logo"><img src="img/icon_yunClassLogo.png"/></div>-->
-    <div class="logo"><img src="img/abz-logo.png"  /></div>
-    <div class="userInfo">
-        <div class="my_flex">
-            <div class="avatar">
-                <img id="user_avatar" src="" alt="">
-            </div>
-            <div class="username"></div>
-            <div class="exit">退出</div>
-        </div>
-            </div>
-        </div>
-        <div class="box_cont">
-            <div class="left_box">
-                <div class="header">课堂管理</div>
-                <div id="classInfo" class="active">课程信息</div>
-                <div id="myFile">我的课件</div>
-            </div>
-            <div class="right_box">
-                <!--课程信息 -->
-                <div class="classInfo_box">
-                    <iframe id="classInfo_iframe" src="" frameborder="0"></iframe>
-                </div>
-                <!--我的课件 -->
-                <div class="myFile_box">
-                    <iframe id="myFile_iframe" src="" frameborder="0"></iframe>
+    <div class="wrap">
+        <div class="inner">
+            <div class="nav">
+                <!--<div class="logo"><img src="img/icon_yunClassLogo.png"/></div>-->
+                <div class="logo"><img src="img/abz-logo.png"/></div>
+                <div class="userInfo">
+                    <div class="my_flex">
+                        <div class="avatar">
+                            <img id="user_avatar" src="" alt="">
+                        </div>
+                        <div class="username"></div>
+                        <div class="exit">退出</div>
+                    </div>
                 </div>
             </div>
+            <div class="box_cont">
+                <div class="left_box">
+                    <div class="header">课堂管理</div>
+                    <div id="classInfo" class="active">课程信息</div>
+                    <div id="myFile">我的课件</div>
+                </div>
+                <div class="right_box">
+                    <!--课程信息 -->
+                    <div class="classInfo_box">
+                        <iframe id="classInfo_iframe" src="" frameborder="0"></iframe>
+                    </div>
+                    <!--我的课件 -->
+                    <div class="myFile_box">
+                        <iframe id="myFile_iframe" src="" frameborder="0"></iframe>
+                    </div>
+                </div>
 
 
+            </div>
         </div>
     </div>
-</div>
 
 </div>
 
 <!-- 新建课堂模块 start-->
 <div class="class_createContent">
-<div class="createNav">
-<div class="createLeft">新建课堂</div>
-<div class="createRight">x</div>
-</div>
-<div class=""></div>
-<div class="content">
-<div>
-课程名称: <input id="class_name" type="text">
-</div>
-<div>
-课程封面: <button id="uploadImage">上传</button>
-</div>
-<div>
-课程概述: <textarea id="class_info"></textarea>
-</div>
-</div>
+    <div class="createNav">
+        <div class="createLeft">新建课堂</div>
+        <div class="createRight">x</div>
+    </div>
+    <div class=""></div>
+    <div class="content">
+        <div>
+            课程名称: <input id="class_name" type="text">
+        </div>
+        <div>
+            课程封面:
+            <button id="uploadImage">上传</button>
+        </div>
+        <div>
+            课程概述: <textarea id="class_info"></textarea>
+        </div>
+    </div>
 
-<div class="schedule_content">
-<div>设置课表</div>
-<div class="table">
-<div class="table_title">
-<span>课时</span>
-<span>名称</span>
-<span>授课老师</span>
-<span>授课时间</span>
-<span>操作</span>
-</div>
-<div class="table_data">
-<div class="list_item">
-<span>1</span>
-<span><input type="text"></span>
-<span>授课老师</span>
-<span>授课时间</span>
-<span class="deleteClass">删除</span>
-</div>
-</div>
-<div class="table_bottom">
-<button onclick="addClass()">添加课时</button>
-<input type="checkbox">立即发布
-<div>
-<button>提交</button>
-</div>
-</div>
-</div>
-</div>
+    <div class="schedule_content">
+        <div>设置课表</div>
+        <div class="table">
+            <div class="table_title">
+                <span>课时</span>
+                <span>名称</span>
+                <span>授课老师</span>
+                <span>授课时间</span>
+                <span>操作</span>
+            </div>
+            <div class="table_data">
+                <div class="list_item">
+                    <span>1</span>
+                    <span><input type="text"></span>
+                    <span>授课老师</span>
+                    <span>授课时间</span>
+                    <span class="deleteClass">删除</span>
+                </div>
+            </div>
+            <div class="table_bottom">
+                <button onclick="addClass()">添加课时</button>
+                <input type="checkbox">立即发布
+                <div>
+                    <button>提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <div class="mask" onclick="maskClick()"></div>
@@ -113,8 +114,8 @@
         var teacherId = Service.getQueryString("teacherId");
         var teacherName = Service.getQueryString("teacherName");
         getUserById();
-        $('#classInfo_iframe').attr('src','createClass.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
-        $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
+        $('#classInfo_iframe').attr('src', 'createClass.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '')
+        $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
 
         $('#classInfo').on('click', function () {
             $('#classInfo').addClass('active');
@@ -173,32 +174,32 @@
     })
 
     //子页面调用新建课堂
-    function createClass(){
+    function createClass() {
         $('.class_createContent').show(150);
         $('.mask').show();
     }
 
-    function maskClick(){
+    function maskClick() {
         $('.mask').hide();
         $('.class_createContent').hide();
     }
 
-    function addClass(){
+    function addClass() {
         console.log('添加课时');
-        $('.table_data').append("<div class='list_item'>\n"+
-                                 "                                 <span>1</span>\n"+
-                                 "                                 <span><input type='text'></span>\n"+
-                                 "                                 <span>授课老师</span>\n"+
-                                 "                                 <span>授课时间</span>\n"+
-                                 "                                 <span class='deleteClass'>删除</span>\n"+
-                                 "                                 </div>");
+        $('.table_data').append("<div class='list_item'>\n" +
+            "                                 <span>1</span>\n" +
+            "                                 <span><input type='text'></span>\n" +
+            "                                 <span>授课老师</span>\n" +
+            "                                 <span>授课时间</span>\n" +
+            "                                 <span class='deleteClass'>删除</span>\n" +
+            "                                 </div>");
 
     }
 
-    $('.deleteClass').live('click',function(){
+    $('.deleteClass').live('click', function () {
 //        console.log(this);
 //          this.parent.remove();
-          console.log($(this).parent().remove());
+        console.log($(this).parent().remove());
     })
 </script>
 </html>
