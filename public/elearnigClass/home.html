@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小蚂蚁云课堂</title>
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+
+<div class="out_warp">
+
+<div class="wrap">
+    <div class="inner">
+        <div class="nav">
+    <!--<div class="logo"><img src="img/icon_yunClassLogo.png"/></div>-->
+    <div class="logo">阿坝州云校</div>
+    <div class="userInfo">
+        <div class="my_flex">
+            <div class="avatar">
+                <img id="user_avatar" src="" alt="">
+            </div>
+            <div class="username"></div>
+            <div class="exit">退出</div>
+        </div>
+            </div>
+        </div>
+        <div class="box_cont">
+            <div class="left_box">
+                <div class="header">课堂管理</div>
+                <div id="classInfo" class="active">课程信息</div>
+                <div id="myFile">我的课件</div>
+            </div>
+            <div class="right_box">
+                <!--课程信息 -->
+                <div class="classInfo_box">
+                    <iframe id="classInfo_iframe" src="" frameborder="0"></iframe>
+                </div>
+                <!--我的课件 -->
+                <div class="myFile_box">
+                    <iframe id="myFile_iframe" src="" frameborder="0"></iframe>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+</div>
+
+</body>
+<script src="../schoolClass/js/jquery.min.js"></script>
+<script type="application/javascript" src="../schoolClass/js/layer/layer.js"></script>
+<script type="application/javascript" src="../schoolClass/js/service.js"></script>
+<script>
+    $(function () {
+
+        var teacherId = Service.getQueryString("teacherId");
+        var teacherName = Service.getQueryString("teacherName");
+        getUserById();
+        $('#classInfo_iframe').attr('src','createClass.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
+        $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
+
+        $('#classInfo').on('click', function () {
+            $('#classInfo').addClass('active');
+            $('#myFile').removeClass('active');
+            $('.classInfo_box').show();
+            $('.myFile_box').hide();
+        })
+
+        $('#myFile').on('click', function () {
+            $('#myFile').addClass('active');
+            $('#classInfo').removeClass('active');
+            $('.classInfo_box').hide();
+            $('.myFile_box').show();
+        })
+
+
+        $('.exit').on('click', function () {
+            layer.confirm('您确定要退出登录?', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                window.location.href = 'login.html'
+            }, function () {
+            });
+        })
+
+
+        function getUserById() {
+            $.ajax({
+                type: "POST",
+                url: "https://www.maaee.com/Excoord_For_Education/webservice",
+                data: {
+                    params: JSON.stringify({
+                        "method": "getUserById",
+                        "ident": teacherId,
+                    })
+                },
+                header: {
+                    "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    console.log(res);
+                    if (res.success) {
+                        $('#user_avatar').attr('src', res.response.avatar);
+                        $('.username').text(res.response.userName);
+                    } else {
+                        alert('用户不存在');
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+    })
+</script>
+</html>
