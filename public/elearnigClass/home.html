@@ -95,7 +95,7 @@
                  -->
             </div>
             <div class="table_bottom">
-                <button onclick="addClass()">添加课时</button>
+                <button onclick="addVideos('','')">添加课时</button>
                 <input id="isPublish" type="checkbox" onchange="isPublish_change()">立即发布
                 <div>
                     <button onclick="submitClass()">提交</button>
@@ -120,8 +120,16 @@
     //是否发布
     var isPublish = 2;
     //章节index
-    var class_index = 1;
+    var class_index = 0;
     var teacherId,teacherName;
+    //章节对象
+    var videos = new Array();
+//    // 当前输入框下标
+//    var inputIndex = 0;
+//    //当前时间框下标
+//    var timeIndex = 0;
+//    var that = this;
+//    var service = new Service();
     $(function () {
 
         teacherId = Service.getQueryString("teacherId");
@@ -129,22 +137,19 @@
 
         //获取用户信息
         getUserById();
-
         //给iframe赋值
         $('#classInfo_iframe').attr('src', 'createClass.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '')
-        $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
-
+//        $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
 
         //默认添加一行
-        $('.table_data').append("<div class='list_item'>\n" +
-                                            "                                 <span>"+class_index+"</span>\n" +
-                                            "                                 <span><input type='text' onkeyup='input_chapterName("+(class_index - 1)+")'></span>\n" +
-                                            "                                 <span>"+teacherName+"</span>\n" +
-                                            "                                 <span> <input type='text' onkeyup='input_chapterTime("+(class_index - 1)+")'> </span>\n" +
-                                            "                                 <span onclick='delete_chapter("+(class_index - 1)+")'>删除</span>\n" +
-                                            "                                 </div>");
-
-
+//        $('.table_data').append("<div class='list_item'>\n" +
+//                                            "                                 <span>"+class_index+"</span>\n" +
+//                                            "                                 <span><input type='text' oninput='input_chapterName("+(class_index - 1)+",this)'></span>\n" +
+//                                            "                                 <span>"+teacherName+"</span>\n" +
+//                                            "                                 <span> <input type='text' oninput='input_chapterTime("+(class_index - 1)+",this)'> </span>\n" +
+//                                            "                                 <span onclick='delete_chapter("+(class_index - 1)+",this)'>删除</span>\n" +
+//                                            "                                 </div>");
+        addVideos('','');
         $('#classInfo').on('click', function () {
             $('#classInfo').addClass('active');
             $('#myFile').removeClass('active');
@@ -167,13 +172,13 @@
                 window.location.href = 'login.html'
             }, function () {
             });
-        })
-
+        });
 
         function getUserById() {
             $.ajax({
                 type: "POST",
                 url: "https://www.maaee.com/Excoord_For_Education/webservice",
+//                url:"http://192.168.50.15:9007/elearning/elearningControl/",
                 data: {
                     params: JSON.stringify({
                         "method": "getUserById",
@@ -213,7 +218,9 @@
 
     //子页面调用新建课堂
     function createClass() {
+
         $('.class_createContent').show(150);
+
         $('.mask').show();
     }
 
@@ -223,53 +230,210 @@
         $('.class_createContent').hide();
     }
 
-    //添加课时章节
-    function addClass() {
-        console.log('添加课时');
+//    //添加课时章节
+//    function addClass() {
+//        addVideos('','',class_index);
+//    }
+
+    function addVideos(name,liveTime,squence){
+        console.log('你好我是王教练');
         class_index++;
         $('.table_data').append("<div class='list_item'>\n" +
-            "                                 <span>"+class_index+"</span>\n" +
-            "                                 <span><input onkeyup='input_chapterName("+(class_index - 1)+")' type='text'></span>\n" +
-            "                                 <span>"+teacherName+"</span>\n" +
-            "                                 <span> <input onkeyup='input_chapterTime("+(class_index - 1)+")' type='text'> </span>\n" +
-            "                                 <span onclick='delete_chapter("+(class_index - 1)+")'>删除</span>\n" +
-            "                                 </div>");
-
+                    "                                 <span>"+class_index+"</span>\n" +
+                    "                                 <span><input oninput='input_chapterName("+(class_index - 1)+",this)' type='text'></span>\n" +
+                    "                                 <span>"+teacherName+"</span>\n" +
+                    "                                 <span> <input oninput='input_chapterTime("+(class_index - 1)+",this)' type='text'> </span>\n" +
+                    "                                 <span onclick='delete_chapter("+(class_index - 1)+",this)'>删除</span>\n" +
+                    "                                 </div>");
+        videos.push({
+            name:name,
+            liveTime:liveTime,
+            userID: teacherId,
+            squence:class_index
+        });
+        console.log(videos,'videos');
     }
 
     //删除课时章节
-    function delete_chapter(index){
-        console.log(index);
-        console.log('删除');
-        console.log($('.table_data > .list_item').eq(0),'table_data');
-//        $('.table_data > .list_item').eq(index).remove();
+    function delete_chapter(index,event){
+//        console.log(event,'event');
+//        console.log(index);
+        console.log($(event).parent().index(),'下标');
+        videos.splice($(event).parent().index(),1);
+//        return;
+        $(event).parent().remove();
     }
-    $('.deleteClass').live('click', function () {
-//        console.log(this);
-//          this.parent.remove();
+    $('.deleteClass').live('click', function (event) {
         console.log($(this).parent().remove());
     })
 
     function submitClass(){
-        console.log($('#class_name').val(),'课程名称');
-        console.log(imagePath,'课程封面');
-        console.log($('#class_info').val(),'课程概述');
-        console.log(isPublish,'是否立即发布');
-        console.log(teacherId,'发布者id');
-        console.log(teacherId,'课表名字');
-        console.log(teacherId,'直播时间');
-        console.log(teacherId,'userId');
-        console.log(teacherId,'课表序列');
+        var warn = '';
+        if($('#class_name').val() == ''){
+            warn = "课程名称不能为空";
+        }else if(imagePath == ''){
+            warn = "请上传课程封面";
+        }else if($('#class_info').val() == ''){
+            warn = "课程概述不能为空";
+        }
+        if(warn == ''){
+            for(var k in videos){
+                if(videos[k].name == ''){
+                   warn = "课程章节第"+(parseInt(k)+1)+"行章节名称不能为空!";
+                }else if(videos[k].liveTime == ''){
+                   warn = "课程章节第"+(parseInt(k)+1)+"行章节时间不能为空!";
+                }else{}
+            }
+        }
+//        console.log($('#class_name').val(),'课程名称');
+//        console.log(imagePath,'课程封面');
+//        console.log($('#class_info').val(),'课程概述');
+//        console.log(isPublish,'是否立即发布');
+//        console.log(teacherId,'发布者id');
+//        console.log(videos,'videos');
+//        videos = new Array();
+//        videos = [];
+//        console.log(videos);
+//        return;
+        if(warn != ''){
+            console.log(warn);
+        }else{
+           openClass($('#class_name').val(),imagePath,$('#class_info').val(),isPublish,teacherId,videos);
+        }
     }
 
-    function input_chapterName(index){
-        console.log(index);
-        console.log('章节名称');
+    function input_chapterName(index,event){
+//        console.log(index);
+//        console.log(videos[$(event).parent().parent().index()]);
+        videos[$(event).parent().parent().index()].name = $(event).val().trim();
+//        console.log($(event).parent().parent().index(),'下标');
+//        console.log($(event).val().trim(),'章节名称');
     }
 
-    function input_chapterTime(index){
-        console.log('章节时间');
-        console.log(index);
+    function input_chapterTime(index,event){
+        videos[$(event).parent().parent().index()].liveTime = $(event).val().trim();
+//        console.log($(event).parent().parent().index(),'下标');
+//        console.log($(event).val().trim(),'章节时间');
+    }
+
+
+    function updateClass(id,publisher_id){
+        console.log(id,'课程ｉｄ');
+        console.log(publisher_id,'publisher_id');
+        $.ajax({
+                    type: "POST",
+                    url: "http://192.168.50.15:9007/elearning/elearningControl/",
+                    data: {
+                          params: JSON.stringify({
+                          method: "addCourse",
+                          jsonObject:JSON.stringify({
+                            courseName: class_name,
+                            content: class_info,
+                            image: class_imagePath,
+                            isPublish: isPublish,
+                            publisher_id: teacherId,
+                            videos: videos,
+                            schoolId: 110
+                          })
+                          })
+                          },
+                          header: {
+                               "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+                          },
+                          success: function (data) {
+                          console.log(JSON.parse(data),'保存');
+                          var res = JSON.parse(data);
+                          if(res.success){
+                                 console.log('保存成功!');
+                                 maskClick();
+                                 //开始初始化
+                                 class_index = 0;
+                                 videos.splice(0)
+                                     isPublish = 2;
+                                     imagePath = '';
+                                     $('#class_name').val('');
+                                     $('#class_info').val('');
+                                     $('.table_data').empty();
+                                     $('.image_box').empty();
+                                     addVideos('','');
+                                     document.getElementById('classInfo_iframe').contentWindow.refresh();
+                          }else{
+                                 console.log(res.msg,'保存失败');
+                          }
+                             },
+                             error: function (e) {
+                                 console.log(e);
+                          }
+                    });
+
+    }
+
+
+
+    function openClass(class_name,class_imagePath,class_info,isPublish,teacherId,videos){
+        $.ajax({
+            type: "POST",
+            url: "http://192.168.50.15:9007/elearning/elearningControl/",
+            data: {
+                  params: JSON.stringify({
+                  method: "addCourse",
+                  jsonObject:JSON.stringify({
+                    courseName: class_name,
+                    content: class_info,
+                    image: class_imagePath,
+                    isPublish: isPublish,
+                    publisher_id: teacherId,
+                    videos: videos,
+                    schoolId: 110
+                  })
+                  })
+                  },
+                  header: {
+                       "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+                  },
+                  success: function (data) {
+                  console.log(JSON.parse(data),'保存');
+                  var res = JSON.parse(data);
+                  if(res.success){
+                         console.log('保存成功!');
+                         maskClick();
+                         //开始初始化
+                         class_index = 0;
+                         videos.splice(0)
+                             isPublish = 2;
+                             imagePath = '';
+                             $('#class_name').val('');
+                             $('#class_info').val('');
+                             $('.table_data').empty();
+                             $('.image_box').empty();
+                             addVideos('','');
+                             document.getElementById('classInfo_iframe').contentWindow.refresh();
+                  }else{
+                         console.log(res.msg,'保存失败');
+                  }
+                     },
+                     error: function (e) {
+                         console.log(e);
+                  }
+            });
+
+
+//        var data = {
+//                method: "getCurrentUnionClassList",
+//                courseName: class_name,
+//                content: class_info,
+//                image: class_imagePath,
+//                isPublish: isPublish,
+//                publisher_id: teacherId,
+//                videos: videos,
+//            };
+//            service.doWebService(data, {
+//                onResponse: function (result) {
+//                    console.log(result,'开启成功');
+//                }, onError: function (error) {
+//
+//                }
+//            })
     }
 
 //    上传图片
