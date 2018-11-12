@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小蚂蚁云课堂</title>
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="./css/home.css">
+</head>
+<body>
+
+<div class="out_warp">
+
+    <div class="wrap">
+        <div class="inner">
+            <div class="nav">
+                <!--<div class="logo"><img src="img/icon_yunClassLogo.png"/></div>-->
+                <div class="logo"><img src="img/abz-logo.png"/></div>
+                <div class="userInfo">
+                    <div class="my_flex">
+                        <div class="avatar">
+                            <img id="user_avatar" src="" alt="">
+                        </div>
+                        <div class="username"></div>
+                        <div class="exit">退出</div>
+                    </div>
+                </div>
+            </div>
+            <div class="box_cont">
+                <div class="left_box">
+                    <div class="header">课堂管理</div>
+                    <div id="classInfo" class="active">课程信息</div>
+                    <div id="myFile">我的课件</div>
+                </div>
+                <div class="right_box">
+                    <!--课程信息 -->
+                    <div class="classInfo_box">
+                        <iframe id="classInfo_iframe" src="" frameborder="0"></iframe>
+                    </div>
+                    <!--我的课件 -->
+                    <div class="myFile_box">
+                        <iframe id="myFile_iframe" src="" frameborder="0"></iframe>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 新建课堂模块 start-->
+<div class="class_createContent">
+    <div class="createNav">
+        <div class="createLeft">新建课堂</div>
+        <div class="createRight" onclick="maskClick()">x</div>
+    </div>
+    <div class="content">
+        <div>
+            课程名称: <input id="class_name" type="text">
+        </div>
+        <div>
+            课程封面:
+            <div class="image_box">
+
+            </div>
+            <button id="uploadImage" onclick="uploadImage()">上传</button>
+
+        </div>
+        <div>
+            课程概述: <textarea id="class_info"></textarea>
+        </div>
+    </div>
+
+    <div class="schedule_content">
+        <div>设置课表</div>
+        <div class="table">
+            <div class="table_title">
+                <span>课时</span>
+                <span>名称</span>
+                <span>授课老师</span>
+                <span>授课时间</span>
+                <span>操作</span>
+            </div>
+            <div class="table_data">
+                <!--
+                 <div class="list_item">
+                                     <span>1</span>
+                                     <span><input type="text"></span>
+                                     <span>授课老师</span>
+                                     <span>授课时间</span>
+                                     <span class="deleteClass">删除</span>
+                                 </div>
+                 -->
+            </div>
+            <div class="table_bottom">
+                <button onclick="addVideos('','')">添加课时</button>
+                <input id="isPublish" type="checkbox" onchange="isPublish_change()">立即发布
+                <div>
+                    <button onclick="submitClass()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="mask" onclick="maskClick()"></div>
+<input id="upload" type="file" accept=".jpg,.png,.gif,.PNG,.JPG,.GIF">
+
+<!-- 新建课堂模块 end-->
+
+</body>
+<script src="../schoolClass/js/jquery.min.js"></script>
+<script type="application/javascript" src="../schoolClass/js/layer/layer.js"></script>
+<script type="application/javascript" src="../schoolClass/js/service.js"></script>
+<script>
+    // 课程封面
+    var imagePath = '';
+    //是否发布
+    var isPublish = 2;
+    //章节index
+    var class_index = 0;
+    var teacherId, teacherName;
+    //章节对象
+    var videos = new Array();
+    //    // 当前输入框下标
+    //    var inputIndex = 0;
+    //    //当前时间框下标
+    //    var timeIndex = 0;
+    //    var that = this;
+    //    var service = new Service();
+    $(function () {
+
+        teacherId = Service.getQueryString("teacherId");
+        teacherName = Service.getQueryString("teacherName");
+
+        //获取用户信息
+        getUserById();
+        //给iframe赋值
+        $('#classInfo_iframe').attr('src', 'createClass.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '')
+//        $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
+
+        //默认添加一行
+//        $('.table_data').append("<div class='list_item'>\n" +
+//                                            "                                 <span>"+class_index+"</span>\n" +
+//                                            "                                 <span><input type='text' oninput='input_chapterName("+(class_index - 1)+",this)'></span>\n" +
+//                                            "                                 <span>"+teacherName+"</span>\n" +
+//                                            "                                 <span> <input type='text' oninput='input_chapterTime("+(class_index - 1)+",this)'> </span>\n" +
+//                                            "                                 <span onclick='delete_chapter("+(class_index - 1)+",this)'>删除</span>\n" +
+//                                            "                                 </div>");
+        addVideos('', '');
+        $('#classInfo').on('click', function () {
+            $('#classInfo').addClass('active');
+            $('#myFile').removeClass('active');
+            $('.classInfo_box').show();
+            $('.myFile_box').hide();
+        })
+
+        $('#myFile').on('click', function () {
+            $('#myFile').addClass('active');
+            $('#classInfo').removeClass('active');
+            $('.classInfo_box').hide();
+            $('.myFile_box').show();
+        })
+
+
+        $('.exit').on('click', function () {
+            layer.confirm('您确定要退出登录?', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                window.location.href = 'login.html'
+            }, function () {
+            });
+        });
+
+        function getUserById() {
+            $.ajax({
+                type: "POST",
+                url: "https://www.maaee.com/Excoord_For_Education/webservice",
+//                url:"http://192.168.50.15:9007/elearning/elearningControl/",
+                data: {
+                    params: JSON.stringify({
+                        "method": "getUserById",
+                        "ident": teacherId,
+                    })
+                },
+                header: {
+                    "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+                success: function (data) {
+                    var res = JSON.parse(data);
+                    console.log(res);
+                    if (res.success) {
+                        $('#user_avatar').attr('src', res.response.avatar);
+                        $('.username').text(res.response.userName);
+
+                    } else {
+                        alert('用户不存在');
+                    }
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+
+    })
+
+    function isPublish_change() {
+        console.log();
+        if ($('#isPublish').attr('checked')) {
+            isPublish = 1;
+        } else {
+            isPublish = 2;
+        }
+    }
+
+    //子页面调用新建课堂
+    function createClass() {
+
+        $('.class_createContent').show(150);
+
+        $('.mask').show();
+    }
+
+    //关闭新建课堂小窗口
+    function maskClick() {
+        $('.mask').hide();
+        $('.class_createContent').hide();
+    }
+
+    //    //添加课时章节
+    //    function addClass() {
+    //        addVideos('','',class_index);
+    //    }
+
+    function addVideos(name, liveTime, squence) {
+        console.log('你好我是王教练');
+        class_index++;
+        $('.table_data').append("<div class='list_item'>\n" +
+            "                                 <span>" + class_index + "</span>\n" +
+            "                                 <span><input oninput='input_chapterName(" + (class_index - 1) + ",this)' type='text'></span>\n" +
+            "                                 <span>" + teacherName + "</span>\n" +
+            "                                 <span> <input oninput='input_chapterTime(" + (class_index - 1) + ",this)' type='text'> </span>\n" +
+            "                                 <span onclick='delete_chapter(" + (class_index - 1) + ",this)'>删除</span>\n" +
+            "                                 </div>");
+        videos.push({
+            name: name,
+            liveTime: liveTime,
+            userID: teacherId,
+            squence: class_index
+        });
+        console.log(videos, 'videos');
+    }
+
+    //删除课时章节
+    function delete_chapter(index, event) {
+//        console.log(event,'event');
+//        console.log(index);
+        console.log($(event).parent().index(), '下标');
+        videos.splice($(event).parent().index(), 1);
+//        return;
+        $(event).parent().remove();
+    }
+
+    $('.deleteClass').live('click', function (event) {
+        console.log($(this).parent().remove());
+    })
+
+    function submitClass() {
+        var warn = '';
+        if ($('#class_name').val() == '') {
+            warn = "课程名称不能为空";
+        } else if (imagePath == '') {
+            warn = "请上传课程封面";
+        } else if ($('#class_info').val() == '') {
+            warn = "课程概述不能为空";
+        }
+        if (warn == '') {
+            for (var k in videos) {
+                if (videos[k].name == '') {
+                    warn = "课程章节第" + (parseInt(k) + 1) + "行章节名称不能为空!";
+                } else if (videos[k].liveTime == '') {
+                    warn = "课程章节第" + (parseInt(k) + 1) + "行章节时间不能为空!";
+                } else {
+                }
+            }
+        }
+//        console.log($('#class_name').val(),'课程名称');
+//        console.log(imagePath,'课程封面');
+//        console.log($('#class_info').val(),'课程概述');
+//        console.log(isPublish,'是否立即发布');
+//        console.log(teacherId,'发布者id');
+//        console.log(videos,'videos');
+//        videos = new Array();
+//        videos = [];
+//        console.log(videos);
+//        return;
+        if (warn != '') {
+            console.log(warn);
+        } else {
+            openClass($('#class_name').val(), imagePath, $('#class_info').val(), isPublish, teacherId, videos);
+        }
+    }
+
+    function input_chapterName(index, event) {
+//        console.log(index);
+//        console.log(videos[$(event).parent().parent().index()]);
+        videos[$(event).parent().parent().index()].name = $(event).val().trim();
+//        console.log($(event).parent().parent().index(),'下标');
+//        console.log($(event).val().trim(),'章节名称');
+    }
+
+    function input_chapterTime(index, event) {
+        videos[$(event).parent().parent().index()].liveTime = $(event).val().trim();
+//        console.log($(event).parent().parent().index(),'下标');
+//        console.log($(event).val().trim(),'章节时间');
+    }
+
+
+    function updateClass(id, publisher_id) {
+        console.log(id, '课程ｉｄ');
+        console.log(publisher_id, 'publisher_id');
+        $.ajax({
+            type: "POST",
+            url: "http://192.168.50.15:9007/elearning/elearningControl/",
+            data: {
+                params: JSON.stringify({
+                    method: "addCourse",
+                    jsonObject: JSON.stringify({
+                        courseName: class_name,
+                        content: class_info,
+                        image: class_imagePath,
+                        isPublish: isPublish,
+                        publisher_id: teacherId,
+                        videos: videos,
+                        schoolId: 110
+                    })
+                })
+            },
+            header: {
+                "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+            success: function (data) {
+                console.log(JSON.parse(data), '保存');
+                var res = JSON.parse(data);
+                if (res.success) {
+                    console.log('保存成功!');
+                    maskClick();
+                    //开始初始化
+                    class_index = 0;
+                    videos.splice(0)
+                    isPublish = 2;
+                    imagePath = '';
+                    $('#class_name').val('');
+                    $('#class_info').val('');
+                    $('.table_data').empty();
+                    $('.image_box').empty();
+                    addVideos('', '');
+                    document.getElementById('classInfo_iframe').contentWindow.refresh();
+                } else {
+                    console.log(res.msg, '保存失败');
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+
+    }
+
+
+    function openClass(class_name, class_imagePath, class_info, isPublish, teacherId, videos) {
+        $.ajax({
+            type: "POST",
+            url: "http://192.168.50.15:9007/elearning/elearningControl/",
+            data: {
+                params: JSON.stringify({
+                    method: "addCourse",
+                    jsonObject: JSON.stringify({
+                        courseName: class_name,
+                        content: class_info,
+                        image: class_imagePath,
+                        isPublish: isPublish,
+                        publisher_id: teacherId,
+                        videos: videos,
+                        schoolId: 110
+                    })
+                })
+            },
+            header: {
+                "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+            success: function (data) {
+                console.log(JSON.parse(data), '保存');
+                var res = JSON.parse(data);
+                if (res.success) {
+                    console.log('保存成功!');
+                    maskClick();
+                    //开始初始化
+                    class_index = 0;
+                    videos.splice(0)
+                    isPublish = 2;
+                    imagePath = '';
+                    $('#class_name').val('');
+                    $('#class_info').val('');
+                    $('.table_data').empty();
+                    $('.image_box').empty();
+                    addVideos('', '');
+                    document.getElementById('classInfo_iframe').contentWindow.refresh();
+                } else {
+                    console.log(res.msg, '保存失败');
+                }
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+
+
+//        var data = {
+//                method: "getCurrentUnionClassList",
+//                courseName: class_name,
+//                content: class_info,
+//                image: class_imagePath,
+//                isPublish: isPublish,
+//                publisher_id: teacherId,
+//                videos: videos,
+//            };
+//            service.doWebService(data, {
+//                onResponse: function (result) {
+//                    console.log(result,'开启成功');
+//                }, onError: function (error) {
+//
+//                }
+//            })
+    }
+
+    //    上传图片
+    function uploadImage() {
+        $("#upload").click();
+        //取消加绑定change事件解决change事件无法控制
+        $("#upload").off("change");
+        $("#upload").change(function () {
+            if (this.files[0]) {
+                var formData = new FormData();
+                formData.append("file" + 0, this.files[0]);
+                formData.append("name" + 0, this.files[0].name);
+                $.ajax({
+                    type: "POST",
+                    url: "https://jiaoxue.maaee.com:8890/Excoord_Upload_Server/file/upload",
+                    enctype: 'multipart/form-data',
+                    data: formData,
+                    // 告诉jQuery不要去处理发送的数据
+                    processData: false,
+                    // 告诉jQuery不要去设置Content-Type请求头
+                    contentType: false,
+                    success: function (res) {
+                        //返回在线图片地址
+                        console.log(res);
+                        imagePath = res;
+                        $('.image_box').html("<img src=" + res + " class='class_image'>")
+                    }
+                });
+            }
+        })
+    }
+</script>
+</html>
