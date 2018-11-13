@@ -67,18 +67,18 @@
 <div class="chapter_createContent">
     <div class="createNav">
         <div class="createLeft">直播章节</div>
-        <div class="createRight" onclick="maskClick()">x</div>
+        <div class="createRight" onclick="maskClick()"><i></i></div>
     </div>
 
     <div class="schedule_content_chapter">
         <div class="chapterContent_chapter">1017回顧</div>
-        <div>排课时间(云校直播可以提前5分钟开课)</div>
-        <div class="table_chapter">
+        <div class="Course-schedule_time">排课时间(云校直播可以提前5分钟开课)</div>
+        <div class="table_chapter ">
             <div class="table_title_chapter">
-                <span>章节名称</span>
-                <span>授课老师</span>
-                <span>授课时间</span>
-                <span>操作</span>
+                <span class="name">章节名称</span>
+                <span class="teacher">授课老师</span>
+                <span class="teacher">授课时间</span>
+                <span class="operation">操作</span>
             </div>
             <div class="table_data_chapter">
                 <!--
@@ -91,10 +91,9 @@
                                  </div>
                  -->
             </div>
-            <button onclick="maskClick()">关闭</button>
         </div>
     </div>
-
+    <div class="schedule_footer"><button class="submitBlue" onclick="maskClick()">关闭</button></div>
 </div>
 
 <!--直播回顧模塊 end-->
@@ -104,34 +103,33 @@
 <div class="class_createContent">
     <div class="createNav">
         <div class="createLeft">新建课堂</div>
-        <div class="createRight" onclick="maskClick()">x</div>
+        <div class="createRight" onclick="maskClick()"><i></i></div>
     </div>
-    <div class="content">
-        <div>
-            课程名称: <input id="class_name" type="text">
+    <div class="content create-content">
+        <div class="create-contentList">
+            <span class="create-contentLeft">课程名称</span><input id="class_name" type="text">
         </div>
-        <div>
-            课程封面:
+        <div class="create-contentList">
+            <span class="create-contentLeft">课程封面</span>
             <div class="image_box">
-
             </div>
-            <button id="uploadImage" onclick="uploadImage()">上传</button>
+            <button id="uploadImage" class="uploadImage" onclick="uploadImage()">上传</button>
 
         </div>
-        <div>
-            课程概述: <textarea id="class_info"></textarea>
+        <div class="create-contentList">
+            <span class="create-contentLeft">课程概述</span><textarea id="class_info" rows="4" ></textarea>
         </div>
     </div>
 
     <div class="schedule_content">
-        <div>设置课表</div>
-        <div class="table">
+        <div class="create-contentLeft setUp-Left">设置课表</div>
+        <div class="table table-right">
             <div class="table_title">
-                <span>课时</span>
-                <span>名称</span>
-                <span>授课老师</span>
-                <span>授课时间</span>
-                <span>操作</span>
+                <span class="table_title_number">课时</span>
+                <span class="table_title_name">名称</span>
+                <span class="table_title_teacher">授课老师</span>
+                <span class="table_title_time">授课时间</span>
+                <span class="table_title_del">操作</span>
             </div>
             <div class="table_data">
                 <!--
@@ -145,15 +143,14 @@
                  -->
             </div>
             <div class="table_bottom">
-                <button onclick="addVideos('','')">添加课时</button>
-                <input id="isPublish" type="checkbox" onchange="isPublish_change()">立即发布
-                <div>
-                    <button onclick="submitClass()">提交</button>
-                </div>
+                <button class="add-class bottom-15" onclick="addVideos('','')">添加课时</button>
+                <div class="bottom-15 release"><input id="isPublish" type="checkbox" onchange="isPublish_change()">立即发布</div>
             </div>
         </div>
     </div>
-
+    <div class="submit-btn">
+        <button class="submitBlue" onclick="submitClass()">提交</button>
+    </div>
 </div>
 <div class="mask" onclick="maskClick()"></div>
 <input id="upload" type="file" accept=".jpg,.png,.gif,.PNG,.JPG,.GIF">
@@ -308,10 +305,10 @@
                                 console.log(video[k]);
                                 var flag = video[k].videoStatus == 1?'未开课':video[k].videoStatus == 2?'正在直播':'课程回顾';
                                 $('.table_data_chapter').append("<div class='list_item'>\n" +
-                                   "                                 <span>"+video[k].name+"</span>\n" +
-                                   "                                 <span>" + teacherName + "</span>\n" +
-                                   "                                 <span>"+formatTime(new Date(video[k].liveTime),true)+"</span>\n" +
-                                   "                                 <button onclick='toLive(\""+flag+"\","+JSON.stringify(video[k])+")'>"+flag+"</button>\n" +
+                                   "                                 <span class='name'>"+video[k].name+"</span>\n" +
+                                   "                                 <span class='teacher'>" + teacherName + "</span>\n" +
+                                   "                                 <span class='teacher'>"+formatTime(new Date(video[k].liveTime),true)+"</span>\n" +
+                                   "                                 <span><button onclick='toLive(\""+flag+"\","+JSON.stringify(video[k])+")'>"+flag+"</button></span>\n" +
                                    "                                 </div>");
                             }
 
@@ -344,15 +341,15 @@
     function addVideos(name, liveTime, callback) {
 //        console.log('你好我是王教练');
         class_index++;
-        $('.table_data').append("<div class='list_item'>\n" +
-            "<span>" + class_index + "</span>\n" +
-            "<span><input oninput='input_chapterName(" + (class_index - 1) + ",this)' type='text'></span>\n" +
-            "<span>" + teacherName + "</span>\n" +
-            "<div class=\"c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10\">\n"+
+        $('.table_data').append("<div class='list_item table_title'>\n" +
+            "<span class='table_title_number table_title_numberT'>" + class_index + "</span>\n" +
+            "<span class='table_title_name'><input oninput='input_chapterName(" + (class_index - 1) + ",this)' type='text'></span>\n" +
+            "<span class='table_title_teacher'>" + teacherName + "</span>\n" +
+            "<div class=\"c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10 table_title_time\">\n"+
             "                              <i class=\"c-datepicker-range__icon kxiconfont icon-clock\"></i>\n"+
             "                              <input type=\"text\" autocomplete=\"off\" name=\"\" placeholder=\"选择日期\" class=\" c-datepicker-data-input only-date\" value=\"\">\n"+
             "                    </div> "+
-            "<span onclick='delete_chapter(" + (class_index - 1) + ",this)'>删除</span>\n" +
+            "<span class='table_title_del' onclick='delete_chapter(" + (class_index - 1) + ",this)'><i></i></span>\n" +
             "</div>");
         videos.push({
             name: name,
@@ -533,14 +530,14 @@ console.log($(event.$input).parent().parent().index(),'下标')
                     // 章节videos 对象回填
                     for(var k in video){
                         $('.table_data').append("<div class='list_item'>\n" +
-                                    "                                 <span>" + video[k].squence + "</span>\n" +
-                                    "                                 <span><input oninput='input_chapterName(video[k].squence,this)' value="+video[k].name+" type='text'></span>\n" +
-                                    "                                 <span>" + teacherName + "</span>\n" +
-                                    "                                  <div class=\"c-datepicker-date-editor c-datepicker-single-editor J-datepickerTime-single mt10\">\n"+
+                                    "                                 <span class='table_title_number table_title_numberT'>" + video[k].squence + "</span>\n" +
+                                    "                                 <span class='table_title_name'><input oninput='input_chapterName(video[k].squence,this)' value="+video[k].name+" type='text'></span>\n" +
+                                    "                                 <span class='table_title_teacher'>" + teacherName + "</span>\n" +
+                                    "                                  <div class=\"c-datepicker-date-editor c-datepicker-single-editor J-datepickerTime-single mt10 table_title_time\">\n"+
                                                                                          "                              <i class=\"c-datepicker-range__icon kxiconfont icon-clock\"></i>\n"+
                                                                                          "                              <input type=\"text\" autocomplete=\"off\" name=\"\" placeholder='"+formatTime(new Date(video[k].liveTime),true)+"' class=\" c-datepicker-data-input only-date\">\n"+
                                                                                          "                    </div> \n" +
-                                    "                                 <span onclick='delete_chapter(video[k].squence,this)'>删除</span>\n" +
+                                    "                                 <span onclick='delete_chapter(video[k].squence,this)' class='table_title_del'><i></i></span>\n" +
                                     "                                 </div>");
 //                        console.log(video[k].name,'章节名称');
 //                        console.log(video[k].squence,'章节序列');
