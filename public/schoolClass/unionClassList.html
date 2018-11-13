@@ -307,11 +307,10 @@
 
     function continueClass(clazzId,title,password){
         var NParams = "";
-//        var browser = platform.name;
-//        if(browser.indexOf("Electron") != -1){
-//            NParams = "&startType=1_n";
-//        }
-        NParams = "&startType=1_n";
+        var browser = platform.name;
+        if(browser.indexOf("Electron") != -1){
+            NParams = "&startType=1_n";
+        }
         var url = "teacherUnionMaster.html?clazzId="+clazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+teacherName+""+NParams;
         window.open(url,"CLASS_WINDOW");
     }
