@@ -31,12 +31,14 @@ function getUnionClassList() {
                 console.log(infos, 'infos');
                 if (infos.length > 0) {
                     for(var k in infos){
+                        var isPublish = infos[k].isPublish == 1?'已发布':'未发布';
+                        var isPublishClass = infos[k].isPublish == 1?'course-tagBlue':'course-tagOrange';
                         $('.list').append("<div class='list_item'>" +
                             "    <div class='left_image'>" +
                             "    <img src='"+infos[k].image+"' alt=''>" +
                             "    </div>" +
                             "    <div class='middle_content'>" +
-                            "    <div class='course-title'><span class='course-titleText public-textHidden'>"+infos[k].courseName+"</span><span class='course-tagBlue'>已发布</span></div>" +
+                            "    <div class='course-title'><span class='course-titleText public-textHidden'>"+infos[k].courseName+"</span><span class='"+isPublishClass+"'>"+isPublish+"</span></div>" +
                                 "    <div class='course-listText'><span class='course-Light_grey'>授课老师</span><span class='course-Dark_grey'>"+infos[k].users[0].userName+"</span></div>" +
                                 "    <div class='course-listText'><span class='course-Light_grey'>上课时间</span><span class='course-Dark_grey'>"+formatTime(new Date(infos[k].courseTime))+"---"+formatTime(new Date(infos[k].endTime))+"</span></div>" +
                                 "    <div class='course-listText'><span class='course-Light_grey'>课程概述</span><span class='course-Dark_grey public-textHidden course-titleText'>"+infos[k].content+"</span></div>" +

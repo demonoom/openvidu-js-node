@@ -298,6 +298,8 @@ body {
     z-index: 200;
     display: none;
     overflow: auto;
+    animation: none;
+    transition:none;
 }
 .schedule_content_chapter{
     height: 452px;
@@ -629,7 +631,7 @@ input, textarea, button{
 .c-datepicker-button--text{
     float: left !important;
 }
-.aBa-play, .aBa-review{
+.aBa-play, .aBa-review, .aBa-notPlay{
     width: 18px;
     height: 18px;
     display: inline-block;
@@ -653,6 +655,15 @@ input, textarea, button{
     background: url("../img/aBa-reviewh.png") no-repeat;
     background-size: 100%;
     width: 17px;
+}
+.aBa-notPlay{
+    width: 21px;
+    height: 18px;
+    background: url("../img/aBa-notPlay.png") no-repeat;
+    background-size: 100%;
+}
+.aBa-notPlay:hover{
+    background: url("../img/aBa-notPlayH.png") no-repeat;
 }
 .public-textHidden{
     overflow: hidden;

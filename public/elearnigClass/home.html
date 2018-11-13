@@ -102,7 +102,7 @@
 <!-- 新建课堂模块 start-->
 <div class="class_createContent">
     <div class="createNav">
-        <div class="createLeft">新建课堂</div>
+        <div class="createLeft"></div>
         <div class="createRight" onclick="maskClick()"><img src="img/aBa-close.png" width="12"></div>
     </div>
     <div class="content create-content">
@@ -273,6 +273,7 @@
 
     //子页面调用新建课堂
     function createClass() {
+        $('.createLeft').text('新建课堂');
         $('.class_createContent').show(150);
         $('.mask').show();
     }
@@ -299,14 +300,16 @@
                         if(res.success){
                             $('.table_data_chapter').empty();
                             var video = res.response.videos;
+                            $('.chapterContent_chapter').text(res.response.content)
                             for(var k in video){
                                 console.log(video[k]);
-                                var flag = video[k].videoStatus == 1?'未开课':video[k].videoStatus == 2?'正在直播':'课程回顾';
+                                var flag = video[k].videoStatus == 1?'':video[k].videoStatus == 2?'':'';
+                                var flagClass = video[k].videoStatus == 1?'aBa-notPlay':video[k].videoStatus == 2?'aBa-play':'aBa-review';
                                 $('.table_data_chapter').append("<div class='list_item'>\n" +
                                    "                                 <span class='name'>"+video[k].name+"</span>\n" +
                                    "                                 <span class='teacher'>" + teacherName + "</span>\n" +
                                    "                                 <span class='time timeList'>"+formatTime(new Date(video[k].liveTime),true)+"</span>\n" +
-                                   "                                 <span class='operation'><button class='aBa-play' onclick='toLive(\""+flag+"\","+JSON.stringify(video[k])+")'>"+flag+"</button></span>\n" +
+                                   "                                 <span class='operation'><button class='"+flagClass+"' onclick='toLive(\""+flag+"\","+JSON.stringify(video[k])+")'>"+flag+"</button></span>\n" +
                                    "                                 </div>");
                             }
 
@@ -482,6 +485,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
         console.log(publisher_id, 'publisher_id');
         editorFlag = true;
         initData();
+
         $.ajax({
             type: "POST",
             url: "http://192.168.50.15:9007/elearning/elearningControl/",
@@ -504,6 +508,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
                     var video = data.videos;
                     videos.splice(0);
                     createClass();
+                    $('.createLeft').text('编辑课堂');
                     $('.table_data').empty();
                     $('.image_box').empty();
 //                    console.log(data.courseName,'课程名称');
@@ -545,26 +550,6 @@ console.log($(event.$input).parent().parent().index(),'下标')
                                     squence: video[k].squence
                                 });
                                 initDate();
-//                        $('.table_data').append("<div class='list_item'>\n" +
-//                                    "                                 <span class='table_title_number table_title_numberT'>" + video[k].squence + "</span>\n" +
-//                                    "                                 <span class='table_title_name'><input oninput='input_chapterName(video[k].squence,this)' value="+video[k].name+" type='text'></span>\n" +
-//                                    "                                 <span class='table_title_teacher'>" + teacherName + "</span>\n" +
-//                                    "                                  <div class=\"c-datepicker-date-editor c-datepicker-single-editor J-datepickerTime-single mt10 table_title_time\">\n"+
-//                                                                                         "                              <i class=\"c-datepicker-range__icon kxiconfont icon-clock\"></i>\n"+
-//                                                                                         "                              <input type=\"text\" autocomplete=\"off\" name=\"\" placeholder='"+formatTime(new Date(video[k].liveTime),true)+"' class=\" c-datepicker-data-input only-date\">\n"+
-//                                                                                         "                    </div> \n" +
-//                                    "                                 <span onclick='delete_chapter(video[k].squence,this)' class='table_title_del'><i></i></span>\n" +
-//                                    "                                 </div>");
-//                        initDate();
-//addVideos("","","");
-//                        console.log(video[k].name,'章节名称');
-//                        console.log(video[k].squence,'章节序列');
-//                        videos.push({
-//                                    name: video[k].name,
-//                                    liveTime: video[k].liveTime,
-//                                    userID: teacherId,
-//                                    squence: video[k].squence
-//                        });
 
                     }
                 }
