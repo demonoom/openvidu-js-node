@@ -5,6 +5,10 @@
 
     turnserver 单独安装到 54.255.200.136(vpn服务器)上,其他的kms服务的turnserver使用此turnserver就可以了
 
+    所以需要在 /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini 配置:
+      stunServerAddress=54.255.200.136
+      stunServerPort=3478
+
 2:使用java的方式启动openvidu服务
 
     java -Dopenvidu.secret=MY_SECRET -Dserver.ssl.key-store=/root/Excoord/Projects/openvidu_java/_.maaee.com.jks -Dserver.ssl.key-store-password=Excoord87651818 -Dserver.ssl.key-alias=1 -Dopenvidu.publicurl=https://kms.maaee.com:4443 -Dkms.uris=[\"ws://10.30.248.188:8888/kurento\",\"ws://10.30.248.170:8888/kurento\",\"ws://10.28.207.199:8888/kurento\"] -jar openvidu-server-2.4.0.jar
