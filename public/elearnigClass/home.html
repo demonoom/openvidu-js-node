@@ -50,6 +50,18 @@
 
 </div>
 
+
+
+<!-- 课程回顾模块 start-->
+<div class="review">
+<div class="review_title">
+<div>課堂回顧</div>
+<div onclick="hideReview()">Ｘ</div>
+</div>
+<div class="review_content"></div>
+</div>
+<!-- 课程回顾模块 end-->
+
 <!--直播回顧模塊 start-->
 
 <div class="chapter_createContent">
@@ -299,7 +311,7 @@
                                    "                                 <span>"+video[k].name+"</span>\n" +
                                    "                                 <span>" + teacherName + "</span>\n" +
                                    "                                 <span>"+formatTime(new Date(video[k].liveTime),true)+"</span>\n" +
-                                   "                                 <button onclick='toLive(\""+flag+"\")'>"+flag+"</button>\n" +
+                                   "                                 <button onclick='toLive(\""+flag+"\","+JSON.stringify(video[k])+")'>"+flag+"</button>\n" +
                                    "                                 </div>");
                             }
 
@@ -320,6 +332,7 @@
         $('.mask').hide();
         $('.class_createContent').hide();
         $('.chapter_createContent').hide();
+        $('.review').hide();
         editorFlag = false;
     }
 
@@ -634,6 +647,11 @@ console.log($(event.$input).parent().parent().index(),'下标')
         });
     }
 
+
+    function hideReview(){
+        $('.review').hide();
+    }
+
     //    上传图片
     function uploadImage() {
         $("#upload").click();
@@ -666,14 +684,70 @@ console.log($(event.$input).parent().parent().index(),'下标')
 
 
 
-    function toLive(flag){
+    function toLive(flag,video){
         console.log(flag);
-        if(flag == '未开课'){
+        if(flag == '未开课' || flag == '正在直播'){
 
-        }else if(flag == '正在直播'){
+//            console.log(video);
+//            console.log(video.liveTime);
+//            layer.msg('正在开启..');
+        var originTime = video.liveTime;
+        //获取当前时间 时间戳
+        var rightTime = new Date();
+        var isCurrentDay = isToday(originTime);
+        if ((originTime - 300000) > Date.parse(rightTime)) {
+            layer.msg('未到开课时间');
+            return;
+        } else if (isCurrentDay === false) {
+            layer.msg('授课时间已过,请修正后再重新开课,谢谢!');
+            return;
+        }else{
+            $.ajax({
+                        type: "POST",
+                        url: "http://192.168.50.15:9007/elearning/elearningControl/",
+                        data: {
+                            params: JSON.stringify({
+                                method: "findVideoById",
+                                "id": video.id,
+                            })
+                        },
+                        header: {
+                            "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
+                        },
+                        success: function (data) {
+                            var res = JSON.parse(data);
+                            console.log(res);
+                            if (res.success) {
+                                var targetType = 1;
+                                var userId = teacherId;
+                                var targetId = res.response.id;
+                                var title = res.response.name;
+                                var requestUrl = "https://www.maaee.com/Excoord_PhoneService/elearningClass/teacherElearningLive/"
+                                requestUrl += userId + "/" + targetType + "/" + targetId + "/" + title + "?title=" + title;
+                                window.open(requestUrl);
+                            } else {
+                                layer.msg(res.msg, '查询失败');
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+        }
+
 
         }else if(flag == '课程回顾'){
+//            layer.msg('课程回顾');
+            var requestUrl = 'http://jiaoxue.maaee.com:8093/#/cloundSchoolDetail';
+            requestUrl += "?vid="+video.virtual_classId+"&userId="+teacherId+"&type=2"+"&name="+encodeURI(video.name);
 
+            $('.review_content').empty();
+            $('.review').show();
+            $('.review_content').append("" +
+             "<iframe src="+requestUrl+"></iframe>" +
+              "")
+            //            window.open(requestUrl);
+//            http://jiaoxue.maaee.com:8093/#/cloundSchoolDetail?vid=223741&userId=129392&type=2&name=%E5%9B%9E%E9%A1%BE
         }
     }
 
