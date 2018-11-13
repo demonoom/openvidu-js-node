@@ -5260,3 +5260,14 @@ span.justify > span {
 	background-color: #edf2ff;
 	color: #333;
 }
+.admin_empty{
+	background: url("../img/admin_empty.png") no-repeat;
+	width: 500px;
+	height: 421px;
+	background-size: 100%;
+}
+.admin_emptyText{
+	font-size: 42px;
+	color: #666;
+	margin-top: 15px;
+}
