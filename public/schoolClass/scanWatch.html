@@ -18,7 +18,7 @@
 	<script type="text/javascript" src="js/jquery.min.js?v=3"></script>
     <script type="text/javascript" src="js/jquery.form.js"></script>
     <script src="js/clazz_websocket_connection.js?v=7" type="text/javascript"></script>
-    
+	  <link href="css/record_list.css" rel="stylesheet" type="text/css" />
     <!-- 引入service类 -->
     <script type="text/javascript" src="js/service.js?v=5"></script>
     
@@ -384,7 +384,7 @@
      var connection = new ClazzConnection();
      connection.clazzWsListener = {onError:function(errorMsg){
     	 //显示error并且回退页面
-    	 $("body").html("<center>下课了~~</center>");
+    	 $("body").html("<center class='empty_center'><div class='admin_empty'></div><div class='admin_emptyText'>下课了，欢迎下次再来~</div></center>");
      },onWarn:function(warnMsg){
     	 //显示warning
     	 alert(warnMsg);
@@ -397,7 +397,7 @@
 			}
 		 }else if(command == "classOver"){
     		 classOver = true;
-    		 $("body").html("<center>下课了~~</center>");
+    		 $("body").html("<center class='empty_center'><div class='admin_empty'></div><div class='admin_emptyText'>下课了，欢迎下次再来~</div></center>");
     	 }//推送教案
     	 else if(command == "pushHandout"){
     		 var url = info.data.url;
