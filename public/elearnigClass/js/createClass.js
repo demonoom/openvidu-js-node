@@ -36,15 +36,15 @@ function getUnionClassList() {
                             "    <img src='"+infos[k].image+"' alt=''>" +
                             "    </div>" +
                             "    <div class='middle_content'>" +
-                            "    <div>"+infos[k].courseName+" <span>已发布</span></div>" +
-                            "    <div>授课老师:"+infos[k].users[0].userName+"</div>" +
-                            "    <div>上课时间:"+formatTime(new Date(infos[k].courseTime))+"---"+formatTime(new Date(infos[k].endTime))+"</div>" +
-                            "    <div>课程概述:"+infos[k].content+"</div>" +
+                            "    <div class='course-title'><span class='course-titleText public-textHidden'>"+infos[k].courseName+"</span><span class='course-tagBlue'>已发布</span></div>" +
+                                "    <div class='course-listText'><span class='course-Light_grey'>授课老师</span><span class='course-Dark_grey'>"+infos[k].users[0].userName+"</span></div>" +
+                                "    <div class='course-listText'><span class='course-Light_grey'>上课时间</span><span class='course-Dark_grey'>"+formatTime(new Date(infos[k].courseTime))+"---"+formatTime(new Date(infos[k].endTime))+"</span></div>" +
+                                "    <div class='course-listText'><span class='course-Light_grey'>课程概述</span><span class='course-Dark_grey public-textHidden course-titleText'>"+infos[k].content+"</span></div>" +
                             "    </div>" +
                             "    <div class='right_oper'>" +
-                            "    <div onclick='live_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'>直播</div>" +
-                            "    <div onclick='editor_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'>编辑</div>" +
-                            "    <div onclick='delete_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'>删除</div>" +
+                            "    <div onclick='live_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'><span class='live'></span></div>" +
+                            "    <div onclick='editor_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'><span class='editor'></span></div>" +
+                            "    <div onclick='delete_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'><span  class='del'></span></div>" +
                             "    </div>" +
                             "    </div>");
                     }
