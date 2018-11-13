@@ -38,13 +38,13 @@ function getUnionClassList() {
                             "    <div class='middle_content'>" +
                             "    <div>"+infos[k].courseName+" <span>已发布</span></div>" +
                             "    <div>授课老师:"+infos[k].users[0].userName+"</div>" +
-                            "    <div>上课时间:"+infos[k].courseTime+"---"+infos[k].endTime+"</div>" +
+                            "    <div>上课时间:"+formatTime(new Date(infos[k].courseTime))+"---"+formatTime(new Date(infos[k].endTime))+"</div>" +
                             "    <div>课程概述:"+infos[k].content+"</div>" +
                             "    </div>" +
                             "    <div class='right_oper'>" +
-                            "    <div onclick='live_click()'>直播</div>" +
-                            "    <div onclick='editor_click("+infos[k].courseClassId+","+infos[k].publisher_id+")'>编辑</div>" +
-                            "    <div onclick='delete_click()'>删除</div>" +
+                            "    <div onclick='live_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'>直播</div>" +
+                            "    <div onclick='editor_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'>编辑</div>" +
+                            "    <div onclick='delete_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'>删除</div>" +
                             "    </div>" +
                             "    </div>");
                     }
@@ -93,24 +93,42 @@ function getUnionClassList() {
 }
 
 function createClass() {
-    console.log(parent.window);
+    // console.log(parent.window);
     parent.window.createClass();
 
 }
 
-function live_click(){
-    console.log('直播');
+function live_click(id,publisher_id){
+    // console.log('直播');
+    parent.window.showIframe(id,publisher_id);
 }
 
 function editor_click(id,publisher_id){
-    console.log('编辑');
+    // console.log('编辑');
     parent.window.updateClass(id,publisher_id);
 }
 
-function delete_click(){
-    console.log('删除');
+function delete_click(id,publisher_id){
+    // console.log('删除');
+    parent.window.deleteClass(id,publisher_id);
 }
 
 function refresh(){
     location.reload();
 }
+
+function formatTime(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const second = date.getSeconds();
+//        return [year, month, day].map(formatNumber).join('-') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+    return [year, month, day].map(formatNumber).join(':');
+}
+function formatNumber(n) {
+    n = n.toString() ;
+    return n[1] ? n : '0' + n;
+}
+
