@@ -303,7 +303,7 @@
                             $('.chapterContent_chapter').text(res.response.content)
                             for(var k in video){
                                 console.log(video[k]);
-                                var flag = video[k].videoStatus == 1?'':video[k].videoStatus == 2?'':'';
+                                var flag = video[k].videoStatus == 1?'未开课':video[k].videoStatus == 2?'正在直播':'课程回顾';
                                 var flagClass = video[k].videoStatus == 1?'aBa-notPlay':video[k].videoStatus == 2?'aBa-play':'aBa-review';
                                 $('.table_data_chapter').append("<div class='list_item'>\n" +
                                    "                                 <span class='name'>"+video[k].name+"</span>\n" +
