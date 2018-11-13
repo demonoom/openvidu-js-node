@@ -273,8 +273,8 @@ body {
 
 /*新建课堂模块*/
 .class_createContent {
-    width: 629px;
-    height: 569px;
+    width: 630px;
+    height: 568px;
     background: white;
     position: absolute;
     top: 50%;
@@ -283,7 +283,7 @@ body {
     box-shadow: 0px 6px 31px 0px rgba(0, 0, 0, 0.39);
     z-index: 200;
     display: none;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .chapter_createContent{
@@ -320,8 +320,15 @@ body {
 .schedule_content_chapter .teacher{
     width: 20%;
 }
+.schedule_content_chapter .time{
+    width: 23%;
+}
+.schedule_content_chapter .timeList{
+    font-size: 12px;
+}
 .schedule_content_chapter .operation{
-    width: 10%;
+    width: 8%;
+    text-align: center;
 }
 .schedule_footer {
     text-align: center !important;
@@ -363,8 +370,8 @@ body {
     display: inline-block;
 }
 .review{
-    width: 500px;
-    height: 400px;
+    width: 620px;
+    height: 600px;
     background: white;
     position: absolute;
     top: 50%;
@@ -375,11 +382,17 @@ body {
     display: none;
     overflow: auto;
 }
+.review_content{
+    width: 100%;
+    height: 557px;
+    overflow: hidden;
+}
 .review iframe{
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
+    border: none;
 }
 
 .mask {
@@ -412,21 +425,26 @@ body {
     color: #666;
 }
 .schedule_content{
-    height: 260px;
+    height: 236px;
     overflow-y: auto;
+    margin-bottom: 12px;
+    padding-top: 0
 }
 .create-content .create-contentLeft,  .schedule_content .create-contentLeft{
     margin-right: 25px;
     display: inline-block;
     vertical-align: top;
     line-height: 1;
-    padding-top: 2px;
+    padding-top: 6px;
 }
 .create-contentList, .bottom-15{
     margin-bottom: 15px;
 }
 .create-contentList .image_box{
     display: inline-block;
+    font-size: 0;
+    vertical-align: bottom;
+    margin-right: 8px;
 }
 .create-contentList button.uploadImage, button.add-class{
     background: #2dbe60 !important;
@@ -435,18 +453,13 @@ body {
     color: #fff;
     outline: none;
     cursor: pointer;
+    border-radius: 4px;
 }
+
 .add-class{
     display: block;
     width: 100%;
     font-size: 14px;
-}
-.create-contentList textarea{
-    border-color: #d9d9d9;
-    margin: 0;
-    padding: 0;
-    width: 400px;
-    color: #666;
 }
 .table-right{
     width: calc(100% - 86px);
@@ -471,18 +484,22 @@ body {
 }
 .table_title_teacher{
     width: 100px;
+    text-align: center;
 }
 .table_title_time{
-    width: 100px;
+    width: 130px;
+    text-align: center;
 }
 .table_title_del{
-    width: 50px;
+    width: 40px;
+    text-align: center;
 }
 .table_title_del i{
     display: inline-block;
     background: url("../img/aBa-del.png") no-repeat;
     width: 13px;
     height:12px;
+    cursor: pointer;
 }
 .table_data .table_title{
     background: #fff;
@@ -500,7 +517,7 @@ body {
     outline: none;
     cursor: pointer;
 }
-input, textarea{
+input, textarea, button{
     -web-kit-appearance:none;
     -moz-appearance: none;
     outline: none;
@@ -537,9 +554,112 @@ input, textarea{
     background-size: 12px;
 }
 .class_image{
-    width: 10px;
-    height: 10px;
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
 }
 .setUp-Left{
     padding-top:10px !important
+}
+.table_bottom{
+    margin-top: 5px;
+}
+.create-contentList input, .create-contentList textarea, .table_title_name input{
+    border: 1px solid #d9d9d9;
+    padding: 4px 6px;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.3;
+    border-radius: 4px;
+}
+.add-CourseName{
+    width: 496px;
+}
+.c-datepicker-date-editor{
+    padding: 4px 6px !important;
+    line-height: 1.5 !important;
+    height: 28px !important;
+    border: 1px solid #d9d9d9 !important;
+}
+.c-datepicker-date-editor .c-datepicker-range__icon{
+    display: none;
+}
+.c-datepicker-data-input{
+    font-size: 12px !important;
+}
+.c-datepicker-data-input.only-date{
+    width:118px !important
+}
+.c-datepicker-picker [slot=sidebar], .c-datepicker-picker__sidebar{
+    display: none !important;
+}
+.c-datepicker-picker [slot=sidebar]+.c-datepicker-picker__body, .c-datepicker-picker__sidebar+.c-datepicker-picker__body{
+    margin-left: 0 !important;
+}
+.c-datepicker-picker{
+    line-height: 24px !important;
+}
+.c-datepicker-date-picker.has-sidebar{
+    width: 220px !important;
+    margin-top: -28px !important;
+}
+.c-datepicker-date-picker__time-header{
+    padding: 5px 5px 5px;
+}
+.c-datepicker-input--small .c-datepicker-input__inner{
+    height: 26px !important;
+    line-height: 26px !important;
+}
+.c-datepicker-date-picker__header{
+    margin: 5px 5px !important;
+}
+.kxiconfont, .c-datepicker-date-picker__header-label{
+    font-size: 14px !important;
+}
+.c-datepicker-picker__icon-btn{
+    padding: 2px !important;
+}
+.c-datepicker-date-table td, .c-datepicker-date-table td div{
+    height: 24px !important;
+    padding: 1px 0 !important;
+}
+.c-datepicker-date-table th{
+    padding: 0 5px 2px 5px !important;
+}
+.c-datepicker-button--text{
+    float: left !important;
+}
+.aBa-play, .aBa-review{
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+.aBa-play{
+    background: url("../img/aBa-play.png") no-repeat;
+    background-size: 100%;
+}
+.aBa-play:hover{
+    background: url("../img/aBa-playH.png") no-repeat;
+    background-size: 100%;
+}
+.aBa-review{
+    background: url("../img/aBa-review.png") no-repeat;
+    background-size: 100%;
+    width: 17px;
+}
+.aBa-review:hover{
+    background: url("../img/aBa-reviewh.png") no-repeat;
+    background-size: 100%;
+    width: 17px;
+}
+.public-textHidden{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+}
+.Publish-btn{
+    margin-right: 6px;
 }
