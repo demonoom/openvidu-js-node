@@ -1,0 +1,582 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+
+    <title>
+		欢迎进入小蚂蚁直播课堂
+    </title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta name="viewport" content="width=device-width,user-scalable=no" />
+	<meta content="width=device-width, initial-scale=1.0, minimum-scale=0.35, maximum-scale=0.35, user-scalable=0" name="viewport" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<script type="text/javascript" src="js/jquery.min.js?v=3"></script>
+    <script type="text/javascript" src="js/jquery.form.js"></script>
+    <script src="js/clazz_websocket_connection.js?v=7" type="text/javascript"></script>
+    
+    <!-- 引入service类 -->
+    <script type="text/javascript" src="js/service.js?v=5"></script>
+    
+    <link href="js/danmu/css/barrager.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="js/danmu/js/jquery.barrager.min.js"></script>
+    
+    
+    <style type="text/css">
+    
+	  body{
+	    padding: 0px;
+	    margin: 0;
+	    background:#f3f3f3;
+	  }
+	  
+	  html {
+	     overflow: hidden; 
+	  }
+	  .ppt_cont{
+		  display:flex;
+		  flex-flow: nowrap column;
+		  overflow: hidden;
+		  background:#000
+	  }
+      #board_image_container{
+         position: relative;
+    	 display: flex;
+    	 flex-flow: column;
+    	 overflow: hidden;
+    	 height:55%
+      }
+      
+      #board_imge_cell{
+        display: block;
+        vertical-align: middle;
+        text-align: center;
+        height:100%;
+        width:100%;
+        margin:0;
+        background: #333
+      }
+      #board_imge_cell iframe{
+      border:0;
+      position:relative;
+      top: -50px;
+      overflow: hidden;
+      background:#333
+      }
+      .board_image{
+        vertical-align: middle;
+        max-width: 100%;
+        max-height:100%;
+      }
+      
+      #board_video_container{
+	        background: black;
+	        width: 100%;
+	        display: none;
+      }
+      #board_zuoti_container{
+	        width: 100%;
+	        display: none;
+      }
+      #board_gongping_container{
+	        width: 100%;
+	        display: none;
+      }
+      
+      #huazhonghua{
+	        position:absolute;
+	        top:15px;
+	        left:15px;
+	        width: 200px;
+	        height: 200px;
+      }
+      
+      #huazhonghua img{
+	        max-width: 100%;
+	        max-height: 100%;
+	        border:6px solid #666;
+      }
+      
+      #canyu{
+         float:right;
+      }
+      
+      .barrage_box div.p a{ font-size: 24px;}
+      
+	  .video_ten{
+		      background:#000;
+		      position: relative;
+		      height:45%;
+	   }
+	   
+	   .video_ten video{
+		    width: 100%;
+		    height:100%;
+		    position: absolute;
+		    top:50%;
+		    left:50%;
+		    transform:translate(-50%,-50%);
+		    -ms-transform:translate(-50%,-50%); 	/* IE 9 */
+		    -moz-transform:translate(-50%,-50%); 	/* Firefox */
+		    -webkit-transform:translate(-50%,-50%); /* Safari 和 Chrome */
+		    -o-transform:translate(-50%,-50%); 	/* Opera */
+		    background:#000
+		}
+		
+		.talk_tab{
+		    background: -webkit-linear-gradient(#6d6d6d, #303030); /* Safari 5.1 - 6.0 */
+		    background: -o-linear-gradient(#6d6d6d, #303030); /* Opera 11.1 - 12.0 */
+		    background: -moz-linear-gradient(#6d6d6d, #303030); /* Firefox 3.6 - 15 */
+		    background: linear-gradient(#6d6d6d, #303030); /* 标准的语法 */
+		    color:#c3c3c3;
+		    padding:18px 10px 18px 20px;
+		    font-size:30px;
+		    z-index: 1;
+		}
+		.talk_tab .select{
+			color:#fff
+		}
+		span.line{
+			height:18px;
+			width:1px;
+			margin:0 20px;
+			background: #bfbfbf;
+			display: inline-block;
+		}
+		.hudong{
+			color: #fff;
+			background: #53a0ff;
+			padding: 0px 40px;
+			margin-top: 1px;
+			border-radius: 4px;
+			line-height: 108px;
+			font-size: 40px;
+		}
+		#pptTab, #danmuTab{
+			height:calc(100% - 81px)
+		}
+		#messageContent{
+			margin:0;
+			height: calc(100% - 208px);
+			padding: 30px;
+			overflow-y:auto
+		}
+		#messageContent li{
+		    list-style: none;
+		}
+	    .input_message {
+			background: #f5f5f7;
+			height: 108px;
+			padding: 20px;
+			text-align:left;
+			font-size:30px
+		}
+		.input_message input {
+			border: 1px solid #ddd;
+			border-radius: 12px;
+			padding: 0 22px;
+			max-height: 108px;
+			min-height: 108px;
+			overflow-y: auto;
+			width: calc(100% - 182px);
+			display: inline-block;
+			font-size:40px;
+			outline:none;
+			box-shadow: none !important;
+		}
+		.input_message .submit {
+			background: #1aad1a;
+			color: #fff;
+			padding: 0;
+			border: none;
+			line-height: 34px;
+			border-radius: 4px;
+			margin-left: 10px;
+			width: 62px;
+			font-size: 14px;
+			display: inline-block;
+			position: relative;
+			top: 1px;
+			outline:none;
+		}
+		.message {
+			margin-bottom: 48px;
+			float: left;
+			width: 100%;
+			text-align:left
+		}
+		.message.me {
+			float: right;
+			text-align: right;
+			clear: right;
+		}
+		.message_userL {
+			margin-left: 10px;
+		}
+		.message_userR {
+			margin-right: 10px;
+		}
+		.message.me .userAvatar {
+			float: right;
+		}
+		.message.me .content {
+			overflow: hidden;
+		}
+		.bubble.bubble_primary {
+			background-color: #a2e65b;
+		}
+		.bubble.right:after, .bubble.right:before {
+			left: 100%;
+		}
+		.bubble.bubble_primary.right.arrow_primary:before, .bubble.bubble_primary.right:after {
+			border-left-color: #a2e65b;
+			border-left-width: 12px;
+		}
+		.message_userR, .message_userL {
+			color: #adadad;
+			font-size: 32px;
+			position: relative;
+			top: -2px;
+			line-height: 2;
+		}
+		 .message .userAvatar {
+			width: 120px;
+			height: 120px;
+			border-radius: 6px;
+			-moz-border-radius: 6px;
+			-webkit-border-radius: 6px;
+			float: left;
+			cursor: pointer;
+		}
+		 .message .content {
+			overflow: hidden;
+		}
+		.bubble {
+			max-width: 75%;
+			min-height: 120px;
+			display: inline-block;
+			vertical-align: top;
+			position: relative;
+			text-align: left;
+			font-size: 40px;
+			border-radius: 9px;
+			-moz-border-radius: 9px;
+			-webkit-border-radius: 9px;
+			margin: 0 30px;
+			line-height: 1.3;
+		}
+		.bubble.bubble_default {
+			background-color: #fff;
+		}
+		.bubble.left:after, .bubble.left:before {
+			right: 100%;
+		}
+		.bubble:after, .bubble:before {
+			position: absolute;
+			top: 14px;
+			border: 18px solid transparent;
+			content: " ";
+		}
+		 .bubble_cont {
+			word-wrap: break-word;
+			word-break: break-all;
+			min-height: 120px;
+			position: relative;
+		}
+		.bubble_cont .plain {
+			padding: 34px 36px;
+		}
+		pre {
+			margin: 0;
+			font-family: inherit;
+			font-size: inherit;
+			white-space: pre-wrap;
+			word-break: normal;
+			font-size: 40px;
+		}
+		.bubble.left:after {
+			border-right-color: #fff;
+			border-right-width: 12px;
+		}
+    </style>
+  </head>
+  
+  <body>
+  
+      <div class="ppt_cont">
+	       <div class="video_ten" id="v_container">
+				<video id="hlsVideo" height="100%"  width="100%"  webkit-playsinline controls="controls" x5-playsinline="true" playsinline="true" webkit-playsinline="true"></video>
+	       </div>
+	       <!-- <ul class="tabs"> 
+					<li class="active"><a href="#tab1">演示文稿</a></li> 
+					<li><a href="#tab2">互动讨论</a></li> 
+		   </ul>  -->
+	       <div id="board_image_container" >
+		       <div class="talk_tab">
+		       		<span id="pptSpan" class="select" onclick="changeContentTab('pptTab')">演示文稿</span>
+		       		<span class="line"></span>
+		       		<span id="danmuSpan" onclick="changeContentTab('danmuTab')">互动讨论</span>
+		       </div>
+			          <div id="pptTab">
+			          		<div id="board_imge_cell">
+			                    <iframe name="ppt_frame" id="ppt_frame"  height="100%" width="100%"></iframe>
+					          </div>
+			          </div>
+			          <div id="danmuTab">
+		            	<!-- <div class="talk_tab" onclick="changeContentTab('danmuTab')">互动讨论 -->
+	                      <!--                  
+		                  <span class="hudong" id="canyu" onclick="sendDanmu();">发言</span>
+		                   -->	
+		               <!-- </div> -->
+			           <div id="board_imge_cell">
+					<ul id="messageContent">
+						<!-- <li class="message">
+							<span class="message_userL" style="display: block;">牛旭东</span>
+							<img class="userAvatar" src="http://60.205.86.217/upload6/2018-02-09/19/805eee4a-b707-49a2-9c75-d5b14ed9227b.jpg">
+							<div class="content">
+								<div class="bubble bubble_default left">
+									<div class="bubble_cont">
+										<div class="plain">
+											<pre>[动态表情]</pre>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li> -->
+						<!-- <li class="message me">
+							<span class="message_userR">李栋</span>
+							<img class="userAvatar" src="http://www.maaee.com:80/Excoord_For_Education/userPhoto/default_avatar.png">
+							<div class="content">
+								<div class="bubble bubble_primary right">
+									<div class="bubble_cont">
+										<div class="plain">
+											<pre>http://192.168.50.186:5000/schoolClass/classMobileAssistant.html?vid=222187&amp;userId=23836</pre>
+										</div>
+									</div>
+								</div>
+							</div>
+						</li> -->
+					</ul>
+					<div class="input_message">
+	                    		<input type="text" id="messageInput" /> <span class="hudong" id="canyu" onclick="sendDanmu();">发送</span>
+	                    	</div>
+			           </div>
+		            </div>
+	       </div>
+      </div>
+  </body>
+  
+    <script type="text/javascript">
+    
+     String.prototype.replaceAll = function(s1,s2){ 
+   	   return this.replace(new RegExp(s1,"gm"),s2); 
+     };
+  	 $("#danmuTab").hide();
+	 var classOver = false;
+     
+
+     var userId = Service.getQueryString("userId");
+     var vid = Service.getQueryString("vid");
+     var connection = new ClazzConnection();
+     connection.clazzWsListener = {onError:function(errorMsg){
+    	 //显示error并且回退页面
+    	 $("body").html("<center>下课了~~</center>");
+     },onWarn:function(warnMsg){
+    	 //显示warning
+    	 alert(warnMsg);
+     },onMessage:function(info){
+    	 var command = info.command;
+    	 if(command == "studentLogin"){
+    	    var hlsUrl =  info.data.play_hls_url;
+    	    if(hlsUrl){
+    	        $("#hlsVideo").src(hlsUrl);
+			}
+		 }else if(command == "classOver"){
+    		 classOver = true;
+    		 $("body").html("<center>下课了~~</center>");
+    	 }//推送教案
+    	 else if(command == "pushHandout"){
+    		 var url = info.data.url;
+    		 var toBoard = info.data.toBoard;
+    		 if(toBoard == null || typeof(toBoard) == "undefined"){
+    			 toBoard = false;
+    		 }
+    		 showHandout(url,toBoard);
+    	 }//弹幕
+    	 else if(command == "classDanmu"){
+    		 /* showDanmu(info); */
+    		 showMessageList(info);
+    	 }//接收到url
+    	 else if(command == "pushUrl"){
+    		 showUrl(info);
+    	 }//ppt处理
+    	 else if(command == "class_ppt"){
+    		 var control = info.data.control;
+    		 if(control == 1){
+    			 playPPT(info.data.html);
+    		 }else if(control == 2){
+    			 pptPre();
+    		 }else if(control == 3){
+    			 pptNext();
+    		 }else if(control == 4){
+    			 pptClick();
+    		 }else if(control == 5){
+    			 closePPT();
+    		 }else if(control == 6){
+    			 pptPreAni();
+    		 }
+    	 }//检测ppt是否同步
+    	 else if(command == "pptCheckPage"){
+    		 var current = info.data.currentPage;
+    		 pptCheckPage(current);
+    	 }else if(command == 'studentLogin'){
+    		 getVclassPPTOpenInfo(vid);
+    	 }
+     }};
+     var loginProtocol = eval('(' + "{'command':'studentLogin','data':{'userId':'"+userId+"','vid':"+vid+"}}" + ')');
+     connection.connect(loginProtocol);
+
+     function showHandout(url,toBoard){
+    	 $("#board_image_container").show();
+    	 $("#board_image").attr("src",url);
+     }
+     
+     function showDanmu(info){
+    	 var message = info.data.message;
+    	 var userName = message.fromUser.userName;
+    	 var avatar = message.fromUser.avatar;
+    	 var content = message.content;
+    	 if(content != ""){
+    		 var item={ 'img':'', 'info':'', 'href':'', 'close':false,  'speed':6,  'color':'#ffffff', 'old_ie_color':'#ffffff' };
+    		 item.info = userName+"："+content;
+    		 item.img = avatar;
+             $('body').barrager(item);
+    	 }
+     }
+
+     function sendDanmu(){
+    	 var messageInputText = $("#messageInput").val();
+    	 if(messageInputText != ""){
+    		 var info = {command:"command_classDanmu",data:{content:""+messageInputText+""}};
+        	 connection.send(info);
+        	 $("#messageInput").val("");
+    	 }
+     }
+     
+     /**
+     * 在列表中显示弹幕信息
+     */
+     function showMessageList(info){
+    	 var message = info.data.message;
+    	 var userName = message.fromUser.userName;
+    	 var avatar = message.fromUser.avatar;
+    	 var content = message.content;
+    	 if(content != ""){
+             var liObj = "<li class='message'>"+
+			"<span class='message_userL' style='display: block;'>"+userName+"</span>"+
+			"<img class='userAvatar' src='"+avatar+"'>"+
+			"<div class='content'>"+
+				"<div class='bubble bubble_default left'>"+
+					"<div class='bubble_cont'>"+
+						"<div class='plain'>"+
+							"<pre>"+content+"</pre>"+
+						"</div>"+
+					"</div>"+
+				"</div>"+
+			"</div>"+
+		"</li>";
+             $("#messageContent").append(liObj);
+             $("#messageContent").scrollTop(parseInt($("#messageContent")[0].scrollHeight)+38);
+    	 }
+     }
+     //测试函数
+     function showMessageList1(info){
+    	 var userName ="zhangsan";
+    	 var content = "1111111";
+    	 if(content != ""){
+             var li = "<li><span>"+userName+"</span><span>"+content+"</span></li>";
+             $("#messageContent").append(li);
+    	 }
+     }
+     
+     function showUrl(info){
+    	 var url = info.data.url+"?access_user="+userId;
+    	 window.location.href=url;
+     }
+     
+     function playPPT(html){
+    	 var url = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=stduent&ppt="+html;
+         url = url.replaceAll("https://","http://");
+    	 $("#ppt_frame").attr("src",url);
+     }
+     
+     function closePPT(){
+     	 $("#ppt_frame").attr("src","");
+     }
+      
+      function pptPre(){
+     	 window.frames["ppt_frame"].window.pre();
+      }
+      
+      function pptPreAni(){
+    	  window.frames["ppt_frame"].window.pre();
+      }
+      
+      function pptNext(){
+     	  window.frames["ppt_frame"].window.next();
+      }
+      
+      function pptClick(){
+     	  window.frames["ppt_frame"].window.click();
+      }
+      
+      function pptCheckPage(currentPage){
+     	 window.frames['ppt_frame'].window.pptCheckPage(currentPage);
+      }
+      
+      function getVclassPPTOpenInfo(vid){
+ 	     var service = new Service();
+ 	     var param = {"method":'getVclassPPTOpenInfo',"vid" : vid+""};
+ 		 service.doWebService(JSON.stringify(param), {
+ 	 		   onResponse : function(result) {
+ 	 			    if(!result.success){
+ 	 			        return;
+ 	 			    }
+ 	 			    var openInfo = result.response;
+ 	 			    if(openInfo != null){
+ 	 			    	//打开课堂中的ppt
+ 	 			    	playPPT(openInfo.pptUrl);
+ 	 			    	//更换当前页
+ 	 			    	setTimeout(function(){
+ 	 			    		pptCheckPage(openInfo.currentPage);
+ 	 			    	}, 1000);
+ 	 			    }
+ 	 			},
+ 	 			onError : function(error) {
+ 	 				
+ 	 			}
+ 		 });
+   }
+   
+   /**
+   * 切换ppt显示区域和互动讨论区域的显示和隐藏
+   */
+   function changeContentTab(tabId){
+	   if(tabId=="pptTab"){
+		   $("#pptTab").show();
+		   $("#danmuTab").hide();
+		   $("#pptSpan").addClass("select");
+		   $("#danmuSpan").removeClass("select");
+	   }else{
+		   $("#pptTab").hide();
+		   $("#danmuTab").show();
+		   $("#pptSpan").removeClass("select");
+		   $("#danmuSpan").addClass("select");
+	   }
+   }   
+  </script>
+</html>
