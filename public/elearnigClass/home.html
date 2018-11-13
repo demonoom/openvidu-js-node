@@ -528,6 +528,23 @@ console.log($(event.$input).parent().parent().index(),'下标')
                     console.log(formatTime(new Date(video[0].liveTime),true),'riqi');
                     // 章节videos 对象回填
                     for(var k in video){
+                        $('.table_data').append("<div class='list_item table_title'>\n" +
+                                    "<span class='table_title_number table_title_numberT'>" + video[k].squence + "</span>\n" +
+                                    "<span class='table_title_name'><input value="+video[k].name+" oninput='input_chapterName(" + (class_index - 1) + ",this)' type='text'></span>\n" +
+                                    "<span class='table_title_teacher'>" + teacherName + "</span>\n" +
+                                    "<div class=\"c-datepicker-date-editor c-datepicker-single-editor J-datepicker-day mt10 table_title_time\">\n"+
+                                    "                              <i class=\"c-datepicker-range__icon kxiconfont icon-clock\"></i>\n"+
+                                    "                              <input type=\"text\" autocomplete=\"off\" name=\"\" placeholder='"+formatTime(new Date(video[k].liveTime),true)+"' class=\" c-datepicker-data-input only-date\" value=\"\">\n"+
+                                    "                    </div> "+
+                                    "<span class='table_title_del' onclick='delete_chapter(video[k].squence,this)' class='table_title_del'><i></i></span>\n" +
+                                    "</div>");
+                                videos.push({
+                                    name: video[k].name,
+                                    liveTime: video[k].liveTime,
+                                    userID: teacherId,
+                                    squence: video[k].squence
+                                });
+                                initDate();
 //                        $('.table_data').append("<div class='list_item'>\n" +
 //                                    "                                 <span class='table_title_number table_title_numberT'>" + video[k].squence + "</span>\n" +
 //                                    "                                 <span class='table_title_name'><input oninput='input_chapterName(video[k].squence,this)' value="+video[k].name+" type='text'></span>\n" +
@@ -539,15 +556,15 @@ console.log($(event.$input).parent().parent().index(),'下标')
 //                                    "                                 <span onclick='delete_chapter(video[k].squence,this)' class='table_title_del'><i></i></span>\n" +
 //                                    "                                 </div>");
 //                        initDate();
-addVideos("","","");
+//addVideos("","","");
 //                        console.log(video[k].name,'章节名称');
 //                        console.log(video[k].squence,'章节序列');
-                        videos.push({
-                                    name: video[k].name,
-                                    liveTime: video[k].liveTime,
-                                    userID: teacherId,
-                                    squence: video[k].squence
-                        });
+//                        videos.push({
+//                                    name: video[k].name,
+//                                    liveTime: video[k].liveTime,
+//                                    userID: teacherId,
+//                                    squence: video[k].squence
+//                        });
 
                     }
                 }
