@@ -16,7 +16,7 @@ function getUnionClassList() {
             params: JSON.stringify({
                 method: "getCourseByTeacherIdV3",
                 userId: teacherId,
-                pageNo:"1"
+                pageNo: -1
             })
         },
         header: {
