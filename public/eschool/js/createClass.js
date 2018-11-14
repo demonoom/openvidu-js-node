@@ -11,7 +11,7 @@ function getUnionClassList() {
     debugger
     $.ajax({
         type: "POST",
-        url: "http://www.maaee.com/elearning/elearningControl/",
+        url: "https://www.maaee.com/elearning/elearningControl/",
         // url:"http://192.168.50.15:9007/elearning/elearningControl/",
         data: {
             params: JSON.stringify({
