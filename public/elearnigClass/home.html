@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>小蚂蚁云课堂</title>
+    <title>阿坝州云校</title>
     <link rel="icon" href="img/logo_title.png" type="image/x-icon">
     <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
     <link rel="stylesheet" href="./css/home.css">
@@ -170,7 +170,7 @@
     var isPublish = 2;
     //章节index
     var class_index = 0;
-    var teacherId, teacherName;
+    var teacherId, teacherName,auid;
     //章节对象
     var videos = new Array();
     //是否编辑状态
@@ -186,12 +186,13 @@
 
         teacherId = Service.getQueryString("teacherId");
         teacherName = Service.getQueryString("teacherName");
+        auid = Service.getQueryString("auid");
 
         //获取用户信息
         getUserById();
         //给iframe赋值
         $('#classInfo_iframe').attr('src', 'createClass.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '')
-//        $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
+        $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + auid + '&fileId=-1&title=蚁盘题目&phoneType=0')
 
         //默认添加一行章节
         addVideos('', '',function(){
@@ -234,11 +235,10 @@
             $.ajax({
                 type: "POST",
                 url: "https://www.maaee.com/Excoord_For_Education/webservice",
-//                url:"http://192.168.50.15:9007/elearning/elearningControl/",
                 data: {
                     params: JSON.stringify({
                         "method": "getUserById",
-                        "ident": teacherId,
+                        "ident": auid,
                     })
                 },
                 header: {
@@ -733,7 +733,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
                                 var targetId = res.response.id;
                                 var title = res.response.name;
                                 var requestUrl = "https://www.maaee.com/Excoord_PhoneService/elearningClass/teacherElearningLive/"
-                                requestUrl += 23836 + "/" + targetType + "/" + targetId + "/" + title + "?title=" + title;
+                                requestUrl += auid + "/" + targetType + "/" + targetId + "/" + title + "?title=" + title;
                                 window.open(requestUrl);
                             } else {
                                 layer.msg(res.msg, '查询失败');

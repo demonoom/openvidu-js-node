@@ -1,0 +1,213 @@
+body,html{
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    font-family: "Microsoft YaHei", "Hiragino Sans GB",  Arial,Helvetica;
+}
+input:-webkit-autofill{
+    box-shadow: 0 0 0px 1000px transparent inset !important;
+}
+:-webkit-autofill {
+    -webkit-text-fill-color: #000 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+.content{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: url("../img/icon_yunBg.png") no-repeat;
+    background-size: cover;
+}
+.login_box{
+    position: absolute;
+    width: 412px;
+    height: 480px;
+    background: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 0 35px;
+    box-sizing: border-box;
+}
+.logo{
+    font-size: 28px;
+    color: #666;
+    font-weight: bold;
+    margin: 37px 0 48px;
+    text-align: center;
+
+}
+.my_flex{
+    -webkit-display: flex;
+    -moz-display: flex;
+    -ms-display: flex;
+    -o-display: flex;
+    display: flex;
+}
+.logo img{
+    width: 48px;
+    margin-right: 12px;
+    vertical-align: text-bottom;
+}
+.tab{
+    font-size: 19px;
+    cursor: pointer;
+}
+.tab > div{
+    width: 50%;
+    color: #666;
+    text-align: center;
+    padding-bottom: 15px;
+    border-bottom: 1px #E0E0E0 solid;
+}
+.right_font{
+    width: 100px;
+    height: 100px;
+    background: palevioletred;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%,-50%) rotate(45deg);
+}
+.inputWrap{
+    position: relative;
+    width: 100%;
+}
+.inputWrap #actData{
+    max-height: 132px;
+    overflow-y: auto;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 74px;
+    box-sizing: border-box;
+    border: 1px #e5e5e5 solid;
+    background: white;
+    z-index: 5;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+::-webkit-scrollbar {
+    width: 8px;
+    height: 12px;
+}
+
+/* 这是针对缺省样式 (必须的) */
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 9px;
+    -webkit-border-radius: 9px;
+}
+
+/* 滑块颜色 */
+::-webkit-scrollbar-button {
+    background-color: initial;
+}
+.inputWrap #actData > div{
+    padding: 5px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+}
+.inputWrap #actData > div:hover{
+    background-color: #edf2ff;
+    color: #333;
+}
+input{
+    border: 1px #D2D2D2 solid;
+    line-height: 20px;
+    padding: 11px 15px;
+    margin-bottom: 24px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 15PX;
+}
+
+input:focus{
+    box-shadow: 0px 0px 2px #215bef8a;
+    border-color: #1757FB;
+}
+input#act{
+    margin-top: 30px;
+}
+#login{
+    line-height: 48px;
+    height: 48px;
+    background-color: #4285F4;
+    width: 100%;
+    color: #fff;
+    text-align: center;
+    outline: none;
+    border: 0;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 50px;
+    font-family: "Helvetica Neue","Microsoft Yahei",Helvetica,Arial,"Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
+}
+#login:hover{
+    opacity: 0.9;
+}
+.font{
+    position: absolute;
+    bottom:10px;
+    right: 50%;
+    z-index: 10;
+    transform: translate(50%,0%) rotate(-45deg);
+    -weibkit-transform:translate(50%,0%) rotate(-45deg);
+}
+
+.tab > div.active{
+    border-bottom: 1px solid #1757FB;
+    position: relative;
+    color: #1A58FB;
+}
+.active::before{
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    border-left: 1px #1757FB solid;
+    border-bottom: 1px #1757FB solid;
+    width: 8px;
+    height: 8px;
+    background-color: #fff;
+    transform: translateX(-50%) rotate(135deg);
+    -weibkit-transform: translateX(-50%) rotate(135deg);
+}
+
+#scan_image{
+    width: 210px;
+    height: 210px;
+}
+.scan{
+    display: none;
+    text-align: center;
+    margin-top: 22px;
+}
+.scan div{
+    color: #666;
+    font-size: 14px;
+}
+.downPc{
+    color: white;
+    font-size: 14px;
+    background: url("../img/icon_down.png") no-repeat left center;
+    background-size: 16px;
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    line-height: 15px;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+    padding-left: 21px;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+.downPc:hover{
+    text-decoration: underline;
+}
