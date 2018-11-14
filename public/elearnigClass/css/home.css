@@ -4,7 +4,7 @@ body {
     border: 0;
     height: 100vh;
     overflow: hidden;
-    font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial;
+    font-family: "Microsoft YaHei", Arial;
 }
 
 ::-webkit-scrollbar {
@@ -44,19 +44,34 @@ body {
     z-index: 2;
     opacity: 0.5;
 }
-
-.wrap {
-    width: 80%;
-    height: 80%;
-
-    background-size: cover;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 112;
+.wrap{
+    min-width: 1000px;
 }
 
+@media only screen and (min-width: 1440px) {
+    .wrap {
+        width: 1288px;
+        height: 80%;
+        background-size: cover;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 112;
+    }
+}
+@media only screen and (max-width: 1439px) {
+    .wrap {
+        width: 1000px;
+        height: 80%;
+        background-size: cover;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 112;
+    }
+}
 .inner {
     position: absolute;
     left: 50%;
@@ -457,7 +472,16 @@ body {
     cursor: pointer;
     border-radius: 4px;
 }
-
+.uploadImage i{
+    display: inline-block;
+    background: url("../img/aBa-upload.png") no-repeat;
+    width: 12px;
+    height:14px;
+    background-size: 12px;
+    position: relative;
+    top: 2px;
+    margin-right: 6px;
+}
 .add-class{
     display: block;
     width: 100%;
@@ -483,6 +507,10 @@ body {
 }
 .table_title_name{
     width: 150px;
+    text-align: center;
+}
+.table_title_name input{
+    width: 136px;
 }
 .table_title_teacher{
     width: 100px;
@@ -674,3 +702,23 @@ input, textarea, button{
 .Publish-btn{
     margin-right: 6px;
 }
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+/* 这是针对缺省样式 (必须的) */
+
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 9px;
+    -webkit-border-radius: 9px;
+}
+
+/* 滑块颜色 */
+
+::-webkit-scrollbar-button {
+    background-color: initial;
+}
+
+/* 滑轨两头的监听按钮颜色 */
