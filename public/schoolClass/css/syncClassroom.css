@@ -208,6 +208,11 @@ body {
 .username {
     color: #9DD1E9;
     font-size: 15px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width:200px
 }
 
 .avatar, .username, .exit {
