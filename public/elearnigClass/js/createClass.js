@@ -1,17 +1,18 @@
 var service = new Service();
 var teacherId = Service.getQueryString("teacherId");
 var teacherName = Service.getQueryString("teacherName");
-var html_list="";
+var html_list = "";
 
 $(document).ready(function () {
     getUnionClassList();
 });
 
 function getUnionClassList() {
+    debugger
     $.ajax({
         type: "POST",
-//                url: "https://www.maaee.com/Excoord_For_Education/webservice",
-        url:"http://192.168.50.15:9007/elearning/elearningControl/",
+        url: "http://www.maaee.com/elearning/elearningControl/",
+        // url:"http://192.168.50.15:9007/elearning/elearningControl/",
         data: {
             params: JSON.stringify({
                 method: "getCourseByTeacherIdV3",
@@ -30,23 +31,23 @@ function getUnionClassList() {
                 var infos = res.response;
                 console.log(infos, 'infos');
                 if (infos.length > 0) {
-                    for(var k in infos){
-                        var isPublish = infos[k].isPublish == 1?'已发布':'未发布';
-                        var isPublishClass = infos[k].isPublish == 1?'course-tagBlue':'course-tagOrange';
+                    for (var k in infos) {
+                        var isPublish = infos[k].isPublish == 1 ? '已发布' : '未发布';
+                        var isPublishClass = infos[k].isPublish == 1 ? 'course-tagBlue' : 'course-tagOrange';
                         $('.list').append("<div class='list_item'>" +
                             "    <div class='left_image'>" +
-                            "    <img src='"+infos[k].image+"' alt=''>" +
+                            "    <img src='" + infos[k].image + "' alt=''>" +
                             "    </div>" +
                             "    <div class='middle_content'>" +
-                            "    <div class='course-title'><span class='course-titleText public-textHidden'>"+infos[k].courseName+"</span><span class='"+isPublishClass+"'>"+isPublish+"</span></div>" +
-                                "    <div class='course-listText'><span class='course-Light_grey'>授课老师</span><span class='course-Dark_grey'>"+infos[k].users[0].userName+"</span></div>" +
-                                "    <div class='course-listText'><span class='course-Light_grey'>上课时间</span><span class='course-Dark_grey'>"+formatTime(new Date(infos[k].courseTime))+"---"+formatTime(new Date(infos[k].endTime))+"</span></div>" +
-                                "    <div class='course-listText'><span class='course-Light_grey'>课程概述</span><span class='course-Dark_grey public-textHidden course-titleText'>"+infos[k].content+"</span></div>" +
+                            "    <div class='course-title'><span class='course-titleText public-textHidden'>" + infos[k].courseName + "</span><span class='" + isPublishClass + "'>" + isPublish + "</span></div>" +
+                            "    <div class='course-listText'><span class='course-Light_grey'>授课老师</span><span class='course-Dark_grey'>" + infos[k].users[0].userName + "</span></div>" +
+                            "    <div class='course-listText'><span class='course-Light_grey'>上课时间</span><span class='course-Dark_grey'>" + formatTime(new Date(infos[k].courseTime)) + "---" + formatTime(new Date(infos[k].endTime)) + "</span></div>" +
+                            "    <div class='course-listText'><span class='course-Light_grey'>课程概述</span><span class='course-Dark_grey public-textHidden course-titleText'>" + infos[k].content + "</span></div>" +
                             "    </div>" +
                             "    <div class='right_oper'>" +
-                            "    <div onclick='live_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'><span class='live'></span></div>" +
-                            "    <div onclick='editor_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'><span class='editor'></span></div>" +
-                            "    <div onclick='delete_click(\""+infos[k].id+"\","+infos[k].publisher_id+")'><span  class='del'></span></div>" +
+                            "    <div onclick='live_click(\"" + infos[k].id + "\"," + infos[k].publisher_id + ")'><span class='live'></span></div>" +
+                            "    <div onclick='editor_click(\"" + infos[k].id + "\"," + infos[k].publisher_id + ")'><span class='editor'></span></div>" +
+                            "    <div onclick='delete_click(\"" + infos[k].id + "\"," + infos[k].publisher_id + ")'><span  class='del'></span></div>" +
                             "    </div>" +
                             "    </div>");
                     }
@@ -100,22 +101,22 @@ function createClass() {
 
 }
 
-function live_click(id,publisher_id){
+function live_click(id, publisher_id) {
     // console.log('直播');
-    parent.window.showIframe(id,publisher_id);
+    parent.window.showIframe(id, publisher_id);
 }
 
-function editor_click(id,publisher_id){
+function editor_click(id, publisher_id) {
     // console.log('编辑');
-    parent.window.updateClass(id,publisher_id);
+    parent.window.updateClass(id, publisher_id);
 }
 
-function delete_click(id,publisher_id){
+function delete_click(id, publisher_id) {
     // console.log('删除');
-    parent.window.deleteClass(id,publisher_id);
+    parent.window.deleteClass(id, publisher_id);
 }
 
-function refresh(){
+function refresh() {
     location.reload();
 }
 
@@ -129,8 +130,9 @@ function formatTime(date) {
 //        return [year, month, day].map(formatNumber).join('-') + ' ' + [hour, minute, second].map(formatNumber).join(':')
     return [year, month, day].map(formatNumber).join(':');
 }
+
 function formatNumber(n) {
-    n = n.toString() ;
+    n = n.toString();
     return n[1] ? n : '0' + n;
 }
 
