@@ -81,15 +81,6 @@
                 <span class="operation">操作</span>
             </div>
             <div class="table_data_chapter">
-                <!--
-                 <div class="list_item">
-                                     <span>1</span>
-                                     <span><input type="text"></span>
-                                     <span>授课老师</span>
-                                     <span>授课时间</span>
-                                     <span class="deleteClass">删除</span>
-                                 </div>
-                 -->
             </div>
         </div>
     </div>
@@ -117,7 +108,7 @@
 
         </div>
         <div class="create-contentList">
-            <span class="create-contentLeft">课程概述</span><textarea id="class_info" class="add-CourseName" rows="4" ></textarea>
+            <span class="create-contentLeft">课程概述</span><textarea id="class_info" class="add-CourseName" rows="2" ></textarea>
         </div>
     </div>
 
@@ -131,24 +122,26 @@
                 <span class="table_title_time">授课时间</span>
                 <span class="table_title_del">操作</span>
             </div>
-            <div class="table_data">
-                <!--
-                 <div class="list_item">
-                                     <span>1</span>
-                                     <span><input type="text"></span>
-                                     <span>授课老师</span>
-                                     <span>授课时间</span>
-                                     <span class="deleteClass">删除</span>
-                                 </div>
-                 -->
+            <div class="table_data-cont">
+                <div class="table_data">
+                    <!--
+                     <div class="list_item">
+                                         <span>1</span>
+                                         <span><input type="text"></span>
+                                         <span>授课老师</span>
+                                         <span>授课时间</span>
+                                         <span class="deleteClass">删除</span>
+                                     </div>
+                     -->
+                </div>
             </div>
             <div class="table_bottom">
-                <button class="add-class bottom-15" onclick="addVideos('','')">添加课时</button>
+                <button class="add-class" onclick="addVideos('','')">添加课时</button>
                 <div class="bottom-15 release release-bottom"><span>立即发布</span><input id="isPublish" class="Publish-btn" type="checkbox" onchange="isPublish_change()"></div>
             </div>
         </div>
     </div>
-    <div class="submit-btn">
+    <div class="schedule_footer">
         <button class="submitBlue" onclick="submitClass()">提交</button>
     </div>
 </div>
@@ -163,6 +156,7 @@
 <script src="./js/datepicker.all.js"></script>
 <script type="application/javascript" src="../schoolClass/js/layer/layer.js"></script>
 <script type="application/javascript" src="../schoolClass/js/service.js"></script>
+<script type="application/javascript" src="./js/utils.js"></script>
 <script>
     // 课程封面
     var imagePath = '';
@@ -176,6 +170,7 @@
     //是否编辑状态
     var editorFlag = false;
     var editorId = null;
+    var utils = new Utils();
     //    // 当前输入框下标
     //    var inputIndex = 0;
     //    //当前时间框下标
@@ -234,7 +229,7 @@
             debugger
             $.ajax({
                 type: "POST",
-                url: "https://www.maaee.com/Excoord_For_Education/webservice",
+                url: utils.excoord_api_url,
                 data: {
                     params: JSON.stringify({
                         "method": "getUserById",
@@ -285,8 +280,7 @@
     function showIframe(id, publisher_id){
         $.ajax({
                     type: "POST",
-//                    url: "http://192.168.50.15:9007/elearning/elearningControl/",
-                    url: "http://www.maaee.com/elearning/elearningControl/",
+                    url: utils.elearning_api_url,
                     data: {
                         params: JSON.stringify({
                             method: "getCourseByCourseId",
@@ -396,8 +390,8 @@
             for (var k in videos) {
                 if (videos[k].name == '') {
                     warn = "课程章节第" + (parseInt(k) + 1) + "行章节名称不能为空!";
-                } else if (videos[k].liveTime == '') {
-                    warn = "课程章节第" + (parseInt(k) + 1) + "行章节时间不能为空!";
+                } else if (videos[k].liveTime == '' || isNaN(videos[k].liveTime)) {
+                    warn = "课程章节第" + (parseInt(k) + 1) + "行章节授课时间不能为空!";
                 } else {
                 }
             }
@@ -415,11 +409,11 @@
         if (warn != '') {
             layer.msg(warn);
         } else {
-            if(editorFlag){
+            /*if(editorFlag){
                 updateCourse($('#class_name').val(), imagePath, $('#class_info').val(), isPublish, teacherId, videos,editorId);
             }else{
                 openClass($('#class_name').val(), imagePath, $('#class_info').val(), isPublish, teacherId, videos);
-            }
+            }*/
 
         }
     }
@@ -446,8 +440,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
     function updateCourse(class_name, class_imagePath, class_info, isPublish, teacherId, videos,id){
         $.ajax({
                     type: "POST",
-//                    url: "http://192.168.50.15:9007/elearning/elearningControl/",
-                    url: "http://www.maaee.com/elearning/elearningControl/",
+                    url: utils.elearning_api_url,
                     data: {
                         params: JSON.stringify({
                             method: "updateCourse",
@@ -493,8 +486,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
 
         $.ajax({
             type: "POST",
-//            url: "http://192.168.50.15:9007/elearning/elearningControl/",
-            url: "http://www.maaee.com/elearning/elearningControl/",
+            url: utils.elearning_api_url,
             data: {
                 params: JSON.stringify({
                     method: "getCourseByCourseId",
@@ -579,8 +571,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
         }, function(){
             $.ajax({
                                 type: "POST",
-//                                url: "http://192.168.50.15:9007/elearning/elearningControl/",
-                                url: "http://www.maaee.com/elearning/elearningControl/",
+                                url: utils.elearning_api_url,
                                 data: {
                                     params: JSON.stringify({
                                         method: "deleteCourse",
@@ -618,8 +609,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
         debugger
         $.ajax({
             type: "POST",
-//            url: "http://192.168.50.15:9007/elearning/elearningControl/",
-            url: "http://www.maaee.com/elearning/elearningControl/",
+            url: utils.elearning_api_url,
             data: {
                 params: JSON.stringify({
                     method: "addCourse",
@@ -713,8 +703,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
         }else{
             $.ajax({
                         type: "POST",
-//                        url: "http://192.168.50.15:9007/elearning/elearningControl/",
-                        url: "http://www.maaee.com/elearning/elearningControl/",
+                        url: utils.elearning_api_url,
                         data: {
                             params: JSON.stringify({
                                 method: "findVideoById",
@@ -748,7 +737,7 @@ console.log($(event.$input).parent().parent().index(),'下标')
 
         }else if(flag == '课程回顾'){
 //            layer.msg('课程回顾');
-            var requestUrl = 'http://jiaoxue.maaee.com:8093/#/cloundSchoolDetail';
+            var requestUrl = 'https://jiaoxue.maaee.com:8093/#/cloundSchoolDetail';
             requestUrl += "?vid="+video.virtual_classId+"&userId="+teacherId+"&type=2"+"&name="+encodeURI(video.name);
 
             $('.review_content').empty();
