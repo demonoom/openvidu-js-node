@@ -380,12 +380,13 @@ body {
     line-height: 1;
 }
 .table_data .list_item{
-    padding: 10px 8px;
+    padding: 6px 8px;
     line-height: 1;
     font-size: 14px;
 }
 .table_data .list_item span{
     display: inline-block;
+    vertical-align: middle;
 }
 .review{
     width: 620px;
@@ -438,14 +439,14 @@ body {
     border-radius: 2px 2px 0 0;
 }
 .create-content, .schedule_content{
-    padding: 30px 15px 0 15px;
+    padding: 20px 15px 0 15px;
     font-size: 14px;
     color: #666;
 }
 .schedule_content{
-    height: 276px;
-    overflow-y: auto;
-    margin-bottom: 12px;
+    height: 290px;
+    overflow-y: hidden;
+    margin-bottom: 0px;
     padding-top: 0
 }
 .create-content .create-contentLeft,  .schedule_content .create-contentLeft{
@@ -487,6 +488,7 @@ body {
     display: block;
     width: 100%;
     font-size: 14px;
+    margin-bottom: 10px;
 }
 .release-bottom span{
     line-height: 1;
@@ -497,6 +499,7 @@ body {
     width:510px;
     display: inline-block;
     float: right;
+    height: 290px;
 }
 .table_title{
     background: #f9f9f9;
@@ -540,6 +543,12 @@ body {
 }
 .table_data .table_title{
     background: #fff;
+}
+.table_data-cont{
+    max-height: 187px;
+    padding: 5px 0 0 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .submit-btn{
     text-align: center;
@@ -591,8 +600,8 @@ input, textarea, button{
     background-size: 12px;
 }
 .class_image{
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 28px;
     object-fit: cover;
 }
 .setUp-Left{
