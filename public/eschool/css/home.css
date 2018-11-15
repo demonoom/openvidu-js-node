@@ -644,21 +644,21 @@ input, textarea, button{
     margin-left: 0 !important;
 }
 .c-datepicker-picker{
-    line-height: 24px !important;
+    line-height: 22px !important;
 }
 .c-datepicker-date-picker.has-sidebar{
     width: 220px !important;
-    margin-top: -50px !important;
+    margin-top: -123px !important;
 }
 .c-datepicker-date-picker__time-header{
     padding: 5px 5px 5px;
 }
 .c-datepicker-input--small .c-datepicker-input__inner{
-    height: 26px !important;
-    line-height: 26px !important;
+    height: 22px !important;
+    line-height: 22px !important;
 }
 .c-datepicker-date-picker__header{
-    margin: 5px 5px !important;
+    margin: 0 5px !important;
 }
 .kxiconfont, .c-datepicker-date-picker__header-label{
     font-size: 14px !important;
@@ -667,14 +667,20 @@ input, textarea, button{
     padding: 2px !important;
 }
 .c-datepicker-date-table td, .c-datepicker-date-table td div{
-    height: 24px !important;
-    padding: 1px 0 !important;
+    height: 22px !important;
+    padding: 0 !important;
 }
 .c-datepicker-date-table th{
     padding: 0 5px 2px 5px !important;
 }
 .c-datepicker-button--text{
     float: left !important;
+}
+.c-datepicker-button--mini{
+    padding: 5px 15px !important;
+}
+.c-datepicker-picker__footer{
+    line-height: 1 !important;
 }
 .aBa-play, .aBa-review, .aBa-notPlay{
     width: 18px;
