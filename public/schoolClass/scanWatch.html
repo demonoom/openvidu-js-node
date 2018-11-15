@@ -393,7 +393,7 @@
     	 if(command == "studentLogin"){
     	    var hlsUrl =  info.data.play_hls_url;
     	    if(hlsUrl){
-    	        $("#hlsVideo").src(hlsUrl);
+    	        $("#hlsVideo").attr("src",hlsUrl);
 			}
 		 }else if(command == "classOver"){
     		 classOver = true;
