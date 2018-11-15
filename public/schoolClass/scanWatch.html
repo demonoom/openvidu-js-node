@@ -385,7 +385,7 @@
      var connection = new ClazzConnection();
      connection.clazzWsListener = {onError:function(errorMsg){
     	 //显示error并且回退页面
-    	 //$("body").html("<center class='empty_center'><div class='admin_empty'></div><div class='admin_emptyText'>下课了，欢迎下次再来~</div></center>");
+    	 $("body").html("<center class='empty_center'><div class='admin_empty'></div><div class='admin_emptyText'>下课了，欢迎下次再来~</div></center>");
      },onWarn:function(warnMsg){
     	 //显示warning
     	 alert(warnMsg);
@@ -398,7 +398,7 @@
 			}
 		 }else if(command == "classOver"){
     		 classOver = true;
-    		 //$("body").html("<center class='empty_center'><div class='admin_empty'></div><div class='admin_emptyText'>下课了，欢迎下次再来~</div></center>");
+    		 $("body").html("<center class='empty_center'><div class='admin_empty'></div><div class='admin_emptyText'>下课了，欢迎下次再来~</div></center>");
     	 }//推送教案
     	 else if(command == "pushHandout"){
     		 var url = info.data.url;
