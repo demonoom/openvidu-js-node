@@ -36,20 +36,19 @@
                 <img id="scan_image" src="./img/school.png" alt="">
                 <div>打开手机小蚂蚁教师端扫一扫</div>
             </div>
-
-            <!--下载客户端 -->
-            <!--<a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.1.7.exe" class="downPc" style="display: none;" id="download_pc">下载PC客户端</a>-->
         </div>
     </div>
 
 </body>
 <script src="../schoolClass/js/jquery.min.js"></script>
 <script src="./js/simple.js"></script>
+<script src="./js/utils.js"></script>
 <script type="text/javascript">
     $(function () {
         checkShowPcDownload();
         var machineId = '';
         var simple = new SimpleWebsocketConnection();
+        var utils = new Utils();
         simple.connect();
         machineId = createMachineId();
         getLoginTeachSystemEwm();
@@ -68,12 +67,8 @@
                     //                   var user = data.user;
                     if (uuid == machineId) {
                         loginElearningSchool(data.user.colAccount,data.user.colPasswd);
-//                        window.location.href = 'home.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
-                        // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
-                        // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + data.user.colUid + '&teacherName=' + data.user.userName + '';
                     } else {
                     }
-                    //
                 }
             }
         };
@@ -116,8 +111,7 @@
         function loginElearningSchool(account,password){
             $.ajax({
                 type: "POST",
-//                url: "http://192.168.50.15:9007/elearning/elearningControl/",
-                url: "https://www.maaee.com/elearning/elearningControl/",
+                url: utils.elearning_api_url,
                 data: {
                     params: JSON.stringify({
                         "method": "AntTeacherLogin",
@@ -142,11 +136,8 @@
                         localStorage.setItem('accountData', JSON.stringify(accountArr));
                         console.log('登录成功');
                         window.location.href = 'home.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '&auid='+res.response.antUid;
-                        // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
-                        // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
-
                     } else {
-                        alert('用户不存在');
+                        alert(res.msg);
                     }
                 },
                 error: function (e) {
@@ -176,7 +167,7 @@
         function getLoginTeachSystemEwm() {
             $.ajax({
                 type: "POST",
-                url: "https://www.maaee.com/Excoord_For_Education/webservice",
+                url: utils.excoord_api_url,
                 data: {
                     params: JSON.stringify({
                         "method": "getLoginTeachSystemEwm",

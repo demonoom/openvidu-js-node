@@ -443,7 +443,7 @@ body {
     color: #666;
 }
 .schedule_content{
-    height: 236px;
+    height: 276px;
     overflow-y: auto;
     margin-bottom: 12px;
     padding-top: 0
@@ -496,6 +496,7 @@ body {
 .table-right{
     width:510px;
     display: inline-block;
+    float: right;
 }
 .table_title{
     background: #f9f9f9;
@@ -638,7 +639,7 @@ input, textarea, button{
 }
 .c-datepicker-date-picker.has-sidebar{
     width: 220px !important;
-    margin-top: -28px !important;
+    margin-top: -50px !important;
 }
 .c-datepicker-date-picker__time-header{
     padding: 5px 5px 5px;
