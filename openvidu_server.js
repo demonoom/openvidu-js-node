@@ -21,7 +21,7 @@ var http = require('http');
 var https = require('https');
 var bodyParser = require('body-parser'); // Pull information from HTML POST (express4)
 var app = express(); // Create our app with express
-var debug = true;
+var debug = false;
 
 // Server configuration
 app.use(session({
