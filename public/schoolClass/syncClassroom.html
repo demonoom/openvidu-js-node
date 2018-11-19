@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="./css/syncClassroom.css">
 </head>
 <body>
+<div class="mask"></div>
+<div class="review_iframe_box">
+        <iframe src="" frameborder="0" id="review_iframe"></iframe>
+</div>
 <div class="wrap">
     <div class="inner">
         <div class="nav">
@@ -27,6 +31,7 @@
             <div class="left_box">
                 <div class="header">课堂管理</div>
                 <div id="classInfo" class="active">课程信息</div>
+                <div id="classReview">课程回顾</div>
                 <div id="myFile">我的课件</div>
             </div>
             <div class="right_box">
@@ -34,6 +39,10 @@
                 <div class="classInfo_box">
                     <iframe id="classInfo_iframe" src="" frameborder="0"></iframe>
                 </div>
+                <!--课程回顾 -->
+                   <div class="classReview_box">
+                         <iframe id="classReview_iframe" src="" frameborder="0"></iframe>
+                   </div>
                 <!--我的课件 -->
                 <div class="myFile_box">
                     <iframe id="myFile_iframe" src="" frameborder="0"></iframe>
@@ -57,7 +66,8 @@
         var teacherId = Service.getQueryString("teacherId");
         var teacherName = Service.getQueryString("teacherName");
         getUserById();
-        $('#classInfo_iframe').attr('src','unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'')
+        $('#classInfo_iframe').attr('src','unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'');
+        $('#classReview_iframe').attr('src','classReviewList.html??teacherId='+teacherId+'&teacherName='+teacherName+'');
         $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
 
         //socket 监听
@@ -91,15 +101,28 @@
         $('#classInfo').on('click', function () {
             $('#classInfo').addClass('active');
             $('#myFile').removeClass('active');
+            $('#classReview').removeClass('active');
             $('.classInfo_box').show();
             $('.myFile_box').hide();
+            $('.classReview_box').hide();
         })
 
         $('#myFile').on('click', function () {
             $('#myFile').addClass('active');
             $('#classInfo').removeClass('active');
+            $('#classReview').removeClass('active');
             $('.classInfo_box').hide();
             $('.myFile_box').show();
+            $('.classReview_box').hide();
+        });
+
+        $('#classReview').on('click',function(){
+            $('#classReview').addClass('active');
+            $('#myFile').removeClass('active');
+            $('#classInfo').removeClass('active');
+            $('.classInfo_box').hide();
+            $('.myFile_box').hide();
+            $('.classReview_box').show();
         })
 
 
@@ -110,7 +133,23 @@
                 window.location.href = 'login.html'
             }, function () {
             });
-        })
+        });
+
+
+        $('.mask').on('click',function(){
+            $('.mask').hide();
+            $('.review_iframe_box').hide();
+            $('#review_iframe').attr('src','');
+        });
+
+         window.addEventListener('message',function(rs){
+                 var res = (rs.data);
+                 if(res.method == 'showReview'){
+                     $('.review_iframe_box').show();
+                     $('.mask').show();
+                     $('#review_iframe').attr('src','https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid='+res.vid+'&userId='+res.userId+'&type=3&name=');
+                 }
+        });
 
 
         function getUserById() {

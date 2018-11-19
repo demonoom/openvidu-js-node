@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>联合开课列表</title>
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
+    <script type="application/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="js/service.js"></script>
+    <script type="application/javascript" src="js/platform.js"></script>
+    <style type="text/css">
+        body,html{
+            margin: 0;
+            background-color: #ECEFF8;
+            overflow: hidden;
+            height: 100vh;
+            font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial;
+        }
+        .layui-layer{
+            box-shadow: 0px 6px 50px rgba(0,0,0,0.4) !important;
+            font-family: "Microsoft YaHei", "Hiragino Sans GB", Helvetica, Arial;
+            animation: none !important;
+        }
+        .layui-layer-shade{
+            opacity: 0 !important;
+        }
+        .layui-layer-title{
+            font-size: 15px !important;
+        }
+        .topDiv{
+            overflow: hidden;
+            padding: 15px  20px 15px  30px;
+            position:relative;
+        }
+        .topDiv:after{
+            position: absolute;
+            content: "";
+            width: 100%;
+            border-bottom: 1px #E6E6E6 solid;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+            bottom: 0;
+            left: 0;
+        }
+        .topDiv h1{
+            color: #333333;
+            font-size: 22px;
+            float: left;
+            margin: 0;
+            line-height: 1;
+            font-weight: bold;
+            padding-top: 7px;
+        }
+        .courseBtn{
+            font-size: 14px;
+            padding: 9px 17px 0 35px;
+            height: 25px;
+            line-height: 1;
+            color:#fff;
+            background: #4285F4 url("img/icon_add_course1.png") no-repeat 14px 10px;
+            background-size: 12px;
+            -webkit-border-radius: 17px;
+            -moz-border-radius: 17px;
+            border-radius: 4px;
+            float: right;
+            cursor: pointer;
+        }
+        #item_container{
+            height: calc(100% - 64px);
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding-left: 30px;
+            padding-right: 20px;
+
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 12px;
+        }
+
+        /* 这是针对缺省样式 (必须的) */
+        ::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 9px;
+            -webkit-border-radius: 9px;
+        }
+
+        /* 滑块颜色 */
+        ::-webkit-scrollbar-button {
+            background-color: initial;
+        }
+        .item{
+            position: relative;
+            border-radius: 4px;
+            color: #333;
+            font-size: 15px;
+            line-height: 20px;
+            padding: 36px 0 20px 0;
+            margin-top: 42px;
+            background-color: white;
+            margin-bottom: 15px;
+            border:none;
+        }
+        .self .rightCont > #title{
+            font-size: 18px;
+            background-color: #FFEBC4 !important;
+            color: #333;
+            position: absolute;
+            top: -58px;
+            left: -2px;
+            width: 70%;
+            border-radius: 4px;
+            line-height: 40px;
+            padding: 0 22px;
+            box-sizing: border-box;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .self > .joinBtn{
+            background: #F49242 !important;
+
+        }
+        #title{
+            font-size: 18px;
+            background-color: #C4DAFF;
+            color: #333;
+            position: absolute;
+            top: -58px;
+            left: -2px;
+            width: 70%;
+            border-radius: 4px;
+            line-height: 40px;
+            padding: 0 22px;
+            box-sizing: border-box;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        #main_teacher_name,#union_teacher_name{
+            margin-bottom: 12px;
+        }
+        #loading{
+            font-size: 14px;
+            text-align: center;
+            color: #888;
+            padding: 10px 0;
+        }
+        .rightCont{
+            position: relative;
+            padding-left: 18px;
+        }
+        .emptyCont{
+            position: absolute;
+            left: 50%;
+            top:50%;
+            -webkit-transform: translate(-50%,-50%);
+            -moz-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+            -o-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+            z-index: 20;
+            text-align: center;
+            color: #666;
+            width: 210px;
+            font-size: 14px;
+        }
+        .emptyCont img{
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .joinBtn{
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+            -webkit-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -o-transform: translateY(-50%);
+            transform: translateY(-50%);
+            cursor: pointer;
+            background: #6696e6;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            padding-top: 10px;
+            letter-spacing: 0.5px;
+        }
+        .layer-anim{
+            animation:none !important;
+        }
+    </style>
+</head>
+
+<body>
+<div class="topDiv">
+    <h1>课程回顾</h1>
+   <!-- <span class="courseBtn" onclick="openUnionClass();">新建课堂</span> -->
+</div>
+
+
+<div id="item_container">
+
+
+</div>
+<div class='emptyCont' style="display: none">
+    <img src='img/icon_empty.png'/><br/>
+    暂无数据
+</div>
+<div id="loading" style="display: none;"> 正在加载...</div>
+
+<div id="item_template" style="display: none;">
+    <div class="item">
+        <div class="rightCont">
+            <div id="title">北京四中和下关四中关于学生品德问题的联合调研</div>
+            <div id="main_teacher_name">张三</div>
+            <div id="union_teacher_name">李四-王五</div>
+            <div id="start_time">开课时间：2018-10-10 09:25</div>
+        </div>
+        <div id="join_class" class="joinBtn">查看<br/>回顾</div>
+    </div>
+</div>
+</body>
+
+<script type="application/javascript">
+
+    var teacherId = Service.getQueryString("teacherId");
+    var teacherName = Service.getQueryString("teacherName");
+    $(document).ready(function(){
+        getUnionClassList();
+    });
+
+
+
+
+    function getUnionClassList() {
+       var service = new Service();
+       var data = {};
+       data.method = 'getCurrentUnionClassList';
+       data.userId = teacherId+"";
+       $("#loading").show();
+       $("#loading").text("正在请求数据...");
+       service.doWebService(data,{onResponse:function(result){
+           var infos = result.response;
+           if(infos.length > 0){
+               $(".emptyCont").hide();
+               $("#loading").text("数据加载完毕");
+               infos.forEach(function(info){
+                   var vid = info.vid;
+                   var title = info.title;
+                   var openTeacher = info.openTeacher;
+                   var unionTeachers = info.unionTeachers;
+                   var pass = info.password;
+                   var startTime = datetimeFormat(info.startTime);
+                   var template = $("#item_template");
+//                   console.log(info.openTeacher.colUid,'info');
+                   $(template.children("div").get(0)).attr("id","vclass_"+vid);
+                   $(template.children("div").get(0)).attr("pass",pass);
+                   template.find("#title").text(title);
+                   template.find("#main_teacher_name").text("主讲老师 : "+openTeacher.userName);
+                   $(template.children("div").get(0)).removeClass("self");
+                   template.find("#join_class").html("查看<br/>回顾");
+                   template.find("#join_class").attr("onclick","openClassReview("+vid+","+info.openTeacher.colUid+");");
+//                   if(openTeacher.colUid == teacherId){
+//                       $(template.children("div").get(0)).addClass("self");
+//                       template.find("#join_class").html("继续<br/>上课");
+//                       template.find("#join_class").attr("onclick","continueClass("+info.clazzId+",'"+info.title+"','"+info.password+"');");
+//                   }else{
+//                       $(template.children("div").get(0)).removeClass("self");
+//                       template.find("#join_class").html("加入<br/>课堂");
+//                       template.find("#join_class").attr("onclick","joinUnionClass("+vid+");");
+//                   }
+
+                   template.find("#start_time").text("开课时间 : "+startTime);
+                   var unionTeacherNames = "";
+                   if(unionTeachers && unionTeachers.length > 0){
+                       unionTeachers.forEach(function(teacher,index){
+                           if(index == unionTeachers.length - 1){
+                               unionTeacherNames = unionTeacherNames + teacher.userName;
+                           }else{
+                               unionTeacherNames = unionTeacherNames + teacher.userName+"-";
+                           }
+
+                       });
+                   }
+
+                   template.find("#union_teacher_name").text("联合老师 : "+unionTeacherNames);
+
+                   $("#item_container").append(template.html());
+                   template.attr("info_vid","0");
+
+               });
+           }else{
+               // $("#loading").text("没有获取到数据...");
+               $(".emptyCont").show();
+           }
+       },onError:function(error){
+
+       }})
+    }
+
+    function openClassReview(clazzId,userId){
+//        var NParams = "";
+//        var browser = platform.name;
+//        if(browser.indexOf("Electron") != -1){
+//            NParams = "&startType=1_n";
+//        }
+//        $('.review_iframe_box').show();
+//        $('#review_iframe').attr('src','https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid='+clazzId+'&userId='+userId+'&type=3&name=');
+//
+//        console.log('展示课堂回顾');
+//        showIframe();
+        parent.window.postMessage({method:'showReview',vid:clazzId,userId:userId},"*");
+    }
+
+    function datetimeFormat(longTypeDate){
+        var dateTypeDate = "";
+        var date = new Date();
+        date.setTime(longTypeDate);
+        dateTypeDate += date.getFullYear(); //年
+        dateTypeDate += "-" + getMonth(date); //月
+        dateTypeDate += "-" + getDay(date); //日
+        dateTypeDate += " " + getHours(date); //时
+        dateTypeDate += ":" + getMinutes(date);  //分
+        return dateTypeDate;
+    }
+
+    function getMonth(date){
+        var month = "";
+        month = date.getMonth() + 1; //getMonth()得到的月份是0-11
+        if(month<10){
+            month = "0" + month;
+        }
+        return month;
+    }
+
+    function getDay(date){
+        var day = "";
+        day = date.getDate();
+        if(day<10){
+            day = "0" + day;
+        }
+        return day;
+    }
+
+    function getHours(date){
+        var hours = "";
+        hours = date.getHours();
+        if(hours<10){
+            hours = "0" + hours;
+        }
+        return hours;
+    }
+
+    function getMinutes(date){
+        var minute = "";
+        minute = date.getMinutes();
+        if(minute<10){
+            minute = "0" + minute;
+        }
+        return minute;
+    }
+
+//    function openUnionClass(){
+//        layer.open({
+//            type: 2,
+//            title: '开启一个联合开课',
+//            shadeClose: true,
+//            shade: 0.8,
+//            area: ['330px', '400px'],
+//            content: 'openUnionClass.html?teacherId='+teacherId+"&userName="+teacherName
+//        });
+//    }
+//
+//    function joinUnionClass(vid){
+//        layer.open({
+//            type: 2,
+//            title: '进入课堂验证',
+//            shadeClose: true,
+//            shade: 0.8,
+//            area: ['330px', '400px'],
+//            content: 'joinDialog.html?teacherId='+teacherId+"&vid="+vid
+//        });
+//    }
+
+
+//    function joinCheck(vid,enterPass,selectedClazzIds){
+//        if(typeof(selectedClazzIds) == undefined || selectedClazzIds == 0){
+//            selectedClazzIds == "";
+//        }
+//        var pass = $("#vclass_"+vid).attr("pass");
+//        if(enterPass == pass){
+//            window.open("teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName="+teacherName+"&clazzIds="+selectedClazzIds,"CLASS_WINDOW");
+//            layer.closeAll();
+//        }else{
+//            layer.msg("邀请码不正确~");
+//        }
+//    }
+
+</script>
+</html>

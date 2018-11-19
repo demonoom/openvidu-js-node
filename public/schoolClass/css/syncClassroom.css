@@ -139,6 +139,16 @@ body {
     background-size: 15px;
 }
 
+#classReview {
+    background: url("../img/icon_nav_course.png") no-repeat 42px 16px;
+    background-size: 15px;
+}
+
+#classReview.active {
+    background: #ebeef5 url("../img/icon_nav_course.png") no-repeat 42px 16px;
+    background-size: 15px;
+}
+
 #myFile {
     background: url("../img/icon_nav_file.png") no-repeat 42px 16px;
     background-size: 12px;
@@ -174,6 +184,10 @@ body {
     display: none;
 }
 
+.classReview_box{
+    display: none;
+}
+
 .classInfo_box {
     height: 100%;
 }
@@ -190,6 +204,11 @@ body {
 .myFile_box > iframe {
     width: 100%;
     height: 100%;
+}
+
+.classReview_box > iframe {
+    width: 100%;
+    height: 100vh;
 }
 
 .avatar {
@@ -266,4 +285,30 @@ body {
 
 .layer-anim{
     animation:none !important;
+}
+.mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    display: none;
+}
+.review_iframe_box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: white;
+    transform: translate(-50%,-50%);
+    width:  400px;
+    height: 500px;
+    display: none;
+    z-index: 101;
+}
+
+#review_iframe{
+    width: 100%;
+    height: 100%;
 }
