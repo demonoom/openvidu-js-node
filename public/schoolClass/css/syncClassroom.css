@@ -302,8 +302,8 @@ body {
     left: 50%;
     background: white;
     transform: translate(-50%,-50%);
-    width:  400px;
-    height: 500px;
+    width:  600px;
+    height: 89%;
     display: none;
     z-index: 101;
 }
