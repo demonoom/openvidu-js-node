@@ -1204,7 +1204,7 @@ $(function () {
           // console.log(before - after,'Math.abs(before - after)')
           var flag = (Math.abs(before - after) > 22)?true:false;
           if (before<after && flag) {
-              turn = '上'
+              turn = '上';
               before = after;
           };
           if (before>after && flag) {
@@ -1237,7 +1237,6 @@ $(function () {
                       // 更新input val
                       _this.picker.$input.val(day + ' ' + val);
                   }
-
               }.bind(this), 100);
           }else{
               timerArr['timer' + index] = setTimeout(function () {
@@ -1250,7 +1249,6 @@ $(function () {
                   top = num * 32;
                   $(this).scrollTop(top + 10);
                   $('.c-datepicker-time-spinner__item').css({lineHeight:'55px'});
-
                   var index = _this.picker.activeTimeWrap.find('.c-datepicker-scrollbar__wrap').index($(this));
                   var $time = _this.picker.activeTimeWrap.find('.c-datePicker__input-time');
                   var day = _this.picker.activeTimeWrap.find('.c-datePicker__input-day').val();
@@ -1331,7 +1329,8 @@ $(function () {
         }
         val = val.split(':');
         $.each($wrap, function (i, el) {
-          $(el).scrollTop(Number(val[i]) * 32).addClass('active');
+          //动态跳到位置   dong
+          // $(el).scrollTop(Number(val[i]) * 32).addClass('active');
         });
       }
       return isMatch;
