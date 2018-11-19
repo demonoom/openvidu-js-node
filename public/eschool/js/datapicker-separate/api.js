@@ -204,6 +204,7 @@ var API = {
     outer.appendChild(inner);
     document.body.appendChild(outer);
     var w1 = inner.offsetWidth;
+    console.log(w1,'w1w1w1')
     outer.style.overflow = 'scroll';
     var w2 = inner.offsetWidth;
     if (w1 == w2) w2 = outer.clientWidth;

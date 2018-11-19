@@ -8,7 +8,6 @@ $(document).ready(function () {
 });
 
 function getUnionClassList() {
-    debugger
     $.ajax({
         type: "POST",
         url: "https://www.maaee.com/elearning/elearningControl/",
@@ -24,7 +23,6 @@ function getUnionClassList() {
             "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
         },
         success: function (data) {
-            debugger
             var res = JSON.parse(data);
             console.log(res);
             // var res = JSON.parse(res);

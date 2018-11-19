@@ -226,7 +226,6 @@
 
         //获取用户信息
         function getUserById() {
-            debugger
             $.ajax({
                 type: "POST",
                 url: utils.excoord_api_url,
@@ -606,7 +605,6 @@ console.log($(event.$input).parent().parent().index(),'下标')
 
 
     function openClass(class_name, class_imagePath, class_info, isPublish, teacherId, videos) {
-        debugger
         $.ajax({
             type: "POST",
             url: utils.elearning_api_url,

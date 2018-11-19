@@ -455,6 +455,7 @@
                 $('.dwb-n .dwb', elm).addClass('mbsc-ic mbsc-ic-loop2');
             
                 $('.dwwl', elm).on('touchstart mousedown DOMMouseScroll mousewheel', function (e) {
+                    console.log(e,'eeeeee')
                     if (e.type === 'mousedown' && touch) {
                         return;
                     }
