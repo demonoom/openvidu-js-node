@@ -317,16 +317,18 @@
 		   </ul>  -->
 	       <div id="board_image_container" >
 		       <div class="talk_tab">
+				   <!--　
 		       		<span id="pptSpan" class="select" onclick="changeContentTab('pptTab')">演示文稿</span>
 		       		<span class="line"></span>
-		       		<span id="danmuSpan" onclick="changeContentTab('danmuTab')">互动讨论</span>
+		       	   -->
+		       		<span id="danmuSpan" class="select" onclick="changeContentTab('danmuTab')">互动讨论</span>
 		       </div>
-			          <div id="pptTab">
+			          <div id="pptTab" style="display: none;">
 			          		<div id="board_imge_cell">
 			                    <iframe name="ppt_frame" id="ppt_frame"  height="100%" width="100%"></iframe>
 					          </div>
 			          </div>
-			          <div id="danmuTab">
+			          <div id="danmuTab" style="display: block;">
 		            	<!-- <div class="talk_tab" onclick="changeContentTab('danmuTab')">互动讨论 -->
 	                      <!--                  
 		                  <span class="hudong" id="canyu" onclick="sendDanmu();">发言</span>
@@ -361,7 +363,7 @@
 							</div>
 						</li> -->
 					</ul>
-					<div class="input_message">
+					<div class="input_message" style="display: block;">
 	                    		<input type="text" id="messageInput" /> <span class="hudong" id="canyu" onclick="sendDanmu();">发送</span>
 	                    	</div>
 			           </div>
@@ -375,7 +377,6 @@
      String.prototype.replaceAll = function(s1,s2){ 
    	   return this.replace(new RegExp(s1,"gm"),s2); 
      };
-  	 $("#danmuTab").hide();
 	 var classOver = false;
      
 
@@ -393,7 +394,7 @@
     	 if(command == "studentLogin"){
     	    var hlsUrl =  info.data.play_hls_url;
     	    if(hlsUrl){
-    	        $("#hlsVideo").src(hlsUrl);
+    	        $("#hlsVideo").attr("src",hlsUrl);
 			}
 		 }else if(command == "classOver"){
     		 classOver = true;
@@ -509,33 +510,33 @@
      }
      
      function playPPT(html){
-    	 var url = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=stduent&ppt="+html;
-         url = url.replaceAll("https://","http://");
-    	 $("#ppt_frame").attr("src",url);
+    	 //var url = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=stduent&ppt="+html;
+         //url = url.replaceAll("https://","http://");
+    	 //$("#ppt_frame").attr("src",url);
      }
      
      function closePPT(){
-     	 $("#ppt_frame").attr("src","");
+     	 //$("#ppt_frame").attr("src","");
      }
       
       function pptPre(){
-     	 window.frames["ppt_frame"].window.pre();
+     	 //window.frames["ppt_frame"].window.pre();
       }
       
       function pptPreAni(){
-    	  window.frames["ppt_frame"].window.pre();
+    	  //window.frames["ppt_frame"].window.pre();
       }
       
       function pptNext(){
-     	  window.frames["ppt_frame"].window.next();
+     	  //window.frames["ppt_frame"].window.next();
       }
       
       function pptClick(){
-     	  window.frames["ppt_frame"].window.click();
+     	  //window.frames["ppt_frame"].window.click();
       }
       
       function pptCheckPage(currentPage){
-     	 window.frames['ppt_frame'].window.pptCheckPage(currentPage);
+     	 //window.frames['ppt_frame'].window.pptCheckPage(currentPage);
       }
       
       function getVclassPPTOpenInfo(vid){

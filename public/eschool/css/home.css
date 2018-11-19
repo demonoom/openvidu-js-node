@@ -380,12 +380,13 @@ body {
     line-height: 1;
 }
 .table_data .list_item{
-    padding: 10px 8px;
+    padding: 6px 8px;
     line-height: 1;
     font-size: 14px;
 }
 .table_data .list_item span{
     display: inline-block;
+    vertical-align: middle;
 }
 .review{
     width: 620px;
@@ -438,14 +439,14 @@ body {
     border-radius: 2px 2px 0 0;
 }
 .create-content, .schedule_content{
-    padding: 30px 15px 0 15px;
+    padding: 20px 15px 0 15px;
     font-size: 14px;
     color: #666;
 }
 .schedule_content{
-    height: 236px;
-    overflow-y: auto;
-    margin-bottom: 12px;
+    height: 290px;
+    overflow-y: hidden;
+    margin-bottom: 0px;
     padding-top: 0
 }
 .create-content .create-contentLeft,  .schedule_content .create-contentLeft{
@@ -487,6 +488,7 @@ body {
     display: block;
     width: 100%;
     font-size: 14px;
+    margin-bottom: 10px;
 }
 .release-bottom span{
     line-height: 1;
@@ -496,6 +498,8 @@ body {
 .table-right{
     width:510px;
     display: inline-block;
+    float: right;
+    height: 290px;
 }
 .table_title{
     background: #f9f9f9;
@@ -539,6 +543,12 @@ body {
 }
 .table_data .table_title{
     background: #fff;
+}
+.table_data-cont{
+    max-height: 187px;
+    padding: 5px 0 0 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 .submit-btn{
     text-align: center;
@@ -590,8 +600,8 @@ input, textarea, button{
     background-size: 12px;
 }
 .class_image{
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 28px;
     object-fit: cover;
 }
 .setUp-Left{
@@ -634,21 +644,21 @@ input, textarea, button{
     margin-left: 0 !important;
 }
 .c-datepicker-picker{
-    line-height: 24px !important;
+    line-height: 22px !important;
 }
 .c-datepicker-date-picker.has-sidebar{
     width: 220px !important;
-    margin-top: -28px !important;
+    margin-top: -123px !important;
 }
 .c-datepicker-date-picker__time-header{
     padding: 5px 5px 5px;
 }
 .c-datepicker-input--small .c-datepicker-input__inner{
-    height: 26px !important;
-    line-height: 26px !important;
+    height: 22px !important;
+    line-height: 22px !important;
 }
 .c-datepicker-date-picker__header{
-    margin: 5px 5px !important;
+    margin: 0 5px !important;
 }
 .kxiconfont, .c-datepicker-date-picker__header-label{
     font-size: 14px !important;
@@ -657,14 +667,20 @@ input, textarea, button{
     padding: 2px !important;
 }
 .c-datepicker-date-table td, .c-datepicker-date-table td div{
-    height: 24px !important;
-    padding: 1px 0 !important;
+    height: 22px !important;
+    padding: 0 !important;
 }
 .c-datepicker-date-table th{
     padding: 0 5px 2px 5px !important;
 }
 .c-datepicker-button--text{
     float: left !important;
+}
+.c-datepicker-button--mini{
+    padding: 5px 15px !important;
+}
+.c-datepicker-picker__footer{
+    line-height: 1 !important;
 }
 .aBa-play, .aBa-review, .aBa-notPlay{
     width: 18px;
