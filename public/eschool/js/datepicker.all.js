@@ -1201,7 +1201,7 @@ $(function () {
         // 兼容滚动延时，导致下一个时间滚动清除掉上一个的timer,所以分开是三个
         clearTimeout(timerArr['timer' + index]);
           var after = $('.c-datepicker-scrollbar__wrap').scrollTop();
-          // console.log(before - after,'Math.abs(before - after)')
+          console.log(before - after,'Math.abs(before - after)')
           var flag = (Math.abs(before - after) > 22)?true:false;
           if (before<after && flag) {
               turn = '上';
@@ -1224,7 +1224,6 @@ $(function () {
                   top = num * 32;
                   $(this).scrollTop(top - 10);
                   $('.c-datepicker-time-spinner__item').css({lineHeight:'15px'});
-
                   var index = _this.picker.activeTimeWrap.find('.c-datepicker-scrollbar__wrap').index($(this));
                   var $time = _this.picker.activeTimeWrap.find('.c-datePicker__input-time');
                   var day = _this.picker.activeTimeWrap.find('.c-datePicker__input-day').val();
