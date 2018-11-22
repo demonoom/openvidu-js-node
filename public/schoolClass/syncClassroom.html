@@ -10,6 +10,7 @@
 <body>
 <div class="mask"></div>
 <div class="review_iframe_box">
+<div><span class="review_iframe_title"></span><span class="cancelX">X</span></div>
         <iframe src="" frameborder="0" id="review_iframe"></iframe>
 </div>
 <div class="wrap">
@@ -143,12 +144,21 @@
             $('#review_iframe').attr('src','');
         });
 
+        $('.cancelX').on('click',function(){
+                    $('.mask').hide();
+                    $('.review_iframe_box').hide();
+                    $('#review_iframe').attr('src','');
+        });
+
          window.addEventListener('message',function(rs){
                  var res = (rs.data);
+//                 console.log(rs.data,'差啊看');
+//                 return;
                  if(res.method == 'showReview'){
                      $('.review_iframe_box').show();
                      $('.mask').show();
-                     $('#review_iframe').attr('src','https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid='+res.vid+'&userId='+res.userId+'&type=3&name=');
+                     $('.review_iframe_title').text(res.name);
+                     $('#review_iframe').attr('src','https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid='+res.vid+'&userId='+res.userId+'&type=3&name='+res.name);
                  }
         });
 

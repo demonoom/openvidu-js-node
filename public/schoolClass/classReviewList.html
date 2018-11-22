@@ -92,7 +92,8 @@
                $("#loading").text("点击加载更多");
                infos.forEach(function(info){
                    var vid = info.courseId;
-                   var title = info.title;
+                   var title = info.name;
+                   console.log(info);
                    var openTeacher = info.teacher;
                    var unionTeachers = info.unionTeachers;
                    var pass = info.password;
@@ -105,7 +106,7 @@
                    template.find("#main_teacher_name").text("主讲老师 : "+openTeacher.userName);
                    $(template.children("div").get(0)).removeClass("self");
                    template.find("#join_class").html("查看<br/>回顾");
-                   template.find("#join_class").attr("onclick","openClassReview("+vid+","+openTeacher.colUid+");");
+                   template.find("#join_class").attr("onclick","openClassReview("+vid+","+openTeacher.colUid+",'"+title+"');");
 
 
                    template.find("#start_time").text("开课时间 : "+startTime);
@@ -142,8 +143,8 @@
        }})
     }
 
-    function openClassReview(clazzId,userId){
-        parent.window.postMessage({method:'showReview',vid:clazzId,userId:userId},"*");
+    function openClassReview(clazzId,userId,name){
+        parent.window.postMessage({method:'showReview',vid:clazzId,userId:userId,name:name},"*");
     }
 
     function datetimeFormat(longTypeDate){
