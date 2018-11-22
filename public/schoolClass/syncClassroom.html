@@ -8,9 +8,14 @@
     <link rel="stylesheet" href="./css/syncClassroom.css">
 </head>
 <body>
-<div class="mask"></div>
+<div class="mask" style="opacity: 0"></div>
 <div class="review_iframe_box">
-<div><span class="review_iframe_title"></span><span class="cancelX">X</span></div>
+<div class="review-modalTitle">
+    <span class="review_iframe_title"></span>
+    <span class="cancelX layui-layer-setwin">
+        <a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
+    </span>
+</div>
         <iframe src="" frameborder="0" id="review_iframe"></iframe>
 </div>
 <div class="wrap">

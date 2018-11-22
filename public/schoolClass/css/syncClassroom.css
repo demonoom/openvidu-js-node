@@ -306,9 +306,24 @@ body {
     height: 89%;
     display: none;
     z-index: 101;
+    box-shadow: 0px 6px 50px rgba(0,0,0,0.4) !important;
 }
 
 #review_iframe{
     width: 100%;
     height: 100%;
+}
+.review-modalTitle{
+    padding: 0 80px 0 20px;
+    height: 42px;
+    line-height: 42px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    background-color: #F8F8F8;
+    border-radius: 2px 2px 0 0;
+}
+.review-modalTitle + iframe{
+    height: calc(100% - 44px) !important;
 }
