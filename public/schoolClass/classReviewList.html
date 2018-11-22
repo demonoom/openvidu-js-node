@@ -70,12 +70,16 @@
             float: right;
             cursor: pointer;
         }
+        #ul_list{
+                    height: calc(100% - 164px);
+                    /*height: 300px;*/
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                    padding-left: 30px;
+                    padding-right: 20px;
+        }
         #item_container{
-            height: calc(100% - 64px);
-            overflow-x: hidden;
-            overflow-y: auto;
-            padding-left: 30px;
-            padding-right: 20px;
+
 
         }
         ::-webkit-scrollbar {
@@ -208,16 +212,22 @@
    <!-- <span class="courseBtn" onclick="openUnionClass();">新建课堂</span> -->
 </div>
 
-
+<div id="ul_list">
 <div id="item_container">
 
 
 </div>
+<div id="loading" style="display: none;"> 点击加载更多 </div>
+
+</div>
+
+
+
+
 <div class='emptyCont' style="display: none">
     <img src='img/icon_empty.png'/><br/>
     暂无数据
 </div>
-<div id="loading" style="display: none;"> 正在加载...</div>
 
 <div id="item_template" style="display: none;">
     <div class="item">
@@ -230,56 +240,60 @@
         <div id="join_class" class="joinBtn">查看<br/>回顾</div>
     </div>
 </div>
+
 </body>
 
-<script type="application/javascript">
 
+<script type="application/javascript">
+    var pageNo = 1;
     var teacherId = Service.getQueryString("teacherId");
+            console.log(teacherId,'teacherId');
     var teacherName = Service.getQueryString("teacherName");
+    $("#loading").show();
     $(document).ready(function(){
         getUnionClassList();
     });
 
 
-
-
+    //点击加载更多
+    $("#loading").on('click',function(){
+        pageNo++;
+        getUnionClassList();
+//        console.log('加载更多');
+    })
     function getUnionClassList() {
        var service = new Service();
        var data = {};
-       data.method = 'getCurrentUnionClassList';
-       data.userId = teacherId+"";
-       $("#loading").show();
+       data.method = 'viewCourseReviewPage';
+       data.adminId = teacherId+"";
+       data.cType = 3+"";
+       data.begin = "2000-01-01";
+       data.end = "2050-01-01";
+       data.tId = -1+"";
+       data.pageNo = pageNo+"";
        $("#loading").text("正在请求数据...");
        service.doWebService(data,{onResponse:function(result){
            var infos = result.response;
            if(infos.length > 0){
                $(".emptyCont").hide();
-               $("#loading").text("数据加载完毕");
+               $("#loading").text("点击加载更多");
                infos.forEach(function(info){
-                   var vid = info.vid;
+                   var vid = info.courseId;
                    var title = info.title;
-                   var openTeacher = info.openTeacher;
+                   var openTeacher = info.teacher;
                    var unionTeachers = info.unionTeachers;
                    var pass = info.password;
-                   var startTime = datetimeFormat(info.startTime);
+                   console.log(info.openTime);
+                   var startTime = (info.openTime);
                    var template = $("#item_template");
-//                   console.log(info.openTeacher.colUid,'info');
                    $(template.children("div").get(0)).attr("id","vclass_"+vid);
                    $(template.children("div").get(0)).attr("pass",pass);
                    template.find("#title").text(title);
                    template.find("#main_teacher_name").text("主讲老师 : "+openTeacher.userName);
                    $(template.children("div").get(0)).removeClass("self");
                    template.find("#join_class").html("查看<br/>回顾");
-                   template.find("#join_class").attr("onclick","openClassReview("+vid+","+info.openTeacher.colUid+");");
-//                   if(openTeacher.colUid == teacherId){
-//                       $(template.children("div").get(0)).addClass("self");
-//                       template.find("#join_class").html("继续<br/>上课");
-//                       template.find("#join_class").attr("onclick","continueClass("+info.clazzId+",'"+info.title+"','"+info.password+"');");
-//                   }else{
-//                       $(template.children("div").get(0)).removeClass("self");
-//                       template.find("#join_class").html("加入<br/>课堂");
-//                       template.find("#join_class").attr("onclick","joinUnionClass("+vid+");");
-//                   }
+                   template.find("#join_class").attr("onclick","openClassReview("+vid+","+openTeacher.colUid+");");
+
 
                    template.find("#start_time").text("开课时间 : "+startTime);
                    var unionTeacherNames = "";
@@ -302,7 +316,12 @@
                });
            }else{
                // $("#loading").text("没有获取到数据...");
-               $(".emptyCont").show();
+               if(pageNo == 1){
+                   $(".emptyCont").show();
+               }else{
+                   $("#loading").text("数据已全部加载")
+               }
+
            }
        },onError:function(error){
 
@@ -310,16 +329,6 @@
     }
 
     function openClassReview(clazzId,userId){
-//        var NParams = "";
-//        var browser = platform.name;
-//        if(browser.indexOf("Electron") != -1){
-//            NParams = "&startType=1_n";
-//        }
-//        $('.review_iframe_box').show();
-//        $('#review_iframe').attr('src','https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid='+clazzId+'&userId='+userId+'&type=3&name=');
-//
-//        console.log('展示课堂回顾');
-//        showIframe();
         parent.window.postMessage({method:'showReview',vid:clazzId,userId:userId},"*");
     }
 
@@ -370,42 +379,6 @@
         }
         return minute;
     }
-
-//    function openUnionClass(){
-//        layer.open({
-//            type: 2,
-//            title: '开启一个联合开课',
-//            shadeClose: true,
-//            shade: 0.8,
-//            area: ['330px', '400px'],
-//            content: 'openUnionClass.html?teacherId='+teacherId+"&userName="+teacherName
-//        });
-//    }
-//
-//    function joinUnionClass(vid){
-//        layer.open({
-//            type: 2,
-//            title: '进入课堂验证',
-//            shadeClose: true,
-//            shade: 0.8,
-//            area: ['330px', '400px'],
-//            content: 'joinDialog.html?teacherId='+teacherId+"&vid="+vid
-//        });
-//    }
-
-
-//    function joinCheck(vid,enterPass,selectedClazzIds){
-//        if(typeof(selectedClazzIds) == undefined || selectedClazzIds == 0){
-//            selectedClazzIds == "";
-//        }
-//        var pass = $("#vclass_"+vid).attr("pass");
-//        if(enterPass == pass){
-//            window.open("teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName="+teacherName+"&clazzIds="+selectedClazzIds,"CLASS_WINDOW");
-//            layer.closeAll();
-//        }else{
-//            layer.msg("邀请码不正确~");
-//        }
-//    }
 
 </script>
 </html>
