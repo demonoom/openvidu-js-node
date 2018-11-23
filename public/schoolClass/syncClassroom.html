@@ -142,6 +142,13 @@
             $('.classReview_box').show();
         })
 
+        $('#closeIframe').on('click', function () {
+            $(".iframeDiv").hide();
+            $(".mask").hide()
+            document.getElementsByClassName("calm")[0].innerHTML = "";
+            document.getElementsByClassName("iframeTitle")[0].innerHTML = "";
+        })
+
 
         $('.exit').on('click', function () {
             layer.confirm('您确定要退出登录?', {
@@ -157,6 +164,11 @@
             $('.mask').hide();
             $('.review_iframe_box').hide();
             $('#review_iframe').attr('src', '');
+
+
+            $(".iframeDiv").hide();
+            document.getElementsByClassName("calm")[0].innerHTML = "";
+            document.getElementsByClassName("iframeTitle")[0].innerHTML = "";
         });
 
         $('.cancelX').on('click', function () {
