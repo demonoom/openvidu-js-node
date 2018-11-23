@@ -327,3 +327,60 @@ body {
 .review-modalTitle + iframe{
     height: calc(100% - 44px) !important;
 }
+
+/*课件预览弹窗*/
+.iframeDiv {
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: white;
+    width: 500px;
+    height: 80%;
+    z-index: 1001;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 6px 50px rgba(0, 0, 0, 0.4) !important;
+}
+.iframeDiv .iframeBox {
+    border: 0;
+    width: 100%;
+    height: calc(100% - 38px);
+}
+.iframeDiv .iframeBox .iframeBox {
+    width: 100%;
+    height: 100%;
+}
+.iframeDiv .text_hidden {
+    text-align: center;
+    line-height: 38px;
+    margin: 0;
+    background-color: #f8f8f8;
+    font-size: 15px;
+    width: 100%;
+    display: block;
+}
+.iframeDiv .iframeTitle {
+    color: #333;
+    font-weight: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 50px;
+    box-sizing: border-box;
+    margin: 0;
+}
+.iframeDiv .closeIframe {
+    background: url("../img/icon_modalClose.png") no-repeat;
+    background-size: cover;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    right: 15px;
+    top: 11px;
+    font-size: 0;
+    cursor: pointer;
+}
