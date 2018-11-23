@@ -335,8 +335,8 @@ body {
     top: 50%;
     left: 50%;
     background: white;
-    width: 500px;
-    height: 80%;
+    width: 600px;
+    height: 89%;
     z-index: 1001;
     -webkit-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
