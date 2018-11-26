@@ -45,6 +45,7 @@
 </body>
 <script src="./js/jquery.min.js"></script>
 <script src="./js/simple.js"></script>
+<script src="./js/layer/layer.js"></script>
 <script type="text/javascript">
     $(function () {
         checkShowPcDownload();
@@ -139,7 +140,7 @@
                         // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
 
                     } else {
-                        alert('密码错误');
+                        layer.msg(res.msg);
                     }
                 },
                 error: function (e) {
