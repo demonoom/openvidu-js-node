@@ -10,27 +10,27 @@
 <body>
 <div class="mask" style="opacity: 0"></div>
 <div class="review_iframe_box">
-<div class="review-modalTitle">
-    <span class="review_iframe_title"></span>
-    <span class="cancelX layui-layer-setwin">
+    <div class="review-modalTitle">
+        <span class="review_iframe_title"></span>
+        <span class="cancelX layui-layer-setwin">
         <a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:;"></a>
     </span>
-</div>
-        <iframe src="" frameborder="0" id="review_iframe"></iframe>
+    </div>
+    <iframe src="" frameborder="0" id="review_iframe"></iframe>
 </div>
 <div class="wrap">
     <div class="inner">
         <div class="nav">
-    <div class="logo"><img src="img/icon_yunClassLogo.png"/></div>
+            <div class="logo"><img src="img/icon_yunClassLogo.png"/></div>
 
-    <div class="userInfo">
-        <div class="my_flex">
-            <div class="avatar">
-                <img id="user_avatar" src="" alt="">
-            </div>
-            <div class="username"></div>
-            <div class="exit">退出</div>
-        </div>
+            <div class="userInfo">
+                <div class="my_flex">
+                    <div class="avatar">
+                        <img id="user_avatar" src="" alt="">
+                    </div>
+                    <div class="username"></div>
+                    <div class="exit">退出</div>
+                </div>
             </div>
         </div>
         <div class="box_cont">
@@ -47,9 +47,9 @@
                     <iframe id="classInfo_iframe" src="" frameborder="0"></iframe>
                 </div>
                 <!--课程回顾 -->
-                   <div class="classReview_box">
-                         <iframe id="classReview_iframe" src="" frameborder="0"></iframe>
-                   </div>
+                <div class="classReview_box">
+                    <iframe id="classReview_iframe" src="" frameborder="0"></iframe>
+                </div>
                 <!--我的课件 -->
                 <div class="myFile_box">
                     <iframe id="myFile_iframe" src="" frameborder="0"></iframe>
@@ -57,6 +57,15 @@
             </div>
 
 
+        </div>
+
+        <div class="iframeDiv" style="display: none">
+            <span id="closeIframe" class="closeIframe">关闭</span>
+            <div class="text_hidden">
+                <h3 class="iframeTitle"></h3>
+            </div>
+
+            <div class="iframeBox calm"></div>
         </div>
     </div>
 </div>
@@ -73,30 +82,31 @@
         var teacherId = Service.getQueryString("teacherId");
         var teacherName = Service.getQueryString("teacherName");
         getUserById();
-        $('#classInfo_iframe').attr('src','unionClassList.html?teacherId='+teacherId+'&teacherName='+teacherName+'');
-        $('#classReview_iframe').attr('src','classReviewList.html?teacherId='+teacherId+'&teacherName='+teacherName+'');
-        $('#myFile_iframe').attr('src','https://jiaoxue.maaee.com:8099/#/antPlate?ident='+teacherId+'&fileId=-1&title=蚁盘题目&phoneType=0')
+        $('#classInfo_iframe').attr('src', 'unionClassList.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '');
+        $('#classReview_iframe').attr('src', 'classReviewList.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '');
+        $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
+//        $('#myFile_iframe').attr('src', 'http://192.168.50.29:8091/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
 
         //socket 监听
         simple.clazzWsListener = {
             onError: function (errorMsg) {
-                console.log(errorMsg,"errorMsg");
+                console.log(errorMsg, "errorMsg");
             }, onWarn: function (warnMsg) {
-                console.log(warnMsg,"warnMsg");
+                console.log(warnMsg, "warnMsg");
             }, onMessage: function (info) {
                 var command = info.command;
                 var messageData = info.data;
                 if (command == "office2PdfSuccess" && messageData.createUid == teacherId) {
                     var cloudFileName = messageData.cloudFileName;
-                    var tipMessage = "课件\""+cloudFileName+"\"已经转码成功!";
-                    var tipMessageHTML = "<div class='classText'>"+tipMessage+"</div>";
+                    var tipMessage = "课件\"" + cloudFileName + "\"已经转码成功!";
+                    var tipMessageHTML = "<div class='classText'>" + tipMessage + "</div>";
                     layer.open({
                         type: 1,
                         shade: false,
                         closeBtn: 0,
                         skin: 'yourclass',
                         area: ['100%', '50px'],
-                        offset:[0,0],
+                        offset: [0, 0],
                         title: false, //不显示标题
                         time: 3000, //2秒后自动关闭
                         content: tipMessageHTML
@@ -123,13 +133,20 @@
             $('.classReview_box').hide();
         });
 
-        $('#classReview').on('click',function(){
+        $('#classReview').on('click', function () {
             $('#classReview').addClass('active');
             $('#myFile').removeClass('active');
             $('#classInfo').removeClass('active');
             $('.classInfo_box').hide();
             $('.myFile_box').hide();
             $('.classReview_box').show();
+        })
+
+        $('#closeIframe').on('click', function () {
+            $(".iframeDiv").hide();
+            $(".mask").hide()
+            document.getElementsByClassName("calm")[0].innerHTML = "";
+            document.getElementsByClassName("iframeTitle")[0].innerHTML = "";
         })
 
 
@@ -143,28 +160,48 @@
         });
 
 
-        $('.mask').on('click',function(){
+        $('.mask').on('click', function () {
             $('.mask').hide();
             $('.review_iframe_box').hide();
-            $('#review_iframe').attr('src','');
+            $('#review_iframe').attr('src', '');
+
+
+            $(".iframeDiv").hide();
+            document.getElementsByClassName("calm")[0].innerHTML = "";
+            document.getElementsByClassName("iframeTitle")[0].innerHTML = "";
         });
 
-        $('.cancelX').on('click',function(){
-                    $('.mask').hide();
-                    $('.review_iframe_box').hide();
-                    $('#review_iframe').attr('src','');
+        $('.cancelX').on('click', function () {
+            $('.mask').hide();
+            $('.review_iframe_box').hide();
+            $('#review_iframe').attr('src', '');
         });
 
-         window.addEventListener('message',function(rs){
-                 var res = (rs.data);
-//                 console.log(rs.data,'差啊看');
-//                 return;
-                 if(res.method == 'showReview'){
-                     $('.review_iframe_box').show();
-                     $('.mask').show();
-                     $('.review_iframe_title').text(res.name);
-                     $('#review_iframe').attr('src','https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid='+res.vid+'&userId='+res.userId+'&type=3&name='+res.name);
-                 }
+        window.addEventListener('message', function (rs) {
+            var res = (rs.data);
+            if (res.method == 'showReview') {
+                $('.review_iframe_box').show();
+                $('.mask').show();
+                $('.review_iframe_title').text(res.name);
+                $('#review_iframe').attr('src', 'https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
+            } else if (res.method == "watchFiles") {
+                var obj = res.data
+                var type = obj.suffix
+
+                $(".mask").show();
+                $(".iframeDiv").show();
+                document.getElementsByClassName("iframeTitle")[0].innerHTML = obj.name;
+
+                if (type == 'mp4') {
+                    var url = 'https://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/' + obj.uuid + '/' + obj.id;
+                } else {
+                    var url = "https://www.maaee.com/Excoord_PhoneService/cloudFile/cloudFileShow/" + obj.id + "/" + obj.createUid;
+                }
+
+                setTimeout(() => {
+                    $("<iframe class='iframeBox' src=" + url + "></iframe>").prependTo($(".calm"))
+                }, 300)
+            }
         });
 
 
