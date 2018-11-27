@@ -1885,7 +1885,7 @@ video{
               electronEinwindow = remote.getCurrentWindow();
           }
           electronEinwindow.setSize($("#left").width()-1,$("#left").height());
-          electronEinwindow.webContents.executeJavaScript("setTitle('您正在桌面讲课中~~~);");
+          electronEinwindow.webContents.executeJavaScript("setTitle('您正在桌面讲课中~~~');");
           electronEinwindow.webContents.executeJavaScript('showActionBarRefresh(false);');
           electronEinwindow.webContents.executeJavaScript('showActionBarMin(false);');
           electronEinwindow.webContents.executeJavaScript('showActionBarMax(true);');
