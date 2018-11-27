@@ -377,7 +377,7 @@ video{
     	  }
 
           var browser = platform.name;
-          if(browser.indexOf("Electron") != -1){
+          if(browser.indexOf("Electron") != -1 && show){
               if(stream.user.userName != '桌面'){
                   toNormalShowType();
               }else{
