@@ -76,14 +76,16 @@ video{
    <div class="live_left" id="left" onmouseleave="showMaiXuTan(false);">
 	    <div id="video_container">
 		</div>
-		<div class="video_operation_menu video_center" style="text-align:left; padding-left:8px">
+		<div class="video_operation_menu video_center" style="text-align:left; padding-left:0px; margin-left:48px">
 		    <a onmouseover="showMaiXuTan(true);" class="video_operation_menu_a" string_id="string_maixu">麦序</a>
 
+			<!--
 			<a id="fengping" class="video_operation_menu_a" href="javascript:toggleVideoShowStyle();" >分屏</a>
+			-->
 
 		    <a id="dismiss_class" string_id="string_xiake" class="video_operation_menu_a" href="javascript:dismissClass();" ></a>
 
-		    <div id="maixu_tan" class="maixu_tan" style="display: none;" onmouseleave="showMaiXuTan(false);">
+		    <div id="maixu_tan" class="maixu_tan" style="display: none; left:-48px" onmouseleave="showMaiXuTan(false);">
 		        <div class="maixu_tan_header">麦序</div>
 		        <div id="mai_list" class="maixu_tan_cont">
 			    </div>
@@ -370,13 +372,28 @@ video{
 	}
 
     function showBigVideo(stream,show,sendCommand){
-          var isFenpingMode = $("#right").is(':hidden');
-          if(show && isFenpingMode){
-              return;
-		  }
-    	  if(typeof(stream) == 'undefined'){
+    	  if(typeof(stream) == 'undefined' || stream == undefined || stream == null){
     		  return;
     	  }
+
+          var browser = platform.name;
+          if(browser.indexOf("Electron") != -1){
+              if(stream.user.userName != '桌面'){
+                  toNormalShowType();
+              }else{
+                  toFloatShowType();
+                  $("#big_video").empty();
+                  $("#big_video").attr("current_stream","");
+                  $("#big_video").hide();
+                  if(sendCommand){
+                      //告诉学生显示大视频
+                      var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':1}}" + ')');
+                      connection.send(protocal);
+                  }
+                  return;
+              }
+           }
+
 		  if(show){
 			  var current_stream = $("#big_video").attr("current_stream");
 		      if(current_stream == stream.getId()){
@@ -403,7 +420,6 @@ video{
                   if(stream.getId() <=2 ){
                       $("#big_video").find("video").css("object-fit","contain");
                   }
-
 		    	  if(sendCommand){
 		    		  //告诉学生显示大视频
 			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':1}}" + ')');
@@ -434,6 +450,7 @@ video{
                   }
 			  }
 		  }
+
 	}
 
 	fullScreen();
@@ -1139,7 +1156,8 @@ video{
 	  layer.confirm(jQuery.i18n.prop("string_queding_xiake"), {
 		     btn: [jQuery.i18n.prop("string_sure")],
 		     closeBtn: 1,
-		     title:jQuery.i18n.prop("string_xiake")
+		     title:jQuery.i18n.prop("string_xiake"),
+		     skin:"dismiss_classLayer"
 	   }, function(index){
 		     leave();
 		     var protocal = eval('(' + "{'command':'classOver'}" + ')');
@@ -1836,20 +1854,69 @@ video{
         }
   }
 
+  var electronEinwindow = null;
+
   function toggleVideoShowStyle(){
-       var isHidden = $("#right").is(':hidden');
-       if(isHidden){
-           $("#right").show();
-           $("#left").css("width","240px");
-           $(".fenping_video").css({'width':'230px','height':'160px'});
+      //  var isHidden = $("#right").is(':hidden');
+      //  if(isHidden){
+      //      $("#right").show();
+      //      $("#left").css("width","240px");
+      //      $(".fenping_video").css({'width':'230px','height':'160px'});
+      //
+      //  }else{
+      //      $("#right").hide();
+      //      $("#left").css("width","100%");
+      //
+      //      changeFengpingItemStyle();
+      //  }
+      // changeFengpingTipName();
 
-	   }else{
-           $("#right").hide();
-           $("#left").css("width","100%");
+  }
 
-           changeFengpingItemStyle();
-	   }
-      changeFengpingTipName();
+  function toFloatShowType(){
+      if($("#right").is(':hidden')){
+          return;
+	  }
+      var browser = platform.name;
+      if(browser.indexOf("Electron") != -1){
+          $("#right").hide();
+          if(electronEinwindow == null){
+              var remote = require('electron').remote;
+              electronEinwindow = remote.getCurrentWindow();
+          }
+          electronEinwindow.setSize($("#left").width()-1,$("#left").height());
+          electronEinwindow.webContents.executeJavaScript("setTitle('您正在桌面讲课中~~~);");
+          electronEinwindow.webContents.executeJavaScript('showActionBarRefresh(false);');
+          electronEinwindow.webContents.executeJavaScript('showActionBarMin(false);');
+          electronEinwindow.webContents.executeJavaScript('showActionBarMax(true);');
+          electronEinwindow.webContents.executeJavaScript('showActionBarClose(false);');
+          electronEinwindow.setAlwaysOnTop(true);
+          electronEinwindow.setResizable(false);
+      }
+  }
+
+  function toNormalShowType(){
+      onMaximize();
+      if(electronEinwindow == null){
+          var remote = require('electron').remote;
+          electronEinwindow = remote.getCurrentWindow();
+      }
+      electronEinwindow.maximize();
+  }
+
+  function onMaximize(){
+      $("#right").show();
+      if(electronEinwindow == null){
+          var remote = require('electron').remote;
+          electronEinwindow = remote.getCurrentWindow();
+      }
+      electronEinwindow.webContents.executeJavaScript("setTitle('同步课堂-主讲');");
+      electronEinwindow.webContents.executeJavaScript('showActionBarRefresh(true);');
+      electronEinwindow.webContents.executeJavaScript('showActionBarMin(true);');
+      electronEinwindow.webContents.executeJavaScript('showActionBarMax(true);');
+      electronEinwindow.webContents.executeJavaScript('showActionBarClose(true);');
+      electronEinwindow.setAlwaysOnTop(false);
+      electronEinwindow.setResizable(true);
   }
 
   function changeFengpingTipName(){

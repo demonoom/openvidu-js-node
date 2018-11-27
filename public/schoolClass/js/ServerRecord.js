@@ -20,7 +20,7 @@ function stopCapture(){
         mediaRecorder.stop();
         mediaRecorder = null;
     }
-    setBadgeText('点击录屏');
+    setBadgeText('服务端录屏');
     setBadgeImg('videoSource-menu3');
     recording = false;
     needReconnect = false;

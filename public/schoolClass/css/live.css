@@ -1462,3 +1462,16 @@ ul.layui-layer-tabmain li{
     right: 20px!important;
     top:40%!important;
 }
+.dismiss_classLayer{
+    min-width: 200px !important;
+}
+.dismiss_classLayer .layui-layer-content{
+    padding: 15px 20px 10px 20px !important;
+}
+.dismiss_classLayer .layui-layer-title{
+    height: 36px;
+    line-height: 36px;
+}
+.dismiss_classLayer .layui-layer-setwin{
+    top: 9px;
+}

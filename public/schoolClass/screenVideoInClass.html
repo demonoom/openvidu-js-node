@@ -91,7 +91,7 @@
     function joinRoom(){
         client = new ExRTC();
 
-        client.join(vid+"", random(-1000000,-2000000),userName, function() {
+        client.join(vid+"", random(-1000000,-2000000),"桌面", function() {
             publish();
         }, function() {
             console.log("Join channel failed");
