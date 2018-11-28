@@ -12,6 +12,7 @@
 <meta name="viewport" content="width=device-width,user-scalable=no" />
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/simple_websocket_connection.js?v=1"></script>
 <script type="text/javascript" src="js/clazz_websocket_connection.js?v=20"></script>
 <script type="text/javascript" src="js/uiutils.js"></script>
 <link rel="icon" href="img/logo_title.png" type="image/x-icon">
@@ -176,6 +177,7 @@
     var videoSourceId = "";
 	var i18nLanguage = "zh-CN";
 	var isStudentManager=false;
+    var simpleConn;
 	function loadStrings() {
 		jQuery.i18n.properties({
 		    name:'strings', 
@@ -413,6 +415,7 @@
 		 initAssiantQrcode();
 		 isPreparedOK = true;
 		 getUserPermissionsByUid();
+         initSimpleConnection();
 	 }else if(command == 'agree_connect_mai'){
 			shangmai();
 	 }else if(command == 'disconnect_mai'){
@@ -650,9 +653,44 @@
   }
   
   function showBigImages(){
-	  var e = window.event;
-	  $.openPhotoGallery(e.target,".live_gongping");
+      var e = window.event;
+      var imageSrc = e.target.currentSrc;
+      //$.openPhotoGallery(e.target,".live_gongping_t");
+      editBigImage(imageSrc,true);
   }
+
+  function editBigImage(imageSrc,notifyOthers){
+      if(imageSrc == undefined || imageSrc == null){
+          return;
+      }
+      var pageSrc = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"_showBigImage&userId="+userId+"&role=manager&ppt="+imageSrc;
+      layer.open({
+          type: 1,
+          title: false,
+          area: ['90%', '90%'], //宽高
+          content: '<iframe src="'+pageSrc+'" style="width:100%;height: 100%"></iframe>',
+          end : function() {
+              if(notifyOthers){
+                  var info = {};
+                  info.command = "vclass_close_edit_big_image";
+                  info.data = {};
+                  info.data.roomid = vid;
+                  info.data.userId = userId;
+                  simpleConn.send(info);
+              }
+          }
+      });
+      if(notifyOthers){
+          var info = {};
+          info.command = "vclass_edit_big_image";
+          info.data = {};
+          info.data.roomid = vid;
+          info.data.userId = userId;
+          info.data.image = imageSrc;
+          simpleConn.send(info);
+      }
+  }
+
   
   var client, localStream;
 
@@ -1341,6 +1379,37 @@
 	            }
 			}}); 
 	  }
+
+      function initSimpleConnection() {
+        try {
+			simpleConn = new SimpleConnection();
+            simpleConn.clazzWsListener = {
+                onError : function(errorMsg) {
+                },
+                onWarn : function(warnMsg) {
+                },
+                onMessage : function(info) {
+                    var command = info.command;
+                    if(command == "vclass_edit_big_image"){
+                        var roomid = info.data.roomid;
+                        var image = info.data.image;
+                        var uid = info.data.userId;
+                        if(roomid == vid && uid != userId){
+                            editBigImage(image);
+                        }
+                    }else if(command == "vclass_close_edit_big_image"){
+                        var roomid = info.data.roomid;
+                        var uid = info.data.userId;
+                        if(roomid == vid && uid != userId){
+                            layer.closeAll();
+                        }
+                    }
+                }
+            };
+            simpleConn.connect();
+        } catch (e) {
+        }
+      }
 
 </script>
 

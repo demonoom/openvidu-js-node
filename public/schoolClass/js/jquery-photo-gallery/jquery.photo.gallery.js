@@ -661,7 +661,7 @@
             $("#J_pg").remove();
             $("<iframe '></iframe").appendTo("body")
                 .attr("id", "J_pg")
-                .attr("src", "Excoord_PhoneService/js/jquery-photo-gallery/gallery.html")
+                .attr("src", "js/jquery-photo-gallery/gallery.html")
                 .css({
                     position: "absolute",
                     left: (document.body.clientWidth - winWidth) / 2,

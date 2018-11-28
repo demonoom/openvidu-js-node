@@ -226,6 +226,7 @@ video{
     var audioSourceId = "";
     var videoSourceId = "";
     var speakStatus=false;
+    var simpleConn;
     if("zh-CN"==languageUrl){
  	   i18nLanguage="zh-CN";
     }else if("en"==languageUrl){
@@ -507,6 +508,7 @@ video{
  		 initStudentSpeak();
          initAssiantQrcode();
          initSimpleConnection();
+         testSendImg();
  		 isPreparedOK = true;
  	 }else if(command == 'simpleClassDanmu'){
 		 var message = info.data.message;
@@ -695,7 +697,41 @@ video{
 
   function showBigImages(){
 	  var e = window.event;
-	  $.openPhotoGallery(e.target,".live_gongping_t");
+	  var imageSrc = e.target.currentSrc;
+	  //$.openPhotoGallery(e.target,".live_gongping_t");
+      editBigImage(imageSrc,true);
+  }
+
+  function editBigImage(imageSrc,notifyOthers){
+      if(imageSrc == undefined || imageSrc == null){
+          return;
+	  }
+      var pageSrc = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"_showBigImage&userId="+userId+"&role=manager&ppt="+imageSrc;
+      layer.open({
+          type: 1,
+          title: false,
+          area: ['90%', '90%'], //宽高
+          content: '<iframe src="'+pageSrc+'" style="width:100%;height: 100%"></iframe>',
+          end : function() {
+             if(notifyOthers){
+                 var info = {};
+                 info.command = "vclass_close_edit_big_image";
+                 info.data = {};
+                 info.data.roomid = vid;
+                 info.data.userId = userId;
+                 simpleConn.send(info);
+			 }
+          }
+      });
+      if(notifyOthers){
+          var info = {};
+          info.command = "vclass_edit_big_image";
+          info.data = {};
+          info.data.roomid = vid;
+          info.data.userId = userId;
+          info.data.image = imageSrc;
+          simpleConn.send(info);
+      }
   }
 
   function isTheUserVideoOnline(userId){
@@ -1831,7 +1867,7 @@ video{
 
   function initSimpleConnection() {
         try {
-            var simpleConn = new SimpleConnection();
+			simpleConn = new SimpleConnection();
             simpleConn.clazzWsListener = {
                 onError : function(errorMsg) {
                 },
@@ -1846,7 +1882,20 @@ video{
                         if (roomid == vid) {
                             playPPT(html, true);
                         }
-                    }
+                    }else if(command == "vclass_edit_big_image"){
+                        var roomid = info.data.roomid;
+                        var image = info.data.image;
+                        var uid = info.data.userId;
+                        if(roomid == vid && uid != userId){
+                            editBigImage(image,false);
+						}
+					}else if(command == "vclass_close_edit_big_image"){
+                        var roomid = info.data.roomid;
+                        var uid = info.data.userId;
+                        if(roomid == vid && uid != userId){
+                            layer.closeAll();
+                        }
+					}
                 }
             };
             simpleConn.connect();
@@ -1993,6 +2042,17 @@ video{
 	 	    }
 	    }
 	});
+
+    function testSendImg(){
+//        var message = {};
+//        message.fromUser = {};
+//        message.fromUser.colUid = 119665;
+//        message.fromUser.userName = "王鹏飞";
+//        message.fromUser.colUtype = "TEAC";
+//        message.attachment = {};
+//        message.attachment.address = "http://60.205.86.217/upload9/2018-11-26/15/024d0b9d-9393-4225-a2f3-ff90739b0efe.webp";
+//        showMessage(message);
+	}
 
 </script>
 
