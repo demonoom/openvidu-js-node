@@ -617,7 +617,6 @@ video{
 	 var newHTMLPath = html.replace("http://60.205.86.217","https://www.maaee.com");
 	 newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
 	 var url = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+newHTMLPath;
- 	 //var url = "http://192.168.50.34:8080/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt=http://192.168.50.34:8080/Excoord_For_Education/drawboard/ppt/ppt.html";
 	 $("#ppt_empty").hide();
  	 $("#ppt_container").show();
  	 $("#ppt_frame").attr("onload","changePPTLanguage();");
@@ -626,7 +625,6 @@ video{
      if(sendCommand){
     	 var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'"+newHTMLPath+"'}}" + ')');
     	 connection.send(protocal);
-
     	 //让新版的学生端显示ppt
 		 var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
 	     connection.send(p1);
@@ -639,7 +637,6 @@ video{
 		 var newHTMLPath = html.replace("http://60.205.86.217","https://www.maaee.com");
 		 newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
 		 var url = "https://www.maaee.com/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&ppt="+newHTMLPath;
-		 //var url = "http://192.168.50.15:8080/Excoord_For_Education/drawboard/main.html?vid="+vid+"&userId="+userId+"&role=manager&"+fileType+"="+newHTMLPath;
 	 	 $("#ppt_empty").hide();
 		 $("#ppt_container").show();
 	 	 $("#ppt_frame").attr("onload","changePPTLanguage();");
@@ -648,7 +645,6 @@ video{
 	     if(sendCommand){
 	    	 var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'"+newHTMLPath+"'}}" + ')');
 	    	 connection.send(protocal);
-
 	    	 //让新版的学生端显示ppt
 			 var p1 = eval('(' + "{'command':'class_ppt','data':{'control':9}}" + ')');
 		     connection.send(p1);
@@ -692,7 +688,6 @@ video{
   function showBigImages(){
 	  var e = window.event;
 	  var imageSrc = e.target.currentSrc;
-	  //$.openPhotoGallery(e.target,".live_gongping_t");
       editBigImage(imageSrc,true);
   }
 
@@ -1077,9 +1072,7 @@ video{
 	  cloudFileClick(current,false,name);
   }
 
-  /**************************************************/
-
-   function openSubjectFromYipan(){
+  function openSubjectFromYipan(){
 	    layer.closeAll();
 	    cloudFileService = new Service();
 	    var layerContent= $("<div><span onclick='cloudSubjectsFileBack();' class='elearning_back'><img src='img/elerning_back_web.png' ></span><div id='cloud_file_container' class='yichao_ul' style='height:369px'></div><div><span id='cloud_file_loading' class='more_font' loading_end_text='"+jQuery.i18n.prop("string_no_loading_more")+"' onclick='listCloudFileSubjects("+listCloudFileId+");'>"+jQuery.i18n.prop("string_loading_more")+"</span></div><div class='teacher_modol_foot'><span onclick='pushYipanSubjets();'>推送题目</span></div></div>").html();
@@ -1099,7 +1092,6 @@ video{
   /**
   *题目详情
   */
-
   function listCloudFileSubjects(cloudFileId){
 	  var data = null;
 	  if(cloudFileId == -1){
@@ -1373,9 +1365,9 @@ video{
   }
 
   function prepareVideoRoom(data){
-  	     client = new ExRTC();
+  	    client = new ExRTC();
 
-	 　  client.join(vid+"", userId,userName, function() {
+	 　 client.join(vid+"", userId,userName, function() {
 				 console.log("User " + userId + " join channel successfully");
 				 playLocalVideo();
 	 　　 	 }, function() {
