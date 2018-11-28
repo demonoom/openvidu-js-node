@@ -19,7 +19,8 @@ function MultiStreamsMixer(arrayOfMediaStreams) {
 
     var canvas = document.createElement('canvas');
     var context = canvas.getContext('2d');
-    canvas.style = 'opacity:0;position:absolute;z-index:-1;top: -100000000;left:-1000000000; margin-top:-1000000000;margin-left:-1000000000;';
+    canvas.style = 'opacity:0;position:absolute;z-index:-1;top: -100000000px;left:-1000000000px; margin-top:-1000000000px;margin-left:-1000000000px;';
+    canvas.className = 'audioCanvas';
     (document.body || document.documentElement).appendChild(canvas);
 
     this.disableLogs = false;
