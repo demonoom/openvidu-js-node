@@ -205,7 +205,7 @@
                            if(response[k].fileType == 1){ //文件夹
                                listHtml += "<div class='line_public' onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img class='item-image' src='./img/cloud_icon_web.png' alt=''> <span class='item-text text-hidden'>"+response[k].name+"</span> </div>";
                            }else if(response[k].fileType == 2){ // 题目
-                               listHtml += "<div class='line_public quesItem'><div class='inputDiv'><i class='icon_check'></i><input type='checkbox' onclick='checkboxOnchange(this,\" + response[k].subject.id + \")'></div><div class='topic_item'>"+response[k].name+"</div></div>";
+                               listHtml += "<div class='line_public quesItem'><div class='inputDiv'><i class='icon_check'></i><input type='checkbox' onclick='checkboxOnchange(this," + response[k].subject.id + ")'></div><div class='topic_item'>"+response[k].name+"</div></div>";
                            }
                        }
                        if(response.length <= 0){
@@ -273,7 +273,7 @@
                            if(response[k].fileType == 1){ //文件夹
                                listHtml += "<div class='line_public' onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img class='item-image' src='./img/cloud_icon_web.png' alt=''> <span class='item-text text-hidden'>"+response[k].name+"</span> </div>";
                            }else if(response[k].fileType == 2){ // 题目
-                               listHtml += "<div class='line_public quesItem'><div class='inputDiv'><i class='icon_check'></i><input type='checkbox' onclick='checkboxOnchange(this,\" + response[k].subject.id + \")'></div><div class='topic_item'>"+response[k].name+"</div></div>";
+                               listHtml += "<div class='line_public quesItem'><div class='inputDiv'><i class='icon_check'></i><input type='checkbox' onclick='checkboxOnchange(this," + response[k].subject.id + ")'></div><div class='topic_item'>"+response[k].name+"</div></div>";
                            }
                        }
                        if(response.length <= 0){
