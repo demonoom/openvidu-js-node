@@ -41,34 +41,26 @@
     var userName = Service.getQueryString("userName");
     var rtspUrl = Service.getQueryString("rtspUrl");
     var wsPort = Service.getQueryString("wsPort");
+    var ipc = window.top.require('electron').ipcRenderer;
 
     $(document).ready(function(){
         console.log('document ready .....');
         joinRoom();
-        //playMediaStream();
     });
 
     function publish(){
         var canvas = $("#rtsp_preview_canvas")[0];
         jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
 
-        const ipc = window.top.ipc;
         var message = {};
         message.command = "startRtspStream";
         message.streamUrl = rtspUrl;
         message.wsPort = wsPort;
         ipc.send('onRendererMessage',message);
 
-        setTimeout(function(){
-            localStream = canvas.captureStream(15);
-            console.log('localStream : '+ localStream);
-            client.publish(localStream,"agora_local");
-        },5000);
-    }
-
-    function playMediaStream(){
-        var canvas = $("#rtsp_preview_canvas")[0];
-        jsmepgPlayer = new JSMpeg.Player('ws://localhost:9999',{loop: true, autoplay: true,canvas:canvas});
+        localStream = canvas.captureStream(15);
+        console.log('localStream : '+ localStream);
+        client.publish(localStream,"agora_local");
     }
 
     function unpublish(){
@@ -83,11 +75,28 @@
         }
         localStream = null;
 
-        const ipc = window.top.ipc;
         var message = {};
         message.command = "stopRtspStream";
         message.wsPort = wsPort;
         ipc.send('onRendererMessage',message);
+        removeIpCameraInfo();
+    }
+
+    function removeIpCameraInfo(){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+
+        if(savedList){
+            var tobeDeleteIndex = -1;
+            savedList.forEach(function(device,index){
+                if(device.type == "ipCamera" && device.rtspUrl == rtspUrl && device.userName == userName){
+                    tobeDeleteIndex = index;
+                }
+            });
+            if(tobeDeleteIndex >= 0){
+                savedList.splice(tobeDeleteIndex,1);
+            }
+            localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+        }
     }
 
     function random(lower, upper) {
@@ -98,7 +107,7 @@
         console.log('joinRoom .....');
         client = new ExRTC();
 
-        client.join(vid+"", random(-1000000,-2000000),userName, function() {
+        client.join(vid+"", random(-10000000,-20000000),userName, function() {
             console.log('joinRoom success');
             publish();
         }, function() {

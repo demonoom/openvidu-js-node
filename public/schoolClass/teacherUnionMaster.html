@@ -120,7 +120,7 @@ video{
 				  <!--
 				  <a href="javascript:goVideoManaerPage();" class="operation_menu_t_btn" >辅助功能</a>
 				  -->
-				  <a id="video_source_peizhi" href="javascript:goVideoSourceSelectPage();" class="operation_menu_t_btn" style="display: none;">视频源设置</a>
+				  <a id="video_source_peizhi" href="javascript:showVideoSourceSelectDialog();" class="operation_menu_t_btn" style="display: none;">视频源设置</a>
 				  <a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" text='打开讨论区' style="display: none;">关闭讨论区</a>
 		          <a id='language_select' href="javascript:changeLanguage();" class="En_icon_i Chinese_icon_i"></a>
 		      </div>
@@ -211,6 +211,16 @@ video{
 	       <span class="cloud_file_name"></span>
 	       <input class="checkbox checkbox_right2" type="checkbox" width="50px" height="50px"/>
 	    </li>
+	</div>
+
+    <div id="videoSourceSelect_container" class="videoSourceSelect-container ppt_default_center" style="left:-10000000000px;top:-1000000000px">
+		  <div class="videoSourceSelect-container-title">视频源配置</div>
+		  <span class="layui-layer-setwin">
+			  <a class="layui-layer-ico layui-layer-close layui-layer-close1" onclick="hideVideoSourceSelectDialog();"></a>
+		  </span>
+		  <div class="videoSourceSelect-container-cont">
+			  <iframe src=""></iframe>
+		  </div>
 	</div>
 </body>
 
@@ -504,6 +514,7 @@ video{
          initAssiantQrcode();
          initSimpleConnection();
          testSendImg();
+         loadVideoSourceSelectPage();
  		 isPreparedOK = true;
  	 }else if(command == 'simpleClassDanmu'){
 		 var message = info.data.message;
@@ -1937,8 +1948,17 @@ video{
       window.open("playLocalFile.html?vid="+vid,"_blank");
   }
 
-  function goVideoSourceSelectPage(){
-      window.open("videoSourceSelect.html?vid="+vid,"CLASS_VIDEO_SOURCE_SETTING");
+
+  function showVideoSourceSelectDialog(){
+      $("#videoSourceSelect_container").css({"left":"50%","top":"50%"});
+  }
+
+  function hideVideoSourceSelectDialog(){
+      $("#videoSourceSelect_container").css({"left":"-10000000000px","top":"-100000000000px"});
+  }
+
+  function loadVideoSourceSelectPage(){
+      $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid);
   }
 
   window.addEventListener('message', function(event) {

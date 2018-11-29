@@ -45,11 +45,12 @@
     function publish(){
 
         const constraints = {
-            audio: {
-                mandatory: {
-                    chromeMediaSource: 'desktop'
-                }
-            },
+//            audio: {
+//                mandatory: {
+//                    chromeMediaSource: 'desktop'
+//                }
+//            },
+            audio:false,
             video: {
                 mandatory: {
                     chromeMediaSource: 'desktop',
@@ -82,6 +83,24 @@
             console.log(e);
         }
         localStream = null;
+        removeScreenCameraInfo();
+    }
+
+    function removeScreenCameraInfo(){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+
+        if(savedList){
+            var tobeDeleteIndex = -1;
+            savedList.forEach(function(device,index){
+                if(device.type == "screen"){
+                    tobeDeleteIndex = index;
+                }
+            });
+            if(tobeDeleteIndex >= 0){
+                savedList.splice(tobeDeleteIndex,1);
+            }
+            localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+        }
     }
 
     function random(lower, upper) {
@@ -91,7 +110,7 @@
     function joinRoom(){
         client = new ExRTC();
 
-        client.join(vid+"", random(-1000000,-2000000),"桌面", function() {
+        client.join(vid+"", random(-10000000,-20000000),"桌面", function() {
             publish();
         }, function() {
             console.log("Join channel failed");
