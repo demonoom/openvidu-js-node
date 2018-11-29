@@ -1877,6 +1877,16 @@ video{
                         if(roomid == vid && uid != userId){
                             layer.closeAll();
                         }
+					}else if(command == "pushTopicInAssistant"){
+					    var sids = info.data.sids;
+					    var roomid = info.data.vid;
+					    if(roomid == vid){
+					        var protocal = eval('(' + "{'command':'pushSubjecShowContentUrl','data':{'sids':'" + sids + "'}}" + ')');
+                            connection.send(protocal);
+                            var proto = eval('(' + "{'command':'pushTopicInAssistantSuccess','data':{'vid':'"+roomid+"'}}" + ')');
+                            simpleConn.send(proto);
+					    }
+
 					}
                 }
             };
