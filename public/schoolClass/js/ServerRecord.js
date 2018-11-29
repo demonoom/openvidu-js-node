@@ -40,6 +40,7 @@ function stopCapture(){
     }
     streams = new Array();
     reconnectCount = 0;
+    $(".audioCanvas").remove();
 }
 
 
