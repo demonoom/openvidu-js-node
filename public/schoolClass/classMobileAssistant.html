@@ -202,7 +202,7 @@
                            if(response[k].fileType == 1){ //文件夹
                                listHtml += "<div onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img src='./img/cloud_icon_web.png' alt=''> <span>"+response[k].name+"</span> </div>";
                            }else if(response[k].fileType == 2){ // 题目
-                               listHtml += "<div><div class='topic_item'>"+response[k].name+"</div> <input type='checkbox' onclick='checkboxOnchange(this," + response[k].subject.id + ")'> </div>";
+                               listHtml += "<div><div class='topic_item'><img src='./img/cloud_icon_web1.png' alt=''><div>"+response[k].name+"</div></div> <input type='checkbox' onclick='checkboxOnchange(this," + response[k].subject.id + ")'> </div>";
                            }
                        }
                        if(response.length <= 0){
