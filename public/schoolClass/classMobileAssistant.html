@@ -24,7 +24,7 @@
             <div class="nav_text text-hidden">
 
             </div>
-            <div class="nav_close"></div>
+            <div class="nav_close" onclick="clickMask()"></div>
         </div>
         <div class="topic_body">
             <div class="topic_list">
@@ -152,6 +152,8 @@
     function checkboxOnchange(e,id){
         console.log(e);
         console.log(id);
+//        console.log(,'prev');;
+        $(e).prev().toggleClass('active');
         if (e.checked) {
                 quesArr.push(id)
         } else {
@@ -407,7 +409,13 @@
                    var navHTML = "";
                    nav.innerHTML = "";
                    for(var k in parentArray){
-                       navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") >"+parentArray[k].name+" > </span>";
+                       if(k == 0){
+                           navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") >"+parentArray[k].name+"</span>";
+
+                       }else{
+                           navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") > > "+parentArray[k].name+"</span>";
+
+                       }
                    }
                    attachment_bottom.innerText = res.response.length <= 0?"无更多文件":"点击加载更多";;
                    attachment_list.innerHTML = (HTML_LIST);
