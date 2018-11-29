@@ -83,7 +83,7 @@ body{
     font-size: 12px;
     line-height: 30px;
 }
-.navigate{
+.topic_nav,.navigate{
     position: absolute;
     width: 100%;
     top: 0;
@@ -91,7 +91,7 @@ body{
 
 .attachment_list{
 }
-.nav{
+.nav_text,.nav{
     padding-left: 15px;
     background: #288AE0;
     box-sizing: border-box;
@@ -106,7 +106,7 @@ body{
     color: #fff;
     margin-right: 8px;
 }
-.nav-back{
+.nav_close,.nav-back{
     background: url("../img/icon-back.png") no-repeat;
     width: 15px;
     height: 15px;
