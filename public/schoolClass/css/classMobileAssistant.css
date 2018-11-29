@@ -98,6 +98,7 @@ body{
     height: 40px;
     line-height: 40px;
     padding-right: 30px;
+    color: #fff;
 }
 .nav span{
     line-height: 1;
@@ -140,25 +141,17 @@ body{
 .courseware-open{
     width: 48px;
     height: 48px;
+    line-height: 48px;
     position: absolute;
-    top: 35px;
-    right: 21px;
+    top: 25px;
+    left: 21px;
     background: #288AE0;
     border-radius: 50%;
     text-align: center;
     font-size: 14px;
     color: #fff;
 }
-.courseware-open span{
-    line-height: 1;
-    position: absolute;
-    top: 50%;
-    transform: translate(-50%, -35%);
-    -webkit-transform: translate(-50%, -35%);
-    -ms-transform: translate(-50%, -35%);
-    width: 100%;
-    left: 50%;
-}
+
 .attachment-cont{
     height: calc(100% - 40px);
     overflow-y: auto;
@@ -177,51 +170,133 @@ body{
 }
 #pushTopic{
     position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 50px;
-    height: 50px;
+    top: 90px;
+    left: 21px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    background: red;
-    color: white;
     line-height: 50px;
     text-align: center;
-    font-size:12px;
+    background: #66b30d;
+    font-size: 14px;
+    color: #fff;
 }
 .topic_box{
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 350px;
+    height: 70%;
     background: white;
     transition: 0.2s;
     z-index:2;
     transform: translate(0,100%);
 }
 .topic_body{
-    overflow: auto;
-    height: 305px;
+    height: calc(100% - 40px);
+    overflow-y: auto;
+    margin-top: 40px;
 }
-.topic_list{
-
+.topic_list > div{
+    height: 58px;
+    line-height: 58px;
+    padding: 0 15px;
+    font-size: 15px;
+    color: #424242;
 }
-.topic_item{
-    width: 250px;
-    height: 50px;
-    overflow: hidden;
-    display: inline-block;
+.quesItem .topic_item{
+    width: 100%;
+    height: 100%;
+    padding: 10px 0;
+    box-sizing: border-box
+}
+.quesItem .topic_item>div {
+    width: 100%!important;
+    height: 100% !important;
+}
+.quesItem .topic_item>div img{
+    width: 100%!important;
+    height: 100%!important;
+    padding-bottom: 0!important;
+    object-fit: cover;
+}
+.topic_more{
+    text-align: center;
+    height: 30px;
+    color: #666;
+    font-size: 12px;
+    line-height: 30px;
 }
 .pushTopic{
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 80px;
-    height: 80px;
-    line-height: 80px;
-    text-align: center;
+    bottom: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    background: #91cbf9;
     border-radius: 50%;
-    background: darkorchid;
-    color: white;
+    color: #fff;
+    text-align: center;
+    line-height: 18px;
+    font-size: 12px;
+    z-index: 10;
+}
+.pushTopic > div{
+    margin: 5px;
+}
+.item-image{
+    margin-right: 15px;
+    width: 24px;
+    height: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.item-text{
+    margin-left: 39px;
+    max-width: calc(100% - 39px);
+    display: inline-block;
+}
+.quesItem{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+.quesItem .inputDiv {
+    width: 18px;
+    height: 18px;
+    position: relative;
+    margin-right: 21px;
+}
+.quesItem .icon_check {
+    width: 18px;
+    height: 18px;
+    border: 1px #B1B2B3 solid;
+    display: block;
+}
+.quesItem .icon_check.active {
+    background-color: #4285F4;
+    border-color: #4285F4;
+    position: relative;
+}
+.quesItem .icon_check.active::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 5px;
+    top: 4px;
+    left: 3px;
+    border-left: 1px #fff solid;
+    border-bottom: 1px #fff solid;
+    transform: rotate(310deg);
+}
+.quesItem .inputDiv input {
+    margin: 0;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 0;
+    left: 0;
+    opacity: 0;
 }
 

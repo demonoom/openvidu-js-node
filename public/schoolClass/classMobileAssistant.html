@@ -20,22 +20,19 @@
     </div>
 
     <div class="topic_box">
-        <div style="position: relative;">
-                <div class="topic_nav">
-                    <div class="nav_text text-hidden">
+        <div class="topic_nav">
+            <div class="nav_text text-hidden">
 
-                    </div>
-                    <div class="nav_close">X</div>
-                </div>
-                <div class="topic_body">
-                     <div class="topic_list">
-
-                     </div>
-                     <div class="topic_more" onclick="getMoreTopic()">点击加载更多</div>
-                </div>
-                <div class="pushTopic" onclick="pushTopic()">推送题目</div>
+            </div>
+            <div class="nav_close"></div>
         </div>
+        <div class="topic_body">
+            <div class="topic_list">
 
+            </div>
+            <div class="topic_more" onclick="getMoreTopic()">点击加载更多</div>
+        </div>
+        <div class="pushTopic" onclick="pushTopic()"><div>推送<br/>题目</div></div>
     </div>
 
           <div id="iframeBox" style="overflow: auto;-webkit-overflow-scrolling:touch;width:100%;"></div>
@@ -193,16 +190,20 @@
                        //导航栏
                        if(isNav){
                            for(var k in parentTopicArray){
-                                   navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span><span>></span></span>";
+                                   if(navHtml == ''){
+                                       navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
+                                   }else{
+                                       navHtml += "<span> <span> > </span> <span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
+                                   }
                            }
                            $('.nav_text').html(navHtml);
                        }
                        for(var k in response){
                            console.log(response[k].fileType,'');
                            if(response[k].fileType == 1){ //文件夹
-                               listHtml += "<div onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img src='./img/cloud_icon_web.png' alt=''> <span>"+response[k].name+"</span> </div>";
+                               listHtml += "<div class='line_public' onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img class='item-image' src='./img/cloud_icon_web.png' alt=''> <span class='item-text text-hidden'>"+response[k].name+"</span> </div>";
                            }else if(response[k].fileType == 2){ // 题目
-                               listHtml += "<div><div class='topic_item'><img src='./img/cloud_icon_web1.png' alt=''><div>"+response[k].name+"</div></div> <input type='checkbox' onclick='checkboxOnchange(this," + response[k].subject.id + ")'> </div>";
+                               listHtml += "<div class='line_public quesItem'><div class='inputDiv'><i class='icon_check'></i><input type='checkbox' onclick='checkboxOnchange(this,\" + response[k].subject.id + \")'></div><div class='topic_item'>"+response[k].name+"</div></div>";
                            }
                        }
                        if(response.length <= 0){
@@ -256,16 +257,21 @@
                        //导航栏
                        if(isNav){
                            for(var k in parentTopicArray){
-                                   navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span><span>></span></span>";
+                               if(navHtml == ''){
+                                   navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
+                               }else{
+                                   navHtml += "<span> <span> > </span> <span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
+                               }
+                                   // navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span><span>></span></span>";
                            }
                            $('.nav_text').html(navHtml);
                        }
                        for(var k in response){
                            console.log(response[k].fileType,'');
                            if(response[k].fileType == 1){ //文件夹
-                               listHtml += "<div onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img src='./img/cloud_icon_web.png' alt=''> <span>"+response[k].name+"</span> </div>";
+                               listHtml += "<div class='line_public' onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img class='item-image' src='./img/cloud_icon_web.png' alt=''> <span class='item-text text-hidden'>"+response[k].name+"</span> </div>";
                            }else if(response[k].fileType == 2){ // 题目
-                               listHtml += "<div><div class='topic_item'>"+response[k].name+"</div> <input type='checkbox' onclick='checkboxOnchange(this," + response[k].subject.id + ")'> </div>";
+                               listHtml += "<div class='line_public quesItem'><div class='inputDiv'><i class='icon_check'></i><input type='checkbox' onclick='checkboxOnchange(this,\" + response[k].subject.id + \")'></div><div class='topic_item'>"+response[k].name+"</div></div>";
                            }
                        }
                        if(response.length <= 0){
