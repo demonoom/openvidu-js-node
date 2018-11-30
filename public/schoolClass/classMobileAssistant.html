@@ -172,9 +172,11 @@
 //点击推送题目
     $('#pushTopic').on('click',function(){
 //        console.log('推送题目');
-        $('.topic_box').css({transform:'translate(0%,0%)'});
         $('.mask').css({display:'block'});
-
+        $('.topic_box').css({display:'block'});
+        window.requestAnimationFrame(function(){
+            $('.topic_box').css({transform:'translate(0%,0%)'});
+        })
     });
 
        /*
@@ -456,6 +458,7 @@
    //点击遮罩
    function clickMask(){
        AddAttachmentChange('none');
+       $('.topic_box').css({display:'none'});
        $('.topic_box').css({transform:'translate(0%,100%)'});
    }
 
