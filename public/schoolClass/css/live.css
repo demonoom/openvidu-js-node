@@ -1475,3 +1475,30 @@ ul.layui-layer-tabmain li{
 .dismiss_classLayer .layui-layer-setwin{
     top: 9px;
 }
+.videoSourceSelect-container{
+    width:30%;
+    height: 80%;
+    z-index: 90000000;
+    box-shadow: 1px 1px 50px rgba(0,0,0,.3);
+}
+.videoSourceSelect-container-title{
+    padding: 0 80px 0 20px;
+    height: 42px;
+    line-height: 42px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    background-color: #F8F8F8;
+    border-radius: 2px 2px 0 0;
+}
+.videoSourceSelect-container-cont{
+    height: calc(100% - 43px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.videoSourceSelect-container-cont iframe{
+    width: 100%;
+    height:100%;
+
+}

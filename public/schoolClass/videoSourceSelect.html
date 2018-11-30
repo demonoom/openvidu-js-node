@@ -36,16 +36,9 @@
 <body>
     <div class="videoSource-wrap">
         <div class="menu">
-            <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头
-            </span>
+            <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头</span>
             <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
-
             <span onclick="addScreen()" class="menu-btn"><i class="videoSource-menu4"></i>添加桌面</span>
-            <div class="menu-btn" onclick="startServerRecord();">
-                <i class="videoSource-menu3" id="recordingTipImg"></i>
-                <span id="recordingTipText">服务端录屏</span>
-            </div>
-
         </div>
 
         <div id="video_sources" class="videoSource_content">
@@ -65,9 +58,11 @@
     var rtspUrlArr = [];
     rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
     var vid = Service.getQueryString("vid");
-    var wsPort = 9999;
+    var teacherId = Service.getQueryString("teacherId");
+    var defaultPort = 9999;
     var jsmpegPlayer;
-    var ipc = require('electron').ipcRenderer;
+    var ipc = window.top.require('electron').ipcRenderer;
+    var rtspPortMap = new HashMap();
      
     function addLocalCamera() {
         navigator.mediaDevices.enumerateDevices()
@@ -114,7 +109,6 @@
             layer.msg("请在pc客户端中使用此功能~~");
             return;
         }
-        wsPort = wsPort + 1;
         var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>昵称<span></span></span><input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
             ">使用</span></div>"
         layer.open({
@@ -128,18 +122,6 @@
         //设置rts的值
         getRtsUrl = function (url) {
             $("#rtsp_url").val(url)
-        }
-        //数组去重
-        makeArr = function (arr, properties) {
-            for (var i = 0; i < arr.length - 1; i++) {
-                for (var j = i + 1; j < arr.length; j++) {
-                    if (arr[i][properties] == arr[j][properties]) {
-                        arr.splice(j, 1);
-                        j--;
-                    }
-                }
-            }
-            return arr
         }
         rtspUrlArr = makeArr(rtspUrlArr, "url")
          //显示输入过的值
@@ -162,9 +144,18 @@
 
 
     function cancelUseRtsp() {
+        var rtspUrl = $("#rtsp_url").val();
+        if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
+            return;
+        }
+        var port = rtspPortMap.get(rtspUrl);
+        if(port == null || port == undefined || port == ""){
+            defaultPort = defaultPort + 1;
+            port = defaultPort;
+        }
         var message = {};
         message.command = "stopRtspStream";
-        message.wsPort = wsPort;
+        message.wsPort = port;
         ipc.send('onRendererMessage', message);
 
         if (jsmpegPlayer) {
@@ -188,32 +179,38 @@
                 }
             )
         }
-         /**
-        * 去重
-        * @param arr    
-        * @returns {*}
-        */
-        makeArr = function (arr, properties) {
-            for (var i = 0; i < arr.length - 1; i++) {
-                for (var j = i + 1; j < arr.length; j++) {
-                    if (arr[i][properties] == arr[j][properties]) {
-                        arr.splice(j, 1);
-                        j--;
-                    }
-                }
-            }
-            return arr
-        }
         rtspUrlArr = makeArr(rtspUrlArr, "url")
         localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
+        var port = rtspPortMap.get(rtspUrl);
+        if(port == null || port == undefined || port == ""){
+            defaultPort = defaultPort + 1;
+            port = defaultPort;
+        }
         var message = {};
         message.command = "startRtspStream";
         message.streamUrl = rtspUrl;
-        message.wsPort = wsPort;
+        message.wsPort = port;
         ipc.send('onRendererMessage', message);
 
         var canvas = $("#rtsp_preview_canvas")[0];
-        jsmpegPlayer = new JSMpeg.Player('ws://localhost:' + wsPort, { loop: true, autoplay: true, canvas: canvas, audio: false });
+        jsmpegPlayer = new JSMpeg.Player('ws://localhost:' + port, { loop: true, autoplay: true, canvas: canvas, audio: false });
+    }
+
+    /**
+     * 数组去重
+     * @param arr
+     * @returns {*}
+     */
+    function makeArr(arr, properties) {
+        for (var i = 0; i < arr.length - 1; i++) {
+            for (var j = i + 1; j < arr.length; j++) {
+                if (arr[i][properties] == arr[j][properties]) {
+                    arr.splice(j, 1);
+                    j--;
+                }
+            }
+        }
+        return arr
     }
 
 
@@ -245,28 +242,35 @@
                 }
             )
         }
-        /**
-        * 去重
-        * @param arr    
-        * @returns {*}
-        */
-        makeArr = function (arr, properties) {
-            for (var i = 0; i < arr.length - 1; i++) {
-                for (var j = i + 1; j < arr.length; j++) {
-                    if (arr[i][properties] == arr[j][properties]) {
-                        arr.splice(j, 1);
-                        j--;
-                    }
-                }
-            }
-            return arr
-        }
         rtspUrlArr = makeArr(rtspUrlArr, "url")
         localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
         layer.closeAll();
-        var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + wsPort + "&rtspUrl=" + rtspUrl;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
 
+        addUsingIpCameraInfo(nick,rtspUrl);
+        innerUseIpCamera(nick,rtspUrl);
+    }
+
+    function innerUseIpCamera(nick,rtspUrl){
+        var port = rtspPortMap.get(rtspUrl);
+        if(port == null || port == undefined || port == ""){
+            defaultPort = defaultPort + 1;
+            port = defaultPort;
+        }
+        var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl;
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
+    }
+
+    function addUsingIpCameraInfo(userName,rtspUrl){
+        var device = {};
+        device.type = "ipCamera";
+        device.rtspUrl = ""+rtspUrl;
+        device.userName = userName;
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
+            savedList = [];
+        }
+        savedList.push(device);
+        localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
     }
 
     function preView() {
@@ -299,9 +303,15 @@
             return;
         }
         layer.closeAll();
+        addUsingUsbCameraInfo(videoDeviceId,audioDeviceId,nick);
+        innerUseUsbCamera(videoDeviceId,audioDeviceId,nick);
+    }
+
+    function innerUseUsbCamera(videoDeviceId,audioDeviceId,nick){
         var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick;
         $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
     }
+
     function deleteVideoSource(span) {
         var iframe = $(span).parent().find("iframe")[0];
         iframe.contentWindow.unpublish();
@@ -310,24 +320,18 @@
         }, 100);
     }
 
-    function startServerRecord() {
-        if ($("#recordingTipText").text() == '服务端录屏') {
-            var config = {};
-            config.maxWidth = 720;
-            config.minWidth = 720;
-            config.maxHeight = 480;
-            config.minHeight = 480;
-            config.maxFrameRate = 30;
-            config.minFrameRate = 30;
-            config.pushUrl = "rtmp://60.205.86.217:19350/live4/119665";
-            config.webSocketUrl = "https://jiaoxue.maaee.com:9003/";
-            config.timeSlice = 1500;
-            config.recordingTipTextId = "recordingTipText",
-                config.recordingTipImgId = "recordingTipImg"
-            captureTab(config);
-        } else {
-            stopCapture();
+    function addUsingUsbCameraInfo(videoDeviceId,audioDeviceId,userName){
+        var device = {};
+        device.type = "usbCamera";
+        device.videoDeviceId = ""+videoDeviceId;
+        device.audioDeviceId = ""+audioDeviceId;
+        device.userName = userName;
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
+            savedList = [];
         }
+        savedList.push(device);
+        localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
     }
 
     function addScreen(){
@@ -349,17 +353,33 @@
             return;
         }
         layer.closeAll();
+        addUsingScreenInfo();
+        innerUseScreenInclass(nick);
+    }
+
+    function innerUseScreenInclass(nick){
         var src = "screenVideoInClass.html?vid=" + vid + "&userName=" + nick;
         $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
     }
 
+    function addUsingScreenInfo(){
+        var device = {};
+        device.type = "screen";
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
+            savedList = [];
+        }
+        savedList.push(device);
+        localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+    }
+
     function screenVideoPreview(){
         const constraints = {
-            audio: {
-                mandatory: {
-                    chromeMediaSource: 'desktop'
-                }
-            },
+           audio: {
+               mandatory: {
+                   chromeMediaSource: 'desktop'
+               }
+           },
             video: {
                 mandatory: {
                     chromeMediaSource: 'desktop',
@@ -381,6 +401,29 @@
                 console.log(e);
             });
     }
+
+    function init(){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        if(savedList){
+            savedList.forEach(function(device){
+                var type = device.type;
+                if(type == "usbCamera"){
+                    innerUseUsbCamera(device.videoDeviceId,device.audioDeviceId,device.userName);
+                }else if(type == "ipCamera"){
+                    innerUseIpCamera(device.userName,device.rtspUrl);
+                }else if(type == "screen"){
+                    innerUseScreenInclass("桌面");
+                }
+
+            });
+        }
+    }
+
+    $(document).ready(function(){
+        setTimeout(function(){
+            init();
+        },500);
+    });
 </script>
 
 </html>

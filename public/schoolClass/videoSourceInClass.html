@@ -40,7 +40,6 @@
 
     $(document).ready(function(){
         joinRoom();
-        //playMediaStream();
     });
 
     function publish(){
@@ -60,21 +59,6 @@
         });
     }
 
-    function playMediaStream(){
-        var audioSource = audioDeviceId;
-        var videoSource = videoDeviceId;
-        var constraints = {
-            audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-        };
-        navigator.mediaDevices.getUserMedia(constraints).
-        then(function(stream){
-            $("#preview_video")[0].srcObject = stream;
-        }).catch(function(e){
-            console.log(e);
-        });
-    }
-
     function unpublish(){
         try{
             client.unpublish(localStream);
@@ -83,6 +67,26 @@
             console.log(e);
         }
         localStream = null;
+        removeUsbCameraInfo();
+    }
+
+    function removeUsbCameraInfo(){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+
+        if(savedList){
+            var tobeDeleteIndex = -1;
+            savedList.forEach(function(device,index){
+                if(device.type == "usbCamera" && device.videoDeviceId == videoDeviceId
+                                              && device.audioDeviceId == audioDeviceId
+                                              && device.userName == userName){
+                    tobeDeleteIndex = index;
+                }
+            });
+            if(tobeDeleteIndex >= 0){
+                savedList.splice(tobeDeleteIndex,1);
+            }
+            localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+        }
     }
 
     function random(lower, upper) {
@@ -92,7 +96,7 @@
     function joinRoom(){
         client = new ExRTC();
 
-        client.join(vid+"", random(-1000000,-2000000),userName, function() {
+        client.join(vid+"", random(-10000000,-20000000),userName, function() {
             publish();
         }, function() {
             console.log("Join channel failed");

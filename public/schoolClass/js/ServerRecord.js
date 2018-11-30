@@ -41,6 +41,7 @@ function stopCapture(){
     streams = new Array();
     reconnectCount = 0;
     $(".audioCanvas").remove();
+    window.close();
 }
 
 
@@ -77,13 +78,13 @@ function onRecording() {
 }
 
 function setBadgeText(text) {
-    $(recordingTipText).text(text);
+    //$(recordingTipText).text(text);
 }
 
 function setBadgeImg(clazz){
-    $(recordingTipImg).removeClass("videoSource-menu3");
-    $(recordingTipImg).removeClass("videoSource-menu3-2");
-    $(recordingTipImg).addClass(clazz);
+    // $(recordingTipImg).removeClass("videoSource-menu3");
+    // $(recordingTipImg).removeClass("videoSource-menu3-2");
+    // $(recordingTipImg).addClass(clazz);
 }
 
 function captureTab(config) {
