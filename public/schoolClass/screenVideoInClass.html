@@ -45,12 +45,11 @@
     function publish(){
 
         const constraints = {
-//            audio: {
-//                mandatory: {
-//                    chromeMediaSource: 'desktop'
-//                }
-//            },
-            audio:false,
+           audio: {
+               mandatory: {
+                   chromeMediaSource: 'desktop'
+               }
+           },
             video: {
                 mandatory: {
                     chromeMediaSource: 'desktop',

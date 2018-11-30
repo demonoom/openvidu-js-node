@@ -36,16 +36,9 @@
 <body>
     <div class="videoSource-wrap">
         <div class="menu">
-            <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头
-            </span>
+            <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头</span>
             <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
-
             <span onclick="addScreen()" class="menu-btn"><i class="videoSource-menu4"></i>添加桌面</span>
-            <div class="menu-btn" onclick="startServerRecord();">
-                <i class="videoSource-menu3" id="recordingTipImg"></i>
-                <span id="recordingTipText">服务端录屏</span>
-            </div>
-
         </div>
 
         <div id="video_sources" class="videoSource_content">
@@ -65,6 +58,7 @@
     var rtspUrlArr = [];
     rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
     var vid = Service.getQueryString("vid");
+    var teacherId = Service.getQueryString("teacherId");
     var defaultPort = 9999;
     var jsmpegPlayer;
     var ipc = window.top.require('electron').ipcRenderer;
@@ -340,27 +334,6 @@
         localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
     }
 
-
-    function startServerRecord() {
-        if ($("#recordingTipText").text() == '服务端录屏') {
-            var config = {};
-            config.maxWidth = 720;
-            config.minWidth = 720;
-            config.maxHeight = 480;
-            config.minHeight = 480;
-            config.maxFrameRate = 30;
-            config.minFrameRate = 30;
-            config.pushUrl = "rtmp://60.205.86.217:19350/live4/119665";
-            config.webSocketUrl = "https://jiaoxue.maaee.com:9003/";
-            config.timeSlice = 1500;
-            config.recordingTipTextId = "recordingTipText",
-                config.recordingTipImgId = "recordingTipImg"
-            captureTab(config);
-        } else {
-            stopCapture();
-        }
-    }
-
     function addScreen(){
         var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
         layer.open({
@@ -400,16 +373,13 @@
         localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
     }
 
-
-
     function screenVideoPreview(){
         const constraints = {
-//            audio: {
-//                mandatory: {
-//                    chromeMediaSource: 'desktop'
-//                }
-//            },
-            audio: false,
+           audio: {
+               mandatory: {
+                   chromeMediaSource: 'desktop'
+               }
+           },
             video: {
                 mandatory: {
                     chromeMediaSource: 'desktop',

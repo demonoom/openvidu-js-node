@@ -120,7 +120,8 @@ video{
 				  <!--
 				  <a href="javascript:goVideoManaerPage();" class="operation_menu_t_btn" >辅助功能</a>
 				  -->
-				  <a id="video_source_peizhi" href="javascript:showVideoSourceSelectDialog();" class="operation_menu_t_btn" style="display: none;">视频源设置</a>
+				  <a id="video_source_peizhi" href="javascript:showVideoSourceSelectDialog();" class="operation_menu_t_btn" style="display: none;">视频源配置</a>
+				  <a id="video_srouce_push_rtmp" href="javascript:goPushRtmp();" class="operation_menu_t_btn" style="display: none;">服务端推流</a>
 				  <a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" text='打开讨论区' style="display: none;">关闭讨论区</a>
 		          <a id='language_select' href="javascript:changeLanguage();" class="En_icon_i Chinese_icon_i"></a>
 		      </div>
@@ -1205,6 +1206,7 @@ video{
   function checkDevice(){
       if(startType == '1_n'){
           $("#video_source_peizhi").show();
+          $("#video_srouce_push_rtmp").show();
           socketLogin();
 	  }else{
           layer.open({
@@ -1909,6 +1911,7 @@ video{
               var remote = require('electron').remote;
               electronEinwindow = remote.getCurrentWindow();
           }
+          //electronEinwindow.setFullScreen(false);
           electronEinwindow.setSize($("#left").width()-1,$("#left").height());
           electronEinwindow.webContents.executeJavaScript("setTitle('您正在桌面讲课中~~~');");
           electronEinwindow.webContents.executeJavaScript('showActionBarRefresh(false);');
@@ -1942,6 +1945,7 @@ video{
       electronEinwindow.webContents.executeJavaScript('showActionBarClose(true);');
       electronEinwindow.setAlwaysOnTop(false);
       electronEinwindow.setResizable(true);
+      //electronEinwindow.setFullScreen(true);
   }
 
   function goVideoManaerPage(){
@@ -1953,12 +1957,16 @@ video{
       $("#videoSourceSelect_container").css({"left":"50%","top":"50%"});
   }
 
+  function goPushRtmp(){
+      window.open("serverRecord.html?teacherId="+userId,"SERVER_RECORD");
+  }
+
   function hideVideoSourceSelectDialog(){
       $("#videoSourceSelect_container").css({"left":"-10000000000px","top":"-100000000000px"});
   }
 
   function loadVideoSourceSelectPage(){
-      $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid);
+      $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid+"&teacherId="+userId);
   }
 
   window.addEventListener('message', function(event) {
