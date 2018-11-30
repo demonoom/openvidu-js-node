@@ -13,6 +13,28 @@
     <div id="empty">
     暂无打开的课件
     </div>
+
+
+    <div id="pushTopic">
+    题库
+    </div>
+
+    <div class="topic_box">
+        <div class="topic_nav">
+            <div class="nav_text text-hidden">
+
+            </div>
+            <div class="nav_close" onclick="clickMask()"></div>
+        </div>
+        <div class="topic_body">
+            <div class="topic_list">
+
+            </div>
+            <div class="topic_more" onclick="getMoreTopic()">点击加载更多</div>
+        </div>
+        <div class="pushTopic" onclick="pushTopic()"><div>推送<br/>题目</div></div>
+    </div>
+
           <div id="iframeBox" style="overflow: auto;-webkit-overflow-scrolling:touch;width:100%;"></div>
           <div class="courseware-open" onclick="showAddAttachment()">
             <span>课件</span>
@@ -46,31 +68,230 @@
        id: -1,
        name: '蚁盘'
    }];
+   var parentTopicArray = [{
+       id: -1,
+       name:'蚁盘'
+   }];
+   var navHtml = '';
+   var listHtml = '';
+   var pageNo = 1;
+   var topicId = -1;
+   //推题数组
+   var quesArr = [];
+
    var iframeBox = document.getElementById("iframeBox");
    var iframe = document.createElement("iframe");
    iframe.setAttribute("id","ifr");
    iframe.setAttribute("name","ifr");
-    iframe.setAttribute("frameborder","0");
-    iframe.setAttribute("scrolling","no");
-    iframe.setAttribute("style","width: 1px; min-width: 100%; *width: 100%");
+   iframe.setAttribute("frameborder","0");
+   iframe.setAttribute("scrolling","no");
+   iframe.setAttribute("style","width: 1px; min-width: 100%; *width: 100%");
    iframeBox.appendChild(iframe);
    simpleMS.connect();
    getClassOpenedKejian(vid);
    filterCloudFile();
+   //获取蚁盘文件根目录
+   getUserRootCloudSubjects(userId,true);
    //监听
-//   simpleMS.msgWsListener = {
-//        onError: function (errorMsg) {
-//
-//             console.log(errorMsg,'11111111111')
-//
-//          }, onWarn: function (warnMsg) {
-//
-//             console.log(warnMsg,'11111111111')
-//
-//          }, onMessage: function (info) {
-//             console.log(info,'11111111111')
-//          }
-//        };
+   simpleMS.clazzWsListener = {
+        onError: function (errorMsg) {
+            console.log(errorMsg);
+          }, onWarn: function (warnMsg) {
+            console.log(warnMsg);
+          }, onMessage: function (info) {
+             if(info.command == 'pushTopicInAssistantSuccess'){
+                 var roomid = info.data.vid;
+                 if(roomid == vid){
+                     layer.msg('推送成功');
+                 }
+             }
+          }
+        };
+
+    function getMoreTopic(){
+        if($('.topic_more').text() == '已全部加载'){
+            return;
+        }else{
+            quesArr.splice(0);
+            if(parentTopicArray.length > 1){
+               console.log('获取更多文件在子目录');
+               pageNo++;
+               listCloudSubject(topicId);
+            }else{
+               console.log('获取更多文件在根目录');
+               pageNo++;
+               getUserRootCloudSubjects(userId);
+            }
+        }
+
+    }
+
+    function pushTopic(){
+        if(quesArr.length <= 0){
+            layer.msg("请先选中要推送的题目");
+        }else{
+            var protocal = eval('(' + "{'command':'pushTopicInAssistant','data':{'sids':'"+quesArr.join(',')+"',vid:'"+vid+"'}}" + ')');
+            simpleMS.send(protocal);
+        }
+    }
+
+
+    function topicClickFolder(id,name){
+//        console.log(id);
+//        console.log(name);
+//        console.log('文件夹');
+        quesArr.splice(0);
+        pageNo = 1;
+        parentTopicArray.push({
+              id:id,
+              name:name
+        });
+        navHtml = '';
+        listHtml = '';
+        topicId = id;
+        listCloudSubject(id,true);
+    }
+
+    function checkboxOnchange(e,id){
+        console.log(e);
+        console.log(id);
+//        console.log(,'prev');;
+        $(e).prev().toggleClass('active');
+        if (e.checked) {
+                quesArr.push(id)
+        } else {
+                quesArr = quesArr.filter((res) => {
+                    return res != id
+                })
+        }
+        console.log(quesArr,'quesArr');
+
+    }
+
+
+//点击推送题目
+    $('#pushTopic').on('click',function(){
+//        console.log('推送题目');
+        $('.topic_box').css({transform:'translate(0%,0%)'});
+        $('.mask').css({display:'block'});
+
+    });
+
+       /*
+       根据文件夹id获取蚁盘题目根目录
+        */
+       function getUserRootCloudSubjects(uId,isNav){
+           var service = new Service();
+           var data = {
+               method:'getUserRootCloudSubjects',
+               userId: uId,
+               pageNo:pageNo
+           };
+           service.doWebService(data,{
+               onResponse:(res) => {
+                   console.log(res,'蚁盘题目根目录');
+                   if(res.success && res.response){
+                       var response = res.response;
+                       //导航栏
+                       if(isNav){
+                           for(var k in parentTopicArray){
+                                   if(navHtml == ''){
+                                       navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
+                                   }else{
+                                       navHtml += "<span> <span> > </span> <span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
+                                   }
+                           }
+                           $('.nav_text').html(navHtml);
+                       }
+                       for(var k in response){
+                           console.log(response[k].fileType,'');
+                           if(response[k].fileType == 1){ //文件夹
+                               listHtml += "<div class='line_public' onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img class='item-image' src='./img/cloud_icon_web.png' alt=''> <span class='item-text text-hidden'>"+response[k].name+"</span> </div>";
+                           }else if(response[k].fileType == 2){ // 题目
+                               listHtml += "<div class='line_public quesItem'><div class='inputDiv'><i class='icon_check'></i><input type='checkbox' onclick='checkboxOnchange(this," + response[k].subject.id + ")'></div><div class='topic_item'>"+response[k].name+"</div></div>";
+                           }
+                       }
+                       if(response.length <= 0){
+                           $('.topic_more').text('已全部加载');
+                       }else{
+                           $('.topic_more').text('点击加载更多');
+                       }
+                       $('.topic_list').html(listHtml);
+                   }else{
+
+                   }
+               },
+               onError:function(error){}
+           });
+       }
+
+
+       function nav_topic(id,index){
+//           console.log(index,'index');
+           navHtml = '';
+           listHtml = '';
+           topicId = id;
+           pageNo = 1;
+           quesArr.splice(0);
+           parentTopicArray = parentTopicArray.splice(0,index+1);
+
+           if(id == -1){//根目录
+               getUserRootCloudSubjects(userId,true);
+//               console.log(parentTopicArray,'parentTopicArray');
+           }else{ //子目录
+
+               listCloudSubject(id,true);
+           }
+       }
+
+       /*
+       根据文件夹id获取蚁盘题目
+        */
+       function listCloudSubject(cId,isNav){
+           var service = new Service();
+           var data = {
+               method:'listCloudSubject',
+               cloudFileId: cId,
+               pageNo:pageNo
+           };
+           service.doWebService(data,{
+               onResponse:(res) => {
+                   console.log(res,'蚁盘题目');
+                   if(res.success && res.response){
+                       var response = res.response;
+                       //导航栏
+                       if(isNav){
+                           for(var k in parentTopicArray){
+                               if(navHtml == ''){
+                                   navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
+                               }else{
+                                   navHtml += "<span> <span> > </span> <span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
+                               }
+                                   // navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span><span>></span></span>";
+                           }
+                           $('.nav_text').html(navHtml);
+                       }
+                       for(var k in response){
+                           console.log(response[k].fileType,'');
+                           if(response[k].fileType == 1){ //文件夹
+                               listHtml += "<div class='line_public' onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img class='item-image' src='./img/cloud_icon_web.png' alt=''> <span class='item-text text-hidden'>"+response[k].name+"</span> </div>";
+                           }else if(response[k].fileType == 2){ // 题目
+                               listHtml += "<div class='line_public quesItem'><div class='inputDiv'><i class='icon_check'></i><input type='checkbox' onclick='checkboxOnchange(this," + response[k].subject.id + ")'></div><div class='topic_item'>"+response[k].name+"</div></div>";
+                           }
+                       }
+                       if(response.length <= 0){
+                           $('.topic_more').text('已全部加载');
+                       }else{
+                           $('.topic_more').text('点击加载更多');
+                       }
+                       $('.topic_list').html(listHtml);
+                   }else{
+
+                   }
+               },
+               onError:function(error){}
+           });
+       }
 
    /*
    通过vid获取课件信息
@@ -191,7 +412,13 @@
                    var navHTML = "";
                    nav.innerHTML = "";
                    for(var k in parentArray){
-                       navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") >"+parentArray[k].name+" > </span>";
+                       if(k == 0){
+                           navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") >"+parentArray[k].name+"</span>";
+
+                       }else{
+                           navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") > > "+parentArray[k].name+"</span>";
+
+                       }
                    }
                    attachment_bottom.innerText = res.response.length <= 0?"无更多文件":"点击加载更多";;
                    attachment_list.innerHTML = (HTML_LIST);
@@ -229,6 +456,7 @@
    //点击遮罩
    function clickMask(){
        AddAttachmentChange('none');
+       $('.topic_box').css({transform:'translate(0%,100%)'});
    }
 
    //点击添加按钮
@@ -241,14 +469,7 @@
        var mask = document.getElementById('mask');
        var attachment_box = document.getElementById('attachment_box');
        mask.style.display = style;
-//       if(style == 'block'){
-           attachment_box.style.display = style;
-//       }else{
-//           setTimeout(()=>{
-//             attachment_box.style.display = style;
-//           },500)
-//       }
-       var requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame
+       attachment_box.style.display = style;
        window.requestAnimationFrame(function(){
           attachment_box.style.transform = style == 'block'?"translateY(0%)":"translateY(100%)";
        })
