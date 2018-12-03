@@ -155,6 +155,16 @@ body {
     background-size: 16px;
 }
 
+#localRecord {
+    background: url("../img/icon_nav_myFile.png") no-repeat 42px 16px;
+    background-size: 16px;
+}
+
+#localRecord.active {
+    background: #ebeef5 url("../img/icon_nav_myFile.png") no-repeat 42px 16px;
+    background-size: 16px;
+}
+
 #myFile {
     background: url("../img/icon_nav_file.png") no-repeat 42px 16px;
     background-size: 12px;
@@ -188,6 +198,10 @@ body {
     display: none;
 }
 
+.localRecord_box{
+    display: none;
+}
+
 .classInfo_box {
     height: 100%;
 }
@@ -207,6 +221,11 @@ body {
 }
 
 .classReview_box > iframe {
+    width: 100%;
+    height: 100vh;
+}
+
+.localRecord_box > iframe {
     width: 100%;
     height: 100vh;
 }

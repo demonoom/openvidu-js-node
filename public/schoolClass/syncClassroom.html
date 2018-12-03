@@ -38,7 +38,7 @@
                 <div class="header">课堂管理</div>
                 <div id="classInfo" class="active">课程信息</div>
                 <div id="classReview">课程回顾</div>
-
+                <div id="localRecord">本地录制</div>
                 <div id="myFile">我的课件</div>
             </div>
             <div class="right_box">
@@ -49,6 +49,10 @@
                 <!--课程回顾 -->
                 <div class="classReview_box">
                     <iframe id="classReview_iframe" src="" frameborder="0"></iframe>
+                </div>
+                <!--本地录制 -->
+                <div class="localRecord_box">
+                    <iframe id="localRecord_iframe" src="" frameborder="0"></iframe>
                 </div>
                 <!--我的课件 -->
                 <div class="myFile_box">
@@ -85,14 +89,15 @@
         $('#classInfo_iframe').attr('src', 'unionClassList.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '');
         $('#classReview_iframe').attr('src', 'classReviewList.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '');
         $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
+        $('#localRecord_iframe').attr('src', 'localRecord.html?ident=' + teacherId);
 //        $('#myFile_iframe').attr('src', 'http://192.168.50.29:8091/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
 
         //socket 监听
         simple.clazzWsListener = {
             onError: function (errorMsg) {
-                console.log(errorMsg, "errorMsg");
+//                console.log(errorMsg, "errorMsg");
             }, onWarn: function (warnMsg) {
-                console.log(warnMsg, "warnMsg");
+//                console.log(warnMsg, "warnMsg");
             }, onMessage: function (info) {
                 var command = info.command;
                 var messageData = info.data;
@@ -122,6 +127,8 @@
             $('.classInfo_box').show();
             $('.myFile_box').hide();
             $('.classReview_box').hide();
+            $('#localRecord').removeClass('active');
+            $('.localRecord_box').hide();
         })
 
         $('#myFile').on('click', function () {
@@ -131,7 +138,22 @@
             $('.classInfo_box').hide();
             $('.myFile_box').show();
             $('.classReview_box').hide();
+            $('#localRecord').removeClass('active');
+            $('.localRecord_box').hide();
         });
+
+        $('#localRecord').on('click',function(){
+            $('#myFile').removeClass('active');
+            $('#classInfo').removeClass('active');
+            $('#classReview').removeClass('active');
+            $('.classInfo_box').hide();
+            $('.myFile_box').hide();
+            $('.classReview_box').hide();
+            $('#localRecord').addClass('active');
+            $('.localRecord_box').show();
+
+
+        })
 
         $('#classReview').on('click', function () {
             $('#classReview').addClass('active');
@@ -140,6 +162,8 @@
             $('.classInfo_box').hide();
             $('.myFile_box').hide();
             $('.classReview_box').show();
+            $('#localRecord').removeClass('active');
+            $('.localRecord_box').hide();
         })
 
         $('#closeIframe').on('click', function () {
@@ -220,7 +244,7 @@
                 },
                 success: function (data) {
                     var res = JSON.parse(data);
-                    console.log(res);
+//                    console.log(res);
                     if (res.success) {
                         $('#user_avatar').attr('src', res.response.avatar);
                         $('.username').text(res.response.userName);
@@ -229,7 +253,7 @@
                     }
                 },
                 error: function (e) {
-                    console.log(e);
+//                    console.log(e);
                 }
             });
         }

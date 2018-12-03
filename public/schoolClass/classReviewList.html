@@ -56,7 +56,7 @@
 <script type="application/javascript">
     var pageNo = 1;
     var teacherId = Service.getQueryString("teacherId");
-            console.log(teacherId,'teacherId');
+//            console.log(teacherId,'teacherId');
     var teacherName = Service.getQueryString("teacherName");
     $("#loading").show();
     $(document).ready(function(){
@@ -93,11 +93,11 @@
                infos.forEach(function(info){
                    var vid = info.courseId;
                    var title = info.name;
-                   console.log(info);
+//                   console.log(info);
                    var openTeacher = info.teacher;
                    var unionTeachers = info.unionTeachers;
                    var pass = info.password;
-                   console.log(info.openTime);
+//                   console.log(info.openTime);
                    var startTime = (info.openTime);
                    var template = $("#item_template");
                    $(template.children("div").get(0)).attr("id","vclass_"+vid);
