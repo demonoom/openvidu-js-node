@@ -203,7 +203,7 @@ function gotStream(stream) {
                     }
                 })
             }else{
-                saveFolder =  saveFolder.replace(/\\/g,"\\\\");
+                saveFolder =  saveFolder.replace(/\\/g,"\\\\")+"\\";
             }
 
             if (reader.readyState == 2) {
