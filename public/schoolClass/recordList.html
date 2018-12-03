@@ -72,7 +72,6 @@ var infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || []
 var rootDir = localStorage.getItem('rootDir');
 console.log(rootDir);
 var fileNames = [];
-
 var listArray = [];
 $(function () {
     $('.list_body').empty();
@@ -92,11 +91,11 @@ function loadFiles(){
 //        console.log((stats.size / 1024 / 1024).toFixed(2), '文件大小');
 //        console.log(stats,'stats');
         var obj = {
-            className:value.clazzName,
-            fileName: value.fileName,
-            filePath: value.filePath,
-            fileDirPath: rootDir,
-            fileTime: value.createTime,
+            className:value.clazzName?value.clazzName:'',
+            fileName: value.fileName?value.fileName:'',
+            filePath: value.filePath?value.filePath:'',
+            fileDirPath: rootDir?rootDir:'',
+            fileTime: datetimeFormat(value.createTime),
             fileSize: (stats.size / 1024 / 1024).toFixed(2) + 'MB',
         };
         listArray.push(obj);
@@ -183,5 +182,54 @@ $('#updateDir').on('click',function(){
     })
 
 })
+
+
+function datetimeFormat(longTypeDate){
+        var dateTypeDate = "";
+        var date = new Date();
+        date.setTime(longTypeDate);
+        dateTypeDate += date.getFullYear(); //年
+        dateTypeDate += "-" + getMonth(date); //月
+        dateTypeDate += "-" + getDay(date); //日
+        dateTypeDate += " " + getHours(date); //时
+        dateTypeDate += ":" + getMinutes(date);  //分
+        return dateTypeDate;
+    }
+
+    function getMonth(date){
+        var month = "";
+        month = date.getMonth() + 1; //getMonth()得到的月份是0-11
+        if(month<10){
+            month = "0" + month;
+        }
+        return month;
+    }
+
+    function getDay(date){
+        var day = "";
+        day = date.getDate();
+        if(day<10){
+            day = "0" + day;
+        }
+        return day;
+    }
+
+    function getHours(date){
+        var hours = "";
+        hours = date.getHours();
+        if(hours<10){
+            hours = "0" + hours;
+        }
+        return hours;
+    }
+
+    function getMinutes(date){
+        var minute = "";
+        minute = date.getMinutes();
+        if(minute<10){
+            minute = "0" + minute;
+        }
+        return minute;
+    }
 </script>
 </html>
