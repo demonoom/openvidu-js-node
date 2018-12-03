@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!doctype html>
 <html lang="en">
 <head>
@@ -42,4 +43,102 @@
 <script src="./js/jquery-3.2.1.min.js"></script>
 <!--<script src="./js/require.js"></script>-->
 <script src="./js/localRecord.js"></script>
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>客户端录制中</title>
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="css/record_list.css?v=35" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/hashmap.js"></script>
+    <script type="text/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="../openvidu-browser-2.6.0.js"></script>
+    <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
+    <script type="text/javascript" src="js/service.js"></script>
+    <script type="application/javascript" src="https://jsmpeg.com/jsmpeg.min.js"></script>
+    <script type="text/javascript" src="js/platform.js"></script>
+    <script type="text/javascript" src="js/socket.io.js"></script>
+    <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
+    <script type="text/javascript" src="js/LocalRecord.js"></script>
+
+    <style>
+        html,body{
+            background: transparent;
+        }
+        .recording-btn{
+            padding: 1px 0 0 0;
+            line-height: 1;
+            margin: 0 auto;
+            min-width: 20px;
+            text-align: center;
+            display: inline-block;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            -ms-transform: translateX(-50%);
+            -moz-transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
+            -o-transform: translateX(-50%);
+
+        }
+        .videoSource-red{
+            width: 18px;
+            height: 18px;
+            display: inline-block;
+        }
+        .recordingTipText{
+            background: red;
+            color: #fff;
+            font-size: 8px;
+            line-height: 11px;
+            height: 12px;
+            vertical-align: top;
+            display: block;
+            margin-top: -5px;
+            border-radius: 1px;
+            padding: 1px 4px;
+            z-index: 11;
+            position: relative;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="recording-btn" onclick="stopCapture();" title="点击可停止录制" style="cursor:pointer">
+        <i class="videoSource-red" id="recordingTipImg"><img src="images/play-red-icon.gif" width="100%" /></i>
+        <span id="recordingTipText" class="recordingTipText" style="-webkit-app-region: drag;">客户端录制中..</span>
+    </div>
+</body>
+
+<script type="text/javascript">
+    //課堂名稱
+    var clazzName = Service.getQueryString("clazzName");
+    function startServerRecord() {
+        var teacherId = Service.getQueryString("teacherId");
+        var config = {};
+        config.maxWidth = 1280;
+        config.minWidth = 1280;
+        config.maxHeight = 720;
+        config.minHeight = 720;
+        config.maxFrameRate = 30;
+        config.minFrameRate = 30;
+        config.pushUrl = "rtmp://60.205.86.217:19350/live4/"+teacherId;
+        config.webSocketUrl = "https://jiaoxue.maaee.com:9003/";
+        config.timeSlice = 1500;
+        config.recordingTipTextId = "recordingTipText",
+        config.recordingTipImgId = "recordingTipImg";
+        config.clazzName = clazzName;
+        config.teacherId = teacherId;
+        captureTab(config);
+    }
+    $(document).ready(function(){
+        startServerRecord();
+    });
+</script>
+
+>>>>>>> v2.6.0_shepinyuan
 </html>
