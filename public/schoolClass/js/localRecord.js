@@ -202,6 +202,8 @@ function gotStream(stream) {
                         })
                     }
                 })
+            }else{
+                saveFolder =  saveFolder.replace(/\\/g,"\\\\");
             }
 
             if (reader.readyState == 2) {
@@ -219,14 +221,13 @@ function gotStream(stream) {
                     item.clazzName = clazzName;
                     item.createTime = startTime;
                     item.filePath = file;
+                    item.fileName = startTime+".mp4";
+                    item.size = 1024*1024*50;
                     savedVideoInfos.splice( 0, 0, item );
                     localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
 
-                    if (err) {
-                        //console.error('Failed to save video ' + err);
-                    } else {
-                        //window.close();
-                    }
+                    //关闭录制窗口
+                    window.close();
                 });
             }
         }

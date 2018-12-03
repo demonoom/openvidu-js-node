@@ -140,7 +140,8 @@ function openFile(path) {
 
 //    console.log('打开文件');
 //    console.log(path);
-    window.open("recordVideoPreview.html?filePath="+path);
+    var url = "recordVideoPreview.html?filePath="+decodeURIComponent(path.replace(/\\/g,"\\\\"));
+    window.open(url);
 }
 
 function openFolder(path) {
@@ -154,6 +155,9 @@ function openFolder(path) {
  ** 添加对象至list_body元素中
  */
 function appendToList(obj) {
+    if(obj.filePath){
+        obj.filePath = obj.filePath.replace(/\\/g,"\\\\");
+    }
     var html = "<div class='list_item'>" +
         "<div class='list_bodyItem'>" + obj.className + "</div>"+
         "<div class='list_bodyItem'>" + obj.fileName + "</div>"+
