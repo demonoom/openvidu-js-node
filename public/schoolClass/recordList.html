@@ -49,30 +49,31 @@ const {dialog} = window.parent.require('electron').remote;
 const fs = window.parent.require('fs');
 var teacherId = Service.getQueryString('ident');
 console.log(teacherId);
+
 var infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || [];
-//var infos = [{
-//    id:1,
-//    clazzName:'常规课',
-//    fileName:'文件名',
-//    createTime:1543827957472,
-//    filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
-//    size:8
-//},{
-//      id:1,
-//      clazzName:'实景课',
-//      fileName:'文件名',
-//      createTime:1543827957472,
-//      filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
-//      size:8
-//},{
-//        id:1,
-//        clazzName:'常规课',
-//        fileName:'文件名',
-//        createTime:1543827957472,
-//        filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
-//        size:8
-//}]
-var rootDir = localStorage.getItem('rootDir');
+var infos = [{
+    id:1,
+    clazzName:'常规课',
+    fileName:'文件名',
+    createTime:1543827957472,
+    filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
+    size:8
+},{
+      id:1,
+      clazzName:'实景课',
+      fileName:'文件名',
+      createTime:1543827957472,
+      filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
+      size:8
+},{
+        id:1,
+        clazzName:'常规课',
+        fileName:'文件名',
+        createTime:1543827957472,
+        filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
+        size:8
+}]
+var rootDir = localStorage.getItem('video_save_folder');
 console.log(rootDir);
 var fileNames = [];
 var listArray = [];
@@ -137,9 +138,6 @@ function loadFiles(){
 
 
 function openFile(path) {
-
-//    console.log('打开文件');
-//    console.log(path);
     var url = "recordVideoPreview.html?filePath="+decodeURIComponent(path.replace(/\\/g,"\\\\"));
     window.open(url);
 }
@@ -178,7 +176,7 @@ $('#updateDir').on('click',function(){
         //重新渲染
         fileNames.splice(0);
         listArray.splice(0);
-        localStorage.setItem('rootDir',rootDir);
+        localStorage.setItem('video_save_folder',rootDir);
         $('#dir_input').val(rootDir);
 //        $('.list_body').empty();
 //        loadFiles();
