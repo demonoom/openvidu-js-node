@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>回顾视频预览</title>
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="css/record_list.css?v=35" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/hashmap.js"></script>
+    <script type="text/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="../openvidu-browser-2.6.0.js"></script>
+    <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
+    <script type="text/javascript" src="js/service.js"></script>
+    <script type="text/javascript" src="js/platform.js"></script>
+</head>
+
+<body style="background: #000">
+    <video style="width: 100%;height: 100%; position: absolute; left: 0; top: 0;" id="video_element" controls autoplay>
+
+    </video>
+</body>
+
+<script type="text/javascript">
+     var video_element = document.getElementById("video_element");
+     video_element.src = "C:\\Users\\Administrator\\Desktop\\electron\\LitteAntTeaching\\recordVideos\\1543822554914.mp4";
+
+     video_element.onloadedmetadata = function() {
+         video_element.onloadedmetadata = null;
+         video_element.currentTime = 9999999999;
+         setTimeout(function(){
+             video_element.currentTime = 0;
+             video_element.play();
+         },500);
+     };
+
+</script>
+
+</html>
