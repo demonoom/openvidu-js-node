@@ -18,9 +18,9 @@
 
 <div class="list_view">
     <div class="list_title">
+        <div class="list_titleItem">课程名</div>
         <div class="list_titleItem">文件名</div>
-        <div class="list_titleItem">类型</div>
-        <div class="list_titleItem">时长</div>
+        <div class="list_titleItem">创建时间</div>
         <div class="list_titleItem">大小</div>
         <div class="list_titleItem">操作</div>
     </div>
@@ -39,6 +39,7 @@
 </div>
 
 </body>
+<script type="application/javascript" src="js/service.js"></script>
 <script src="./js/jquery-3.2.1.min.js"></script>
 <!--<script src="./js/require.js"></script>-->
 <script>
@@ -46,14 +47,33 @@ const electron = window.parent.require('electron');
 const {shell} = electron;
 const {dialog} = window.parent.require('electron').remote;
 const fs = window.parent.require('fs');
-var rootDir = '/home/fanbo/视频';
+var teacherId = Service.getQueryString('ident');
+console.log(teacherId);
+var infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || [];
+//var infos = [{
+//    id:1,
+//    clazzName:'常规课',
+//    fileName:'文件名',
+//    createTime:1543827957472,
+//    filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
+//},{
+//      id:1,
+//      clazzName:'实景课',
+//      fileName:'文件名',
+//      createTime:1543827957472,
+//      filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
+//},{
+//        id:1,
+//        clazzName:'常规课',
+//        fileName:'文件名',
+//        createTime:1543827957472,
+//        filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
+//}]
+var rootDir = localStorage.getItem('rootDir');
+console.log(rootDir);
 var fileNames = [];
-// console.log(shell,'shell');
-// console.log(electron);
-// console.log(fs);
 
 var listArray = [];
-
 $(function () {
     $('.list_body').empty();
     loadFiles();
@@ -62,33 +82,53 @@ $(function () {
 
 //根据根目录遍历渲染文件
 function loadFiles(){
-    //置空
-    console.log($('.list_body'),'已清空的');
-    // console.log($('.list_body').html(),'')
-    $('#dir_input').val(rootDir);
-    fs.readdirSync(rootDir).map((value, index) => {
-        fileNames.push(value);
-    })
-    fileNames.map((value, index) => {
-        // console.log(rootDir+'/'+value,'文件路径')
-        var stats = fs.statSync(rootDir + '/' + value);
+
+
+    infos.map((value,index)=>{
+//        console.log(value);
+        var stats = fs.statSync(value.filePath);
         // console.log(stats,'stats');
-        var type = (stats.size / 1024 / 1024).toFixed(2) > 10 ? '本地课堂' : '微课';
-        console.log(value, '文件名称');
-        console.log((stats.size / 1024 / 1024).toFixed(2), '文件大小');
-        console.log(type, '类型');
-        console.log(rootDir, '文件夹位置');
-        console.log(rootDir + '/' + value, '文件位置');
+//        console.log(value.clazzName, '文件名称');
+//        console.log((stats.size / 1024 / 1024).toFixed(2), '文件大小');
+//        console.log(stats,'stats');
         var obj = {
-            fileName: value,
-            filePath: rootDir + '/' + value,
+            className:value.clazzName,
+            fileName: value.fileName,
+            filePath: value.filePath,
             fileDirPath: rootDir,
-            fileTime: '03:22:17',
+            fileTime: value.createTime,
             fileSize: (stats.size / 1024 / 1024).toFixed(2) + 'MB',
-            fileType: type
         };
         listArray.push(obj);
-    });
+    })
+    $('#dir_input').val(rootDir);
+//    console.log(listArray,'listArray');
+
+
+//    //置空
+//    console.log($('.list_body'),'已清空的');
+//    // console.log($('.list_body').html(),'')
+//    $('#dir_input').val(rootDir);
+//    fs.readdirSync(rootDir).map((value, index) => {
+//        fileNames.push(value);
+//    })
+//    fileNames.map((value, index) => {
+//        // console.log(rootDir+'/'+value,'文件路径')
+//        var stats = fs.statSync(rootDir + '/' + value);
+//        // console.log(stats,'stats');
+//        console.log(value, '文件名称');
+//        console.log((stats.size / 1024 / 1024).toFixed(2), '文件大小');
+//        console.log(stats,'stats');
+//        var obj = {
+//            className:'常规课',
+//            fileName: value,
+//            filePath: rootDir + '/' + value,
+//            fileDirPath: rootDir,
+//            fileTime: '03:22:17',
+//            fileSize: (stats.size / 1024 / 1024).toFixed(2) + 'MB',
+//        };
+//        listArray.push(obj);
+//    });
     //将file对象渲染至页面
     if (listArray.length == 0) {
         $('.list_body').append("<div class='empty'>本地暂无文件</div>")
@@ -117,29 +157,29 @@ function openFolder(path) {
  */
 function appendToList(obj) {
     var html = '<div class="list_item">' +
+        '<div class="list_bodyItem">' + obj.className + '</div>' +
         '<div class="list_bodyItem">' + obj.fileName + '</div>' +
-        '<div class="list_bodyItem">' + obj.fileType + '</div>' +
         '<div class="list_bodyItem">' + obj.fileTime + '</div>' +
         '<div class="list_bodyItem">' + obj.fileSize + '</div>' +
         '<div class="list_bodyItem">' +
         '     <button onclick="openFile()">播放</button>' +
-        '     <button onclick="openFolder()">打开文件夹</button>' +
+//        '     <button onclick="openFolder()">打开文件夹</button>' +
         '</div></div>';
     $('.list_body').append(html);
 }
 
 $('#updateDir').on('click',function(){
     console.log('更改文件夹路径');
-
     dialog.showOpenDialog({ properties: ['openDirectory']},function(res){
         console.log(res[0]);
         rootDir = res[0];
         //重新渲染
         fileNames.splice(0);
-        listArray.splice(0)
+        listArray.splice(0);
+        localStorage.setItem('rootDir',rootDir);
         $('#dir_input').val(rootDir);
-        $('.list_body').empty();
-        loadFiles();
+//        $('.list_body').empty();
+//        loadFiles();
     })
 
 })
