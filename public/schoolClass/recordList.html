@@ -49,26 +49,26 @@ const {dialog} = window.parent.require('electron').remote;
 const fs = window.parent.require('fs');
 var teacherId = Service.getQueryString('ident');
 console.log(teacherId);
-var savedVideoInfos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos"));
-var infos = [{
-    id:1,
-    clazzName:'常规课',
-    fileName:'文件名',
-    createTime:1543827957472,
-    filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
-},{
-      id:1,
-      clazzName:'实景课',
-      fileName:'文件名',
-      createTime:1543827957472,
-      filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
-},{
-        id:1,
-        clazzName:'常规课',
-        fileName:'文件名',
-        createTime:1543827957472,
-        filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
-}]
+var infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || [];
+//var infos = [{
+//    id:1,
+//    clazzName:'常规课',
+//    fileName:'文件名',
+//    createTime:1543827957472,
+//    filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
+//},{
+//      id:1,
+//      clazzName:'实景课',
+//      fileName:'文件名',
+//      createTime:1543827957472,
+//      filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
+//},{
+//        id:1,
+//        clazzName:'常规课',
+//        fileName:'文件名',
+//        createTime:1543827957472,
+//        filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4'
+//}]
 var rootDir = localStorage.getItem('rootDir');
 console.log(rootDir);
 var fileNames = [];
