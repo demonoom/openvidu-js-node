@@ -130,7 +130,7 @@ function loadFiles(){
 //    });
     //将file对象渲染至页面
     if (listArray.length == 0) {
-        $('.list_body').append("<div class='empty'>本地暂无文件</div>")
+        $('.list_body').append("<div class='empty' style='text-align: center;'>本地暂无文件</div>")
     } else {
         //遍历当前目录下的文件
         listArray.map((value, index) => {
