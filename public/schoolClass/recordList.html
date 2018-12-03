@@ -9,20 +9,23 @@
 </head>
 <body>
 <div class="nav">
+    <span class="record_title">录制列表</span>
   <div class="nav_right">
     <span>默认输出路径</span>
-    <input id="dir_input" type="text">
-    <span id="updateDir">更改路径</span>
+      <span id="dir_input" class="text_hidden"></span>
+    <span id="updateDir"></span>
   </div>
 </div>
 
 <div class="list_view">
-    <div class="list_title">
-        <div class="list_titleItem">课程名</div>
-        <div class="list_titleItem">文件名</div>
-        <div class="list_titleItem">创建时间</div>
-        <div class="list_titleItem">大小</div>
-        <div class="list_titleItem">操作</div>
+    <div class="list_title my_flex">
+        <div class="noomWidth my_flex">
+            <div class="list_titleItem courseName">课程名</div>
+            <div class="list_titleItem fileName">文件名</div>
+        </div>
+        <div class="list_titleItem time">创建时间</div>
+        <div class="list_titleItem size">大小</div>
+        <div class="list_titleItem option">操作</div>
     </div>
     <div class="list_body">
         <!--
@@ -98,7 +101,7 @@ function loadFiles(){
         };
         listArray.push(obj);
     });
-    $('#dir_input').val(rootDir);
+    $('#dir_input').text(rootDir);
 
 
 //    //置空
@@ -156,12 +159,11 @@ function appendToList(obj) {
     if(obj.filePath){
         obj.filePath = obj.filePath.replace(/\\/g,"\\\\");
     }
-    var html = "<div class='list_item'>" +
-        "<div class='list_bodyItem'>" + obj.className + "</div>"+
-        "<div class='list_bodyItem'>" + obj.fileName + "</div>"+
-        "<div class='list_bodyItem'>" + obj.fileTime + "</div>"+
-        "<div class='list_bodyItem'>" + obj.fileSize + "</div>"+
-        "<div class='list_bodyItem'>" +
+    var html = "<div class='list_item my_flex'>" +
+        "<div class='noomWidth my_flex'><div class='list_bodyItem courseName text_hidden'><img class='filePic' src='img/icon_recordFile.png'/>" + obj.className + "</div><div class='list_bodyItem fileName text_hidden'>" + obj.fileName + "</div></div>"+
+        "<div class='list_bodyItem time'>" + obj.fileTime + "</div>"+
+        "<div class='list_bodyItem size'>" + obj.fileSize + "</div>"+
+        "<div class='list_bodyItem option'>" +
         "    <button onclick='openFile(\""+obj.filePath+"\")'>播放</button>" +
 //        '     <button onclick="openFolder()">打开文件夹</button>' +
         "</div></div>";
@@ -177,7 +179,7 @@ $('#updateDir').on('click',function(){
         fileNames.splice(0);
         listArray.splice(0);
         localStorage.setItem('video_save_folder',rootDir);
-        $('#dir_input').val(rootDir);
+        $('#dir_input').text(rootDir);
 //        $('.list_body').empty();
 //        loadFiles();
     })
