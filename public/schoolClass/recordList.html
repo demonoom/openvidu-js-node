@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+<link rel="stylesheet" href="./css/recordList_local.css">
+</head>
+<body>
+<div class="nav">
+  <div class="nav_right">
+    <span>默认输出路径</span>
+    <input id="dir_input" type="text">
+    <span id="updateDir">更改路径</span>
+  </div>
+</div>
+
+<div class="list_view">
+    <div class="list_title">
+        <div class="list_titleItem">文件名</div>
+        <div class="list_titleItem">类型</div>
+        <div class="list_titleItem">时长</div>
+        <div class="list_titleItem">大小</div>
+        <div class="list_titleItem">操作</div>
+    </div>
+    <div class="list_body">
+        <!--
+        <div class="list_item">传统民居</div>
+        <div class="list_item">微课</div>
+        <div class="list_item">05:00:22</div>
+        <div class="list_item">4.5MB</div>
+        <div class="list_item">
+             <button onclick="openFile()">播放</button>
+             <button onclick="openFolder()">打开文件夹</button>
+        </div>
+        -->
+    </div>
+</div>
+
+</body>
+<script src="./js/jquery-3.2.1.min.js"></script>
+<!--<script src="./js/require.js"></script>-->
+<script>
+const electron = window.parent.require('electron');
+const {shell} = electron;
+const {dialog} = window.parent.require('electron').remote;
+const fs = window.parent.require('fs');
+var rootDir = '/home/fanbo/视频';
+var fileNames = [];
+// console.log(shell,'shell');
+// console.log(electron);
+// console.log(fs);
+
+var listArray = [];
+
+$(function () {
+    $('.list_body').empty();
+    loadFiles();
+
+});
+
+//根据根目录遍历渲染文件
+function loadFiles(){
+    //置空
+    console.log($('.list_body'),'已清空的');
+    // console.log($('.list_body').html(),'')
+    $('#dir_input').val(rootDir);
+    fs.readdirSync(rootDir).map((value, index) => {
+        fileNames.push(value);
+    })
+    fileNames.map((value, index) => {
+        // console.log(rootDir+'/'+value,'文件路径')
+        var stats = fs.statSync(rootDir + '/' + value);
+        // console.log(stats,'stats');
+        var type = (stats.size / 1024 / 1024).toFixed(2) > 10 ? '本地课堂' : '微课';
+        console.log(value, '文件名称');
+        console.log((stats.size / 1024 / 1024).toFixed(2), '文件大小');
+        console.log(type, '类型');
+        console.log(rootDir, '文件夹位置');
+        console.log(rootDir + '/' + value, '文件位置');
+        var obj = {
+            fileName: value,
+            filePath: rootDir + '/' + value,
+            fileDirPath: rootDir,
+            fileTime: '03:22:17',
+            fileSize: (stats.size / 1024 / 1024).toFixed(2) + 'MB',
+            fileType: type
+        };
+        listArray.push(obj);
+    });
+    //将file对象渲染至页面
+    if (listArray.length == 0) {
+        $('.list_body').append("<div class='empty'>本地暂无文件</div>")
+    } else {
+        //遍历当前目录下的文件
+        listArray.map((value, index) => {
+            appendToList(value);
+        })
+    }
+}
+
+
+function openFile(path) {
+    console.log('打开文件');
+}
+
+function openFolder(path) {
+    console.log('打开文件夹');
+    shell.openItem(rootDir,function(err){
+        console.log(err);
+    });
+}
+
+/*
+ ** 添加对象至list_body元素中
+ */
+function appendToList(obj) {
+    var html = '<div class="list_item">' +
+        '<div class="list_bodyItem">' + obj.fileName + '</div>' +
+        '<div class="list_bodyItem">' + obj.fileType + '</div>' +
+        '<div class="list_bodyItem">' + obj.fileTime + '</div>' +
+        '<div class="list_bodyItem">' + obj.fileSize + '</div>' +
+        '<div class="list_bodyItem">' +
+        '     <button onclick="openFile()">播放</button>' +
+        '     <button onclick="openFolder()">打开文件夹</button>' +
+        '</div></div>';
+    $('.list_body').append(html);
+}
+
+$('#updateDir').on('click',function(){
+    console.log('更改文件夹路径');
+
+    dialog.showOpenDialog({ properties: ['openDirectory']},function(res){
+        console.log(res[0]);
+        rootDir = res[0];
+        //重新渲染
+        fileNames.splice(0);
+        listArray.splice(0)
+        $('#dir_input').val(rootDir);
+        $('.list_body').empty();
+        loadFiles();
+    })
+
+})
+</script>
+</html>
