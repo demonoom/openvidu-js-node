@@ -10,7 +10,6 @@ var recordingTipImg;
 var reverse = false;
 var electronRemote = require('electron').remote;
 var electronFs = electronRemote.require('fs');
-var appRootPath = electronRemote.require('app-root-path').path;
 var clazzName = "";
 var startTime ;
 var teacherId;
@@ -23,7 +22,6 @@ function stopCapture(){
     setBadgeText('服务端录屏');
     setBadgeImg('videoSource-menu3');
     recording = false;
-
     try{
         streams.forEach(function(stream){
             stream.getTracks().forEach(function(track){
@@ -34,7 +32,6 @@ function stopCapture(){
     }
     streams = new Array();
     $(".audioCanvas").remove();
-    //window.close();
 }
 
 
@@ -71,18 +68,14 @@ function onRecording() {
 }
 
 function setBadgeText(text) {
-    //$(recordingTipText).text(text);
+
 }
 
 function setBadgeImg(clazz){
-    // $(recordingTipImg).removeClass("videoSource-menu3");
-    // $(recordingTipImg).removeClass("videoSource-menu3-2");
-    // $(recordingTipImg).addClass(clazz);
+
 }
 
 function captureTab(config) {
-
-    localStorage.removeItem("video_save_folder");
 
     teacherId = config.teacherId;
     startTime = new Date().getTime();
@@ -179,13 +172,11 @@ function getDefaultVideoSavePath(){
     const electron = window.top.require('electron');
     const appRootPath = electron.remote.require('app-root-path').path;
     const path = electron.remote.require('path');
-
     if(appRootPath.indexOf(".asar") == -1){
         return path.join(appRootPath,"recordVideos") +"\\";
     }else{
         return path.join(path.dirname(appRootPath),"recordVideos")+"\\";
     }
-    //return "C:\\Program Files (x86)\\LittleAntTeaching\\resources\\recordVideos\\";
 }
 
 function gotStream(stream) {
@@ -206,50 +197,51 @@ function gotStream(stream) {
             var saveFolder = localStorage.getItem("video_save_folder");
             if(saveFolder == null || saveFolder == undefined || saveFolder == ""){
                 saveFolder = getDefaultVideoSavePath();
-                alert("saveFolder:" + saveFolder);
-                electronFs.exists(saveFolder,function(exists){
-                    if(!exists){
-                        electronFs.mkdir(saveFolder,function(error){
-                            if(error){
-                                console.log(error);
-                                alert(error);
-                                return false;
-                            }
-                            console.log('创建目录成功');
-                            alert("创建目录成功");
-                        })
-                    }
-                })
-            }else{
-                saveFolder =  saveFolder.replace(/\\/g,"\\\\")+"\\";
             }
+            saveFolder =  saveFolder.replace(/\\/g,"\\\\")+"\\";
 
-            if (reader.readyState == 2) {
-                var buffer = new Buffer(reader.result);
-                var file = saveFolder+startTime+".mp4";
-                electronFs.writeFile(file, buffer, function(err) {
-                    var savedVideoInfos = localStorage.getItem(teacherId+"_savedVideoInfos");
-                    if(savedVideoInfos == null || savedVideoInfos == undefined){
-                        savedVideoInfos = new Array();
-                    }else{
-                        savedVideoInfos = JSON.parse(savedVideoInfos);
-                    }
-                    var item = {};
-                    item.id = guid();
-                    item.clazzName = clazzName;
-                    item.createTime = startTime;
-                    item.filePath = file;
-                    item.fileName = startTime+".mp4";
-                    item.size = streamData.size;
-                    savedVideoInfos.splice( 0, 0, item );
-                    localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
-
-                    //关闭录制窗口
-                    window.close();
-                });
-            }
+            electronFs.exists(saveFolder,function(exists){
+                if(!exists){
+                    electronFs.mkdir(saveFolder,function(error){
+                        if(error){
+                            console.log(error);
+                            return false;
+                        }
+                        console.log('创建目录成功');
+                        saveToDisk(saveFolder,reader,streamData.size);
+                    })
+                }else{
+                    saveToDisk(saveFolder,reader,streamData.size);
+                }
+            })
         }
         reader.readAsArrayBuffer(blob);
+    }
+
+    function saveToDisk(saveFolder,reader,streamSize){
+        if (reader.readyState == 2) {
+            var buffer = Buffer.from(reader.result);
+            var file = saveFolder+startTime+".mp4";
+            electronFs.writeFile(file, buffer, function(err) {
+                var savedVideoInfos = localStorage.getItem(teacherId+"_savedVideoInfos");
+                if(savedVideoInfos == null || savedVideoInfos == undefined){
+                    savedVideoInfos = new Array();
+                }else{
+                    savedVideoInfos = JSON.parse(savedVideoInfos);
+                }
+                var item = {};
+                item.id = guid();
+                item.clazzName = clazzName;
+                item.createTime = startTime;
+                item.filePath = file;
+                item.fileName = startTime+".mp4";
+                item.size = streamSize;
+                savedVideoInfos.splice( 0, 0, item );
+                localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
+                //关闭录制窗口
+                window.close();
+            });
+        }
     }
 
     function guid() {
