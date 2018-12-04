@@ -95,7 +95,7 @@
                     title: "请选择本地摄像头",
                     skin: "videoSource",
                     area: ['300px', '480px'], //宽高
-                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='left left2'>昵称</span><input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
+                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='left left2'>昵称</span><input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
                 });
 
             }).catch(function (err) {
@@ -335,10 +335,10 @@
     }
 
     function addScreen(){
-        var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
+        var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
         layer.open({
             type: 1,
-            title: "请选择网络摄像头",
+            title: "桌面视频源",
             closeBtn: 0,
             skin: "videoSource",
             area: ['300px', '480px'], //宽高

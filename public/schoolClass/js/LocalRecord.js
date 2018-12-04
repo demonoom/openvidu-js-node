@@ -8,30 +8,12 @@ var recordingTipImg;
 var reverse = false;
 var electronRemote = require('electron').remote;
 var electronFs = electronRemote.require('fs');
+var electronFsPromises = electronRemote.require('fs').promises;
 var clazzName = "";
 var startTime ;
 var teacherId;
-
-function stopCapture(){
-    if(mediaRecorder){
-        mediaRecorder.stop();
-        mediaRecorder = null;
-    }
-    setBadgeText('服务端录屏');
-    setBadgeImg('videoSource-menu3');
-    recording = false;
-    try{
-        streams.forEach(function(stream){
-            stream.getTracks().forEach(function(track){
-                track.stop();
-            });
-        });
-    }catch (e){
-    }
-    streams = new Array();
-    $(".audioCanvas").remove();
-}
-
+var videoSize = 0;
+var filePath;
 
 function onRecording() {
     if(!recording){
@@ -56,21 +38,17 @@ function onRecording() {
             reverse = false;
         }
     }
-
     if (recording) {
         setTimeout(onRecording, 800);
         return;
     }
-
     setBadgeImg("videoSource-menu3-2");
 }
 
 function setBadgeText(text) {
-
 }
 
 function setBadgeImg(clazz){
-
 }
 
 function captureTab(config) {
@@ -176,69 +154,96 @@ function gotStream(stream) {
         return;
     }
     mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.start();
+    mediaRecorder.start(1000 * 10);
 
-    mediaRecorder.ondataavailable = function(e) {
-
+    mediaRecorder.ondataavailable = function (e) {
         var streamData = e.data;
-        var blob = new Blob([streamData],{ 'type' : 'video/webm\\;codecs=vp9' });
+        videoSize = videoSize + streamData.size;
+        var blob = new Blob([streamData], {'type': 'video/webm\\;codecs=vp9'});
         let reader = new FileReader();
-        reader.onload = function() {
-            $(recordingTipText).text("正在保存视频..");
+        reader.onload = function () {
             var saveFolder = localStorage.getItem("video_save_folder");
-            if(saveFolder == null || saveFolder == undefined || saveFolder == ""){
+            if (saveFolder == null || saveFolder == undefined || saveFolder == "") {
                 saveFolder = getDefaultVideoSavePath();
             }
-            saveFolder =  saveFolder.replace(/\\/g,"\\\\")+"\\";
+            saveFolder = saveFolder.replace(/\\/g, "\\\\") + "\\";
 
-            electronFs.exists(saveFolder,function(exists){
-                if(!exists){
-                    electronFs.mkdir(saveFolder,function(error){
-                        if(error){
+            electronFs.exists(saveFolder, function (exists) {
+                if (!exists) {
+                    electronFs.mkdir(saveFolder, function (error) {
+                        if (error) {
                             console.log(error);
                             return false;
                         }
                         console.log('创建目录成功');
-                        saveToDisk(saveFolder,reader,streamData.size);
+                        appendDataToDiskFile(saveFolder, reader);
                     })
-                }else{
-                    saveToDisk(saveFolder,reader,streamData.size);
+                } else {
+                    appendDataToDiskFile(saveFolder, reader);
                 }
             })
         }
         reader.readAsArrayBuffer(blob);
     }
+}
 
-    function saveToDisk(saveFolder,reader,streamSize){
-        if (reader.readyState == 2) {
-            var buffer = Buffer.from(reader.result);
-            var file = saveFolder+startTime+".mp4";
-            electronFs.writeFile(file, buffer, function(err) {
-                var savedVideoInfos = localStorage.getItem(teacherId+"_savedVideoInfos");
-                if(savedVideoInfos == null || savedVideoInfos == undefined){
-                    savedVideoInfos = new Array();
-                }else{
-                    savedVideoInfos = JSON.parse(savedVideoInfos);
-                }
-                var item = {};
-                item.id = guid();
-                item.clazzName = clazzName;
-                item.createTime = startTime;
-                item.filePath = file;
-                item.fileName = startTime+".mp4";
-                item.size = streamSize;
-                savedVideoInfos.splice( 0, 0, item );
-                localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
-                //关闭录制窗口
-                window.close();
-            });
-        }
-    }
-
-    function guid() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-            return v.toString(16);
-        });
+function appendDataToDiskFile(saveFolder,reader){
+    if (reader.readyState == 2) {
+        var buffer = Buffer.from(reader.result);
+        var file = saveFolder+startTime+".mp4";
+        filePath = file;
+        electronFsPromises.appendFile(file, buffer);
     }
 }
+
+function stopCapture(){
+    stopMediaRecorder();
+    setBadgeText('服务端录屏');
+    setBadgeImg('videoSource-menu3');
+    recording = false;
+    try{
+        streams.forEach(function(stream){
+            stream.getTracks().forEach(function(track){
+                track.stop();
+            });
+        });
+    }catch (e){
+    }
+    streams = new Array();
+    $(".audioCanvas").remove();
+}
+
+function stopMediaRecorder(){
+    if(mediaRecorder){
+        $(recordingTipText).text("正在保存视频..");
+        mediaRecorder.stop();
+        mediaRecorder = null;
+        setTimeout(function () {
+            var savedVideoInfos = localStorage.getItem(teacherId+"_savedVideoInfos");
+            if(savedVideoInfos == null || savedVideoInfos == undefined){
+                savedVideoInfos = new Array();
+            }else{
+                savedVideoInfos = JSON.parse(savedVideoInfos);
+            }
+            var item = {};
+            item.id = guid();
+            item.clazzName = clazzName;
+            item.createTime = startTime;
+            item.filePath = filePath;
+            item.fileName = startTime+".mp4";
+            item.size = videoSize;
+            savedVideoInfos.splice( 0, 0, item );
+            localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
+            //关闭录制窗口
+            window.close();
+        },1000);
+    }
+}
+
+function guid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+}
+
