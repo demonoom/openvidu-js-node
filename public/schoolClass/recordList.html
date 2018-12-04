@@ -49,7 +49,7 @@
 <script>
 const electron = window.parent.require('electron');
 const {dialog} = window.parent.require('electron').remote;
-var appRootPath = electron.remote.require('app-root-path').path;
+var appRootPath = getDefaultVideoSavePath();
 const {shell} = electron;
 const fs = window.parent.require('fs');
 var teacherId,infos,rootDir;
@@ -82,6 +82,18 @@ function loadFiles(){
                 id: value.id
             });
         });
+    }
+}
+
+function getDefaultVideoSavePath(){
+    const electron = window.top.require('electron');
+    const appRootPath = electron.remote.require('app-root-path').path;
+    const path = electron.remote.require('path');
+
+    if(appRootPath.indexOf(".asar") == -1){
+        return path.join(appRootPath,"recordVideos");
+    }else{
+        return path.join(path.dirname(appRootPath),"recordVideos");
     }
 }
 
