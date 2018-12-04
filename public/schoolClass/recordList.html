@@ -44,112 +44,46 @@
 </body>
 <script type="application/javascript" src="js/service.js"></script>
 <script src="./js/jquery-3.2.1.min.js"></script>
+<script src="./js/layer/layer.js"></script>
 <!--<script src="./js/require.js"></script>-->
 <script>
 const electron = window.parent.require('electron');
-const {shell} = electron;
 const {dialog} = window.parent.require('electron').remote;
+var appRootPath = electron.remote.require('app-root-path').path;
+const {shell} = electron;
 const fs = window.parent.require('fs');
-var teacherId = Service.getQueryString('ident');
-console.log(teacherId);
-
-var infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || [];
-// var infos = [{
-//     id:1,
-//     clazzName:'常规课',
-//     fileName:'文件名',
-//     createTime:1543827957472,
-//     filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
-//     size:8
-// },{
-//       id:1,
-//       clazzName:'实景课',
-//       fileName:'文件名',
-//       createTime:1543827957472,
-//       filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
-//       size:8
-// },{
-//         id:1,
-//         clazzName:'常规课',
-//         fileName:'文件名',
-//         createTime:1543827957472,
-//         filePath:'/home/fanbo/视频/26897f6d-7043-4972-8631-ea63420111ca.mp4',
-//         size:8
-// }]
-var rootDir = localStorage.getItem('video_save_folder');
-console.log(rootDir);
-var fileNames = [];
-var listArray = [];
+var teacherId,infos,rootDir;
 $(function () {
-    $('.list_body').empty();
+    // console.log(appRootPath+"\recordVideos\",'appRootPath')
+    teacherId = Service.getQueryString('ident');
+    infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || [];
+    rootDir = localStorage.getItem('video_save_folder') || appRootPath+"\\ecordVideos\\";
     loadFiles();
-
 });
 
 //根据根目录遍历渲染文件
 function loadFiles(){
-
-
-    infos.map((value,index)=>{
-        var obj = {
-            className:value.clazzName?value.clazzName:'',
-            fileName: value.fileName?value.fileName:'',
-            filePath: value.filePath?value.filePath:'',
-            fileDirPath: rootDir?rootDir:'',
-            fileTime: datetimeFormat(value.createTime),
-            fileSize: (value.size?(value.size / 1024 / 1024).toFixed(2):0) + 'MB',
-        };
-        listArray.push(obj);
-    });
+    //清空list元素
+    $('.list_body').empty();
+    //动态获取根目录路径
     $('#dir_input').text(rootDir);
 
-
-//    //置空
-//    console.log($('.list_body'),'已清空的');
-//    // console.log($('.list_body').html(),'')
-//    $('#dir_input').val(rootDir);
-//    fs.readdirSync(rootDir).map((value, index) => {
-//        fileNames.push(value);
-//    })
-//    fileNames.map((value, index) => {
-//        // console.log(rootDir+'/'+value,'文件路径')
-//        var stats = fs.statSync(rootDir + '/' + value);
-//        // console.log(stats,'stats');
-//        console.log(value, '文件名称');
-//        console.log((stats.size / 1024 / 1024).toFixed(2), '文件大小');
-//        console.log(stats,'stats');
-//        var obj = {
-//            className:'常规课',
-//            fileName: value,
-//            filePath: rootDir + '/' + value,
-//            fileDirPath: rootDir,
-//            fileTime: '03:22:17',
-//            fileSize: (stats.size / 1024 / 1024).toFixed(2) + 'MB',
-//        };
-//        listArray.push(obj);
-//    });
-    //将file对象渲染至页面
-    if (listArray.length == 0) {
-        $('.list_body').append("<div class='empty' style='text-align: center;'>本地暂无文件</div>")
-    } else {
-        //遍历当前目录下的文件
-        listArray.map((value, index) => {
-            appendToList(value);
-        })
+    if (infos.length == 0) {
+        $('.list_body').append("<div class='empty' style='text-align: center;'>本地暂无文件</div>");
+    }else{
+        //遍历创建对象
+        infos.map((value,index)=>{
+            appendToList({
+                className:value.clazzName?value.clazzName:'',
+                fileName: value.fileName?value.fileName:'',
+                filePath: value.filePath?value.filePath:'',
+                fileDirPath: rootDir?rootDir:'',
+                fileTime: datetimeFormat(value.createTime),
+                fileSize: (value.size?(value.size / 1024 / 1024).toFixed(2):0) + 'MB',
+                id: value.id
+            });
+        });
     }
-}
-
-
-function openFile(path) {
-    var url = "recordVideoPreview.html?filePath="+decodeURIComponent(path.replace(/\\/g,"\\\\"));
-    window.open(url);
-}
-
-function openFolder(path) {
-    console.log('打开文件夹');
-    shell.openItem(rootDir,function(err){
-        console.log(err);
-    });
 }
 
 /*
@@ -165,28 +99,70 @@ function appendToList(obj) {
         "<div class='list_bodyItem size'>" + obj.fileSize + "</div>"+
         "<div class='list_bodyItem option'>" +
         "    <button onclick='openFile(\""+obj.filePath+"\")'>播放</button>" +
+        "    <button onclick='deleteFile(\""+obj.id+"\",\""+obj.filePath+"\")'>删除</button>" +
 //        '     <button onclick="openFolder()">打开文件夹</button>' +
         "</div></div>";
     $('.list_body').append(html);
 }
 
+//打开文件
+function openFile(path) {
+    var url = "recordVideoPreview.html?filePath="+decodeURIComponent(path.replace(/\\/g,"\\\\"));
+    window.open(url);
+}
+
+//打开文件夹
+function openFolder(path) {
+    shell.openItem(rootDir,function(err){
+        console.log(err);
+    });
+}
+
+//删除文件
+function deleteFile(id,filePath){
+    if(!id){
+        console.log('此id为空');
+        return;
+    }
+    layer.confirm('确认删除文件？', {
+        btn: ['确认','取消'] //按钮
+    }, function(){ //确认回调
+        //要删除的数组下标以及文件路径
+        var deleteIndex = null,deletePath = null;
+        for(var k in infos){
+            if(infos[k].id === id){
+                deleteIndex = k;
+                deletePath = infos[k].filePath;
+            }
+        }
+        if(deleteIndex && deletePath){
+            fs.unlink(deletePath,function(err){
+                if(err){
+                    layer.msg('删除出错', {icon: 1});
+                }else{
+                    infos.splice(deleteIndex,1);
+                    localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(infos));
+                    loadFiles();
+                    layer.msg('文件已删除', {icon: 1});
+                }
+            })
+        }else{
+            layer.msg('未找到文件', {icon: 1});
+        }
+    }, function(){});
+}
+
+//更改输出路径
 $('#updateDir').on('click',function(){
-    console.log('更改文件夹路径');
     dialog.showOpenDialog({ properties: ['openDirectory']},function(res){
-        console.log(res[0]);
         rootDir = res[0];
-        //重新渲染
-        fileNames.splice(0);
-        listArray.splice(0);
         localStorage.setItem('video_save_folder',rootDir);
         $('#dir_input').text(rootDir);
-//        $('.list_body').empty();
-//        loadFiles();
     })
 
 })
 
-
+//格式化日期
 function datetimeFormat(longTypeDate){
         var dateTypeDate = "";
         var date = new Date();
