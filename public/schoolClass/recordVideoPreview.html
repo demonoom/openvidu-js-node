@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
 
 <head>
     <meta charset="UTF-8">
     <title>回顾视频预览</title>
     <link rel="icon" href="img/logo_title.png" type="image/x-icon">
-    <link type="text/css" rel="stylesheet" href="css/record_list.css?v=35" />
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/hashmap.js"></script>
     <script type="text/javascript" src="js/layer/layer.js"></script>
@@ -15,17 +14,16 @@
     <script type="text/javascript" src="js/platform.js"></script>
 </head>
 
-<body style="background: #000">
-    <video style="width: 100%;height: 100%; position: absolute; left: 0; top: 0;" id="video_element" controls autoplay>
-
+<body style="background: #000;height: 100%;overflow: hidden;margin: 0" ondblclick="toggleFullScreen();" >
+    <video id="video_element"  style="max-width: 100%;max-height: 100%; position: absolute; left: 50%; top: 50%; z-index: 99;
+    transform: translate(-50%,-50%);"   controls controlsList='nofullscreen nodownload noremote footbar' autoplay>
     </video>
 </body>
 
 <script type="text/javascript">
      var video_element = document.getElementById("video_element");
-     //video_element.src = "C:\\Users\\Administrator\\Desktop\\electron\\LitteAntTeaching\\recordVideos\\1543822554914.mp4";
-
      var filePath = Service.getQueryString("filePath");
+     //filePath = "http://60.205.111.227/upload2/xuanchuan/zhanshi_xuanchuan.mp4";
      video_element.src = filePath;
 
      video_element.onloadedmetadata = function() {
@@ -36,6 +34,19 @@
              video_element.play();
          },500);
      };
+
+     function toggleFullScreen(){
+         var remote = require('electron').remote;
+         var electronWindow = remote.getCurrentWindow();
+         var video_element = document.getElementsByTagName("body")[0];
+         if (document.webkitFullscreenElement) {
+             document.webkitExitFullscreen();
+             electronWindow.webContents.executeJavaScript('showActionBar(true);');
+         }else{
+             video_element.webkitRequestFullscreen();
+             electronWindow.webContents.executeJavaScript('showActionBar(false);');
+         }
+     }
 
 </script>
 
