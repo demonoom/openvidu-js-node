@@ -49,13 +49,15 @@
 <script>
 const electron = window.parent.require('electron');
 const {dialog} = window.parent.require('electron').remote;
+var appRootPath = electron.remote.require('app-root-path').path;
 const {shell} = electron;
 const fs = window.parent.require('fs');
 var teacherId,infos,rootDir;
 $(function () {
+    // console.log(appRootPath+"\recordVideos\",'appRootPath')
     teacherId = Service.getQueryString('ident');
     infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || [];
-    rootDir = localStorage.getItem('video_save_folder');
+    rootDir = localStorage.getItem('video_save_folder') || appRootPath+"\\ecordVideos\\";
     loadFiles();
 });
 
