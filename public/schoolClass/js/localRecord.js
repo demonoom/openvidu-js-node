@@ -82,6 +82,8 @@ function setBadgeImg(clazz){
 
 function captureTab(config) {
 
+    localStorage.removeItem("video_save_folder");
+
     teacherId = config.teacherId;
     startTime = new Date().getTime();
     recordingTipText = $("#"+config.recordingTipTextId);
@@ -183,6 +185,7 @@ function getDefaultVideoSavePath(){
     }else{
         return path.join(path.dirname(appRootPath),"recordVideos")+"\\";
     }
+    //return "C:\\Program Files (x86)\\LittleAntTeaching\\resources\\recordVideos\\";
 }
 
 function gotStream(stream) {
@@ -203,14 +206,17 @@ function gotStream(stream) {
             var saveFolder = localStorage.getItem("video_save_folder");
             if(saveFolder == null || saveFolder == undefined || saveFolder == ""){
                 saveFolder = getDefaultVideoSavePath();
+                alert("saveFolder:" + saveFolder);
                 electronFs.exists(saveFolder,function(exists){
                     if(!exists){
                         electronFs.mkdir(saveFolder,function(error){
                             if(error){
                                 console.log(error);
+                                alert(error);
                                 return false;
                             }
                             console.log('创建目录成功');
+                            alert("创建目录成功");
                         })
                     }
                 })
