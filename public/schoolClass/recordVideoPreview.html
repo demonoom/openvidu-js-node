@@ -15,28 +15,30 @@
 </head>
 
 <body style="background: #000;height: 100%;overflow: hidden;margin: 0" ondblclick="toggleFullScreen();" >
-    <video id="video_element"  style="max-width: 100%;max-height: 100%; position: absolute; left: 50%; top: 50%; z-index: 99;
-    transform: translate(-50%,-50%);"   controls controlsList='nofullscreen nodownload noremote footbar' autoplay>
+    <video ondurationchange="durationChange();" id="video_element"  style="max-width: 100%;max-height: 100%; position: absolute; left: 50%; top: 50%; z-index: 99;
+    transform: translate(-50%,-50%);"   controls controlsList='nofullscreen nodownload noremote footbar' autoplay >
     </video>
 </body>
 
 <script type="text/javascript">
 
-
      $(document).ready(function(){
          hideActionBarMax();
          var video_element = document.getElementById("video_element");
          var filePath = Service.getQueryString("filePath");
+         //filePath = "D:\\electronDownloads2\\1543936464767.mp4";
          video_element.src = filePath;
-         video_element.onloadedmetadata = function() {
-             video_element.onloadedmetadata = null;
-             video_element.currentTime = 9999999999;
-             setTimeout(function(){
-                 video_element.currentTime = 0;
-                 video_element.play();
-             },500);
-         };
+         video_element.currentTime = 9999999999;
      });
+
+     function durationChange(){
+         var video_element = document.getElementById("video_element");
+         var duration = video_element.duration;
+         if(duration != Infinity && duration > 0){
+             video_element.currentTime = 0;
+             video_element.play();
+         }
+     }
 
      function toggleFullScreen(){
          var remote = require('electron').remote;
