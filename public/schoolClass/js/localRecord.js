@@ -169,7 +169,7 @@ function onTabStream(tabStream,config){
 }
 
 function getDefaultVideoSavePath(){
-    return "C:\\LittleTeachingRecord\\";
+    return "C:\\LittleAntTeachingRecord\\";
 }
 
 function gotStream(stream) {
