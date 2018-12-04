@@ -169,14 +169,7 @@ function onTabStream(tabStream,config){
 }
 
 function getDefaultVideoSavePath(){
-    const electron = window.top.require('electron');
-    const appRootPath = electron.remote.require('app-root-path').path;
-    const path = electron.remote.require('path');
-    if(appRootPath.indexOf(".asar") == -1){
-        return path.join(appRootPath,"recordVideos") +"\\";
-    }else{
-        return path.join(path.dirname(appRootPath),"recordVideos")+"\\";
-    }
+    return "C:\\LittleTeachingRecord\\";
 }
 
 function gotStream(stream) {
