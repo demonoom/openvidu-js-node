@@ -1,5 +1,3 @@
-
-
 var recording = false;
 var mediaRecorder;
 var recodingImages = ['recordRTC-progress-1.png', 'recordRTC-progress-2.png', 'recordRTC-progress-3.png', 'recordRTC-progress-4.png', 'recordRTC-progress-5.png'];
