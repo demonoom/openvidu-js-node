@@ -184,7 +184,8 @@ function gotStream(stream) {
 
     mediaRecorder.ondataavailable = function(e) {
 
-        var blob = new Blob([e.data],{ 'type' : 'video/webm\\;codecs=vp9' });
+        var streamData = e.data;
+        var blob = new Blob([streamData],{ 'type' : 'video/webm\\;codecs=vp9' });
         let reader = new FileReader();
         reader.onload = function() {
             $(recordingTipText).text("正在保存视频..");
@@ -222,7 +223,7 @@ function gotStream(stream) {
                     item.createTime = startTime;
                     item.filePath = file;
                     item.fileName = startTime+".mp4";
-                    item.size = 1024*1024*50;
+                    item.size = streamData.size;
                     savedVideoInfos.splice( 0, 0, item );
                     localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
 

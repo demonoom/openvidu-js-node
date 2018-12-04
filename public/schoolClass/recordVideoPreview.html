@@ -21,19 +21,22 @@
 </body>
 
 <script type="text/javascript">
-     var video_element = document.getElementById("video_element");
-     var filePath = Service.getQueryString("filePath");
-     //filePath = "http://60.205.111.227/upload2/xuanchuan/zhanshi_xuanchuan.mp4";
-     video_element.src = filePath;
 
-     video_element.onloadedmetadata = function() {
-         video_element.onloadedmetadata = null;
-         video_element.currentTime = 9999999999;
-         setTimeout(function(){
-             video_element.currentTime = 0;
-             video_element.play();
-         },500);
-     };
+
+     $(document).ready(function(){
+         hideActionBarMax();
+         var video_element = document.getElementById("video_element");
+         var filePath = Service.getQueryString("filePath");
+         video_element.src = filePath;
+         video_element.onloadedmetadata = function() {
+             video_element.onloadedmetadata = null;
+             video_element.currentTime = 9999999999;
+             setTimeout(function(){
+                 video_element.currentTime = 0;
+                 video_element.play();
+             },500);
+         };
+     });
 
      function toggleFullScreen(){
          var remote = require('electron').remote;
@@ -46,6 +49,12 @@
              video_element.webkitRequestFullscreen();
              electronWindow.webContents.executeJavaScript('showActionBar(false);');
          }
+     }
+
+     function hideActionBarMax(){
+         var remote = require('electron').remote;
+         var electronWindow = remote.getCurrentWindow();
+         electronWindow.webContents.executeJavaScript('showActionBarMax(false);');
      }
 
 </script>

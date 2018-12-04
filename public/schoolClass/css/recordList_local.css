@@ -49,6 +49,11 @@ body,html{
     margin: 0 20px 0 10px;
     width: 258px;
     box-sizing: border-box;
+    overflow-x: auto;
+    color: #888;
+}
+#dir_input::-webkit-scrollbar {
+   display: none;
 }
 #updateDir{
     background: url("../img/icon_pathModifyBtn.png") no-repeat;
@@ -124,14 +129,22 @@ body,html{
     width: 54px;
 }
 .option button{
-    background: url("../img/icon_recordPlay.png") no-repeat;
-    width: 14px;
-    height: 14px;
-    background-size: cover;
+    width: 15px;
+    height: 15px;
     outline: none;
     border: 0;
     font-size: 0;
     vertical-align: middle;
+    cursor: pointer;
+}
+.option .playBtn{
+    background: url("../img/icon_recordPlay.png") no-repeat;
+    background-size: cover;
+    margin-right: 6px;
+}
+.option .deleteBtn{
+    background: url("../img/icon_recordDelete.png") no-repeat;
+    background-size: cover;
 }
 ::-webkit-scrollbar {
     width: 8px;

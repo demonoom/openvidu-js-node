@@ -12,7 +12,7 @@
     <span class="record_title">录制列表</span>
   <div class="nav_right">
     <span>默认输出路径</span>
-      <span id="dir_input" class="text_hidden"></span>
+      <span id="dir_input"></span>
     <span id="updateDir"></span>
   </div>
 </div>
@@ -54,10 +54,9 @@ const {shell} = electron;
 const fs = window.parent.require('fs');
 var teacherId,infos,rootDir;
 $(function () {
-    // console.log(appRootPath+"\recordVideos\",'appRootPath')
     teacherId = Service.getQueryString('ident');
     infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || [];
-    rootDir = localStorage.getItem('video_save_folder') || appRootPath+"\\ecordVideos\\";
+    rootDir = localStorage.getItem('video_save_folder') || appRootPath+"\\recordVideos\\";
     loadFiles();
 });
 
@@ -98,8 +97,8 @@ function appendToList(obj) {
         "<div class='list_bodyItem time'>" + obj.fileTime + "</div>"+
         "<div class='list_bodyItem size'>" + obj.fileSize + "</div>"+
         "<div class='list_bodyItem option'>" +
-        "    <button onclick='openFile(\""+obj.filePath+"\")'>播放</button>" +
-        "    <button onclick='deleteFile(\""+obj.id+"\",\""+obj.filePath+"\")'>删除</button>" +
+        "    <button class='playBtn' onclick='openFile(\""+obj.filePath+"\")'>播放</button>" +
+        "    <button class='deleteBtn' onclick='deleteFile(\""+obj.id+"\",\""+obj.filePath+"\")'>删除</button>" +
 //        '     <button onclick="openFolder()">打开文件夹</button>' +
         "</div></div>";
     $('.list_body').append(html);
