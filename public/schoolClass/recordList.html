@@ -56,7 +56,7 @@ var teacherId,infos,rootDir;
 $(function () {
     teacherId = Service.getQueryString('ident');
     infos = JSON.parse(localStorage.getItem(teacherId+"_savedVideoInfos")) || [];
-    rootDir = localStorage.getItem('video_save_folder') || appRootPath+"\\recordVideos\\";
+    rootDir = localStorage.getItem('video_save_folder') || appRootPath;
     loadFiles();
 });
 
@@ -91,9 +91,9 @@ function getDefaultVideoSavePath(){
     const path = electron.remote.require('path');
 
     if(appRootPath.indexOf(".asar") == -1){
-        return path.join(appRootPath,"recordVideos");
+        return path.join(appRootPath,"recordVideos") +"\\";
     }else{
-        return path.join(path.dirname(appRootPath),"recordVideos");
+        return path.join(path.dirname(appRootPath),"recordVideos")+"\\";
     }
 }
 

@@ -173,6 +173,17 @@ function onTabStream(tabStream,config){
     });
 }
 
+function getDefaultVideoSavePath(){
+    const electron = window.top.require('electron');
+    const appRootPath = electron.remote.require('app-root-path').path;
+    const path = electron.remote.require('path');
+
+    if(appRootPath.indexOf(".asar") == -1){
+        return path.join(appRootPath,"recordVideos") +"\\";
+    }else{
+        return path.join(path.dirname(appRootPath),"recordVideos")+"\\";
+    }
+}
 
 function gotStream(stream) {
 
@@ -191,7 +202,7 @@ function gotStream(stream) {
             $(recordingTipText).text("正在保存视频..");
             var saveFolder = localStorage.getItem("video_save_folder");
             if(saveFolder == null || saveFolder == undefined || saveFolder == ""){
-                saveFolder = appRootPath+"\\recordVideos\\";
+                saveFolder = getDefaultVideoSavePath();
                 electronFs.exists(saveFolder,function(exists){
                     if(!exists){
                         electronFs.mkdir(saveFolder,function(error){
