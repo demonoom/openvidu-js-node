@@ -84,11 +84,11 @@
     function checkShowRecord(){
         var browser = platform.name;
         if(browser.indexOf("Electron") != -1){
-            $("#record_tip").hide();
-            $("#record_list").hide();
-        }else{
             $("#record_tip").show();
-            $("#record_list").show();
+            $("#localRecord").show();
+        }else{
+            $("#record_tip").hide();
+            $("#localRecord").hide();
         }
     }
     checkShowRecord();
