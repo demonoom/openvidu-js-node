@@ -140,17 +140,17 @@ function deleteFile(id,filePath){
         }
         if(deleteIndex && deletePath){
             fs.unlink(deletePath,function(err){
-                if(err){
-                    layer.msg('删除出错', {icon: 1});
-                }else{
+                // if(err){
+                //     layer.msg('删除出错', {icon: 1});
+                // }else{
                     infos.splice(deleteIndex,1);
                     localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(infos));
                     loadFiles();
                     layer.msg('文件已删除', {icon: 1});
-                }
-            })
+                // }
+            });
         }else{
-            layer.msg('未找到文件', {icon: 1});
+            layer.msg('删除出错', {icon: 2});
         }
     }, function(){});
 }

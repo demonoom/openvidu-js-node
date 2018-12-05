@@ -4918,17 +4918,20 @@ br{
 }
 .videoSource{
 	color: #333;
-	font-size: 14px;
+	font-size: 13px;
 	line-height: 1;
-	width: 300px !important;
+	width: 100% !important;
 	height: 400px !important;
+}
+.videoSource ::-webkit-scrollbar{
+	width: 4px;
 }
 .videoSource .layui-layer-title{
 	padding: 0 80px 0 20px;
 	height: 42px;
 	line-height: 42px;
 	border-bottom: 1px solid #eee;
-	font-size: 15px;
+	font-size: 13px;
 	color: #333;
 	overflow: hidden;
 	background-color: #F8F8F8;
@@ -4936,7 +4939,7 @@ br{
 }
 
 .videoSource .layui-layer-content{
-	padding:20px 0 20px 15px;
+	padding:20px 0 20px 20px;
 	overflow: hidden !important;
 }
 .videoSource .list-item{
@@ -4950,10 +4953,11 @@ br{
 	align-items: baseline;
 }
 .videoSource .list-item-video{
-	width: 254px;
 	height: 150px;
 	overflow: hidden;
-	margin-left: 7px;
+	margin-left: 0;
+	margin-right: 20px;
+	margin-bottom: 0;
 }
 .videoSourceInClass-video{
 	width: 230px;
@@ -4967,17 +4971,17 @@ br{
 }
 .videoSource .list-item .left{
 	color: #333;
-	font-size: 15px;
-	width: 70px;
-	text-align: right;
+	font-size: 13px;
+	width: 60px;
+	text-align: left;
 	display: inline-block;
 }
 .videoSource .list-item .left2{
-	width: 60px;
+	width: 45px;
 }
 .videoSource .list-item .right-item{
-	width:212px;
-	margin-left:12px;
+	width:calc(100% - 45px);
+	margin-left:0;
 	display: inline-block;
 	float: right;
 	display:-webkit-box;
@@ -5007,7 +5011,7 @@ br{
 	overflow-y: auto;
 }
 .videoSource .btn-cont{
-	height: 36px;
+	height: 34px;
 	display:-webkit-box;
 	display: -moz-box;
 	display: -ms-flexbox;
@@ -5024,15 +5028,18 @@ br{
 	-moz-box-align:center;
 	-webkit-box-align:center;
 	margin-right: 15px;
+	box-sizing: border-box;
+	padding-top: 18px;
 }
 .videoSource .btn-blue{
 	width:74px;
-	height:32px;
+	height:30px;
 	border-radius:4px;
 	border:1px solid;
-	font-size: 15px;
-	line-height: 32px;
+	font-size: 12px;
+	line-height: 28px;
 	text-align: center;
+	box-sizing: border-box;
 }
 .videoSource .Ghost-btn{
 	border-color: #4285F4;
@@ -5041,14 +5048,16 @@ br{
 .videoSource .Solid-btn{
 	background: #0084FF;
 	color: #fff;
+	border: 1px solid #0084FF;
 }
 .videoSource .nickname{
-	width: 163px;
+	width: 100%;
 	height: 28px;
 	border: 1px solid #e5e5e5;
-	margin-left: 12px;
+	margin-left: 0;
 	padding: 0 6px;
-	font-size: 13.333px;
+	font-size: 13px;
+	box-sizing: border-box;
 }
 
 .videoSource .a-radio{
@@ -5056,13 +5065,13 @@ br{
 }
 .videoSource .b-radio{
 	display: inline-block;
-	width:16px;
-	height: 16px;
+	width:14px;
+	height: 14px;
 	vertical-align: middle;
 	margin-right: 5px;
 	position: relative;
 	background: url("../images/b-radio-1.png") no-repeat;
-	background-size: 16px;
+	background-size: 14px;
 }
 .videoSource .b-radio:before{
 	content: '';
@@ -5082,9 +5091,12 @@ br{
 	display: block;
 }
 .videoSource .b-ridioText{
-    width: 184px;
+    width: calc(100% - 20px);
     float: right;
     line-height: 16px;
+	float: right;
+	text-align: left;
+
 }
 .videoSource-wrap{
 	width: 100%;
@@ -5231,8 +5243,11 @@ span.justify > span {
 	display: inline-block /* Opera */; padding-left: 100%;
 }
 .inputWrap{
-	width: 190px;
+	width: calc(100% - 80px);
 	position: relative;
+}
+.inputWrap-3{
+	width: calc(100% - 65px);
 }
 .inputWrap #rtsUrl{
 	position: absolute;
