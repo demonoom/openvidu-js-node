@@ -1982,7 +1982,10 @@ video{
   }
 
   function loadVideoSourceSelectPage(){
-      $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid+"&teacherId="+userId);
+      var browser = platform.name;
+      if(browser.indexOf("Electron") != -1){
+          $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid+"&teacherId="+userId);
+      }
   }
 
   window.addEventListener('message', function(event) {

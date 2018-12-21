@@ -99,29 +99,42 @@ function ExRTC(){
                 _this.session.on('connectionRecovered', (event) => {
                     console.log("connectionRecovered  rejoinRoom ....");
                     _this.session.disconnect();
-                    _this.session = false;
-                    _this.OV = false;
-                    _this.publisher = false;
-                    _this.token =false;
-                    _this.innerJoin(_this.channel,_this.userId,_this.userName,onSuccess,onFailure);
+                    setTimeout(function () {
+                        _this.httpPostRequest(
+                            'api-sessions/get-token',
+                            {sessionName: _this.channel},
+                            'Request of TOKEN gone WRONG:',
+                            (response) => {
+                                _this.token = response[0];
+                                _this.session.connect(_this.token, { clientData: _this.userId ,clientUser:{userId:_this.userId,userName:_this.userName}})
+                                    .then(() => {
+                                        if(_this.mediaStream){
+                                            $("#"+_this.mediaStream.elmentId).find("video").remove();
+                                            _this.publish(_this.mediaStream,_this.mediaStream.elmentId);
+                                        }else{
+                                            onSuccess();
+                                        }
+                                    })
+                                    .catch(error => {
+                                        if(!_this.mediaStream){
+                                            console.error('There was an error connecting to the session:', error.code, error.message);
+                                            onFailure();
+                                        }
+                                    });
+                            });
+                    },1500);
+
                 });
 
                 _this.userId = uid;
                 _this.userName = userName;
                 _this.session.connect(_this.token, { clientData: _this.userId ,clientUser:{userId:_this.userId,userName:_this.userName}})
                     .then(() => {
-                        if(_this.mediaStream){
-                            $("#"+_this.mediaStream.elmentId).find("video").remove();
-                            _this.publish(_this.mediaStream,_this.mediaStream.elmentId);
-                        }else{
-                            onSuccess();
-                        }
+                        onSuccess();
                     })
                     .catch(error => {
-                        if(!_this.mediaStream){
-                            console.error('There was an error connecting to the session:', error.code, error.message);
-                            onFailure();
-                        }
+                        console.error('There was an error connecting to the session:', error.code, error.message);
+                        onFailure();
                     });
             }
         );
@@ -154,10 +167,17 @@ function ExRTC(){
     }
 
     this.publish = function(mediaStream,elmentId){
+
         mediaStream.elmentId = elmentId;
         _this.mediaStream = mediaStream;
-        var videoSource = mediaStream.getVideoTracks()[0];
-        var audioSource = mediaStream.getAudioTracks()[0];
+
+        var useMediaStream = new MediaStream();
+        mediaStream.getTracks().forEach(function(track) {
+            useMediaStream.addTrack(track.clone());
+        });
+
+        var videoSource = useMediaStream.getVideoTracks()[0];
+        var audioSource = useMediaStream.getAudioTracks()[0];
         _this.publisher = _this.OV.initPublisher(elmentId, {
             audioSource: audioSource, // The source of audio. If undefined default microphone
             videoSource: videoSource, // The source of video. If undefined default webcam
@@ -181,6 +201,7 @@ function ExRTC(){
             params.user = user;
             params.videoElement = event.element;
             exrtcStream.init(params);
+
 
             _this.emit("stream-published",{stream:exrtcStream,user:user});
         });
