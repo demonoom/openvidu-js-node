@@ -105,11 +105,12 @@ iframe{
     border: 1px solid #d4d4d4;
     color: #717171;
     border-radius: 4px;
-    height: 30px;
-    line-height: 30px;
+    height: 28px;
+    line-height: 28px;
     display: inline-block;
     text-align: center;
-    padding:0 12px;
+    padding:0 10px;
+    font-size: 12px;
 }
 
 .stop_student_speak1{
@@ -384,8 +385,8 @@ iframe{
     width: 140px;
 }
 .live_input_t2{
-    height: 29px;
-    line-height: 29px;
+    height: 28px;
+    line-height: 28px;
     text-indent: 12px;
     margin-right: 8px;
     width: 140px;
@@ -412,14 +413,14 @@ iframe{
 .send_btn{
     background: #39f;
     border: none;
-    height: 30px;
-    line-height: 30px;
+    height:28px;
+    line-height: 27px;
     color: #fff;
     width: 70px;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 13px;
     float:right;
-    margin-top: -1px;
+    margin-top: 0;
 }
 .send_btn:hover{
 	background:#4da6ff
@@ -680,9 +681,11 @@ iframe{
     white-space: nowrap;
     width: 60px;
     display: inline-block;
-    height: 28px;
-    line-height: 18px !important;
-    margin-top: 10px !important;
+    height: 26px;
+    line-height: 16px !important;
+    margin-top: 11px !important;
+    text-align: center;
+    font-size: 13px;
 }
 .video_right{
 	text-align:right

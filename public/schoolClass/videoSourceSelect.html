@@ -20,10 +20,6 @@
     <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
     <script type="text/javascript" src="js/ServerRecord.js"></script>
     <style type="text/css">
-        .layui-layer-shade {
-            opacity: 0 !important;
-        }
-
         .layui-layer {
             box-shadow: 0px 6px 50px rgba(0, 0, 0, 0.4) !important;
         }
@@ -94,8 +90,9 @@
                     closeBtn: 0,
                     title: "请选择本地摄像头",
                     skin: "videoSource",
-                    area: ['300px', '480px'], //宽高
-                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='left left2'>昵称</span><input id='nick'  class='right nickname' /></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
+                    area: ['100%', '480px'], //宽高
+                    offset: 'b',
+                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='left left2'>昵称</span><div class='inputWrap inputWrap-3'><input id='nick'  class='right nickname' /></div></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
                 });
 
             }).catch(function (err) {
@@ -109,14 +106,15 @@
             layer.msg("请在pc客户端中使用此功能~~");
             return;
         }
-        var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>昵称<span></span></span><input id='nick' class='right nickname'/></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
+        var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
             ">使用</span></div>"
         layer.open({
             type: 1,
             title: "请选择网络摄像头",
             closeBtn: 0,
             skin: "videoSource",
-            area: ['300px', '480px'], //宽高
+            area: ['100%', '480px'], //宽高
+            offset: 'b',
             content: html
         });
         //设置rts的值
@@ -335,13 +333,14 @@
     }
 
     function addScreen(){
-        var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
+        var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
         layer.open({
             type: 1,
-            title: "请选择网络摄像头",
+            title: "桌面视频源",
             closeBtn: 0,
             skin: "videoSource",
-            area: ['300px', '480px'], //宽高
+            area: ['100%', '480px'], //宽高
+            offset: 'b',
             content: html
         });
     }

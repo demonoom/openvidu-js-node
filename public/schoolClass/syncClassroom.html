@@ -6,6 +6,7 @@
     <link rel="icon" href="img/logo_title.png" type="image/x-icon">
     <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
     <link rel="stylesheet" href="./css/syncClassroom.css">
+    <script type="application/javascript" src="js/platform.js"></script>
 </head>
 <body>
 <div class="mask" style="opacity: 0"></div>
@@ -39,8 +40,8 @@
                 <div id="classInfo" class="active">正在直播</div>
                 <div id="classReview">课程回顾</div>
                 <div id="myFile">我的课件</div>
-                <div class="header">本地录制</div>
-                <div id="localRecord">录制列表</div>
+                <div class="header" id="record_tip" style="display: none;">本地录制</div>
+                <div id="localRecord" id="record_list" style="display: none;">录制列表</div>
             </div>
             <div class="right_box">
                 <!--课程信息 -->
@@ -80,6 +81,17 @@
 <script type="application/javascript" src="js/service.js"></script>
 <script type="application/javascript" src="js/simple_websocket_connection.js"></script>
 <script>
+    function checkShowRecord(){
+        var browser = platform.name;
+        if(browser.indexOf("Electron") != -1){
+            $("#record_tip").show();
+            $("#localRecord").show();
+        }else{
+            $("#record_tip").hide();
+            $("#localRecord").hide();
+        }
+    }
+    checkShowRecord();
     $(function () {
         var simple = new SimpleConnection();
         simple.connect();
@@ -91,14 +103,11 @@
         $('#classReview_iframe').attr('src', 'classReviewList.html?teacherId=' + teacherId + '&teacherName=' + teacherName + '');
         $('#myFile_iframe').attr('src', 'https://jiaoxue.maaee.com:8099/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
         $('#localRecord_iframe').attr('src', 'recordList.html?ident=' + teacherId);
-//        $('#myFile_iframe').attr('src', 'http://192.168.50.29:8091/#/antPlate?ident=' + teacherId + '&fileId=-1&title=蚁盘题目&phoneType=0')
 
         //socket 监听
         simple.clazzWsListener = {
             onError: function (errorMsg) {
-//                console.log(errorMsg, "errorMsg");
             }, onWarn: function (warnMsg) {
-//                console.log(warnMsg, "warnMsg");
             }, onMessage: function (info) {
                 var command = info.command;
                 var messageData = info.data;
@@ -245,7 +254,6 @@
                 },
                 success: function (data) {
                     var res = JSON.parse(data);
-//                    console.log(res);
                     if (res.success) {
                         $('#user_avatar').attr('src', res.response.avatar);
                         $('.username').text(res.response.userName);
@@ -254,7 +262,6 @@
                     }
                 },
                 error: function (e) {
-//                    console.log(e);
                 }
             });
         }
