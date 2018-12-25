@@ -57,6 +57,7 @@
 <script>
 //   var userId = 28551;
 //   vid = 221822;
+
    var vid = Service.getQueryString("vid");
    var userId = Service.getQueryString("userId");
    var HTML_LIST="";
@@ -81,17 +82,21 @@
 
    var iframeBox = document.getElementById("iframeBox");
    var iframe = document.createElement("iframe");
-   iframe.setAttribute("id","ifr");
-   iframe.setAttribute("name","ifr");
-   iframe.setAttribute("frameborder","0");
-   iframe.setAttribute("scrolling","no");
-   iframe.setAttribute("style","width: 1px; min-width: 100%; *width: 100%");
-   iframeBox.appendChild(iframe);
-   simpleMS.connect();
-   getClassOpenedKejian(vid);
-   filterCloudFile();
-   //获取蚁盘文件根目录
-   getUserRootCloudSubjects(userId,true);
+
+   $(function(){
+       iframe.setAttribute("id","ifr");
+          iframe.setAttribute("name","ifr");
+          iframe.setAttribute("frameborder","0");
+          iframe.setAttribute("scrolling","no");
+          iframe.setAttribute("style","width: 1px; min-width: 100%; *width: 100%");
+          iframeBox.appendChild(iframe);
+          simpleMS.connect();
+          getClassOpenedKejian(vid);
+          filterCloudFile();
+          //获取蚁盘文件根目录
+          getUserRootCloudSubjects(userId,true);
+   })
+
    //监听
    simpleMS.clazzWsListener = {
         onError: function (errorMsg) {
@@ -311,21 +316,11 @@
                    document.getElementById('empty').style.display="none";
                    document.getElementById('iframeBox').style.display="block";
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
-//                   setTimeout(()=>{
-//                           var progress_bar_container = window.frames["ifr"].document.getElementById("progress_bar_container");
-//                           var progress_bar_wrap = window.frames["ifr"].document.getElementsByClassName("progress_bar_wrap")[0];
-//                           progress_bar_wrap.style.borderRadius = "0 0 4px 4px";
-//                           progress_bar_container.style.top = 0;
-//                   },1000);
-
-                   setTimeout(()=>{
-//                       iframe.contentWindow.pptCheckPage(res.response.currentPage);
-                         window.frames['ifr'].window.pptCheckPage(res.response.currentPage)
-                   },2000);
-
-//                   if(iframe.contentWindow.pptCheckPage){
-
-//                   }
+                   $(iframe).load(function(){                             //  等iframe加载完毕
+                        setTimeout(()=>{
+                            window.frames['ifr'].window.pptCheckPage(res.response.currentPage)
+                        },2000);
+                   });
                }else{
                    document.getElementById('empty').style.display="block";
                    document.getElementById('iframeBox').style.display="none";
