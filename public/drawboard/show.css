@@ -1,3 +1,6 @@
+body{
+    font-family: "Microsoft YaHei", "Tahoma";
+}
 .courseware-open {
     width: 48px;
     height: 48px;
@@ -15,14 +18,14 @@
 
 .attachment_box {
     background: white;
-    width: 100%;
-    height: 70%;
+    width: 520px;
+    height: 540px;
     position: absolute;
-    bottom: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
     overflow: auto;
     z-index: 100000;
-    transform: translateY(100%);
+    transform: translate(-50%, -50%) !important;
     transition: 0.3s;
     display: none;
 }
@@ -34,19 +37,21 @@
 }
 
 .nav {
-    padding-left: 15px;
-    background: #288AE0;
-    box-sizing: border-box;
-    height: 40px;
-    line-height: 40px;
-    padding-right: 30px;
-    color: #fff;
+    padding: 0 40px 0 15px;
+    height: 42px;
+    line-height: 42px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+    overflow: hidden;
+    background-color: #F8F8F8;
+    border-radius: 2px 2px 0 0;
 }
 
 .nav span {
     display: inline-block;
-    font-size: 16px;
-    color: #fff;
+    font-size: 14px;
+    color: #333;
     margin-right: 8px;
 }
 
@@ -56,7 +61,7 @@
     white-space: nowrap;
 }
 
-.nav_close, .nav-back {
+.nav_close{
     background: url("../schoolClass/img/icon-back.png") no-repeat;
     width: 15px;
     height: 15px;
@@ -66,7 +71,16 @@
     top: 12px;
     right: 11px;
 }
-
+.nav-back-show {
+    background: url("../schoolClass/img/icon-back-show.png") no-repeat;
+    width: 14px;
+    height: 14px;
+    background-size: 100% 100%;
+    display: inline-block;
+    position: absolute;
+    top: 14px;
+    right: 12px;
+}
 .attachment-cont {
     height: calc(100% - 40px);
     overflow-y: auto;
@@ -116,8 +130,8 @@
 }
 
 .item-text {
-    margin-left: 39px;
-    max-width: calc(100% - 39px);
+    margin-left: 40px;
+    max-width: calc(100% - 40px);
     display: inline-block;
 }
 
@@ -143,4 +157,22 @@
     -webkit-transform: scaleY(0.5);
     -ms-transform: scaleY(0.5);
     transform: scaleY(0.5);
+}
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+/* 这是针对缺省样式 (必须的) */
+
+::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 9px;
+    -webkit-border-radius: 9px;
+}
+
+/* 滑块颜色 */
+
+::-webkit-scrollbar-button {
+    background-color: initial;
 }
