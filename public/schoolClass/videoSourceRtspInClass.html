@@ -27,7 +27,8 @@
 <body>
 
 <div class="videoSourceInClass-video">
-        <canvas width="230px" height="127px" autoplay id="rtsp_preview_canvas"></canvas>
+    <canvas width="230px" height="127px" autoplay id="rtsp_preview_canvas"></canvas>
+    <span class="preview_videoName til_hidden" id="video_name"></span>
 </div>
 
 </body>
@@ -35,37 +36,56 @@
 <script type="text/javascript">
     var client = new ExRTC();
     var localStream;
-    var jsmepgPlayer;
+    var jsmepgPlayer = null;
 
     var vid = Service.getQueryString("vid");
     var userName = Service.getQueryString("userName");
     var rtspUrl = Service.getQueryString("rtspUrl");
     var wsPort = Service.getQueryString("wsPort");
+    var from = Service.getQueryString("from");
+    var userId = Service.getQueryString("userId");
+    userId = from=="master"?random(-10000000,-20000000):userId;
     var ipc = window.top.require('electron').ipcRenderer;
 
     $(document).ready(function(){
-        console.log('document ready .....');
-        joinRoom();
+        $("#video_name").text(userName);
+        var publish = Service.getQueryString("publish");
+        if(publish == "true"){
+            joinRoom();
+        }else{
+            var canvas = $("#rtsp_preview_canvas")[0];
+            if(jsmepgPlayer == null){
+                jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
+
+                var message = {};
+                message.command = "startRtspStream";
+                message.streamUrl = rtspUrl;
+                message.wsPort = wsPort;
+                ipc.send('onRendererMessage',message);
+            }
+        }
     });
 
     function publish(){
         var canvas = $("#rtsp_preview_canvas")[0];
-        jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
+        if(jsmepgPlayer == null){
+            jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
 
-        var message = {};
-        message.command = "startRtspStream";
-        message.streamUrl = rtspUrl;
-        message.wsPort = wsPort;
-        ipc.send('onRendererMessage',message);
-
+            var message = {};
+            message.command = "startRtspStream";
+            message.streamUrl = rtspUrl;
+            message.wsPort = wsPort;
+            ipc.send('onRendererMessage',message);
+        }
         localStream = canvas.captureStream(15);
         console.log('localStream : '+ localStream);
         client.publish(localStream,"agora_local");
     }
 
     function unpublish(){
-        if(jsmepgPlayer){
+        if(jsmepgPlayer != null){
             jsmepgPlayer.destroy();
+            jsmepgPlayer = null;
         }
         try{
             client.unpublish(localStream);
@@ -83,7 +103,7 @@
     }
 
     function removeIpCameraInfo(){
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
 
         if(savedList){
             var tobeDeleteIndex = -1;
@@ -95,7 +115,7 @@
             if(tobeDeleteIndex >= 0){
                 savedList.splice(tobeDeleteIndex,1);
             }
-            localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+            localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
         }
     }
 
@@ -107,7 +127,7 @@
         console.log('joinRoom .....');
         client = new ExRTC();
 
-        client.join(vid+"", random(-10000000,-20000000),userName, function() {
+        client.join(vid+"", userId,userName, function() {
             console.log('joinRoom success');
             publish();
         }, function() {

@@ -37,6 +37,7 @@
 <script type="text/javascript" src="../openvidu-browser-2.6.0.js"></script>
 <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
 <script type="application/javascript" src="./js/qrcode.js"></script>
+	<script type="application/javascript" src="./js/platform.js"></script>
 
 <style type="text/css">
   
@@ -123,6 +124,7 @@
 							</div>
 							<a  class="phoneHelp operation_menu_t_btn"  >课堂助手</a>
 						</div>
+						<a id="video_source_peizhi" href="javascript:showVideoSourceSelectDialog();" class="operation_menu_t_btn" style="display: none;">视频源配置</a>
 						<a id="show_talk" href="javascript:showTalkDiv();" class="operation_menu_t_btn" string_id="string_open_taolun" style="display: none;">打开讨论区</a>
 		      			<a id='language_select' href="javascript:changeLanguage();" class="En_icon_i" style="margin-left: 100px"></a>
 		      		</div>
@@ -162,8 +164,16 @@
 		   </div>
 	   </div>
 	</div>
-	
-	<iframe id="bm_iframe" width="1px" height="1px"></iframe>
+
+    <div id="videoSourceSelect_container" class="videoSourceSelect-container ppt_default_center" style="left:-10000000000px;top:-1000000000px">
+	   <div class="videoSourceSelect-container-title">视频源配置</div>
+	   <span class="layui-layer-setwin">
+			  <a class="layui-layer-ico layui-layer-close layui-layer-close1" onclick="hideVideoSourceSelectDialog();"></a>
+		  </span>
+	   <div class="videoSourceSelect-container-cont">
+		   <iframe src=""></iframe>
+	   </div>
+    </div>
 </body>
 
 <script type="text/javascript">
@@ -399,6 +409,7 @@
 		 isPreparedOK = true;
 		 getUserPermissionsByUid();
          initSimpleConnection();
+         showVideoSelectButton();
 	 }else if(command == 'agree_connect_mai'){
 			shangmai();
 	 }else if(command == 'disconnect_mai'){
@@ -555,6 +566,34 @@
 	  if(url != ""){
 		  $("#handout_image").attr("src",url);
 	  }
+  }
+
+  function showVideoSourceSelectDialog(){
+      var src = $("#videoSourceSelect_container").find("iframe").attr("src");
+      if(src == "" || src == undefined){
+          loadVideoSourceSelectPage(false);
+	  }
+
+      $("#videoSourceSelect_container").css({"left":"50%","top":"50%"});
+  }
+
+  function showVideoSelectButton(){
+      var browser = platform.name;
+      if(browser.indexOf("Electron") != -1){
+          $("#video_source_peizhi").show();
+      }
+  }
+
+  function hideVideoSourceSelectDialog(){
+	  $("#videoSourceSelect_container").css({"left":"-10000000000px","top":"-100000000000px"});
+  }
+
+  function loadVideoSourceSelectPage(publish){
+      var browser = platform.name;
+      if(browser.indexOf("Electron") != -1){
+         $("#video_source_peizhi").show();
+         $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid+"&teacherId="+userId+"&publish="+publish+"&from=slaver");
+      }
   }
   
   function playPPT(html){
@@ -729,9 +768,18 @@
 	  }
   }
 
+  function random(lower, upper) {
+        return Math.floor(Math.random() * (upper - lower+1)) + lower;
+  }
+
   function join() {
 		client = new ExRTC();
-		client.join(vid+"", userId,userName, function() {
+		var uid = userId;
+        var browser = platform.name;
+        if(browser.indexOf("Electron") != -1){
+            uid  = random(10000000,20000000);
+        }
+		client.join(vid+"", uid,userName, function() {
 			  console.log("User " + userId + " join channel successfully");
 		}, function() {
 			  console.log("Join channel failed");
@@ -758,6 +806,10 @@
 			  if(mutedStreamIds.contains(stream.getId())){
 				  stream.disableAudio();
 			  };
+			  //是自己的话，不订阅声音
+			  if(stream.getId() == userId){
+				  stream.disableAudio();
+			  }
 			  onAudioMutedStateChange(stream.getId());
 			  //计算当前正在显示的大流
 			  showEclassCurrentBigStreamId();
@@ -794,11 +846,21 @@
     }
 
     function shangmai(){
-		  if(audioSourceId != "" && videoSourceId != ""){
-			  goPlayLocalVideo();
-		  }else{
-			  checkDevice();
-		  }
+        var browser = platform.name;
+        if(browser.indexOf("Electron") != -1){
+            var savedList = JSON.parse(localStorage.getItem("usingDeviceList_slaver"));
+            if(!savedList){
+                layer.msg("请先设置视频源~~~");
+			}else{
+                loadVideoSourceSelectPage(true);
+			}
+        }else{
+            if(audioSourceId != "" && videoSourceId != ""){
+                goPlayLocalVideo();
+            }else{
+                checkDevice();
+            }
+		}
     }
   
     function goPlayLocalVideo(){
@@ -869,16 +931,20 @@
     }
 
     function unpublish() {
-
-			$("#apply_lianmai").show();
-			try{$("#agora_local").parent().remove();}catch(e){}
-			client.unpublish(localStream);
-			localStream.disableVideo();
-			localStream.disableAudio();
-			showBigVideo(localStream, false,false);
-			//通知手机端清除此视频
-			var protocal = eval('(' + "{'command':'clear_agora_removed_video','data':{'type':0}}" + ')');
-			connection.send(protocal);
+        var browser = platform.name;
+        if(browser.indexOf("Electron") != -1){
+            $("#videoSourceSelect_container").find("iframe").attr("src","");
+        }else{
+            $("#apply_lianmai").show();
+            try{$("#agora_local").parent().remove();}catch(e){}
+            client.unpublish(localStream);
+            localStream.disableVideo();
+            localStream.disableAudio();
+            showBigVideo(localStream, false,false);
+            //通知手机端清除此视频
+            var protocal = eval('(' + "{'command':'clear_agora_removed_video','data':{'type':0}}" + ')');
+            connection.send(protocal);
+		}
 
     }
 
@@ -910,14 +976,27 @@
   
     //检查音视频环境
     function checkApplyMaiDevice(){
-		  layer.open({
-			  type: 1,
-			  title: '音视频设备检测',
-			  shadeClose: false,
-			  shade: 0.2,
-			  area: ['380px', '260px'],
-			  content: "<iframe width='100%' height='100%' src='html/device/device_check.html' onload='onCheckApplyMaiResult(this);'></iframe>" //iframe的url
-		   });
+            var browser = platform.name;
+			if(browser.indexOf("Electron") != -1){
+				var savedList = JSON.parse(localStorage.getItem("usingDeviceList_slaver"));
+				if(!savedList || !(savedList instanceof Array) || savedList.length <= 0){
+					layer.msg("请先设置视频源~~~");
+				}else{
+                    $("#apply_lianmai").attr("text","取消申请");
+                    $("#apply_lianmai").text(jQuery.i18n.prop("string_quxiao_lianmai"));
+                    var protocal = eval('(' + "{'command':'apply_for_mai','data':{'type':0}}" + ')');
+                    connection.send(protocal);
+				}
+			}else{
+				layer.open({
+					type: 1,
+					title: '音视频设备检测',
+					shadeClose: false,
+					shade: 0.2,
+					area: ['380px', '260px'],
+					content: "<iframe width='100%' height='100%' src='html/device/device_check.html' onload='onCheckApplyMaiResult(this);'></iframe>" //iframe的url
+				});
+			}
     }
 	  
     function onCheckApplyMaiResult(iframe){
