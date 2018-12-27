@@ -12,6 +12,8 @@
     <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
     <script type="text/javascript" src="js/service.js"></script>
     <script type="application/javascript" src="https://jsmpeg.com/jsmpeg.min.js"></script>
+    <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
+
     <style type="text/css">
         .layui-layer-shade{
             opacity: 0 !important;
@@ -23,6 +25,7 @@
             animation:none !important;
         }
     </style>
+
 </head>
 <body>
 
@@ -79,7 +82,45 @@
         }
         localStream = canvas.captureStream(15);
         console.log('localStream : '+ localStream);
-        client.publish(localStream,"agora_local");
+
+        mixMicStream(localStream,function(){
+            client.publish(localStream,"agora_local");
+        });
+    }
+
+    function mixMicStream(tabStream,onfinish){
+        navigator.mediaDevices.getUserMedia({audio:{mandatory:{echoCancellation: true}},video:false}).then(function(micStream) {
+            var cts = {
+                autoGainControl:true,//自动增益控制
+                noiseSuppression:true,//噪声抑制
+                echoCancellation:true//回声消除
+            };
+
+            var audioTracks = micStream.getAudioTracks();
+            try{
+                if(audioTracks && audioTracks.length && audioTracks.length > 0){
+                    var audioTrack = audioTracks[0];
+                    audioTrack.applyConstraints(cts);
+                }
+            }catch (e){
+
+            }
+
+            var speakers = new MediaStream();
+            tabStream.getAudioTracks().forEach(function(track) {
+                speakers.addTrack(track);
+                tabStream.removeTrack(track);
+            });
+
+            var mixer = new MultiStreamsMixer([speakers, micStream]);
+            mixer.getMixedStream().getAudioTracks().forEach(function(track) {
+                tabStream.addTrack(track);
+            });
+            onfinish();
+        }).catch(function(err) {
+            console.log(err);
+            onfinish();
+        });
     }
 
     function unpublish(){
