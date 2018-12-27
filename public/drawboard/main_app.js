@@ -29,8 +29,8 @@ function AddAttachmentChange(style) {
 //点击遮罩
 function clickMask() {
     AddAttachmentChange('none');
-    $('.topic_box').css({display: 'none'});
-    $('.topic_box').css({transform: 'translate(0%,100%)'});
+    $('.topic_box').css({ display: 'none' });
+    $('.topic_box').css({ transform: 'translate(0%,100%)' });
 }
 
 //加载更多
@@ -113,20 +113,20 @@ function clickFile(fileType, parent, name, isPush, suffix, htmlPath, pdfPath) {
     var path = suffix == 'ppt' || suffix == "pptx" ? htmlPath : pdfPath;
     name = unescape(name);
     if (fileType == 0) { //文件点击事件
-//                 if(path && path != 'null'){
-//                     var iframe = document.getElementById("ifr");
-//                     var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");
-//                     newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
-//                     iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+newHTMLPath+"");
-//                     var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
-//                     //推送通知
-//                     simpleMS.send(protocal);
-//                     AddAttachmentChange('none');
-//                     document.getElementById('empty').style.display="none";
-//                     document.getElementById('iframeBox').style.display="block";
-//                 }else{
-//                    console.log("path为空");
-//                 }
+        //                 if(path && path != 'null'){
+        //                     var iframe = document.getElementById("ifr");
+        //                     var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");
+        //                     newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
+        //                     iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+newHTMLPath+"");
+        //                     var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
+        //                     //推送通知
+        //                     simpleMS.send(protocal);
+        //                     AddAttachmentChange('none');
+        //                     document.getElementById('empty').style.display="none";
+        //                     document.getElementById('iframeBox').style.display="block";
+        //                 }else{
+        //                    console.log("path为空");
+        //                 }
     } else {
         parentId = parent;
         if (isPush) {
