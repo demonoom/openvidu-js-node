@@ -9,83 +9,103 @@
     <link href="rangeslider/range-slider.min.css" rel="stylesheet" type="text/css"/>
 
     <style type="text/css">
-    body{
-        margin:0;
-        padding:0;
-        overflow:hidden;
-        position:relative;
-        background:#292929;
-    }
-	    .range-slider.red .range-slider-track:before,.range-slider.red .dragger {background-color:red}
-	    .range-slider.green .range-slider-track:before,.range-slider.green .dragger {background-color:green}
-	    .range-slider.blue .range-slider-track:before,.range-slider.blue .dragger {background-color:blue}
-	    .progress_bar_wrap3{
-	        position: absolute;
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            background: #292929;
+        }
+
+        .range-slider.red .range-slider-track:before, .range-slider.red .dragger {
+            background-color: red
+        }
+
+        .range-slider.green .range-slider-track:before, .range-slider.green .dragger {
+            background-color: green
+        }
+
+        .range-slider.blue .range-slider-track:before, .range-slider.blue .dragger {
+            background-color: blue
+        }
+
+        .progress_bar_wrap3 {
+            position: absolute;
             bottom: 0;
             height: 30px;
             width: 100%;
-            left:0;
+            left: 0;
             z-index: 3000
-	    }
-	    .progress_bar_wrap .range-slider{
-	        margin: 0;
+        }
+
+        .progress_bar_wrap .range-slider {
+            margin: 0;
             width: calc(100% - 54px);
-            float:right
-	    }
-	    .progress_bar_wrap{
+            float: right
+        }
+
+        .progress_bar_wrap {
             height: 30px;
             width: 50%;
             margin: 0 auto;
-            background: rgba(0,0,0,0.5);
-            border-radius:4px 4px 0 0;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px 4px 0 0;
             padding: 0 14px;
             margin-top: 0;
-	    }
-	    .iframe_wrap{
-	        border:none;
-	        width:100%;
-	        height:100%;
-	        background: #292929;
-	        z-index: 1;
-	        position:absolute;
-	        top: 0;
-	        left:0;
-	    }
-	    .progress_bar_cont p{
-	        display:inline-block;
-	    }
-	    .progress_bar_wrap .range-slider-track:before{
-	        background:rgba(168,168,168,0.7);
-	        height:4px;
-	        border-radius:4px;
-	        top:13px;
-	    }
-	    .progress_bar_wrap .range-slider-track .dragger{
-	        background: url("../images/icon_progress_bar.png") no-repeat;
-	        background-size: 20px;
-    		width: 20px;
-    		height: 20px;
-    		top: 6px;
-	    }
-	    .progress_bar_wrap .number{
-	        padding: 0;
+        }
+
+        .iframe_wrap {
+            border: none;
+            width: 100%;
+            height: 100%;
+            background: #292929;
+            z-index: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .progress_bar_cont p {
+            display: inline-block;
+        }
+
+        .progress_bar_wrap .range-slider-track:before {
+            background: rgba(168, 168, 168, 0.7);
+            height: 4px;
+            border-radius: 4px;
+            top: 13px;
+        }
+
+        .progress_bar_wrap .range-slider-track .dragger {
+            background: url("../images/icon_progress_bar.png") no-repeat;
+            background-size: 20px;
+            width: 20px;
+            height: 20px;
+            top: 6px;
+        }
+
+        .progress_bar_wrap .number {
+            padding: 0;
             margin: 0;
             text-align: left;
             color: #fff;
             height: 30px;
-            line-height:30px;
+            line-height: 30px;
             font-size: 15px;
             font-family: sans-serif;
             display: inline-block;
-            width:50px;
-	    }
-	    .progress_bar_wrap .number strong{
-	        font-weight: normal;
-	    }
-	    .progress_bar_cont{
-	        position:relative;
-	    }
-	    .courseware-open{
+            width: 50px;
+        }
+
+        .progress_bar_wrap .number strong {
+            font-weight: normal;
+        }
+
+        .progress_bar_cont {
+            position: relative;
+        }
+
+        .courseware-open {
             width: 48px;
             height: 48px;
             line-height: 48px;
@@ -97,12 +117,13 @@
             text-align: center;
             font-size: 14px;
             color: #fff;
-            z-index:3;
+            z-index: 3;
         }
-        .attachment_box{
+
+        .attachment_box {
             background: white;
-            width:  100%;
-            height:  70%;
+            width: 100%;
+            height: 70%;
             position: absolute;
             bottom: 0;
             left: 0;
@@ -112,12 +133,14 @@
             transition: 0.3s;
             display: none;
         }
-        .navigate{
+
+        .navigate {
             position: absolute;
             width: 100%;
             top: 0;
         }
-        .nav{
+
+        .nav {
             padding-left: 15px;
             background: #288AE0;
             box-sizing: border-box;
@@ -126,41 +149,47 @@
             padding-right: 30px;
             color: #fff;
         }
-        .nav span{
+
+        .nav span {
             display: inline-block;
             font-size: 16px;
             color: #fff;
             margin-right: 8px;
         }
-        .text-hidden{
+
+        .text-hidden {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .nav_close,.nav-back{
+
+        .nav_close, .nav-back {
             background: url("../schoolClass/img/icon-back.png") no-repeat;
             width: 15px;
             height: 15px;
-            background-size:100% 100% ;
+            background-size: 100% 100%;
             display: inline-block;
             position: absolute;
             top: 12px;
             right: 11px;
         }
-        .attachment-cont{
+
+        .attachment-cont {
             height: calc(100% - 40px);
             overflow-y: auto;
             margin-top: 40px;
         }
-        .attachment_bottom{
+
+        .attachment_bottom {
             text-align: center;
             height: 30px;
             color: #666;
             font-size: 12px;
             line-height: 30px;
         }
-        .mask{
-            width:  100%;
+
+        .mask {
+            width: 100%;
             height: 100%;
             background: #000;
             position: absolute;
@@ -168,16 +197,18 @@
             left: 0;
             opacity: 0.5;
             z-index: 1;
-            display:none
+            display: none
         }
-        .list-item{
+
+        .list-item {
             height: 58px;
             line-height: 58px;
             padding: 0 15px;
             font-size: 15px;
             color: #424242;
         }
-        .item-image{
+
+        .item-image {
             /*display: inline-block;*/
             margin-right: 15px;
             width: 24px;
@@ -190,14 +221,17 @@
             top: 50%;
             transform: translateY(-50%);
         }
-        .item-text{
+
+        .item-text {
             margin-left: 39px;
             max-width: calc(100% - 39px);
             display: inline-block;
         }
-        .line_public{
+
+        .line_public {
             position: relative;
         }
+
         .line_public:after {
             content: '';
             position: absolute;
@@ -221,209 +255,209 @@
 </head>
 
 <body>
-    <div class="progress_bar_wrap3" id="progress_bar_container" style="display: none;">
-	     <div  class="progress_bar_wrap" >
-			 <div class="progress_bar_cont">
-			     <p></p>
-			     <p class="number">1/1</p>
-			 </div>    
-		 </div>
-    </div> 
-    <iframe name="contentFrame" id="contentFrame" class="iframe_wrap"></iframe>
-
-    <div class="courseware-open" onclick="showAddAttachment()">
-            <span>课件</span>
+<div class="progress_bar_wrap3" id="progress_bar_container" style="display: none;">
+    <div class="progress_bar_wrap">
+        <div class="progress_bar_cont">
+            <p></p>
+            <p class="number">1/1</p>
+        </div>
     </div>
-    <div class="attachment_box" id="attachment_box">
-                <div class="navigate">
-                  <div class="nav text-hidden" id="nav"></div>
-                  <div onclick="clickMask()" class="nav-back"></div>
-                </div>
-                <div class="attachment-cont">
-                  <div class="attachment_list" id="attachment_list"></div>
-                  <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
-                </div>
-              </div>
-              <div class="mask" id="mask" onclick="clickMask()"></div>
+</div>
+<iframe name="contentFrame" id="contentFrame" class="iframe_wrap"></iframe>
+
+<div class="courseware-open" onclick="showAddAttachment()">
+    <span>课件</span>
+</div>
+<div class="attachment_box" id="attachment_box">
+    <div class="navigate">
+        <div class="nav text-hidden" id="nav"></div>
+        <div onclick="clickMask()" class="nav-back"></div>
+    </div>
+    <div class="attachment-cont">
+        <div class="attachment_list" id="attachment_list"></div>
+        <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
+    </div>
+</div>
+<div class="mask" id="mask" onclick="clickMask()"></div>
 </body>
 <script type="application/javascript" src="../schoolClass/js/service.js"></script>
- <script type="text/javascript">
+<script type="text/javascript">
 
-      var userId = Service.getQueryString("userId");
-      var defaultPageNo = 1;
-      var HTML_LIST="";
-      var parentId = -1;
-      var parentArray = [{
-             id: -1,
-             name: '蚁盘'
-         }];
-      filterCloudFile();
-      var p = document.getElementsByTagName('p');
-      var rs = new RS(p[0], {
-          create: function(value, target) {
-              target.className += ' red';
-          },
-          drag: function(value, target,dragState) {
-              p[1].innerHTML = "<strong>"+(value+1)+"/"+(rs.getMax()+1)+"</strong>";
-          },
-          stop: function(value, target,dragState) {
-        	  var role = getQueryString("role");
-        	  if(role == 'manager'){
-        		  window.frames["contentFrame"].window.clearScreen();
-                  window.frames["contentFrame"].window.pptCheckPageClick(value+1);
-        	  }
-          },
-          max:10
-       });
-      
-      function getParams(){
-    	  var strs = window.location.search.substr(1).split("?");
-    	  if(strs.length > 0){
-    		  return strs[0];
-    	  }
-    	  return null;
-      }
-      
-      function getQueryString(name){
-  		  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-  		  var r = window.location.search.substr(1).match(reg);
-  		  if(r!=null) {
-  			 return unescape(r[2]);
-  		  }
-  		  return null;
-  	  }
-      
-      function pptCheckPage(currentPage){
-    	  window.frames["contentFrame"].window.pptCheckPage(currentPage);
-      }
-      
-      function setMaxProgress(max){
-    	  rs.setMax(max);
-    	  p[1].innerHTML = "<strong>"+(rs.getCurrent()+1)+"/"+(max+1)+"</strong>";
-      }
-      
-      function setCurrentProgress(current){
-    	  rs.setCurrent(current);
-    	  p[1].innerHTML = "<strong>"+(current+1)+"/"+(rs.getMax()+1)+"</strong>";
-      }
-      
-      function showProgressBar(show){
-    	  if(show){
-    		  $("#progress_bar_container").show();
-    	  }else{
-    		  $("#progress_bar_container").hide();
-    	  }
-      }
-
-
-      
-      $("#contentFrame").attr("src","show_app.html?"+getParams());
-
-      //点击添加按钮
-         function showAddAttachment(){
-             AddAttachmentChange('block');
-         }
-
-
-      //改变蚁盘元素显示状态
-         function AddAttachmentChange(style){
-             var mask = document.getElementById('mask');
-             var attachment_box = document.getElementById('attachment_box');
-             mask.style.display = style;
-             attachment_box.style.display = style;
-             window.requestAnimationFrame(function(){
-             attachment_box.style.transform = style == 'block'?"translateY(0%)":"translateY(100%)";
-             })
-
-
-         }
-
-         //点击遮罩
-            function clickMask(){
-                AddAttachmentChange('none');
-                $('.topic_box').css({display:'none'});
-                $('.topic_box').css({transform:'translate(0%,100%)'});
+    var userId = Service.getQueryString("userId");
+    var defaultPageNo = 1;
+    var HTML_LIST = "";
+    var parentId = -1;
+    var parentArray = [{
+        id: -1,
+        name: '蚁盘'
+    }];
+    filterCloudFile();
+    var p = document.getElementsByTagName('p');
+    var rs = new RS(p[0], {
+        create: function (value, target) {
+            target.className += ' red';
+        },
+        drag: function (value, target, dragState) {
+            p[1].innerHTML = "<strong>" + (value + 1) + "/" + (rs.getMax() + 1) + "</strong>";
+        },
+        stop: function (value, target, dragState) {
+            var role = getQueryString("role");
+            if (role == 'manager') {
+                window.frames["contentFrame"].window.clearScreen();
+                window.frames["contentFrame"].window.pptCheckPageClick(value + 1);
             }
+        },
+        max: 10
+    });
 
-            //加载更多
-               function onEndedPage(e){
-                   if(e.srcElement.innerText == "无更多文件"){
-                       return;
-                   }
-                   defaultPageNo += 1;
-                   filterCloudFile();
-               }
+    function getParams() {
+        var strs = window.location.search.substr(1).split("?");
+        if (strs.length > 0) {
+            return strs[0];
+        }
+        return null;
+    }
 
-      /*
-            * 根据userId获取蚁盘文件
-             */
-         function filterCloudFile(clearFlag){
-             if(clearFlag){
-             HTML_LIST = '';
-             defaultPageNo = 1;
-             document.getElementById('attachment_bottom').innerText= "点击加载更多";
-             }
-             var service = new Service();
-             var data = {
-                 method:'filterCloudFile',
-                 userId: userId,
-                 parentId: parentId,
-                 filterOption: -17,
-                 pageNo: defaultPageNo,
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
 
-             };
-             service.doWebService(data,{
-                 onResponse:(res) => {
-                     console.log(res,'filterCloudFile');
-                     if(res.success){
-                         var attachment_list = document.getElementById('attachment_list');
-                         var attachment_bottom = document.getElementById('attachment_bottom');
-                         var nav = document.getElementById('nav');
-                         var data = res.response;
-                         var imgSrc,img_height;
-                         for(var k in data){
-                                 imgSrc = data[k].fileType == 0?"../schoolClass/img/cloud_icon_web1.png":"../schoolClass/img/cloud_icon_web.png";
-                                 img_height = data[k].fileType == 0?30:20;
-                                 HTML_LIST += "" +
-                                  "<div onclick=clickFile("+data[k].fileType+","+data[k].id+",\""+escape(data[k].name)+"\",true,\""+data[k].suffix+"\",\""+data[k].htmlPath+"\",\""+data[k].pdfPath+"\") class='list-item line_public'><img class='item-image' src="+imgSrc+" style='height:"+img_height+"px' /><span class='item-text text-hidden'>"+data[k].name+"</span></div>";
-                         }
-                         var navHTML = "";
-                         nav.innerHTML = "";
-                         for(var k in parentArray){
-                             if(k == 0){
-                                 navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") >"+parentArray[k].name+"</span>";
+    function pptCheckPage(currentPage) {
+        window.frames["contentFrame"].window.pptCheckPage(currentPage);
+    }
 
-                             }else{
-                                 navHTML += "<span onclick=clickNav("+parentArray[k].id+",\""+parentArray[k].name+"\") > > "+parentArray[k].name+"</span>";
+    function setMaxProgress(max) {
+        rs.setMax(max);
+        p[1].innerHTML = "<strong>" + (rs.getCurrent() + 1) + "/" + (max + 1) + "</strong>";
+    }
 
-                             }
-                         }
-                         attachment_bottom.innerText = res.response.length <= 0?"无更多文件":"点击加载更多";;
-                         attachment_list.innerHTML = (HTML_LIST);
-                         nav.innerHTML = navHTML;
-                     }
-                 },
-                 onError:function(error){
-                     console.log(error,'error');
-                 }
-             });
-         }
+    function setCurrentProgress(current) {
+        rs.setCurrent(current);
+        p[1].innerHTML = "<strong>" + (current + 1) + "/" + (rs.getMax() + 1) + "</strong>";
+    }
+
+    function showProgressBar(show) {
+        if (show) {
+            $("#progress_bar_container").show();
+        } else {
+            $("#progress_bar_container").hide();
+        }
+    }
 
 
-      /*
-         点击蚁盘文件触发事件
-         */
-         function clickFile(fileType,parent,name,isPush,suffix,htmlPath,pdfPath){
-             console.log(fileType,'fileType');
-             console.log(parent,'parent');
-             console.log(name,'name');
-             console.log(isPush,'isPush');
-             console.log(suffix,'suffix');
-             console.log(htmlPath,'htmlPath');
-             console.log(pdfPath,'pdfPath');
-             var path = suffix == 'ppt' || suffix == "pptx"?htmlPath:pdfPath;
-             name = unescape(name);
-             if(fileType==0){ //文件点击事件
+    $("#contentFrame").attr("src", "show_app.html?" + getParams());
+
+    //点击添加按钮
+    function showAddAttachment() {
+        AddAttachmentChange('block');
+    }
+
+
+    //改变蚁盘元素显示状态
+    function AddAttachmentChange(style) {
+        var mask = document.getElementById('mask');
+        var attachment_box = document.getElementById('attachment_box');
+        mask.style.display = style;
+        attachment_box.style.display = style;
+        window.requestAnimationFrame(function () {
+            attachment_box.style.transform = style == 'block' ? "translateY(0%)" : "translateY(100%)";
+        })
+
+
+    }
+
+    //点击遮罩
+    function clickMask() {
+        AddAttachmentChange('none');
+        $('.topic_box').css({display: 'none'});
+        $('.topic_box').css({transform: 'translate(0%,100%)'});
+    }
+
+    //加载更多
+    function onEndedPage(e) {
+        if (e.srcElement.innerText == "无更多文件") {
+            return;
+        }
+        defaultPageNo += 1;
+        filterCloudFile();
+    }
+
+    /*
+          * 根据userId获取蚁盘文件
+           */
+    function filterCloudFile(clearFlag) {
+        if (clearFlag) {
+            HTML_LIST = '';
+            defaultPageNo = 1;
+            document.getElementById('attachment_bottom').innerText = "点击加载更多";
+        }
+        var service = new Service();
+        var data = {
+            method: 'filterCloudFile',
+            userId: userId,
+            parentId: parentId,
+            filterOption: -17,
+            pageNo: defaultPageNo,
+
+        };
+        service.doWebService(data, {
+            onResponse: (res) => {
+                console.log(res, 'filterCloudFile');
+                if (res.success) {
+                    var attachment_list = document.getElementById('attachment_list');
+                    var attachment_bottom = document.getElementById('attachment_bottom');
+                    var nav = document.getElementById('nav');
+                    var data = res.response;
+                    var imgSrc, img_height;
+                    for (var k in data) {
+                        imgSrc = data[k].fileType == 0 ? "../schoolClass/img/cloud_icon_web1.png" : "../schoolClass/img/cloud_icon_web.png";
+                        img_height = data[k].fileType == 0 ? 30 : 20;
+                        HTML_LIST += "" +
+                            "<div onclick=clickFile(" + data[k].fileType + "," + data[k].id + ",\"" + escape(data[k].name) + "\",true,\"" + data[k].suffix + "\",\"" + data[k].htmlPath + "\",\"" + data[k].pdfPath + "\") class='list-item line_public'><img class='item-image' src=" + imgSrc + " style='height:" + img_height + "px' /><span class='item-text text-hidden'>" + data[k].name + "</span></div>";
+                    }
+                    var navHTML = "";
+                    nav.innerHTML = "";
+                    for (var k in parentArray) {
+                        if (k == 0) {
+                            navHTML += "<span onclick=clickNav(" + parentArray[k].id + ",\"" + parentArray[k].name + "\") >" + parentArray[k].name + "</span>";
+
+                        } else {
+                            navHTML += "<span onclick=clickNav(" + parentArray[k].id + ",\"" + parentArray[k].name + "\") > > " + parentArray[k].name + "</span>";
+
+                        }
+                    }
+                    attachment_bottom.innerText = res.response.length <= 0 ? "无更多文件" : "点击加载更多";
+                    ;
+                    attachment_list.innerHTML = (HTML_LIST);
+                    nav.innerHTML = navHTML;
+                }
+            },
+            onError: function (error) {
+                console.log(error, 'error');
+            }
+        });
+    }
+
+
+    /*
+       点击蚁盘文件触发事件
+       */
+    function clickFile(fileType, parent, name, isPush, suffix, htmlPath, pdfPath) {
+        console.log(fileType, 'fileType');
+        console.log(parent, 'parent');
+        console.log(name, 'name');
+        console.log(isPush, 'isPush');
+        console.log(suffix, 'suffix');
+        console.log(htmlPath, 'htmlPath');
+        console.log(pdfPath, 'pdfPath');
+        var path = suffix == 'ppt' || suffix == "pptx" ? htmlPath : pdfPath;
+        name = unescape(name);
+        if (fileType == 0) { //文件点击事件
 //                 if(path && path != 'null'){
 //                     var iframe = document.getElementById("ifr");
 //                     var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");
@@ -438,28 +472,28 @@
 //                 }else{
 //                    console.log("path为空");
 //                 }
-             }else{
-                 parentId = parent;
-                 if(isPush){
-                     parentArray.push({
-                          id: parent,
-                          name: name
-                     });
-                 }
-                 filterCloudFile(true);
-             }
-         }
-
-         //点击导航栏事件
-            function clickNav(parentId,parentName){
-                var indexof = '';
-                for(var k in parentArray){
-                    if(parentArray[k].id == parentId){
-                        indexof = parseInt(k)+1;
-                    }
-                }
-                parentArray = parentArray.slice(0,parseInt(indexof));
-                clickFile(1,parentId,parentName);
+        } else {
+            parentId = parent;
+            if (isPush) {
+                parentArray.push({
+                    id: parent,
+                    name: name
+                });
             }
-  </script>
+            filterCloudFile(true);
+        }
+    }
+
+    //点击导航栏事件
+    function clickNav(parentId, parentName) {
+        var indexof = '';
+        for (var k in parentArray) {
+            if (parentArray[k].id == parentId) {
+                indexof = parseInt(k) + 1;
+            }
+        }
+        parentArray = parentArray.slice(0, parseInt(indexof));
+        clickFile(1, parentId, parentName);
+    }
+</script>
 </html>
