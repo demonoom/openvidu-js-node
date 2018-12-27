@@ -123,7 +123,7 @@
             box-sizing: border-box;
             height: 40px;
             line-height: 40px;
-            padding-right: 30px;
+            padding-right: 35px;
             color: #fff;
         }
         .nav span{
@@ -226,9 +226,9 @@
 			 <div class="progress_bar_cont">
 			     <p></p>
 			     <p class="number">1/1</p>
-			 </div>    
+			 </div>
 		 </div>
-    </div> 
+    </div>
     <iframe name="contentFrame" id="contentFrame" class="iframe_wrap"></iframe>
 
     <div class="courseware-open" onclick="showAddAttachment()">
@@ -275,7 +275,7 @@
           },
           max:10
        });
-      
+
       function getParams(){
     	  var strs = window.location.search.substr(1).split("?");
     	  if(strs.length > 0){
@@ -283,7 +283,7 @@
     	  }
     	  return null;
       }
-      
+
       function getQueryString(name){
   		  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
   		  var r = window.location.search.substr(1).match(reg);
@@ -292,21 +292,21 @@
   		  }
   		  return null;
   	  }
-      
+
       function pptCheckPage(currentPage){
     	  window.frames["contentFrame"].window.pptCheckPage(currentPage);
       }
-      
+
       function setMaxProgress(max){
     	  rs.setMax(max);
     	  p[1].innerHTML = "<strong>"+(rs.getCurrent()+1)+"/"+(max+1)+"</strong>";
       }
-      
+
       function setCurrentProgress(current){
     	  rs.setCurrent(current);
     	  p[1].innerHTML = "<strong>"+(current+1)+"/"+(rs.getMax()+1)+"</strong>";
       }
-      
+
       function showProgressBar(show){
     	  if(show){
     		  $("#progress_bar_container").show();
@@ -316,7 +316,7 @@
       }
 
 
-      
+
       $("#contentFrame").attr("src","show_app.html?"+getParams());
 
       //点击添加按钮
