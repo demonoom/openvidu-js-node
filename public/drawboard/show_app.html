@@ -1,0 +1,313 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge，chrome=1">
+    <script src='jquery.js' type='text/javascript'></script>
+    <script src='../schoolClass/js/simple_websocket_connection.js' type='text/javascript'></script>
+    <script type="text/javascript" src="../schoolClass/js/layer/layer.js"></script>
+    <link href="drawboard.css?v=206" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+      body{
+        overflow: hidden;
+        -webkit-text-size-adjust : none ;
+        -moz-text-size-adjust : none ;
+        -ms-text-size-adjust : none ;
+        text-size-adjust : none；
+      }
+	  .pen_color_selected {
+	    background: #353535 !important;
+	    border-radius: 0;
+	   }
+	   .eraser_selected{
+           background:#353535 !important;
+           border-radius: 0;
+       }
+       .draw_main1{
+           z-index:-1
+       }
+    </style>
+</head>
+
+<body class="main_app_body">
+ <div  class="draw_main_app" id="draw_container">
+    <div id="control_bar" class="control_bar">
+		 <span id="ppt_page" class="draw_pen__app_ri_new" style="margin-right:0">1/10</span>
+         <span id="ppt_control_span" style="display: none;">         
+             <span id="pre_page" class="draw_pen_app_up " onclick="javascript:pptPreClick();"><img src="../images/app_page_up2.png"></span>
+		     <span id="next_page" class="draw_pen_app_down " onclick="javascript:pptNextClick();"><img src="../images/app_page_down2.png"></span>
+		     <span class="draw_page_app">
+		         <span class="app_t_line"></span>
+		         <span id="clear_screen" class="draw_page_app_span" onclick="javascript:clearScreen();"><span  class="draw_pen_app_img "><img src="../images/app_clear_screen.png"></span></span>
+		         <span class="app_t_line"></span>
+		         <span id="eraser" class="draw_page_app_span" onclick="javascript:toggleEraser();"><span class="draw_pen_app_img"><img src="../images/app_drawboard_rubber.png"></span></span>
+		         <span class="app_t_line"></span>
+		         <span class="draw_page_app_span pen_color_red pen_color_selected"  onclick="onPenColorChanged(this);"><span class="draw_pen_app_img "><img src="../images/app_drawboard_red.png"></span></span>
+		         <span class="app_t_line"></span>
+		         <span class="draw_page_app_span pen_color_black"  onclick="onPenColorChanged(this);"><span class="draw_pen_app_img"><img src="../images/app_drawboard_black.png"></span></span>
+		         <span class="app_t_line"></span>
+		     </span>
+	     </span>
+    </div>
+    <div class="draw_main2">
+	        <iframe id="board_iframe" name="board_iframe" style=" position: absolute;" >
+	   
+	        </iframe>
+	   
+	        <div id="zhenzhao" style="position: absolute;width:1140px; height:666px"></div>
+	      
+		    <iframe name="ppt_iframe" id="ppt_iframe" style="overflow: hidden;"  onload="hideToolbar();">
+		     
+		    </iframe>
+     </div>
+     
+     <div id="can_shouxie_tip" style="display: none;">您已拥有手写权限</div>
+     <div id="can_not_shouxie_tip" style="display: none;">您没有手写权限</div>
+ </div>
+
+</body>
+
+ <script type="text/javascript">
+ 
+    String.prototype.endWith=function(str){     
+	   var reg=new RegExp(str+"$");     
+	   return reg.test(this);        
+	};
+ 
+   var vid = getQueryString("vid");
+   var userId = getQueryString("userId");
+   var role = getQueryString("role");
+   var ppt = getQueryString("ppt");
+   
+   var paths = ppt.split(",");
+   if(paths.length == 1){
+	   if(ppt.toLowerCase().endWith(".pdf")){
+		   $("#ppt_iframe").attr("src","pdf_image_show.html?pdf="+ppt);
+	   }else if(ppt.toLowerCase().endWith(".html")){
+		   $("#ppt_iframe").attr("src",ppt);
+	   }else if(ppt.toLowerCase().endWith(".png")){
+		   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
+	   }else if(ppt.toLowerCase().endWith(".jpg")){
+		   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
+	   }else if(ppt.toLowerCase().endWith(".gif")){
+		   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
+	   }else if(ppt.toLowerCase().endWith(".webp")){
+		   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
+	   }
+   }else if(paths.length > 1){
+	   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
+   }
+   
+   $("#board_iframe").attr("src","index.html?roomid="+vid);
+   
+   roleUpdated();
+ 
+   $(document).ready(function(){
+	   initWs();
+   });
+   
+   function roleUpdated(){
+	   if(role == "manager"){
+		   $("#zhenzhao").hide();
+		   $("#ppt_control_span").show();
+		   $("#ppt_page").hide();
+		   window.parent.showProgressBar(true);
+	   }else if(role == "subManager"){
+		   $("#zhenzhao").hide();
+		   $("#ppt_control_span").hide();
+	   }else{
+		   $("#zhenzhao").show();
+		   $("#ppt_control_span").hide();
+		   $("#ppt_page").show();
+	   }
+   }
+   
+   function toggleEraser(){
+	   var selected = $("#eraser").hasClass("eraser_selected");
+	   var frame = window.frames["board_iframe"].window;
+	   if(selected){
+		   $("#eraser").removeClass("eraser_selected");
+		   frame.setDrawType(0);
+	   }else{
+		   $("#eraser").addClass("eraser_selected");
+		   frame.setDrawType(1);
+	   }
+   }
+   
+   function onPenColorChanged(element){
+	   $(".pen_color_selected").removeClass("pen_color_selected");
+	   $(element).addClass("pen_color_selected");
+	   if($(element).hasClass("pen_color_red")){
+		   window.frames["board_iframe"].window.setColor(2);
+	   }else if($(element).hasClass("pen_color_black")){
+		   window.frames["board_iframe"].window.setColor(0);
+	   }
+   }
+   
+   function getQueryString(name){
+		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if(r!=null) {
+			return unescape(r[2]);
+		}
+		return null;
+	}
+   
+   function hideToolbar(){
+	   reSetScalePercent();
+	   $("body").css({"margin":"0 auto"});
+	   window.frames["ppt_iframe"].window.showToobar(false);
+	   pptCheckPage(1);
+	   setTimeout(function(){
+		   clearScreen(); 
+	   }, 500);
+   }
+   
+   function reSetScalePercent(){
+	   var clientHeight = $(window.parent).height(); 
+	   var clientWidth = $(window.parent).width(); 
+	   var scaleWidth  = 0;
+	   var scaleHeight = 0;
+	   scaleHeight = clientHeight/$("#draw_container").height();
+	   scaleWidth = clientWidth/$("#draw_container").width();
+	   if(scaleWidth > scaleHeight){
+		   $("body").css("transform","scale("+scaleHeight+")");
+	   }else{
+		   $("body").css("transform","scale("+scaleWidth+")");
+	   }
+	   $("body").css("left",($(window).width()-$(window.parent).width())/2);
+   }
+   
+   function pptPre(){
+	   clearScreen();
+	   window.frames["ppt_iframe"].window.pre();
+	   showPPTPage();
+   }
+   
+   function pptNext(){
+	   clearScreen();
+	   window.frames["ppt_iframe"].window.next();
+	   showPPTPage();
+   }
+   
+   function clearScreen(){
+	   window.frames["board_iframe"].window.savePage(true);
+   }
+   
+   function pptCheckPage(currentPage){
+  	   window.frames["ppt_iframe"].window.checkSlide(currentPage);
+  	   showPPTPage();
+   }
+   
+   function pptCheckPageClick(currentPage){
+	   setTimeout(function(){
+		   pptCheckPage(currentPage);
+		   var protocal = eval('(' + "{'command':'board_ppt_check','data':{'userid':"+userId+",'roomid':"+vid+",'currentPage':"+currentPage+",'role':'"+role+"'}}" + ')');
+		   connection.send(protocal);
+	   }, 100);
+   }
+   
+   function pptPreClick(){
+	   pptPre();
+	   var protocal = eval('(' + "{'command':'board_ppt_pre','data':{'userid':"+userId+",'roomid':"+vid+"}}" + ')');
+	   connection.send(protocal);
+	   pptCheckPageClick(window.frames["ppt_iframe"].window.currentSlide());
+   }
+   
+   function pptNextClick(){
+	   pptNext();
+	   var protocal = eval('(' + "{'command':'board_ppt_next','data':{'userid':"+userId+",'roomid':"+vid+"}}" + ')');
+	   connection.send(protocal);
+	   pptCheckPageClick(window.frames["ppt_iframe"].window.currentSlide());
+   }
+   
+   function showPPTPage(){
+	  var current = window.frames["ppt_iframe"].window.currentSlide();
+	  var total =  window.frames["ppt_iframe"].window.totleSlide();
+      if(typeof(current) == 'undefined'){
+         current = 1;
+      }
+      if(typeof(total) == 'undefined'){
+         total = 16;
+      }
+	  $("#ppt_page").text(current+"/"+total);
+	  
+	  window.parent.setMaxProgress(total-1);
+	  window.parent.setCurrentProgress(current-1);
+   }
+   
+   var connection = new SimpleConnection("www.maaee.com");
+   function initWs(){
+	     connection.clazzWsListener = {onError:function(errorMsg){
+		   	 //显示error并且回退页面
+		   	 alert(errorMsg);
+	     },onWarn:function(warnMsg){
+	   	     //显示warning
+	   	     alert(warnMsg);
+	     },onMessage:function(info){
+		   	 var command = info.command;
+		   	 if(command == "board_ppt_pre"){
+		   		 var roomid = info.data.roomid;
+		   		 var userid = info.data.userid;
+		   		 if(roomid == vid && userid != userId){
+		   			pptPre();
+		   		 }
+		   	 }else if(command == "board_ppt_next"){
+		   		 var roomid = info.data.roomid;
+		   		 var userid = info.data.userid;
+		   		 if(roomid == vid && userid != userId){
+		   			 pptNext();
+		   		 }
+		   	 }else if(command == "board_ppt_check"){
+		   		 var roomid = info.data.roomid;
+		   		 var userid = info.data.userid;
+		   		 var currentPage = info.data.currentPage;
+		   		 if(roomid == vid && userid != userId){
+		   			pptCheckPage(currentPage);
+		   		 }
+		   	 }else if(command == "changeUserDrawboardRole"){
+		   		 var roomid = info.data.roomid;
+		   		 var userid = info.data.userid;
+		   		 if(roomid == vid && userid == userId){
+			   		var rl = info.data.role;
+			   		role = rl;
+			   		roleUpdated();
+			   	   if(role == "manager"){
+			   		  layer.msg($("#can_shouxie_tip").text());
+			 	   }else if(role == "subManager"){
+			 		  layer.msg($("#can_shouxie_tip").text());
+			 	   }else{
+			 		  layer.msg($("#can_not_shouxie_tip").text());
+			 	   }
+			   	 }
+		   	 }
+	     }};
+	     connection.connect();
+   }
+   
+   function addScale(){
+	   try{
+		   var tran = $("body").css("transform");
+		   var bili = tran.split(",")[3];
+		   var newBili = Number(bili)+0.01;
+		   $("body").css("transform","scale("+newBili+")");
+	   }catch(e){}
+   }
+   
+   function reduceScale(){
+	   try{
+		   var tran = $("body").css("transform");
+		   var bili = tran.split(",")[3];
+		   var newBili = Number(bili)-0.01;
+		   console.log(newBili);
+		   $("body").css("transform","scale("+newBili+")");
+	   }catch(e){}
+   }
+   
+    window.onresize = function(){
+	    reSetScalePercent();
+    };
+ </script>
+</html>

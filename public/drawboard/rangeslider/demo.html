@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>demo.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="range-slider.js?v=53"></script>
+    <link href="range-slider.min.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+    .range-slider.red .range-slider-track:before,.range-slider.red .dragger {background-color:red}
+    .range-slider.green .range-slider-track:before,.range-slider.green .dragger {background-color:green}
+    .range-slider.blue .range-slider-track:before,.range-slider.blue .dragger {background-color:blue}
+    </style>
+  </head>
+  
+  <body>
+      <div>
+        <p></p>
+      </div>
+      
+      <p></p>
+      
+      <p id="test_txt"></p>
+      
+      <script type="text/javascript">
+      
+      var p = document.getElementsByTagName('p');
+      var rs = new RS(p[0], {
+          create: function(value, target) {
+              target.className += ' red';
+          },
+          drag: function(value, target,dragState) {
+              p[1].innerHTML = '<strong>' + value + '%</strong>';
+              if(dragState == "stop"){
+            	  console.log("dragState:" + dragState);
+              }
+          },
+          stop: function(value, target,dragState) {
+        	  alert("heello");
+          },
+          max:2
+       });
+      
+      </script>
+  </body>
+</html>

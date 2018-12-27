@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src='jquery.js' type='text/javascript'></script>
+    <script type="text/javascript" src="rangeslider/range-slider.js?v=53"></script>
+    <link href="rangeslider/range-slider.min.css" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <style type="text/css">
+    body{
+        margin:0;
+        padding:0;
+        overflow: hidden;
+    }
+	    .range-slider.red .range-slider-track:before,.range-slider.red .dragger {background-color:red}
+	    .range-slider.green .range-slider-track:before,.range-slider.green .dragger {background-color:green}
+	    .range-slider.blue .range-slider-track:before,.range-slider.blue .dragger {background-color:blue}
+	    .progress_bar_wrap3{
+	        position: absolute;
+            top: 0;
+            height: 40px;
+            width: 100%;
+            left:0
+	    }
+	    .progress_bar_wrap .range-slider{
+	        margin: 0;
+            width: calc(100% - 54px);
+            float:right
+	    }
+	    .iframe_wrap{
+	        border:none;
+	        height:100%;
+	        background:#fff;
+	       
+	    }
+	    .progress_bar_wrap{
+	        height: 30px;
+            width: 40%;
+            margin: 0 auto;
+            background: rgba(0,0,0,0.2);
+            border-radius:0 0 6px 6px;
+            position: relative;
+           top:0;
+           margin-top: 0;
+           padding:0 14px;
+	    }
+	    .progress_bar_wrap .range-slider-track:before{
+	       background: rgba(255,255,255,0.4);
+           height: 6px;
+           border-radius: 4px;
+           top: 11px;
+	    }
+	    .progress_bar_wrap .range-slider-track .dragger{
+	        background: url(../images/icon_progress_bar.png) no-repeat;
+            background-size: 24px;
+             width: 24px;
+             height: 24px;
+             top: 2px;
+	    }
+	    .progress_bar_wrap .number{
+	        padding: 0;
+            margin: 0;
+            text-align: left;
+            color: #fff;
+            height: 30px;
+            line-height:30px;
+            font-size: 18px;
+            font-family: sans-serif;
+            display: inline-block;
+            width:50px;
+            text-shadow: 1px 0 2px rgba(0,0,0,0.4);
+	    }
+	    .progress_bar_wrap .number strong{
+	        font-weight: normal;
+	    }
+	    .progress_bar_cont{
+	        position:relative;
+	    }
+    </style>
+</head>
+<body>
+   <div class="progress_bar_wrap3" id="progress_bar_container" style="display: none;">
+      <div  class="progress_bar_wrap" >
+         <div class="progress_bar_cont">
+	        <p></p>
+	        <p class="number">1/1</p>
+	     </div>
+	  </div>
+   </div>
+   <iframe name="contentFrame" id="contentFrame" class="iframe_wrap" width="100%"></iframe>
+</body>
+ <script type="text/javascript">
+      
+      var p = document.getElementsByTagName('p');
+      var rs = new RS(p[0], {
+          create: function(value, target) {
+              target.className += ' red';
+          },
+          drag: function(value, target,dragState) {
+              p[1].innerHTML = "<strong>"+(value+1)+"/"+(rs.getMax()+1)+"</strong>";
+          },
+          stop: function(value, target,dragState) {
+        	  var role = getQueryString('role');
+        	  if(role == 'manager'){
+        		  window.frames["contentFrame"].window.clearScreen();
+                  window.frames["contentFrame"].window.pptCheckPageClick(value+1);
+        	  }
+          },
+          max:10
+       });
+      
+      function getParams(){
+    	  var strs = window.location.search.substr(1).split("?");
+    	  if(strs.length > 0){
+    		  return strs[0];
+    	  }
+    	  return null;
+      }
+      
+      function getQueryString(name){
+          var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    	  var r = window.location.search.substr(1).match(reg);
+          if(r!=null) {
+    		 return unescape(r[2]);
+    	  }
+    	  return null;
+      }
+      
+      function pptCheckPage(currentPage){
+    	  window.frames["contentFrame"].window.pptCheckPage(currentPage);
+      }
+      
+      function setMaxProgress(max){
+    	  rs.setMax(max);
+    	  p[1].innerHTML = "<strong>"+(rs.getCurrent()+1)+"/"+(max+1)+"</strong>";
+      }
+      
+      function setCurrentProgress(current){
+    	  rs.setCurrent(current);
+    	  p[1].innerHTML = "<strong>"+(current+1)+"/"+(rs.getMax()+1)+"</strong>";
+      }
+      
+      function showProgressBar(show){
+    	  if(show){
+    		  $("#progress_bar_container").show();
+    	  }else{
+    		  $("#progress_bar_container").hide();
+    	  }
+      }
+      
+      $("#contentFrame").attr("src","show.html?"+getParams());
+  </script>
+</html>
