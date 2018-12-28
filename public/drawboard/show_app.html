@@ -60,8 +60,8 @@
 		         <span class="draw_page_app_span pen_color_black"  onclick="onPenColorChanged(this);"><span class="draw_pen_app_img"><img src="../images/app_drawboard_black.png"></span></span>
 		         <span class="app_t_line"></span>
 		         <!-- 选择音乐-->
-		         <span id="chooseMus" class="draw_page_app_span pen_color_black"  onclick="postOpenAnt()"><span class="draw_pen_app_img"><img src="../images/share.png"></span></span>
-
+		       <!--  <span id="chooseMus" class="draw_page_app_span pen_color_black"  onclick="postOpenAnt()"><span class="draw_pen_app_img"><img src="../images/share.png"></span></span>
+-->
 		     </span>
 	     </span>
     </div>
@@ -322,10 +322,10 @@
 	    reSetScalePercent();
     };
 
-   //打开蚁盘
-   function postOpenAnt(){
-//       console.log('ｐｏｓｔ出去打开蚁盘');
-       window.parent.postMessage({name:'openAnt'},"*");
-   }
+//   //打开蚁盘
+//   function postOpenAnt(){
+////       console.log('ｐｏｓｔ出去打开蚁盘');
+//       window.parent.postMessage({name:'openAnt'},"*");
+//   }
  </script>
 </html>
