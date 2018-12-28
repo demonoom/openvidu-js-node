@@ -110,9 +110,17 @@
                  if(roomid == vid){
                      layer.msg('推送成功');
                  }
+             }else if(info.command == 'assistantPlayKejianInWindow'){ //从ＰＣ端推过来
+                 var roomid = info.data.roomid;
+                 if(roomid == vid){
+                    console.log(info,'infoooooooooo');
+                    checkIframe(info.data.html,true);
+
+                 }
              }
           }
         };
+
 
     function getMoreTopic(){
         if($('.topic_more').text() == '已全部加载'){
@@ -351,16 +359,7 @@
        name = unescape(name);
        if(fileType==0){
            if(path && path != 'null'){
-               var iframe = document.getElementById("ifr");
-               var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");
-               newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
-               iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+newHTMLPath+"");
-               var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
-               //推送通知
-               simpleMS.send(protocal);
-               AddAttachmentChange('none');
-               document.getElementById('empty').style.display="none";
-               document.getElementById('iframeBox').style.display="block";
+               checkIframe(path);
            }else{
               console.log("path为空");
            }
@@ -374,6 +373,22 @@
            }
            filterCloudFile(true);
        }
+   }
+
+
+   function checkIframe(path,flag){
+       var iframe = document.getElementById("ifr");
+       var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");
+       newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
+       iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+newHTMLPath+"");
+       if(!flag){
+           var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
+           //推送通知
+           simpleMS.send(protocal);
+       }
+       AddAttachmentChange('none');
+       document.getElementById('empty').style.display="none";
+       document.getElementById('iframeBox').style.display="block";
    }
 
    /*
