@@ -79,12 +79,13 @@
    var topicId = -1;
    //推题数组
    var quesArr = [];
+   var isCheckPage = true;
 
    var iframeBox = document.getElementById("iframeBox");
    var iframe = document.createElement("iframe");
 
    $(function(){
-       iframe.setAttribute("id","ifr");
+          iframe.setAttribute("id","ifr");
           iframe.setAttribute("name","ifr");
           iframe.setAttribute("frameborder","0");
           iframe.setAttribute("scrolling","no");
@@ -315,10 +316,13 @@
                    document.getElementById('empty').style.display="none";
                    document.getElementById('iframeBox').style.display="block";
                    iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+res.response.vid+"&userId="+randomNumber+"&role=manager&ppt="+res.response.pptUrl+"");
-                   $(iframe).load(function(){                             //  等iframe加载完毕
-                        setTimeout(()=>{
-                            window.frames['ifr'].window.pptCheckPage(res.response.currentPage)
-                        },2000);
+                   $(iframe).load(function(){    //  等iframe加载完毕
+                       if(isCheckPage){
+                          setTimeout(()=>{
+                             window.frames['ifr'].window.pptCheckPage(res.response.currentPage);
+                          },2000);
+                          isCheckPage = false;
+                       }
                    });
                }else{
                    document.getElementById('empty').style.display="block";

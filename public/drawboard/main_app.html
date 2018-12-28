@@ -122,9 +122,9 @@
     <iframe name="contentFrame" id="contentFrame" class="iframe_wrap"></iframe>
 
     <!--蚁盘 start -->
-    <div class="courseware-open" onclick="AddAttachmentChange('block')">
-        <span>课件</span>
-    </div>
+    <!--<div class="courseware-open" onclick="AddAttachmentChange('block')">
+        <span>音</span>
+    </div>-->
     <div class="attachment_box" id="attachment_box">
         <div class="navigate">
             <div class="nav text-hidden" id="nav"></div>
@@ -141,6 +141,11 @@
 <script type="application/javascript" src="../schoolClass/js/service.js"></script>
 <script src="./main_app.js"></script>
 <script type="text/javascript">
+
+//     setTimeout(function(){
+//         $('body').click();
+//         console.log(123)
+//     },2000)
 
 
     var p = document.getElementsByTagName('p');
@@ -200,10 +205,7 @@
         }
     }
 
-
-
     $("#contentFrame").attr("src", "show_app.html?" + getParams());
-
 
 </script>
 
