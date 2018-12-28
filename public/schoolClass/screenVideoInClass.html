@@ -24,9 +24,10 @@
     </style>
 </head>
 <body>
-
- <video width="230px" height="127px" autoplay class="preview_video" id="preview_video" muted></video>
-
+<div class="preview_video-cont">
+    <video width="230px" height="127px" autoplay class="preview_video" id="preview_video" muted></video>
+　   <span class="preview_videoName til_hidden" id="video_name">sdfsdf</span>
+</div>
 </body>
 
 <script type="text/javascript">
@@ -37,20 +38,44 @@
     var userName = Service.getQueryString("userName");
     var videoDeviceId = Service.getQueryString("videoDeviceId");
     var audioDeviceId = Service.getQueryString("audioDeviceId");
+    var from = Service.getQueryString("from");
+    var userId = Service.getQueryString("userId");
+    userId = from=="master"?random(-10000000,-20000000):userId;
 
     $(document).ready(function(){
-        joinRoom();
+        $("#video_name").text(userName);
+        var publish = Service.getQueryString("publish");
+        if(publish == "true"){
+            joinRoom();
+        }else{
+            const constraints = {
+                audio: { mandatory: {chromeMediaSource: 'desktop'}},
+                video: {
+                    mandatory: {
+                        chromeMediaSource: 'desktop',
+                        maxWidth:1280,
+                        minWidth:1280,
+                        maxHeight:720,
+                        minHeight:720,
+                        maxFrameRate:30,
+                        minFrameRate:30
+                    }
+                }
+            };
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(function(stream){
+                    $("#preview_video")[0].srcObject = stream;
+                })
+                .catch(function(e){
+                    console.log(e);
+                });
+        }
     });
 
     function publish(){
-
         const constraints = {
-           audio: {
-               mandatory: {
-                   chromeMediaSource: 'desktop'
-               }
-           },
-            video: {
+           audio: {mandatory: {chromeMediaSource: 'desktop'}},
+           video: {
                 mandatory: {
                     chromeMediaSource: 'desktop',
                     maxWidth:1280,
@@ -86,7 +111,7 @@
     }
 
     function removeScreenCameraInfo(){
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
 
         if(savedList){
             var tobeDeleteIndex = -1;
@@ -98,7 +123,7 @@
             if(tobeDeleteIndex >= 0){
                 savedList.splice(tobeDeleteIndex,1);
             }
-            localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+            localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
         }
     }
 
@@ -109,7 +134,7 @@
     function joinRoom(){
         client = new ExRTC();
 
-        client.join(vid+"", random(-10000000,-20000000),"桌面", function() {
+        client.join(vid+"",userId,"桌面", function() {
             publish();
         }, function() {
             console.log("Join channel failed");

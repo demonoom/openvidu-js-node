@@ -6,321 +6,364 @@
     <script src='jquery.js' type='text/javascript'></script>
     <script src='../schoolClass/js/simple_websocket_connection.js' type='text/javascript'></script>
     <script type="text/javascript" src="../schoolClass/js/layer/layer.js"></script>
-    <link href="drawboard.css?v=178" rel="stylesheet" type="text/css" />
- <style type="text/css">
-       body{
-           overflow: hidden;
-       }
-       .eraser_selected{
-           background:rgba(100,100, 100, 0.5) !important;
-       }
-       .eraser_selected i, .pen_color_selected i{
-           margin: auto;
-           width: 36px;
-           margin-top: 5px;
-           height: 36px;
-           display: inline-block;;
-      }
-       .eraser_selected i.rubber{
-	       background:url("../images/main_icon_rubber_h.png");
-	       background-size:36px;
-       }
-       .pen_color_selected{
-           background:rgba(100,100, 100, 0.5) !important;
-       }
-       .pen_color_red.pen_color_selected i.drawboardred{
-	       background:url("../images/main_icon_drawboardred_h.png");
-	       background-size:36px;
-       }
-       .pen_color_black.pen_color_selected i.drawboardblack{
-	       background:url("../images/main_icon_drawboardblack_h.png");
-	       background-size:36px;
-       }
-       .draw_main1{
-           z-index:-1
-       }
-       
+    <link href="drawboard.css?v=178" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="./show.css">
+    <style type="text/css">
+        body {
+            overflow: hidden;
+        }
+
+        .eraser_selected {
+            background: rgba(100, 100, 100, 0.5) !important;
+        }
+
+        .eraser_selected i, .pen_color_selected i {
+            margin: auto;
+            width: 36px;
+            margin-top: 5px;
+            height: 36px;
+            display: inline-block;;
+        }
+
+        .eraser_selected i.rubber {
+            background: url("../images/main_icon_rubber_h.png");
+            background-size: 36px;
+        }
+
+        .pen_color_selected {
+            background: rgba(100, 100, 100, 0.5) !important;
+        }
+
+        .pen_color_red.pen_color_selected i.drawboardred {
+            background: url("../images/main_icon_drawboardred_h.png");
+            background-size: 36px;
+        }
+
+        .pen_color_black.pen_color_selected i.drawboardblack {
+            background: url("../images/main_icon_drawboardblack_h.png");
+            background-size: 36px;
+        }
+
+        .draw_main1 {
+            z-index: -1
+        }
+
     </style>
 </head>
 
 <body>
- <div  class="draw_main" id="draw_container">  
+<div class="draw_main" id="draw_container">
     <div class="draw_main1">
-	        <iframe id="board_iframe" name="board_iframe" style=" position: absolute;">
-	   
-	        </iframe>
-	   
-	        <div id="zhenzhao" style="position: absolute; width:1140px; height:666px"></div>
-	      
-		    <iframe name="ppt_iframe" id="ppt_iframe" style="overflow: hidden;" onload="hideToolbar();">
-		     
-		    </iframe>
+        <iframe id="board_iframe" name="board_iframe" style=" position: absolute;">
+
+        </iframe>
+
+        <div id="zhenzhao" style="position: absolute; width:1140px; height:666px"></div>
+
+        <iframe name="ppt_iframe" id="ppt_iframe" style="overflow: hidden;" onload="hideToolbar();">
+
+        </iframe>
     </div>
-     <div id="control_bar" class="draw_page" style="display: none;">
-         <span id="ppt_page" class="page_number2" style="display: none;"></span>
-         <span id="ppt_control_span" class="ppt_control_span" style="display: none;">
+    <div id="control_bar" class="draw_page" style="display: none;">
+        <span id="ppt_page" class="page_number2" style="display: none;"></span>
+        <span id="ppt_control_span" class="ppt_control_span" style="display: none;">
              <span class="ppt_control_vertical">
-                <a href="javascript:clearScreen();"  class="draw_bar" id="clear_screen"><i class="clean"></i></a>
-                <span id="eraser" class="draw_bar draw_bar_left" onclick="javascript:toggleEraser();"><i class="rubber"></i></span>
-		        <span class="draw_bar pen_color_red pen_color_selected draw_bar_left"  onclick="onPenColorChanged(this);"><i class="drawboardred"></i></span>
-		        <span class="draw_bar pen_color_black draw_bar_left"  onclick="onPenColorChanged(this);"><i class="drawboardblack"></i></span> 
+                 <span onclick="AddAttachmentChange('block');">音乐</span>
+                <a href="javascript:clearScreen();" class="draw_bar" id="clear_screen"><i class="clean"></i></a>
+                <span id="eraser" class="draw_bar draw_bar_left" onclick="javascript:toggleEraser();"><i
+                        class="rubber"></i></span>
+		        <span class="draw_bar pen_color_red pen_color_selected draw_bar_left"
+                      onclick="onPenColorChanged(this);"><i class="drawboardred"></i></span>
+		        <span class="draw_bar pen_color_black draw_bar_left" onclick="onPenColorChanged(this);"><i
+                        class="drawboardblack"></i></span>
              </span>
              <span class="ppt_control_across center_middle">
-                 <a href="javascript:pptPreClick();" id="pre_page" class="draw_bar_pageleft" style="margin-right:20px"></a>
-		         <a href="javascript:pptNextClick();" id="next_page" class="draw_bar_pageright" style="margin-left:20px"></a>		
+                 <a href="javascript:pptPreClick();" id="pre_page" class="draw_bar_pageleft"
+                    style="margin-right:20px"></a>
+		         <a href="javascript:pptNextClick();" id="next_page" class="draw_bar_pageright"
+                    style="margin-left:20px"></a>
              </span>
 	     </span>
-     </div>
+
+    </div>
+
     <div id="can_shouxie_tip" style="display: none;">您已拥有手写权限</div>
     <div id="can_not_shouxie_tip" style="display: none;">您没有手写权限</div>
- </div>
 
- 
+</div>
+
+<!--蚁盘 start -->
+<div class="attachment_box" id="attachment_box">
+    <div class="navigate">
+        <div class="nav text-hidden" id="nav"></div>
+        <div onclick="clickMask()" class="nav-back-show"></div>
+    </div>
+    <div class="attachment-cont">
+        <div class="attachment_list" id="attachment_list"></div>
+        <div onclick="onEndedPage(event)" id="attachment_bottom" class='attachment_bottom'>加载更多</div>
+    </div>
+</div>
+<div class="mask" id="mask" onclick="clickMask()"></div>
+<!--蚁盘 end -->
+
 </body>
+<script type="application/javascript" src="../schoolClass/js/service.js"></script>
+<script src="./main_app.js"></script>
 
- <script type="text/javascript">
- 
-   String.prototype.endWith=function(str){     
-	   var reg=new RegExp(str+"$");     
-	   return reg.test(this);        
-   };
-   var vid = getQueryString("vid");
-   var userId = getQueryString("userId");
-   var role = getQueryString("role");
-   var ppt = getQueryString("ppt");
-   
-   var paths = ppt.split(",");
-   if(paths.length == 1){
-	   if(ppt.toLowerCase().endWith(".pdf")){
-		   $("#ppt_iframe").attr("src","pdf_image_show.html?pdf="+ppt);
-	   }else if(ppt.toLowerCase().endWith(".html")){
-		   $("#ppt_iframe").attr("src",ppt);
-	   }else if(ppt.toLowerCase().endWith(".png")){
-		   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
-	   }else if(ppt.toLowerCase().endWith(".jpg")){
-		   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
-	   }else if(ppt.toLowerCase().endWith(".gif")){
-		   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
-	   }else if(ppt.toLowerCase().endWith(".webp")){
-		   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
-	   }
-   }else if(paths.length > 1){
-	   $("#ppt_iframe").attr("src","images_show.html?images="+ppt);
-   }
-   
-   $("#board_iframe").attr("src","index.html?roomid="+vid);
-   
-   roleUpdated();
- 
-   $(document).ready(function(){
-	   initWs();
-   });
-   
-   function roleUpdated(){
-	   if(role == "manager"){
-		   $("#zhenzhao").hide();
-		   $("#ppt_control_span").show();
-		   window.parent.showProgressBar(true);
-		   $("#ppt_page").hide();
-	   }else if(role == "subManager"){
-		   $("#zhenzhao").hide();
-		   $("#ppt_control_span").hide();
-		   $("#control_bar").hide();
-		   $("#ppt_page").show();
-	   }else{
-		   $("#control_bar").hide();
-		   $("#zhenzhao").show();
-		   $("#ppt_control_span").hide();
-		   $("#ppt_page").show();
-	   }
-   }
-   
-   function toggleEraser(){
-	   var selected = $("#eraser").hasClass("eraser_selected");
-	   var frame = window.frames["board_iframe"].window;
-	   if(selected){
-		   $("#eraser").removeClass("eraser_selected");
-		   frame.setDrawType(0);
-	   }else{
-		   $("#eraser").addClass("eraser_selected");
-		   frame.setDrawType(1);
-	   }
-   }
-   
-   function onPenColorChanged(element){
-	   $(".pen_color_selected").removeClass("pen_color_selected");
-	   $(element).addClass("pen_color_selected");
-	   if($(element).hasClass("pen_color_red")){
-		   window.frames["board_iframe"].window.setColor(2);
-	   }else if($(element).hasClass("pen_color_black")){
-		   window.frames["board_iframe"].window.setColor(0);
-	   }
-   }
-   
-   function getQueryString(name){
-		var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		var r = window.location.search.substr(1).match(reg);
-		if(r!=null) {
-			return unescape(r[2]);
-		}
-		return null;
-	}
-   
-   function hideToolbar(){
-	   reSetScalePercent();
-	   window.frames["ppt_iframe"].window.showToobar(false);
-	   pptCheckPage(1);
-   }
-   
-   function reSetScalePercent(){
-	   var clientHeight = document.body.clientHeight; 
-	   var clientWidth = document.body.clientWidth; 
-	   var scaleWidth  = 0;
-	   var scaleHeight = 0;
-	   scaleHeight = clientHeight/$("#draw_container").height();
-	   scaleWidth = clientWidth/$("#draw_container").width();
-	   if(scaleWidth > scaleHeight){
-		   $("body").css("transform","scale("+scaleHeight+")");
-	   }else{
-		   $("body").css("transform","scale("+scaleWidth+")");
-	   }
-   }
-   
-   function pptPre(){
-	   clearScreen();
-	   window.frames["ppt_iframe"].window.pre();
-	   showPPTPage();
-   }
-   function pptNext(){
-	   clearScreen();
-	   window.frames["ppt_iframe"].window.next();
-	   showPPTPage();
-   }
-   
-   function clearScreen(){
-	   window.frames["board_iframe"].window.savePage(true);
-   }
-   
-   function pptCheckPage(currentPage){
-  	   window.frames["ppt_iframe"].window.checkSlide(currentPage);
-  	   showPPTPage();
-   }
-   
-   function pptCheckPageClick(currentPage){
-	   setTimeout(function(){
-		   pptCheckPage(currentPage);
-		   var protocal = eval('(' + "{'command':'board_ppt_check','data':{'userid':"+userId+",'roomid':"+vid+",'currentPage':"+currentPage+",'role':'"+role+"'}}" + ')');
-		   connection.send(protocal);
-	   }, 100);
-   }
-   
-   function pptPreClick(){
-	   pptPre();
-	   var protocal = eval('(' + "{'command':'board_ppt_pre','data':{'userid':"+userId+",'roomid':"+vid+"}}" + ')');
-	   connection.send(protocal);
-	   pptCheckPageClick(window.frames["ppt_iframe"].window.currentSlide());
-   }
-   function pptNextClick(){
-	   pptNext();
-	   var protocal = eval('(' + "{'command':'board_ppt_next','data':{'userid':"+userId+",'roomid':"+vid+"}}" + ')');
-	   connection.send(protocal);
-	   pptCheckPageClick(window.frames["ppt_iframe"].window.currentSlide());
-   }
-   function showPPTPage(){
-	  var current = window.frames["ppt_iframe"].window.currentSlide();
-	  var total =  window.frames["ppt_iframe"].window.totleSlide();
-	  if(typeof(current) == 'undefined'){
-		  current = 1;
-	  }
-	  if(typeof(total) == 'undefined'){
-		  total = 16;
-	  }
-	  $("#ppt_page").text(current+"/"+total);
-	  window.parent.setMaxProgress(total-1);
-	  window.parent.setCurrentProgress(current-1);
-   }
-   
-   var connection = new SimpleConnection("www.maaee.com");
-   function initWs(){
-	     connection.clazzWsListener = {onError:function(errorMsg){
-		   	 //显示error并且回退页面
-		   	 alert(errorMsg);
-	     },onWarn:function(warnMsg){
-	   	     //显示warning
-	   	     alert(warnMsg);
-	     },onMessage:function(info){
-		   	 var command = info.command;
-		   	 if(command == "board_ppt_pre"){
-		   		 var roomid = info.data.roomid;
-		   		 var userid = info.data.userid;
-		   		 if(roomid == vid && userid != userId){
-		   			pptPre();
-		   		 }
-		   	 }else if(command == "board_ppt_next"){
-		   		 var roomid = info.data.roomid;
-		   		 var userid = info.data.userid;
-		   		 if(roomid == vid && userid != userId){
-		   			 pptNext();
-		   		 }
-		   	 }else if(command == "board_ppt_check"){
-		   		 var roomid = info.data.roomid;
-		   		 var userid = info.data.userid;
-		   		 var currentPage = info.data.currentPage;
-		   		 if(roomid == vid && userid != userId){
-		   			pptCheckPage(currentPage);
-		   		 }
-		   	 }else if(command == "changeUserDrawboardRole"){
-		   		 var roomid = info.data.roomid;
-		   		 var userid = info.data.userid;
-		   		 if(roomid == vid && userid == userId){
-			   		var rl = info.data.role;
-			   		role = rl;
-			   		roleUpdated();
-			   	   if(role == "manager"){
-			   		  layer.msg($("#can_shouxie_tip").text());
-			 	   }else if(role == "subManager"){
-			 		  layer.msg($("#can_shouxie_tip").text());
-			 	   }else{
-			 		  layer.msg($("#can_not_shouxie_tip").text());
-			 	   }
-			   	 }
-		   	 }
-	     }};
-	     connection.connect();
-   }
-   
-   function addScale(){
-	   try{
-		   var tran = $("body").css("transform");
-		   var bili = tran.split(",")[3]; 
-		   var newBili = Number(bili)+0.01;
-		   console.log(newBili);
-		   $("body").css("transform","scale("+newBili+")");
-	   }catch(e){}
-   }
-   
-   function reduceScale(){
-	   try{
-		   var tran = $("body").css("transform");
-		   var bili = tran.split(",")[3]; 
-		   var newBili = Number(bili)-0.01;
-		   console.log(newBili);
-		   $("body").css("transform","scale("+newBili+")");
-	   }catch(e){}
-   }
+<script type="text/javascript">
 
-   function isPC(){    
-        var userAgentInfo = navigator.userAgent;  
-        var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");    
-        var flag = true;    
-        for (var v = 0; v < Agents.length; v++) {    
-            if (userAgentInfo.indexOf(Agents[v]) > 0) { flag = false; break; }    
-        }    
-        return flag;    
-   }
-   
-   window.onresize = function(){
-	    reSetScalePercent();  
-   };
- </script>
+    String.prototype.endWith = function (str) {
+        var reg = new RegExp(str + "$");
+        return reg.test(this);
+    };
+    var vid = getQueryString("vid");
+    var userId = getQueryString("userId");
+    var role = getQueryString("role");
+    var ppt = getQueryString("ppt");
+
+    var paths = ppt.split(",");
+    if (paths.length == 1) {
+        if (ppt.toLowerCase().endWith(".pdf")) {
+            $("#ppt_iframe").attr("src", "pdf_image_show.html?pdf=" + ppt);
+        } else if (ppt.toLowerCase().endWith(".html")) {
+            $("#ppt_iframe").attr("src", ppt);
+        } else if (ppt.toLowerCase().endWith(".png")) {
+            $("#ppt_iframe").attr("src", "images_show.html?images=" + ppt);
+        } else if (ppt.toLowerCase().endWith(".jpg")) {
+            $("#ppt_iframe").attr("src", "images_show.html?images=" + ppt);
+        } else if (ppt.toLowerCase().endWith(".gif")) {
+            $("#ppt_iframe").attr("src", "images_show.html?images=" + ppt);
+        } else if (ppt.toLowerCase().endWith(".webp")) {
+            $("#ppt_iframe").attr("src", "images_show.html?images=" + ppt);
+        }
+    } else if (paths.length > 1) {
+        $("#ppt_iframe").attr("src", "images_show.html?images=" + ppt);
+    }
+
+    $("#board_iframe").attr("src", "index.html?roomid=" + vid);
+
+    roleUpdated();
+
+    $(document).ready(function () {
+        initWs();
+    });
+
+    function roleUpdated() {
+        if (role == "manager") {
+            $("#zhenzhao").hide();
+            $("#ppt_control_span").show();
+            window.parent.showProgressBar(true);
+            $("#ppt_page").hide();
+        } else if (role == "subManager") {
+            $("#zhenzhao").hide();
+            $("#ppt_control_span").hide();
+            $("#control_bar").hide();
+            $("#ppt_page").show();
+        } else {
+            $("#control_bar").hide();
+            $("#zhenzhao").show();
+            $("#ppt_control_span").hide();
+            $("#ppt_page").show();
+        }
+    }
+
+    function toggleEraser() {
+        var selected = $("#eraser").hasClass("eraser_selected");
+        var frame = window.frames["board_iframe"].window;
+        if (selected) {
+            $("#eraser").removeClass("eraser_selected");
+            frame.setDrawType(0);
+        } else {
+            $("#eraser").addClass("eraser_selected");
+            frame.setDrawType(1);
+        }
+    }
+
+    function onPenColorChanged(element) {
+        $(".pen_color_selected").removeClass("pen_color_selected");
+        $(element).addClass("pen_color_selected");
+        if ($(element).hasClass("pen_color_red")) {
+            window.frames["board_iframe"].window.setColor(2);
+        } else if ($(element).hasClass("pen_color_black")) {
+            window.frames["board_iframe"].window.setColor(0);
+        }
+    }
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+
+    function hideToolbar() {
+        reSetScalePercent();
+        window.frames["ppt_iframe"].window.showToobar(false);
+        pptCheckPage(1);
+    }
+
+    function reSetScalePercent() {
+        var clientHeight = document.body.clientHeight;
+        var clientWidth = document.body.clientWidth;
+        var scaleWidth = 0;
+        var scaleHeight = 0;
+        scaleHeight = clientHeight / $("#draw_container").height();
+        scaleWidth = clientWidth / $("#draw_container").width();
+        if (scaleWidth > scaleHeight) {
+            $("body").css("transform", "scale(" + scaleHeight + ")");
+        } else {
+            $("body").css("transform", "scale(" + scaleWidth + ")");
+        }
+    }
+
+    function pptPre() {
+        clearScreen();
+        window.frames["ppt_iframe"].window.pre();
+        showPPTPage();
+    }
+
+    function pptNext() {
+        clearScreen();
+        window.frames["ppt_iframe"].window.next();
+        showPPTPage();
+    }
+
+    function clearScreen() {
+        window.frames["board_iframe"].window.savePage(true);
+    }
+
+    function pptCheckPage(currentPage) {
+        window.frames["ppt_iframe"].window.checkSlide(currentPage);
+        showPPTPage();
+    }
+
+    function pptCheckPageClick(currentPage) {
+        setTimeout(function () {
+            pptCheckPage(currentPage);
+            var protocal = eval('(' + "{'command':'board_ppt_check','data':{'userid':" + userId + ",'roomid':" + vid + ",'currentPage':" + currentPage + ",'role':'" + role + "'}}" + ')');
+            connection.send(protocal);
+        }, 100);
+    }
+
+    function pptPreClick() {
+        pptPre();
+        var protocal = eval('(' + "{'command':'board_ppt_pre','data':{'userid':" + userId + ",'roomid':" + vid + "}}" + ')');
+        connection.send(protocal);
+        pptCheckPageClick(window.frames["ppt_iframe"].window.currentSlide());
+    }
+
+    function pptNextClick() {
+        pptNext();
+        var protocal = eval('(' + "{'command':'board_ppt_next','data':{'userid':" + userId + ",'roomid':" + vid + "}}" + ')');
+        connection.send(protocal);
+        pptCheckPageClick(window.frames["ppt_iframe"].window.currentSlide());
+    }
+
+    function showPPTPage() {
+        var current = window.frames["ppt_iframe"].window.currentSlide();
+        var total = window.frames["ppt_iframe"].window.totleSlide();
+        if (typeof (current) == 'undefined') {
+            current = 1;
+        }
+        if (typeof (total) == 'undefined') {
+            total = 16;
+        }
+        $("#ppt_page").text(current + "/" + total);
+        window.parent.setMaxProgress(total - 1);
+        window.parent.setCurrentProgress(current - 1);
+    }
+
+    var connection = new SimpleConnection("www.maaee.com");
+
+    function initWs() {
+        connection.clazzWsListener = {
+            onError: function (errorMsg) {
+                //显示error并且回退页面
+                alert(errorMsg);
+            }, onWarn: function (warnMsg) {
+                //显示warning
+                alert(warnMsg);
+            }, onMessage: function (info) {
+                var command = info.command;
+                if (command == "board_ppt_pre") {
+                    var roomid = info.data.roomid;
+                    var userid = info.data.userid;
+                    if (roomid == vid && userid != userId) {
+                        pptPre();
+                    }
+                } else if (command == "board_ppt_next") {
+                    var roomid = info.data.roomid;
+                    var userid = info.data.userid;
+                    if (roomid == vid && userid != userId) {
+                        pptNext();
+                    }
+                } else if (command == "board_ppt_check") {
+                    var roomid = info.data.roomid;
+                    var userid = info.data.userid;
+                    var currentPage = info.data.currentPage;
+                    if (roomid == vid && userid != userId) {
+                        pptCheckPage(currentPage);
+                    }
+                } else if (command == "changeUserDrawboardRole") {
+                    var roomid = info.data.roomid;
+                    var userid = info.data.userid;
+                    if (roomid == vid && userid == userId) {
+                        var rl = info.data.role;
+                        role = rl;
+                        roleUpdated();
+                        if (role == "manager") {
+                            layer.msg($("#can_shouxie_tip").text());
+                        } else if (role == "subManager") {
+                            layer.msg($("#can_shouxie_tip").text());
+                        } else {
+                            layer.msg($("#can_not_shouxie_tip").text());
+                        }
+                    }
+                }
+            }
+        };
+        connection.connect();
+    }
+
+    function addScale() {
+        try {
+            var tran = $("body").css("transform");
+            var bili = tran.split(",")[3];
+            var newBili = Number(bili) + 0.01;
+            console.log(newBili);
+            $("body").css("transform", "scale(" + newBili + ")");
+        } catch (e) {
+        }
+    }
+
+    function reduceScale() {
+        try {
+            var tran = $("body").css("transform");
+            var bili = tran.split(",")[3];
+            var newBili = Number(bili) - 0.01;
+            console.log(newBili);
+            $("body").css("transform", "scale(" + newBili + ")");
+        } catch (e) {
+        }
+    }
+
+    function isPC() {
+        var userAgentInfo = navigator.userAgent;
+        var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+        var flag = true;
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    window.onresize = function () {
+        reSetScalePercent();
+    };
+</script>
 </html>

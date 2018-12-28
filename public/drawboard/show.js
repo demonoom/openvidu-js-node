@@ -1,5 +1,3 @@
-
-
 var userId = Service.getQueryString("userId");
 console.log(userId, 'userId');
 var defaultPageNo = 1;
@@ -9,18 +7,12 @@ var parentArray = [{
     id: -1,
     name: '蚁盘'
 }];
-$(function(){
-    filterCloudFile();
-});
+filterCloudFile();
+// //点击添加按钮
+// function showAddAttachment() {
+//     AddAttachmentChange('block');
+// }
 
-
-//监听消息反馈
-window.addEventListener('message',function(event) {
-    if(event.data.name == "openAnt"){
-        //打开蚁盘
-        AddAttachmentChange('block');
-    }
-},false);
 
 //改变蚁盘元素显示状态
 function AddAttachmentChange(style) {
@@ -36,8 +28,8 @@ function AddAttachmentChange(style) {
 //点击遮罩
 function clickMask() {
     AddAttachmentChange('none');
-    $('.topic_box').css({ display: 'none' });
-    $('.topic_box').css({ transform: 'translate(0%,100%)' });
+    $('.topic_box').css({display: 'none'});
+    $('.topic_box').css({transform: 'translate(0%,100%)'});
 }
 
 //加载更多
@@ -50,7 +42,8 @@ function onEndedPage(e) {
 }
 
 /*
-* 根据userId获取蚁盘文件 */
+      * 根据userId获取蚁盘文件
+       */
 function filterCloudFile(clearFlag) {
     if (clearFlag) {
         HTML_LIST = '';
@@ -89,6 +82,7 @@ function filterCloudFile(clearFlag) {
 
                     } else {
                         navHTML += "<span onclick=clickNav(" + parentArray[k].id + ",\"" + parentArray[k].name + "\") > > " + parentArray[k].name + "</span>";
+
                     }
                 }
                 attachment_bottom.innerText = res.response.length <= 0 ? "无更多文件" : "点击加载更多";
@@ -108,33 +102,30 @@ function filterCloudFile(clearFlag) {
    点击蚁盘文件触发事件
    */
 function clickFile(fileType, parent, name, isPush, suffix, htmlPath, pdfPath) {
-    // console.log(fileType, 'fileType');
-    // console.log(parent, 'parent');
-    // console.log(name, 'name');
-    // console.log(isPush, 'isPush');
-    // console.log(suffix, 'suffix');
-    // console.log(htmlPath, 'htmlPath');
-    // console.log(pdfPath, 'pdfPath');
-    // var path = suffix == 'ppt' || suffix == "pptx" ? htmlPath : pdfPath;
+    console.log(fileType, 'fileType');
+    console.log(parent, 'parent');
+    console.log(name, 'name');
+    console.log(isPush, 'isPush');
+    console.log(suffix, 'suffix');
+    console.log(htmlPath, 'htmlPath');
+    console.log(pdfPath, 'pdfPath');
+    var path = suffix == 'ppt' || suffix == "pptx" ? htmlPath : pdfPath;
     name = unescape(name);
     if (fileType == 0) { //文件点击事件
-        // console.log(name, 'pdfPath');
-        console.log(htmlPath,'htmlPath');
-
-        //                 if(path && path != 'null'){
-        //                     var iframe = document.getElementById("ifr");
-        //                     var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");
-        //                     newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
-        //                     iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+newHTMLPath+"");
-        //                     var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
-        //                     //推送通知
-        //                     simpleMS.send(protocal);
-        //                     AddAttachmentChange('none');
-        //                     document.getElementById('empty').style.display="none";
-        //                     document.getElementById('iframeBox').style.display="block";
-        //                 }else{
-        //                    console.log("path为空");
-        //                 }
+//                 if(path && path != 'null'){
+//                     var iframe = document.getElementById("ifr");
+//                     var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");
+//                     newHTMLPath = newHTMLPath.replace("http://60.205.111.227","https://www.maaee.com");
+//                     iframe.setAttribute("src","https://www.maaee.com/Excoord_For_Education/drawboard/main_app.html?vid="+vid+"&userId="+randomNumber+"&role=manager&ppt="+newHTMLPath+"");
+//                     var protocal = eval('(' + "{'command':'assistantPlayKejian','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
+//                     //推送通知
+//                     simpleMS.send(protocal);
+//                     AddAttachmentChange('none');
+//                     document.getElementById('empty').style.display="none";
+//                     document.getElementById('iframeBox').style.display="block";
+//                 }else{
+//                    console.log("path为空");
+//                 }
     } else {
         parentId = parent;
         if (isPush) {

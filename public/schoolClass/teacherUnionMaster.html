@@ -1984,7 +1984,7 @@ video{
   function loadVideoSourceSelectPage(){
       var browser = platform.name;
       if(browser.indexOf("Electron") != -1){
-          $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid+"&teacherId="+userId);
+          $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid+"&teacherId="+userId+"&publish=true&from=master");
       }
   }
 

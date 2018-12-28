@@ -34,7 +34,7 @@
         <div class="menu">
             <span onclick="addIpCamera();" class="menu-btn"><i class="videoSource-menu2"></i>网络摄像头</span>
             <span onclick="addLocalCamera()" class="menu-btn"><i class="videoSource-menu1"></i>本机摄像头</span>
-            <span onclick="addScreen()" class="menu-btn"><i class="videoSource-menu4"></i>添加桌面</span>
+            <span onclick="addScreen()" style="display: none;" class="menu-btn" id="screen_menu"><i class="videoSource-menu4"></i>添加桌面</span>
         </div>
 
         <div id="video_sources" class="videoSource_content">
@@ -59,8 +59,14 @@
     var jsmpegPlayer;
     var ipc = window.top.require('electron').ipcRenderer;
     var rtspPortMap = new HashMap();
+    var from = Service.getQueryString("from");
      
     function addLocalCamera() {
+        var childrenSize = $("#video_sources").children().length;
+        if(from == "slaver" &&childrenSize > 1){
+            layer.msg("请先移除已添加视频源");
+            return;
+        }
         navigator.mediaDevices.enumerateDevices()
             .then(function (devices) {
                 var audios = new Array();
@@ -104,6 +110,11 @@
         var browser = platform.name;
         if(browser.indexOf("Electron") == -1){
             layer.msg("请在pc客户端中使用此功能~~");
+            return;
+        }
+        var childrenSize = $("#video_sources").children().length;
+        if(from == "slaver" &&childrenSize > 1){
+            layer.msg("请先移除已添加视频源");
             return;
         }
         var html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
@@ -249,13 +260,14 @@
     }
 
     function innerUseIpCamera(nick,rtspUrl){
+        var publish = Service.getQueryString("publish");
         var port = rtspPortMap.get(rtspUrl);
         if(port == null || port == undefined || port == ""){
             defaultPort = defaultPort + 1;
             port = defaultPort;
         }
-        var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
+        var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from;
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>关闭视频源</span></div>");
     }
 
     function addUsingIpCameraInfo(userName,rtspUrl){
@@ -263,12 +275,12 @@
         device.type = "ipCamera";
         device.rtspUrl = ""+rtspUrl;
         device.userName = userName;
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
         if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
     }
 
     function preView() {
@@ -306,8 +318,9 @@
     }
 
     function innerUseUsbCamera(videoDeviceId,audioDeviceId,nick){
-        var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
+        var publish = Service.getQueryString("publish");
+        var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick+"&publish="+publish+"&userId="+teacherId+"&from="+from;
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>关闭视频源</span></div>");
     }
 
     function deleteVideoSource(span) {
@@ -324,15 +337,20 @@
         device.videoDeviceId = ""+videoDeviceId;
         device.audioDeviceId = ""+audioDeviceId;
         device.userName = userName;
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
         if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
     }
 
     function addScreen(){
+        var childrenSize = $("#video_sources").children().length;
+        if(from == "slaver" &&childrenSize > 1){
+            layer.msg("请先移除已添加视频源");
+            return;
+        }
         var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
         layer.open({
             type: 1,
@@ -357,19 +375,20 @@
     }
 
     function innerUseScreenInclass(nick){
-        var src = "screenVideoInClass.html?vid=" + vid + "&userName=" + nick;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开房间</span></div>");
+        var publish = Service.getQueryString("publish");
+        var src = "screenVideoInClass.html?vid=" + vid + "&userName=" + nick+"&publish="+publish+"&userId="+teacherId+"&from="+from;
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>关闭视频源</span></div>");
     }
 
     function addUsingScreenInfo(){
         var device = {};
         device.type = "screen";
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
         if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
     }
 
     function screenVideoPreview(){
@@ -402,7 +421,11 @@
     }
 
     function init(){
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        var from = Service.getQueryString("from");
+        if(from == "master"){
+            $("#screen_menu").show();
+        }
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
         if(savedList){
             savedList.forEach(function(device){
                 var type = device.type;
@@ -413,7 +436,6 @@
                 }else if(type == "screen"){
                     innerUseScreenInclass("桌面");
                 }
-
             });
         }
     }
