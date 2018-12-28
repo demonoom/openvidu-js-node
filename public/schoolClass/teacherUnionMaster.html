@@ -636,6 +636,10 @@ video{
      $("#ppt_frame").attr("src",url);
 
      if(sendCommand){
+         console.log('发送')
+         var protocal = eval('(' + "{'command':'assistantPlayKejianInWindow','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
+         //推送通知
+         simpleConn.send(protocal);
     	 var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'"+newHTMLPath+"'}}" + ')');
     	 connection.send(protocal);
     	 //让新版的学生端显示ppt
@@ -656,6 +660,9 @@ video{
 	     $("#ppt_frame").attr("src",url);
 
 	     if(sendCommand){
+	         var protocal = eval('(' + "{'command':'assistantPlayKejianInWindow','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
+                      //推送通知
+             simpleConn.send(protocal);
 	    	 var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'"+newHTMLPath+"'}}" + ')');
 	    	 connection.send(protocal);
 	    	 //让新版的学生端显示ppt
@@ -1984,7 +1991,7 @@ video{
   function loadVideoSourceSelectPage(){
       var browser = platform.name;
       if(browser.indexOf("Electron") != -1){
-          $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid+"&teacherId="+userId);
+          $("#videoSourceSelect_container").find("iframe").attr("src","videoSourceSelect.html?vid="+vid+"&teacherId="+userId+"&publish=true&from=master");
       }
   }
 

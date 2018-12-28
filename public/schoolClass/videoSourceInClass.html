@@ -25,8 +25,10 @@
 </head>
 <body>
 
- <video width="230px" height="127px" autoplay class="preview_video" id="preview_video" muted></video>
-
+ <div class="preview_video-cont">
+     <video width="230px" height="127px" autoplay class="preview_video" id="preview_video" muted></video>
+     <span class="preview_videoName til_hidden" id="video_name">前置摄像头</span>
+ </div>
 </body>
 
 <script type="text/javascript">
@@ -37,9 +39,28 @@
     var userName = Service.getQueryString("userName");
     var videoDeviceId = Service.getQueryString("videoDeviceId");
     var audioDeviceId = Service.getQueryString("audioDeviceId");
+    var from = Service.getQueryString("from");
+    var userId = Service.getQueryString("userId");
+    userId = from=="master"?random(-10000000,-20000000):userId;
 
     $(document).ready(function(){
-        joinRoom();
+        $("#video_name").text(userName);
+        var publish = Service.getQueryString("publish");
+        if(publish == "true"){
+            joinRoom();
+        }else{
+            var audioSource = audioDeviceId;
+            var videoSource = videoDeviceId;
+            var constraints = {
+                audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
+                video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+            };
+            navigator.mediaDevices.getUserMedia(constraints).
+            then(function(stream){
+                $("#preview_video")[0].srcObject = stream;
+            }).catch(function(e){
+            });
+        }
     });
 
     function publish(){
@@ -71,7 +92,7 @@
     }
 
     function removeUsbCameraInfo(){
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList"));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
 
         if(savedList){
             var tobeDeleteIndex = -1;
@@ -85,7 +106,7 @@
             if(tobeDeleteIndex >= 0){
                 savedList.splice(tobeDeleteIndex,1);
             }
-            localStorage.setItem("usingDeviceList",JSON.stringify(savedList));
+            localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
         }
     }
 
@@ -96,7 +117,7 @@
     function joinRoom(){
         client = new ExRTC();
 
-        client.join(vid+"", random(-10000000,-20000000),userName, function() {
+        client.join(vid+"", userId,userName, function() {
             publish();
         }, function() {
             console.log("Join channel failed");

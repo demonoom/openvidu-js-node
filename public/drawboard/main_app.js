@@ -1,3 +1,5 @@
+
+
 var userId = Service.getQueryString("userId");
 console.log(userId, 'userId');
 var defaultPageNo = 1;
@@ -7,12 +9,18 @@ var parentArray = [{
     id: -1,
     name: '蚁盘'
 }];
-filterCloudFile();
-// //点击添加按钮
-// function showAddAttachment() {
-//     AddAttachmentChange('block');
-// }
+$(function(){
+    filterCloudFile();
+});
 
+
+//监听消息反馈
+window.addEventListener('message',function(event) {
+    if(event.data.name == "openAnt"){
+        //打开蚁盘
+        AddAttachmentChange('block');
+    }
+},false);
 
 //改变蚁盘元素显示状态
 function AddAttachmentChange(style) {
@@ -42,8 +50,7 @@ function onEndedPage(e) {
 }
 
 /*
-      * 根据userId获取蚁盘文件
-       */
+* 根据userId获取蚁盘文件 */
 function filterCloudFile(clearFlag) {
     if (clearFlag) {
         HTML_LIST = '';
@@ -82,7 +89,6 @@ function filterCloudFile(clearFlag) {
 
                     } else {
                         navHTML += "<span onclick=clickNav(" + parentArray[k].id + ",\"" + parentArray[k].name + "\") > > " + parentArray[k].name + "</span>";
-
                     }
                 }
                 attachment_bottom.innerText = res.response.length <= 0 ? "无更多文件" : "点击加载更多";
@@ -102,16 +108,19 @@ function filterCloudFile(clearFlag) {
    点击蚁盘文件触发事件
    */
 function clickFile(fileType, parent, name, isPush, suffix, htmlPath, pdfPath) {
-    console.log(fileType, 'fileType');
-    console.log(parent, 'parent');
-    console.log(name, 'name');
-    console.log(isPush, 'isPush');
-    console.log(suffix, 'suffix');
-    console.log(htmlPath, 'htmlPath');
-    console.log(pdfPath, 'pdfPath');
-    var path = suffix == 'ppt' || suffix == "pptx" ? htmlPath : pdfPath;
+    // console.log(fileType, 'fileType');
+    // console.log(parent, 'parent');
+    // console.log(name, 'name');
+    // console.log(isPush, 'isPush');
+    // console.log(suffix, 'suffix');
+    // console.log(htmlPath, 'htmlPath');
+    // console.log(pdfPath, 'pdfPath');
+    // var path = suffix == 'ppt' || suffix == "pptx" ? htmlPath : pdfPath;
     name = unescape(name);
     if (fileType == 0) { //文件点击事件
+        // console.log(name, 'pdfPath');
+        console.log(htmlPath,'htmlPath');
+
         //                 if(path && path != 'null'){
         //                     var iframe = document.getElementById("ifr");
         //                     var newHTMLPath = path.replace("http://60.205.86.217","https://www.maaee.com");

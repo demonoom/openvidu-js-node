@@ -28,6 +28,17 @@
        .draw_main1{
            z-index:-1
        }
+       .courseware-open{
+       position: absolute;
+       width: 100px;
+       height: 100px;
+       top: 50px;
+       left: 50px;
+       background: red;
+       }
+       #chooseMus{
+         transform: translateX(280px);
+       }
     </style>
 </head>
 
@@ -48,6 +59,9 @@
 		         <span class="app_t_line"></span>
 		         <span class="draw_page_app_span pen_color_black"  onclick="onPenColorChanged(this);"><span class="draw_pen_app_img"><img src="../images/app_drawboard_black.png"></span></span>
 		         <span class="app_t_line"></span>
+		         <!-- 选择音乐-->
+		         <span id="chooseMus" class="draw_page_app_span pen_color_black"  onclick="postOpenAnt()"><span class="draw_pen_app_img"><img src="../images/share.png"></span></span>
+
 		     </span>
 	     </span>
     </div>
@@ -62,16 +76,9 @@
 		     
 		    </iframe>
      </div>
-     
      <div id="can_shouxie_tip" style="display: none;">您已拥有手写权限</div>
      <div id="can_not_shouxie_tip" style="display: none;">您没有手写权限</div>
  </div>
-
-
-
-
-
-
 </body>
 
  <script type="text/javascript">
@@ -314,5 +321,11 @@
     window.onresize = function(){
 	    reSetScalePercent();
     };
+
+   //打开蚁盘
+   function postOpenAnt(){
+//       console.log('ｐｏｓｔ出去打开蚁盘');
+       window.parent.postMessage({name:'openAnt'},"*");
+   }
  </script>
 </html>

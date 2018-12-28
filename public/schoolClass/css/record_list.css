@@ -4963,6 +4963,7 @@ br{
 	width: 230px;
 	height: 130px;
 	overflow: hidden;
+	position: relative;
 }
 .videoSource .list-item-video video, .videoSource .list-item-video canvas, .videoSourceInClass-video canvas{
 	object-fit: cover;
@@ -5118,11 +5119,11 @@ br{
 	display: -ms-flexbox;
 	display: -webkit-flex;
 	display: flex;
-	-webkit-justify-content:space-between;
-	justify-content:space-between;
-	-moz-box-pack:space-between;
-	-webkit--moz-box-pack:space-between;
-	box-pack:space-between;
+	-webkit-justify-content:space-around;
+	-moz-box-pack:space-around;
+	-webkit--moz-box-pack:space-around;
+	box-pack:space-around;
+	justify-content:space-around;
 	align-items:center;
 	-webkit-align-items:center;
 	box-align:center;
@@ -5231,6 +5232,23 @@ br{
 	margin-top: 20px;
 	text-align: center;
 	font-size: 14px;
+}
+.preview_video-cont{
+	width: 230px;
+	height: 127px;
+	position: relative;
+	overflow: hidden;
+}
+.preview_videoName{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding: 2px 8px;
+	background: rgba(0,0,0,0.5);
+	color: #fff;
+	font-size: 12px;
+	width: 100%;
+	box-sizing: border-box;
 }
 .preview_video{
 	object-fit: cover;
