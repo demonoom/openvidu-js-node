@@ -68,7 +68,6 @@
         <span id="ppt_page" class="page_number2" style="display: none;"></span>
         <span id="ppt_control_span" class="ppt_control_span" style="display: none;">
              <span class="ppt_control_vertical">
-                 <span onclick="AddAttachmentChange('block');">音乐</span>
                 <a href="javascript:clearScreen();" class="draw_bar" id="clear_screen"><i class="clean"></i></a>
                 <span id="eraser" class="draw_bar draw_bar_left" onclick="javascript:toggleEraser();"><i
                         class="rubber"></i></span>
@@ -83,6 +82,22 @@
 		         <a href="javascript:pptNextClick();" id="next_page" class="draw_bar_pageright"
                     style="margin-left:20px"></a>
              </span>
+            <span class="ppt_control_across center_music">
+                <a class="draw_bar_music" onclick="AddAttachmentChange('block');"></a>
+                <span class="draw_bar_musicVoice text-ellipsis">
+                    <span class="draw_bar_musicPlayIcon"></span>
+                    <span>走进经典，享受阅读走进经典，享受阅读</span>
+                    <span class="draw_bar_musicVoiceIcon"></span>
+                    <span class="draw_bar_musicSound">
+                        <span class="progress">
+                            <span class="progress-bar">
+                                <span class="dragger"></span>
+                            </span>
+                        </span>
+                    </span>
+                    <span class="draw_bar_musicSound-arrow"></span>
+                </span>
+            </span>
 	     </span>
 
     </div>
