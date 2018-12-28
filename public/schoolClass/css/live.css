@@ -1496,7 +1496,7 @@ ul.layui-layer-tabmain li{
     border-radius: 2px 2px 0 0;
 }
 .videoSourceSelect-container-cont{
-    height: calc(100% - 43px);
+    height: calc(100% - 42px);
     overflow-y: auto;
     overflow-x: hidden;
 }

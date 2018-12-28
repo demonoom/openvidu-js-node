@@ -48,6 +48,11 @@
     var from = Service.getQueryString("from");
     var userId = Service.getQueryString("userId");
     userId = from=="master"?random(-10000000,-20000000):userId;
+
+    var audioDeviceId = Service.getQueryString("audioDeviceId");
+
+    audioDeviceId = (audioDeviceId == null || audioDeviceId == undefined || audioDeviceId == "")?false:audioDeviceId;
+
     var ipc = window.top.require('electron').ipcRenderer;
 
     $(document).ready(function(){
@@ -89,7 +94,17 @@
     }
 
     function mixMicStream(tabStream,onfinish){
-        navigator.mediaDevices.getUserMedia({audio:{mandatory:{echoCancellation: true}},video:false}).then(function(micStream) {
+        var micConstraints = {
+            audio: true,
+            video: false
+        };
+        if(audioDeviceId){
+            micConstraints = {
+                audio: {deviceId: audioDeviceId ? {exact: audioDeviceId} : undefined},
+                video: false
+            };
+        };
+        navigator.mediaDevices.getUserMedia(micConstraints).then(function(micStream) {
             var cts = {
                 autoGainControl:true,//自动增益控制
                 noiseSuppression:true,//噪声抑制
