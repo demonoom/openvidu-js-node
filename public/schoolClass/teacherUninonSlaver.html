@@ -182,6 +182,8 @@
 	var i18nLanguage = "zh-CN";
 	var isStudentManager=false;
     var simpleConn;
+    var ipcRenderer = null;
+
 	function loadStrings() {
 		jQuery.i18n.properties({
 		    name:'strings', 
@@ -933,7 +935,17 @@
     function unpublish() {
         var browser = platform.name;
         if(browser.indexOf("Electron") != -1){
+
             $("#videoSourceSelect_container").find("iframe").attr("src","");
+
+            if(ipcRenderer == null){
+                ipcRenderer = window.top.require('electron').ipcRenderer
+			}
+
+            var message = {};
+            message.command = "stopAllRtspStream";
+            ipcRenderer.send('onRendererMessage',message);
+
         }else{
             $("#apply_lianmai").show();
             try{$("#agora_local").parent().remove();}catch(e){}
