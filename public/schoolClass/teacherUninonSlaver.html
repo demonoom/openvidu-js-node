@@ -937,6 +937,7 @@
         if(browser.indexOf("Electron") != -1){
 
             $("#videoSourceSelect_container").find("iframe").attr("src","");
+            hideVideoSourceSelectDialog();
 
             if(ipcRenderer == null){
                 ipcRenderer = window.top.require('electron').ipcRenderer
