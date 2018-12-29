@@ -854,7 +854,20 @@
             if(!savedList){
                 layer.msg("请先设置视频源~~~");
 			}else{
-                loadVideoSourceSelectPage(true);
+
+                hideVideoSourceSelectDialog();
+
+                if(ipcRenderer == null){
+                    ipcRenderer = window.top.require('electron').ipcRenderer
+                }
+
+                var message = {};
+                message.command = "stopAllRtspStream";
+                ipcRenderer.send('onRendererMessage',message);
+                setTimeout(function(){
+                    loadVideoSourceSelectPage(true);
+				},500);
+
 			}
         }else{
             if(audioSourceId != "" && videoSourceId != ""){
