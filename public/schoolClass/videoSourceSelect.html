@@ -19,6 +19,7 @@
     <script type="text/javascript" src="js/socket.io.js"></script>
     <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
     <script type="text/javascript" src="js/ServerRecord.js"></script>
+    <script type="text/javascript" src="js/rtsp_ffmpeg_config.js"></script>
     <style type="text/css">
         .layui-layer {
             box-shadow: 0px 6px 50px rgba(0, 0, 0, 0.4) !important;
@@ -227,6 +228,9 @@
         message.command = "startRtspStream";
         message.streamUrl = rtspUrl;
         message.wsPort = port;
+        message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
+        message.malv = RtspFFMPEGConfig.malv;
+        message.zhenlv = RtspFFMPEGConfig.zhenlv;
         ipc.send('onRendererMessage', message);
 
         var canvas = $("#rtsp_preview_canvas")[0];

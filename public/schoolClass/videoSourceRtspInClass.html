@@ -13,6 +13,8 @@
     <script type="text/javascript" src="js/service.js"></script>
     <script type="application/javascript" src="https://jsmpeg.com/jsmpeg.min.js"></script>
     <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
+    <script type="text/javascript" src="js/rtsp_ffmpeg_config.js"></script>
+
 
     <style type="text/css">
         .layui-layer-shade{
@@ -69,6 +71,9 @@
                 message.command = "startRtspStream";
                 message.streamUrl = rtspUrl;
                 message.wsPort = wsPort;
+                message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
+                message.malv = RtspFFMPEGConfig.malv;
+                message.zhenlv = RtspFFMPEGConfig.zhenlv;
                 ipc.send('onRendererMessage',message);
             }
         }
@@ -83,6 +88,9 @@
             message.command = "startRtspStream";
             message.streamUrl = rtspUrl;
             message.wsPort = wsPort;
+            message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
+            message.malv = RtspFFMPEGConfig.malv;
+            message.zhenlv = RtspFFMPEGConfig.zhenlv;
             ipc.send('onRendererMessage',message);
         }
         localStream = canvas.captureStream(15);
