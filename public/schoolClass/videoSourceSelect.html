@@ -188,17 +188,13 @@
         if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
             return;
         }
-//        var port = rtspPortMap.get(rtspUrl);
-//        if(port == null || port == undefined || port == ""){
-//            defaultPort = defaultPort + 1;
-//            port = defaultPort;
-//        }
-        var message = {};
-        message.command = "stopRtspStream";
-        message.wsPort = defaultPort;
-        ipc.send('onRendererMessage', message);
 
         if (jsmpegPlayer) {
+            var message = {};
+            message.command = "stopRtspStream";
+            message.wsPort = defaultPort;
+            ipc.send('onRendererMessage', message);
+
             try{
                 jsmpegPlayer.destroy();
             }catch (e) {
@@ -206,6 +202,7 @@
             }
             jsmpegPlayer = null;
         }
+
         layer.closeAll();
     }
 
@@ -270,14 +267,7 @@
             layer.msg("请输入此设备在课堂中的昵称~~");
             return;
         }
-        if (jsmpegPlayer) {
-            try{
-                jsmpegPlayer.destroy();
-            }catch (e) {
-                console.log(e);
-            }
-            jsmpegPlayer = null;
-        }
+
         rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
         
         if ($.trim($("#rtsp_url").val()) != "" || $("#rtsp_url").val() != undefined) {
@@ -296,6 +286,19 @@
     }
 
     function innerUseIpCamera(nick,rtspUrl,audioDeviceId){
+        if (jsmpegPlayer) {
+            var message = {};
+            message.command = "stopRtspStream";
+            message.wsPort = defaultPort;
+            ipc.send('onRendererMessage', message);
+
+            try{
+                jsmpegPlayer.destroy();
+            }catch (e) {
+                console.log(e);
+            }
+            jsmpegPlayer = null;
+        }
         var publish = Service.getQueryString("publish");
         var port = rtspPortMap.get(rtspUrl);
         if(port == null || port == undefined || port == ""){
