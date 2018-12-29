@@ -80,8 +80,10 @@
                         return;
                     }
                     if (device.kind == 'audioinput') {
-                        audios.push(device);
-                        audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
+                        if(device.deviceId != "communications"){
+                            audios.push(device);
+                            audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
+                        }
                     } else if (device.kind == 'videoinput') {
                         videos.push(device);
                         videoHtml = videoHtml + "<label class='right'><input class='a-radio' name='videoinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
@@ -164,14 +166,15 @@
         var audioHtml = "<span class='left'>音&nbsp&nbsp&nbsp&nbsp&nbsp频\n</span><div class='right-item' style='margin-left: 1px'>";
         navigator.mediaDevices.enumerateDevices()
             .then(function (devices) {
-
                 devices.forEach(function (device) {
                     if (device.deviceId == 'default') {
                         return;
                     }
                     if (device.kind == 'audioinput') {
-                        audios.push(device);
-                        audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
+                        if(device.deviceId != "communications"){
+                            audios.push(device);
+                            audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
+                        }
                     }
                     console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
                 });
