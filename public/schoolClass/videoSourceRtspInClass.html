@@ -93,7 +93,7 @@
             message.zhenlv = RtspFFMPEGConfig.zhenlv;
             ipc.send('onRendererMessage',message);
         }
-        localStream = canvas.captureStream(10);
+        localStream = canvas.captureStream(20);
         console.log('localStream : '+ localStream);
 
         mixMicStream(localStream,function(){
@@ -102,28 +102,6 @@
     }
 
     function mixMicStream(tabStream,onfinish){
-
-        const constraints = {
-            video: {
-                mandatory: {
-                    chromeMediaSource: 'desktop',
-                    maxWidth:320,
-                    minWidth:320,
-                    maxHeight:240,
-                    minHeight:240,
-                    maxFrameRate:20,
-                    minFrameRate:20
-                }
-            }
-        };
-
-        var videoTracks = tabStream.getVideoTracks();
-        if(videoTracks && videoTracks.length && videoTracks.length > 0) {
-            var videoTrack = videoTracks[0];
-            videoTrack.applyConstraints(constraints);
-        }
-
-
 
         var micConstraints = {
             audio: true,
