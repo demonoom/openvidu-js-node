@@ -93,7 +93,7 @@
             message.zhenlv = RtspFFMPEGConfig.zhenlv;
             ipc.send('onRendererMessage',message);
         }
-        localStream = canvas.captureStream(10);
+        localStream = canvas.captureStream(15);
         console.log('localStream : '+ localStream);
 
         mixMicStream(localStream,function(){
