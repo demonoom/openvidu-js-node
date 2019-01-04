@@ -93,7 +93,7 @@
             message.zhenlv = RtspFFMPEGConfig.zhenlv;
             ipc.send('onRendererMessage',message);
         }
-        localStream = canvas.captureStream(15);
+        localStream = canvas.captureStream(20);
         console.log('localStream : '+ localStream);
 
         mixMicStream(localStream,function(){
@@ -102,6 +102,7 @@
     }
 
     function mixMicStream(tabStream,onfinish){
+
         var micConstraints = {
             audio: true,
             video: false
