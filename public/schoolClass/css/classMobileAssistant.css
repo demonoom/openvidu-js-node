@@ -144,11 +144,10 @@ body{
     position: absolute;
     top: 25px;
     left: 21px;
-    background: #288AE0;
-    border-radius: 50%;
+    background: url("../images/icon-courseware.png") no-repeat;
+    background-size: 100% 100%;
     text-align: center;
-    font-size: 14px;
-    color: #fff;
+    font-size:0
 }
 
 .attachment-cont{
@@ -176,9 +175,9 @@ body{
     border-radius: 50%;
     line-height: 50px;
     text-align: center;
-    background: #66b30d;
-    font-size: 14px;
-    color: #fff;
+    background: url("../images/icon-questionBank.png") no-repeat;
+    background-size: 100% 100%;
+    font-size:0;
     z-index:1;
 }
 .topic_box{
@@ -300,4 +299,96 @@ body{
     left: 0;
     opacity: 0;
 }
+
+#album{
+    position: absolute;
+    top: 90px;
+    right: 21px;
+    background: url("../images/icon-selectionImages.png") no-repeat;
+    background-size: 100% 100%;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 0;
+    z-index: 1;
+}
+
+#shouTu{
+    position: absolute;
+    top: 25px;
+    right: 21px;
+    background: url("../images/icon-CollectFigure.png") no-repeat;
+    background-size: 100% 100%;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 0;
+    z-index: 1;
+}
+#shouTu.stop_shou{
+    background: url("../images/icon-cancel.png") no-repeat;
+    background-size: 100% 100%;
+}
+.imageBox{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 999;
+    background: rgba(0,0,0,0.5);
+    /*box-shadow: 1px 1px 10px #ccc;*/
+    display: none;
+}
+#image{
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    /*transform: translate(50%,50%);*/
+    object-fit: contain;
+}
+.close_img{
+    position: absolute;
+    top: 14px;
+    left: 15px;
+    color: white;
+    font-size: 14px;
+    line-height: 1;
+    z-index: 1000;
+}
+.pushImage-navigation{
+    height: 44px;
+    background: #282D31;
+    padding: 0 10px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    box-sizing: border-box;
+}
+.pushImageBtn{
+    position: absolute;
+    right:15px;
+    border-radius: 4px;
+    padding: 0 12px;
+    height: 28px;
+    top: 6px;
+    border:none;
+    outline: none;
+    background: #1CAC1B;
+    font-size: 12px;
+    color: #fff;
+
+}
+
+
 

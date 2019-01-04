@@ -64,6 +64,203 @@ video{
 #video_container{
 	height: calc(100% - 50px) !important;
 }
+.imgBox{
+    height: 100%;
+    width: calc(100% - 240px);
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+    z-index: 101;
+}
+.handoutImg-mask{
+    background: rgba(0,0,0,0.7);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+#handoutImg{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    z-index: 10;
+}
+.receiveBox{
+    height: 100%;
+    width: calc(100% - 240px);
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+    background: rgba(0,0,0,0.7);
+    overflow-x: hidden;
+    overflow-y: auto;
+     z-index: 101;
+}
+.topicBox{
+    height: 100%;
+    width: calc(100% - 240px);
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+    background: rgba(0,0,0,0.7);
+    padding: 20px 10px 10px 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+     z-index: 101;
+}
+
+.shouTuAvatar{
+    display:inline-block;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+    float: left;
+
+}
+.shouTuAvatar img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+        /*width: 30px;*/
+        /*height: 30px;*/
+}
+.shouTuName{
+    display: inline-block;
+    margin: 0;
+    width: 110px;
+    position: relative;
+    float: left;
+    line-height: 30px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.shouTuItem{
+    display: inline-block;
+    width: 150px;
+    margin: 12px;
+    color: #fff;
+}
+.shouTuHead{
+   text-align: left;
+   padding: 0 0 10px 0;
+   height: 40px;
+}
+.shouTuContent{
+    width: 150px;
+    height: 150px;
+}
+.shouTuPic{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.shouTuBottom{
+    font-size: 12px;
+    clear: both;
+    height: 34px;
+    line-height: 34px;
+}
+.shouTuCount{
+    float:left
+}
+.shouTuTime{
+   float:right
+}
+.topicItem{
+    width: 100px;
+    text-align: center;
+    padding: 10px;
+    float: left;
+    font-size: 12px;
+    height: 115px;
+    overflow: hidden;
+}
+.topicItemAnimation{
+   animation:upup 1.5s ease forwards;
+   width: 100px;
+   text-align: center;
+   padding: 10px;
+   float: left;
+   font-size: 12px;
+   height: 115px;
+   overflow: hidden;
+}
+.topicImgBox{
+    height: 70px;
+    width: 70px;
+    position: relative;
+    margin: 0 auto 4px auto;
+}
+.topicImgBox img{
+   width: 100%;
+   height: 100%;
+   border-radius:4px;
+}
+.topicName{
+   text-align: center;
+   color: #eee;
+   height: 35px;
+   display: inline-block;
+   line-height: 18px;
+   overflow: hidden;
+   white-space: nowrap;
+   text-overflow: ellipsis;
+   width: 100%;
+}
+.icon{
+    background: url(images/icon_ok.png) no-repeat -24px 0;
+    position: relative;
+    bottom: 23px;
+    right: -47px;
+    width: 22px;
+    height: 22px;
+}
+.iconSuccess{
+   background: url(images/icon_ok.png) no-repeat 0 0;
+   position: relative;
+   bottom: 23px;
+   right: -47px;
+   width: 22px;
+   height: 22px;
+
+}
+.closeIcon{
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 102;
+      background: url(img/del_icon_s.png) no-repeat #fff;
+      background-size: 100% 100%;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+   }
+@keyframes upup {
+  0% {
+    transform: translateY(0%);
+  }
+  25%{
+    transform: translateY(-30%);
+  }
+  50%{
+    transform: translateY(0%);
+  }
+  75%{
+    transform: translateY(-10%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
 
 
 </style>
@@ -172,6 +369,24 @@ video{
 		</div>
 	</div>
 
+
+    <!--推图 -->
+	<div class="imgBox">
+	<div class="closeIcon" onclick="closeAllInClass()"></div>
+	<div class="handoutImg-mask"></div>
+	    <img id="handoutImg" src="" alt="">
+    </div>
+
+    <!--收图 -->
+    <div class="receiveBox">
+
+    </div>
+
+    <!--答题效果 -->
+    <div class="topicBox">
+        <div class="closeIcon" onclick="closeAllInClass()"></div>
+    </div>
+
 	<div id="message_text_template" style="display: none;">
 		   <div class="live_talk_t">
 		   	  <div class="live_user" onclick="doHandleStudent(this);"><img src="http://img000.hc360.cn/y1/M01/7A/4F/wKhQc1RzaJ6EN3PMAAAAAGPs-ZY043.jpg" width="60" height="60"  class="green"></div>
@@ -234,6 +449,9 @@ video{
     var videoSourceId = "";
     var speakStatus=false;
     var simpleConn;
+    var shouTuList = [];
+    var topicStuList = [];
+    var topicUidList = [];
     if("zh-CN"==languageUrl){
  	   i18nLanguage="zh-CN";
     }else if("en"==languageUrl){
@@ -497,6 +715,7 @@ video{
 	  layer.msg(warnMsg);
 	  console.log("warnMsg:"+warnMsg);
   },onMessage:function(info){
+      console.log(info);
  	 var command = info.command;
  	 if(command == 'teacherUnionMasterLogin'){
  		 if(isPreparedOK){
@@ -523,6 +742,36 @@ video{
 		 showMessage(message);
 	 }else if(command == 'classDanmu'){
 		 var message = info.data.message;
+		 if(info.data.message.content == "[图片]" && $('.receiveBox').css("display") != "none"){
+         	         var isPush = true;
+         	         var itemData = info.data.message;
+         	         if(shouTuList.length <= 0){
+         	             shouTuList.push({
+                             userId: itemData.fromUser.colUid,
+                             userName:itemData.fromUser.userName,
+                             avatar:itemData.fromUser.avatar,
+                             picSrc:[itemData.attachment.address],
+                             time: (itemData.attachment.createTime)
+                         });
+         	         }else{
+         	             for(var k in shouTuList){
+                            if(itemData.fromUser.colUid == shouTuList[k].userId){//已上传图片过的学生
+                                 shouTuList[k].picSrc.push(itemData.attachment.address);
+                                 isPush = false;
+                            }
+                         }
+                         if(isPush){
+         	                 shouTuList.push({
+                                 userId: itemData.fromUser.colUid,
+                                 userName:itemData.fromUser.userName,
+                                 avatar:itemData.fromUser.avatar,
+                                 picSrc:[itemData.attachment.address],
+                                 time: (itemData.attachment.createTime)
+                             });
+                         }
+         	         }
+         	         updateShouTu();
+         	     }
 		 showMessage(message);
 	 }else if(command == 'apply_for_mai'){
 		 var user = info.data.user;
@@ -532,7 +781,7 @@ video{
 		 }else{
 			 removeMaiUser(user.colUid);
 		 }
-	 }else if(command = 'elearnig_mute_audio'){
+	 }else if(command == 'elearnig_mute_audio'){
 		 var type = info.data.type;
 		 var streamId = info.data.streamId;
 		 //让其静音
@@ -560,6 +809,29 @@ video{
                  }
 			 }
 		 }
+	 }else if(command == "pushHandout"){
+	     var url = info.data.url;
+	     if(vid == info.data.vid){
+	         showImage(url);
+	     }
+	 }else if(command == "class_ppt"){
+	     if(vid == info.data.vid){
+	         playPPT(info.data.html, true);
+	         closeAllInClass();
+	     }
+	 }else if(command == "pushSubjecShowContentUrl"){
+	     showTopicStu(info.data.students);
+	 }else if(command == "class_shoutu"){
+	     if(info.data.type == 0){
+	        showReceive();
+	     }else{
+	        closeAllInClass();
+	     }
+	 }else if(command == "studentSubjectsCommit"){
+	     if(topicUidList.indexOf(info.data.uid) == -1){
+	        topicUidList.push(info.data.uid);
+	     }
+	     updateStuList();
 	 }
   }};
 
@@ -636,10 +908,9 @@ video{
      $("#ppt_frame").attr("src",url);
 
      if(sendCommand){
-         console.log('发送')
-         var protocal = eval('(' + "{'command':'assistantPlayKejianInWindow','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
-         //推送通知
-         simpleConn.send(protocal);
+//         var protocal = eval('(' + "{'command':'assistantPlayKejianInWindow','data':{'roomid':'"+vid+"','html':'"+newHTMLPath+"','userId':'"+userId+"'}}" + ')');
+//         //推送通知
+//         simpleConn.send(protocal);
     	 var protocal = eval('(' + "{'command':'class_ppt','data':{'control':1,'html':'"+newHTMLPath+"'}}" + ')');
     	 connection.send(protocal);
     	 //让新版的学生端显示ppt
@@ -1885,6 +2156,7 @@ video{
                         var html = info.data.html;
                         if (roomid == vid) {
                             playPPT(html, true);
+                            closeAllInClass();
                         }
                     }else if(command == "vclass_edit_big_image"){
                         var roomid = info.data.roomid;
@@ -1909,6 +2181,11 @@ video{
                             simpleConn.send(proto);
 					    }
 
+					}else if(command == "board_ppt_next" || command == "board_ppt_pre" || command == "board_ppt_check"){
+					    var roomid = info.data.roomid;
+					    if(roomid == vid){
+					        closeAllInClass();
+					    }
 					}
                 }
             };
@@ -2042,6 +2319,101 @@ video{
         message.attachment.address = "http://60.205.86.217/upload9/2018-11-26/15/024d0b9d-9393-4225-a2f3-ff90739b0efe.webp";
         showMessage(message);
         */
+	}
+
+    //展示推过来的图片
+	function showImage(url){
+        $('#handoutImg').attr("src",url);
+        $('.imgBox').show();
+        $('.topicBox').hide();
+        $('.topicBox').empty();
+        $('.receiveBox').hide();
+        $('.receiveBox').empty();
+	}
+
+    //展示收图列表
+	function showReceive(){
+        $('.receiveBox').show();
+        $('.topicBox').hide();
+        $('.topicBox').empty();
+        $('.imgBox').hide();
+        $('#handoutImg').attr("src","");
+        updateShouTu();
+	}
+
+    //展示答题效果
+	function showTopicStu(students){
+	    $('.topicBox').show();
+	     $('.receiveBox').hide();
+	     $('.receiveBox').empty();
+	     $('.imgBox').hide();
+         $('#handoutImg').attr("src","");
+	    topicStuList = students;
+    	updateStuList(topicStuList);
+    }
+
+    //关闭答题效果//关闭收图列表//关闭推过来的图片
+    function closeAllInClass(){
+        $('.topicBox').hide();
+        topicStuList.splice(0);
+        topicUidList.splice(0);
+        $('.topicBox').empty();
+        $('.receiveBox').hide();
+        $('.receiveBox').empty();
+        shouTuList.splice(0);
+        $('#handoutImg').attr("src","");
+        $('.imgBox').hide();
+    }
+
+	function updateShouTu(){
+	    var html = "";
+	    for(var k in shouTuList){
+	        html += "<div class='shouTuItem'>" +
+	         "<div class='shouTuHead'>" +
+	          "<div class='shouTuAvatar'> <img src="+shouTuList[k].avatar+" alt=''> </div><div class='shouTuName'>"+shouTuList[k].userName+"</div>" +
+	           "</div>" +
+	            "<div class='shouTuContent'>" +
+	             "<img class='shouTuPic' src="+shouTuList[k].picSrc[0]+" /></div>" +
+	              "<div class='shouTuBottom'>" +
+	               "<div class='shouTuCount'>共"+shouTuList[k].picSrc.length+"张</div>" +
+	                "<div class='shouTuTime'>用时: "+calcTime(shouTuList[k].time,new Date())+"</div>" +
+	                "</div>" +
+	          "</div>";
+	    }
+
+	    $('.receiveBox').html(html+"<div class=\"closeIcon\" onclick=\"closeAllInClass()\"></div>");
+
+	}
+
+	function updateStuList(){
+	    var students = topicStuList;
+	    var html = "";
+	    for(var k in students){
+	        var className = topicUidList.indexOf(students[k].id) == -1?'icon':'iconSuccess';
+	        var animation = topicUidList.indexOf(students[k].id) == -1?'topicItem':'topicItemAnimation';
+	        html += "<div class="+animation+">"+
+                     "          <div class='topicImgBox'>"+
+                     "             <img class='topicAvatar' src='http://192.168.50.34:8080/Excoord_For_Education//images/1-141012103336-50-1.jpg' alt=''>\n"+
+                     "             <div class="+className+"></div>"+
+                     "          </div>"+
+                     "          <div class='topicName'>"+students[k].name+"</div>"+
+                     "        </div>";
+	    }
+	    $('.topicBox').html(html+"<div class=\"closeIcon\" onclick=\"closeAllInClass()\"></div>");
+	}
+
+	function calcTime(startTime,EndTime){
+	    var date1= startTime;  //开始时间
+        var date2 = EndTime;    //结束时间
+        var date3 = date2.getTime() - new Date(date1).getTime();   //时间差的毫秒数
+        var days=Math.floor(date3/(24*3600*1000))
+        var leave1=date3%(24*3600*1000)    //计算天数后剩余的毫秒数
+        var hours=Math.floor(leave1/(3600*1000))
+        var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
+        var minutes=Math.floor(leave2/(60*1000))
+        var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
+        var seconds=Math.round(leave3/1000)
+        return hours+":"+minutes+":"+seconds;
 	}
 
 </script>
