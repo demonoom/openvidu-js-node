@@ -3,10 +3,10 @@
 
 1：native安装 kms server , 仅限ubuntu16.04 参考: https://openvidu.io/docs/deployment/deploying-ubuntu/
 
-    turnserver 单独安装到 54.255.200.136(vpn服务器)上,其他的kms服务的turnserver使用此turnserver就可以了
+    turnserver 单独安装到 47.93.162.96(openvidu服务器)上,其他的kms服务的turnserver使用此turnserver就可以了
 
     所以需要在 /etc/kurento/modules/kurento/WebRtcEndpoint.conf.ini 配置:
-      stunServerAddress=54.255.200.136
+      stunServerAddress=47.93.162.96
       stunServerPort=3478
 
 2:使用java的方式启动openvidu服务
