@@ -1510,6 +1510,7 @@ video{
           $("#video_local_record").show();
           socketLogin();
 	  }else{
+          //socketLogin();
           layer.open({
               type: 1,
               title: '音视频设备检测',
@@ -1533,6 +1534,7 @@ video{
 		  setTimeout(function(){
 			  layer.closeAll();
 		  }, 500);
+
 	  },"onMediaError":function(){
 		  iframe.contentWindow.showErrorPage();
 	  }});

@@ -111,7 +111,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: "https://www.maaee.com/Excoord_For_Education/webservice",
+                url: "http://192.168.43.210:9006/Excoord_ApiServer/webservice",
                 data: {
                     params: JSON.stringify({
                         "method": "login",
@@ -171,7 +171,7 @@
         function getLoginTeachSystemEwm() {
             $.ajax({
                 type: "POST",
-                url: "https://www.maaee.com/Excoord_For_Education/webservice",
+                url: "http://192.168.43.210:9006/Excoord_ApiServer/webservice",
                 data: {
                     params: JSON.stringify({
                         "method": "getLoginTeachSystemEwm",
