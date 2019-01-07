@@ -502,8 +502,8 @@ var loginPro = {
        url = window.location.href;
        $.ajax({
            type: "POST",
-            url: "http://192.168.43.210:9006/Excoord_ApiServer/webservice",
-//            url: "https://www.maaee.com/Excoord_For_Education/webservice",
+            //url: "http://192.168.43.210:9006/Excoord_ApiServer/webservice",
+            url: "https://www.maaee.com/Excoord_For_Education/webservice",
            data: {
                params: JSON.stringify({
                    "method": 'getWeChatSignature',
@@ -514,8 +514,8 @@ var loginPro = {
                var res = JSON.parse(ret).response;
                wx.config({
                    debug: false,
-//                    appId: 'wx181574f3ea687daf',  // 线上用的
-                   appId: 'wx9d076742b77044dd',   //测试用的
+                    appId: 'wx181574f3ea687daf',  // 线上用的
+                   //appId: 'wx9d076742b77044dd',   //测试用的
                    timestamp: res.timestamp,
                    nonceStr: res.noncestr,
                    signature: res.signature,
