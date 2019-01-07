@@ -98,6 +98,7 @@
    var iframeBox = document.getElementById("iframeBox");
    var iframe = document.createElement("iframe");
    var picUrl = "http://img3.redocn.com/tupian/20150908/sansuitaoxinbiankuang_3797288.jpg";
+   var isAlbum = false;
 var loginPro = {
     "command": "assistantLogin",
     "data": {
@@ -137,10 +138,9 @@ var loginPro = {
                     checkIframe(info.data.html,true);
                  }
              }else if(info.command == 'assistantLogin'){ //登录
-                          layer.msg('已登入!',{time: 500});
+                     layer.msg('已登入!',{time: 500});
              }else if(info.command == "pushHandout"){
-                     layer.msg('推图成功',{time: 500});
-//                 }
+
              }
           }
    };
@@ -201,7 +201,7 @@ var loginPro = {
     }
 
 
-//点击题目
+    //点击题目
     $('#pushTopic').on('click',function(){
         $('.mask').css({display:'block'});
         $('.topic_box').css({display:'block'});
@@ -236,7 +236,6 @@ var loginPro = {
                            $('.nav_text').html(navHtml);
                        }
                        for(var k in response){
-//                           console.log(response[k].fileType,'');
                            if(response[k].fileType == 1){ //文件夹
                                listHtml += "<div class='line_public' onclick='topicClickFolder("+response[k].id+",\""+response[k].name+"\")'> <img class='item-image' src='./img/cloud_icon_web.png' alt=''> <span class='item-text text-hidden'>"+response[k].name+"</span> </div>";
                            }else if(response[k].fileType == 2){ // 题目
@@ -268,7 +267,6 @@ var loginPro = {
            if(id == -1){//根目录
                getUserRootCloudSubjects(userId,true);
            }else{ //子目录
-
                listCloudSubject(id,true);
            }
        }
@@ -295,7 +293,6 @@ var loginPro = {
                                }else{
                                    navHtml += "<span> <span> > </span> <span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span></span>";
                                }
-                                   // navHtml += "<span><span onclick='nav_topic(\""+parentTopicArray[k].id+"\","+k+")'>"+parentTopicArray[k].name+"</span><span>></span></span>";
                            }
                            $('.nav_text').html(navHtml);
                        }
@@ -332,7 +329,6 @@ var loginPro = {
        };
        service.doWebService(data,{
            onResponse:(res) => {
-//               console.log(res,'success');
                if(res.success && res.response){
                    document.getElementById('empty').style.display="none";
                    document.getElementById('iframeBox').style.display="block";
@@ -424,7 +420,6 @@ var loginPro = {
        };
        service.doWebService(data,{
            onResponse:(res) => {
-//               console.log(res,'filterCloudFile');
                if(res.success){
                    var attachment_list = document.getElementById('attachment_list');
                    var attachment_bottom = document.getElementById('attachment_bottom');
@@ -453,9 +448,7 @@ var loginPro = {
                    nav.innerHTML = navHTML;
                }
            },
-           onError:function(error){
-               console.log(error,'error');
-           }
+           onError:function(error){}
        });
    }
 
@@ -509,8 +502,8 @@ var loginPro = {
        url = window.location.href;
        $.ajax({
            type: "POST",
-//            url: "http://192.168.50.34:9006/Excoord_ApiServer/webservice",
-            url: "https://www.maaee.com/Excoord_For_Education/webservice",
+            url: "http://192.168.43.210:9006/Excoord_ApiServer/webservice",
+//            url: "https://www.maaee.com/Excoord_For_Education/webservice",
            data: {
                params: JSON.stringify({
                    "method": 'getWeChatSignature',
@@ -521,8 +514,8 @@ var loginPro = {
                var res = JSON.parse(ret).response;
                wx.config({
                    debug: false,
-                    appId: 'wx181574f3ea687daf',  // 线上用的
-//                   appId: 'wx9d076742b77044dd',   //测试用的
+//                    appId: 'wx181574f3ea687daf',  // 线上用的
+                   appId: 'wx9d076742b77044dd',   //测试用的
                    timestamp: res.timestamp,
                    nonceStr: res.noncestr,
                    signature: res.signature,
@@ -545,7 +538,9 @@ var loginPro = {
                            'scanQRCode',
                            'getLocalImgData',
                        ],
-                       success: function (res) { }
+                       success: function (res) {
+                            isAlbum = true;
+                        }
                    });
                })
                wx.error(function (res) {
@@ -561,17 +556,21 @@ var loginPro = {
 
    //相机点击事件
    $('#album').click(function () {
-       wx.chooseImage({
-           count: 1, // 默认9
-           sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有
-           sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有
-           success: (res) => {
-               var tempFilePaths = res.localIds[0];
-               let load = layer.load(0, { shade: 0.1 });
-               wxUploadImage(tempFilePaths,load);
+       if(isAlbum){
+           wx.chooseImage({
+                      count: 1, // 默认9
+                      sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有
+                      sourceType: ['album','camera'], // 可以指定来源是相册还是相机，默认二者都有
+                      success: (res) => {
+                          var tempFilePaths = res.localIds[0];
+                          let load = layer.load(0, { shade: 0.1 });
+                          wxUploadImage(tempFilePaths,load);
+                      }
+                  });
+       }else{
+           layer.msg('正在获取签名...');
+       }
 
-           }
-       });
    })
 
    //相册及相机上传图片事件
@@ -635,18 +634,17 @@ var loginPro = {
        return new Blob([new Uint8Array(array)], { type: type });
    }
 
-  //ｓｅｎｄ　推图
+  //推图
    function pushImage(){
        var protocal = eval('(' + "{'command':'pushHandout','data':{'url':'"+picUrl+"',vid:'"+vid+"'}}" + ')');
        clazzConn.send(protocal);
-
+       layer.msg('推图成功',{time: 500});
 
    }
 
    function closeImage(){
        $('.imageBox').hide();
    }
-
 
    $('#shouTu').on('click',function(){
        if($('#shouTu').text() == '收图'){
@@ -661,9 +659,7 @@ var loginPro = {
           clazzConn.send(protocal);
           $('#shouTu').removeClass('stop_shou');
           $('#shouTu').text('收图');
-
        }
-
    })
 </script>
 </html>

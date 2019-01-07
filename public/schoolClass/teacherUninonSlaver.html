@@ -243,23 +243,36 @@
       height: 22px;
 
    }
-   .closeIcon{
-      position: absolute;
-      top: 0;
-      right: 0;
-      z-index: 102;
-      background: white;
-   }
-   .closeIcon{
+     .closeIcon{
          position: absolute;
          top: 20px;
          right: 20px;
          z-index: 102;
-         background: url(img/del_icon_s.png) no-repeat #fff;
+         background: url(img/icon-delPic.png) no-repeat;
          background-size: 100% 100%;
          width: 28px;
          height: 28px;
-         border-radius: 50%;
+         cursor: pointer;
+      }
+      .closeIconHover{
+         position: absolute;
+         top: 20px;
+         right: 20px;
+         background: url(img/icon-delPicH.png) no-repeat;
+         background-size: 100% 100%;
+         width: 28px;
+         height: 28px;
+         cursor: pointer;
+         z-index: 102;
+      }
+      .shouTuText{
+        text-align: center;
+        color: #e5e5e5;
+        font-size: 28px;
+        position: absolute;
+        top: 50%;
+        transform: translate(-51%, -50%);
+        left: 50%;
       }
    @keyframes upup {
      0% {
@@ -359,7 +372,6 @@
     	<div class="handoutImg-mask"></div>
     	    <img id="handoutImg" src="" alt="" />
         </div>
-
         <!--收图 -->
         <div class="receiveBox"></div>
 
@@ -674,9 +686,11 @@
 	        unpublish();
 	 }else if(command == "pushSubjecShowContentUrl") {
 			//老师推送题目
-			console.log("老师推送题目");
-			showTopicStu(info.data.students);
-//			initSubjectWindow(info.data.subjects,info.data.workIds);
+			closeAllInClass();
+			if(info.data.students){
+            	   layer.closeAll();
+            	   showTopicStu(info.data.students);
+            }
 	 }//老师控制学生放大缩小视频
 	 else if(command == "show_elearning_big_video"){
 		 var streamId = info.data.streamId;
@@ -1780,7 +1794,12 @@
 	                "</div>" +
 	          "</div>";
 	    }
-	    $('.receiveBox').html(html+"<div class=\"closeIcon\" onclick=\"closeAllInClass()\"></div>");
+	    if(html == ''){
+	        $('.receiveBox').html(html+"<div class='closeIcon' onclick='closeAllInClass()'></div><div class='shouTuText'>老师已开启收图模式...</div>");
+	    }else{
+	        $('.receiveBox').html(html+"<div class='closeIcon' onclick='closeAllInClass()'></div>");
+	    }
+
 
 	}
 
@@ -1792,7 +1811,7 @@
 	        var animation = topicUidList.indexOf(students[k].id) == -1?'topicItem':'topicItemAnimation';
 	        html += "<div class="+animation+">"+
                      "          <div class='topicImgBox'>"+
-                     "             <img class='topicAvatar' src='http://192.168.50.34:8080/Excoord_For_Education//images/1-141012103336-50-1.jpg' alt=''>\n"+
+                     "             <img class='topicAvatar' src='https://www.maaee.com/Excoord_For_Education//images/1-141012103336-50-1.jpg' alt=''>\n"+
                      "             <div class="+className+"></div>"+
                      "          </div>"+
                      "          <div class='topicName'>"+students[k].name+"</div>"+
@@ -1814,6 +1833,18 @@
         var seconds=Math.round(leave3/1000)
         return hours+":"+minutes+":"+seconds;
 	}
+
+	$(document).on('mousemove','.closeIcon',function(){
+	   $('.closeIcon').addClass('closeIconHover');
+	});
+
+	$(document).on('mouseleave','.closeIcon',function(){
+    	$('.closeIcon').removeClass('closeIconHover');
+    });
+
+	$(document).on('click','.closeIcon',function(){
+        	$('.closeIcon').removeClass('closeIconHover');
+    });
 </script>
 
 </html>
