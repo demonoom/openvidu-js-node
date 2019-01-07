@@ -46,6 +46,7 @@
 <script src="./js/jquery.min.js"></script>
 <script src="./js/simple.js"></script>
 <script src="./js/layer/layer.js"></script>
+<script type="text/javascript" src="js/service.js"></script>
 <script type="text/javascript">
     $(function () {
         checkShowPcDownload();
@@ -98,10 +99,6 @@
         accountArr = JSON.parse(localStorage.getItem("accountData")) == null ? accountArr : JSON.parse(localStorage.getItem("accountData"))
         //登录事件
         $('#login').on('click', function () {
-
-            console.log('开始登录');
-            console.log($('#act').val().trim(), '账号');
-            console.log($('#pwd').val().trim(), '密码');
             if ($('#act').val().trim() == '') {
                 alert('请输入账号');
                 return;
@@ -109,45 +106,35 @@
                 alert('请输入密码');
                 return;
             }
-            $.ajax({
-                type: "POST",
-                url: "https://www.maaee.com/Excoord_For_Education/webservice",
-                data: {
-                    params: JSON.stringify({
-                        "method": "login",
-                        "username": $('#act').val().trim(),
-                        "password": $('#pwd').val().trim()
-                    })
-                },
-                header: {
-                    "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
-                },
-                success: function (data) {
-                    var res = JSON.parse(data);
-                    console.log(res);
-                    if (res.success) {
-                        if ($("#act").val() !== "" && $("#pwd").val() !== "") {
-                            accountArr.push({
-                                account: $("#act").val(),
-                                password: $("#pwd").val()
-                            });
-                        }
-                        accountArr = makeArr(accountArr, "account")
-                        localStorage.setItem('accountData', JSON.stringify(accountArr));
-                        console.log('登录成功');
-                        window.location.href = 'syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
-                        // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
-                        // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
 
-                    } else {
-                        layer.msg(res.msg);
-                    }
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
+            var service = new Service();
+                   var data = {
+                       "method": "login",
+                       "username": $('#act').val().trim(),
+                       "password": $('#pwd').val().trim()
+                   };
+                   service.doWebService(data,{
+                       onResponse:(res) => {
+                           if (res.success) {
+                           if ($("#act").val() !== "" && $("#pwd").val() !== "") {
+                               accountArr.push({
+                                   account: $("#act").val(),
+                                   password: $("#pwd").val()
+                               });
+                           }
+                           accountArr = makeArr(accountArr, "account")
+                           localStorage.setItem('accountData', JSON.stringify(accountArr));
+                           console.log('登录成功');
+                           window.location.href = 'syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+                                                   // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+                                                   // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
 
+                       } else {
+                           layer.msg(res.msg);
+                       }
+                       },
+                       onError:function(error){}
+                   });
         })
 
 
@@ -169,29 +156,18 @@
 
         //获取二维码接口
         function getLoginTeachSystemEwm() {
-            $.ajax({
-                type: "POST",
-                url: "https://www.maaee.com/Excoord_For_Education/webservice",
-                data: {
-                    params: JSON.stringify({
-                        "method": "getLoginTeachSystemEwm",
-                        "uuid": machineId,
-                    })
-                },
-                header: {
-                    "content-type": "application/x-www-form-urlencoded;charset=UTF-8"
-                },
-                success: function (data) {
-                    var res = JSON.parse(data);
-                    console.log(res);
+            var service = new Service();
+            var data = {
+                "method":'getLoginTeachSystemEwm',
+                "uuid": machineId,
+            };
+            service.doWebService(data,{
+                onResponse:(res) => {
                     if (res.success) {
-                        $('#scan_image').attr('src', res.response)
+                       $('#scan_image').attr('src', res.response);
                     }
-
                 },
-                error: function (e) {
-                    console.log(e);
-                }
+                onError:function(error){}
             });
         }
         
