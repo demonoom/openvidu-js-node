@@ -184,7 +184,7 @@ function ExRTC(){
             publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
             publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
             resolution: '640x480',  // The resolution of your video
-            frameRate: 30,			// The frame rate of your video
+            frameRate: 15,			// The frame rate of your video
             insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
             mirror: false       	// Whether to mirror your local video or not
         });
