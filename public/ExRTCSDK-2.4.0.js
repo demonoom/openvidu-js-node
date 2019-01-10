@@ -177,7 +177,7 @@ function ExRTC(){
         });
 
         const constraints = {
-            width: 640,
+            width: 848,
             height: 480,
             frameRate:15
         };
