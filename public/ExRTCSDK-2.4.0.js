@@ -179,8 +179,8 @@ function ExRTC(){
         var videoSource = useMediaStream.getVideoTracks()[0];
         var audioSource = useMediaStream.getAudioTracks()[0];
         _this.publisher = _this.OV.initPublisher(elmentId, {
-            audioSource: audioSource, // The source of audio. If undefined default microphone
-            videoSource: videoSource, // The source of video. If undefined default webcam
+            audioSource: true, // The source of audio. If undefined default microphone
+            videoSource: true, // The source of video. If undefined default webcam
             publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
             publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
             resolution: '640x480',  // The resolution of your video
