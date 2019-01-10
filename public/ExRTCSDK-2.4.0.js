@@ -176,14 +176,22 @@ function ExRTC(){
             useMediaStream.addTrack(track.clone());
         });
 
+        const constraints = {
+            width: 640,
+            height: 480,
+            frameRate:15
+        };
+
         var videoSource = useMediaStream.getVideoTracks()[0];
+        videoSource.applyConstraints(constraints);
+
         var audioSource = useMediaStream.getAudioTracks()[0];
         _this.publisher = _this.OV.initPublisher(elmentId, {
             audioSource: audioSource, // The source of audio. If undefined default microphone
             videoSource: videoSource, // The source of video. If undefined default webcam
             publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
             publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-            resolution: '320x240',  // The resolution of your video
+            resolution: '640x480',  // The resolution of your video
             frameRate: 15,			// The frame rate of your video
             insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
             mirror: false       	// Whether to mirror your local video or not
