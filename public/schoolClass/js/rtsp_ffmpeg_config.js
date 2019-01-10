@@ -6,6 +6,6 @@ function RtspFFMPEGConfig(){
 // RtspFFMPEGConfig.malv = "800k";
 // RtspFFMPEGConfig.zhenlv = "20";
 
-RtspFFMPEGConfig.fenbianlv = "1280x720";
-RtspFFMPEGConfig.malv = "200k";
+RtspFFMPEGConfig.fenbianlv = "960x720";
+RtspFFMPEGConfig.malv = "1000k";
 RtspFFMPEGConfig.zhenlv = "20";
