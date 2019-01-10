@@ -176,14 +176,14 @@ function ExRTC(){
             useMediaStream.addTrack(track.clone());
         });
 
-        //const constraints = {
-        //    width: 640,
-        //    height: 480,
-        //    frameRate:15
-        //};
+        const constraints = {
+           width: 640,
+           height: 480,
+           frameRate:15
+        };
 
         var videoSource = useMediaStream.getVideoTracks()[0];
-        //videoSource.applyConstraints(constraints);
+        videoSource.applyConstraints(constraints);
 
         var audioSource = useMediaStream.getAudioTracks()[0];
         _this.publisher = _this.OV.initPublisher(elmentId, {
