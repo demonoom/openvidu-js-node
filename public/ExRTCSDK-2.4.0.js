@@ -183,7 +183,7 @@ function ExRTC(){
         };
 
         var videoSource = useMediaStream.getVideoTracks()[0];
-        videoSource.applyConstraints(constraints);
+        //videoSource.applyConstraints(constraints);
 
         var audioSource = useMediaStream.getAudioTracks()[0];
         _this.publisher = _this.OV.initPublisher(elmentId, {
