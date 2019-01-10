@@ -206,7 +206,7 @@
         if(browser.indexOf("Electron") != -1){
             NParams = "&startType=1_n";
         }
-        var url = "teacherUnionMaster_screen.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+userName+""+NParams;
+        var url = "teacherUnionMaster.html?clazzId="+selectedClazzId+"&userId="+teacherId+"&title="+title+"&livePassword="+password+"&userName="+userName+""+NParams;
         window.open(url,"CLASS_WINDOW");
         window.parent.layer.closeAll();
     }
