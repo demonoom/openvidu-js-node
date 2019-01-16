@@ -1337,7 +1337,7 @@ ul.layui-layer-tabmain li{
     z-index:100;
     background:url(../img/back_r.png) no-repeat;
 	position: absolute;
-	right:-1px;
+	right:-14px;
 	top:50%;
 	transform:translateY(-50%);
     -ms-transform:translateY(-50%); /* IE 9 */
@@ -1354,7 +1354,7 @@ ul.layui-layer-tabmain li{
     z-index:100;
     background:url(../img/back_l.png) no-repeat;
 	position: absolute;
-	right:-1px;
+	right:-14px;
 	top:50%;
 	transform:translateY(-50%);
     -ms-transform:translateY(-50%); /* IE 9 */
@@ -1380,6 +1380,54 @@ ul.layui-layer-tabmain li{
     -o-transform:translateY(-50%);
     cursor: pointer;
     z-index:10000
+}
+.Left-backleft_i{
+    width: 18px;
+    height: 30px;
+    display:inline-block;
+    padding:0px;
+    z-index:9000003;
+    background:url(../img/back_l.png) no-repeat;
+    position: absolute;
+    left:-14px;
+    top:50%;
+    -ms-transform:translateY(-50%); /* IE 9 */
+    -moz-transform:translateY(-50%); /* Firefox */
+    -webkit-transform:translateY( -50%); /* Safari 和 Chrome */
+    -o-transform:translateY(-50%);
+    transform:translateY(-50%);
+    -ms-transform:rotate(180deg); /* IE 9 */
+    -moz-transform:rotate(180deg); /* Firefox */
+    -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+    -o-transform:rotate(180deg);
+    transform: rotate(180deg);
+    transform-origin: center center;
+    margin-top: -15px;
+    cursor: pointer;
+}
+.Left-backri_i{
+    width: 18px;
+    height: 30px;
+    display:inline-block;
+    padding:0px;
+    z-index:9000003;
+    background:url(../img/back_r.png) no-repeat;
+    position: absolute;
+    left:-14px;
+    top:50%;
+    transform:translateY(-50%);
+    -ms-transform:translateY(-50%); /* IE 9 */
+    -moz-transform:translateY(-50%); /* Firefox */
+    -webkit-transform:translateY( -50%); /* Safari 和 Chrome */
+    -o-transform:translateY(-50%);
+    -ms-transform:rotate(180deg); /* IE 9 */
+    -moz-transform:rotate(180deg); /* Firefox */
+    -webkit-transform:rotate(180deg); /* Safari 和 Chrome */
+    -o-transform:rotate(180deg);
+    transform: rotate(180deg);
+    transform-origin: center center;
+    margin-top: -15px;
+    cursor: pointer;
 }
 .En_icon_i{
 	width: 19px;

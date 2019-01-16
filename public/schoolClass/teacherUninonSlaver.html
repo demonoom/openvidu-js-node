@@ -317,6 +317,7 @@
 		    <div class="backleft_i" id="toggle_right" onclick="showTalkDiv();">
 		        <span id="image_message_badge" class="backri_i_red" style="display: none;color:red" ></span>
 		    </div>
+			<div class="Left-backri_i" id="toggle_left" onclick="toggleLeftVideos();"></div>
 		      <div id="handout_container" style="display: none;">
 	             <div id="board_imge_cell">
 	                  <img id="handout_image" class="board_image" />  
@@ -1018,7 +1019,7 @@
 	    	  $("#big_video").show();
 	    	  
 
-			  $("#big_video").append("<video autoplay width='100%' height='100%' style='' muted></video>");
+			  $("#big_video").append("<video autoplay width='100%' height='100%' muted></video>");
 			  $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
 		  }else{
 			  if(current_stream == stream.getId()){
@@ -1104,9 +1105,9 @@
 			  $('#agora_remote' + stream.getId()).remove();
 			  console.log("Remote stream is removed " + stream.getId());
 			  showBigVideo(stream,false,false);
-				  //stream.stop();
+			  //stream.stop();
 			  //计算当前正在显示的大流
-			  showEclassCurrentBigStreamId();
+			  //showEclassCurrentBigStreamId();
 		});
     }
   
@@ -1845,6 +1846,26 @@
 	$(document).on('click','.closeIcon',function(){
         	$('.closeIcon').removeClass('closeIconHover');
     });
+
+    function toggleLeftVideos(){
+        if($("#left").is(':visible')){
+            $("#toggle_left").removeClass("Left-backleft_i");
+            $("#toggle_left").removeClass("Left-backri_i");
+            $("#toggle_left").addClass("Left-backleft_i");
+            $("#left").hide();
+            $("#right").css("width","100%");
+            $("#big_video").css("width","100%");
+            $("#big_video").css("left","0px");
+        }else{
+            $("#toggle_left").removeClass("Left-backleft_i");
+            $("#toggle_left").removeClass("Left-backri_i");
+            $("#toggle_left").addClass("Left-backri_i");
+            $("#right").css("width","calc(100% - 240px)");
+            $("#big_video").css("width","calc(100% - 240px)");
+            $("#big_video").css("left","240px");
+            $("#left").show();
+        }
+    }
 </script>
 
 </html>

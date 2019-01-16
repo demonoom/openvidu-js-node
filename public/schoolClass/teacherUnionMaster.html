@@ -313,6 +313,8 @@ video{
 		 <div class="backleft_i" id="toggle_right" onclick="showTalkDiv();">
 		     <span id="image_message_badge" class="backri_i_red" style="display: none;color:red" ></span>
 		 </div>
+		<div class="Left-backri_i" id="toggle_left" onclick="toggleLeftVideos();">
+		</div>
 		      <div id="ppt_container">
 		         <div class="ppt_default ppt_default_center" id="ppt_empty">
 		             <div class="ppt_default_img"></div>
@@ -1748,7 +1750,7 @@ video{
 			  $("#mai_"+stream.getId()).find(".mai_user_state_t").attr("string_id","string_lianmai");
 			  $("#mai_"+stream.getId()).find(".mai_user_state_t").attr("onclick","updateMaiUserState("+stream.getId()+",1)");
 		      //计算当前的大流
-		      showEclassCurrentBigStreamId();
+		      //showEclassCurrentBigStreamId();
 	    });
 
   }
@@ -2454,6 +2456,26 @@ video{
     $(document).on('click','.closeIcon',function(){
            $('.closeIcon').removeClass('closeIconHover');
     });
+
+    function toggleLeftVideos(){
+        if($("#left").is(':visible')){
+            $("#toggle_left").removeClass("Left-backleft_i");
+            $("#toggle_left").removeClass("Left-backri_i");
+            $("#toggle_left").addClass("Left-backleft_i");
+            $("#left").hide();
+            $("#right").css("width","100%");
+            $("#big_video").css("width","100%");
+            $("#big_video").css("left","0px");
+        }else{
+            $("#toggle_left").removeClass("Left-backleft_i");
+            $("#toggle_left").removeClass("Left-backri_i");
+            $("#toggle_left").addClass("Left-backri_i");
+            $("#right").css("width","calc(100% - 240px)");
+            $("#big_video").css("width","calc(100% - 240px)");
+            $("#big_video").css("left","240px");
+            $("#left").show();
+		}
+	}
 
 </script>
 
