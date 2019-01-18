@@ -952,6 +952,7 @@ iframe{
     z-index: 9000000;
     left: 240px;
     top: 0;
+    overflow: hidden;
 }
 .big_video_new div{
     width: 100%;
