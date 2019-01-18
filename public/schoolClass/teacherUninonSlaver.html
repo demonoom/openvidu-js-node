@@ -71,10 +71,10 @@
 	   height: 100%;
 	   object-fit:cover;
    }
+
    #big_video video{
   	 object-fit:cover !important;
    }
-
 
    .imgBox{
        height: 100%;
@@ -1196,7 +1196,7 @@
             onAudioMutedStateChange(localStream.getId());
         });
 
-	    navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+	    navigator.mediaDevices.getUserMedia({ audio: true, video: {width:1920,height:1080} })
           .then(function(stream) {
               client.publish(stream, "agora_local");
           })
