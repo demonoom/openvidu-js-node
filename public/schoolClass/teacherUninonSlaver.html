@@ -1201,6 +1201,7 @@
 		    client.publish(stream, "agora_local");
 	    })
 	    .catch(function(err) {
+	        console.log(err);
 	    });
     }
   
@@ -1222,10 +1223,12 @@
 		  iframe.contentWindow.start({"onMediaOK":function(media){
 			  audioSourceId = media.audioInputSource;
 			  videoSourceId = media.videoSource;
-			  goPlayLocalVideo();
+              layer.closeAll();
+
 			  setTimeout(function(){
-				  layer.closeAll();
+			      goPlayLocalVideo();
 			  }, 500);
+
 		  },"onMediaError":function(){
 			  iframe.contentWindow.showErrorPage();
 		  }});

@@ -1514,7 +1514,6 @@ video{
           $("#video_local_record").show();
           socketLogin();
 	  }else{
-          //socketLogin();
           layer.open({
               type: 1,
               title: '音视频设备检测',
@@ -1532,11 +1531,10 @@ video{
 	  iframe.contentWindow.start({"onMediaOK":function(media){
 		  audioSourceId = media.audioInputSource;
 		  videoSourceId = media.videoSource;
-
-          socketLogin();
+          layer.closeAll();
 
 		  setTimeout(function(){
-			  layer.closeAll();
+              socketLogin();
 		  }, 500);
 
 	  },"onMediaError":function(){
