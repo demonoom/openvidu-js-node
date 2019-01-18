@@ -1196,13 +1196,12 @@
             onAudioMutedStateChange(localStream.getId());
         });
 
-	    navigator.mediaDevices.getUserMedia({ audio: {deviceId:{exact: audioSourceId}}, video: {deviceId:{exact: videoSourceId},width:1920,height:1080} })
-          .then(function(stream) {
-              client.publish(stream, "agora_local");
-          })
-          .catch(function(err) {
-
-          });
+        navigator.mediaDevices.getUserMedia({ audio: {deviceId:{exact: audioSourceId}}, video: {deviceId:{exact: videoSourceId},width:1920,height:1080} })
+	    .then(function(stream) {
+		    client.publish(stream, "agora_local");
+	    })
+	    .catch(function(err) {
+	    });
     }
   
   

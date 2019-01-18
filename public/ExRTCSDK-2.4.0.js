@@ -168,6 +168,7 @@ function ExRTC(){
 
     this.publish = function(mediaStream,elmentId){
 
+        var setting = mediaStream.getVideoTracks()[0].getSettings();
         mediaStream.elmentId = elmentId;
         _this.mediaStream = mediaStream;
 
