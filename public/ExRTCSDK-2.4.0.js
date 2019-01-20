@@ -262,16 +262,18 @@ function ExRTC(){
     }
 
     this.httpPostRequest = function(url, body, errorMsg, callback) {
-        var protocal = window.location.protocol;
-        var host = window.location.host;
-        if(host.indexOf("maaee.com") != -1){
-            url = "openvidu/"+url;
-        }
-        url = protocal+"//"+host+"/"+url;
+        // var protocal = window.location.protocol;
+        // var host = window.location.host;
+        // if(host.indexOf("maaee.com") != -1){
+        //     url = "openvidu/"+url;
+        // }
+        // url = protocal+"//"+host+"/"+url;
+        url = "https://www.maaee.com/openvidu/"+url;
         var http = new XMLHttpRequest();
         http.open('POST', url, true);
         http.setRequestHeader('Content-type', 'application/json');
         http.addEventListener('readystatechange', processRequest, false);
+        http.withCredentials = true;
         http.send(JSON.stringify(body));
 
         function processRequest() {
