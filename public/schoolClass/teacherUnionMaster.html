@@ -1694,7 +1694,12 @@ video{
 
 
 	    client.on('stream-added', function (evt) {
+
 		      var stream = evt.stream;
+		      //先不订阅rtsp的流，看下cpu消耗情况
+              if(stream.getId() < 0){
+                 return;
+              }
 
 		      console.log("New stream added: " + stream.getId());
 		      console.log("Subscribe ", stream);
