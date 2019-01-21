@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课堂中的视频源</title>
+    <link rel="icon" href="img/logo_title.png" type="image/x-icon">
+    <link type="text/css" rel="stylesheet" href="css/record_list.css?v=35" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/hashmap.js"></script>
+    <script type="text/javascript" src="js/layer/layer.js"></script>
+    <script type="application/javascript" src="../openvidu-browser-2.6.0.js"></script>
+    <script type="text/javascript" src="../ExRTCSDK-2.4.0.js"></script>
+    <script type="text/javascript" src="js/service.js"></script>
+    <script type="application/javascript" src="https://jsmpeg.com/jsmpeg.min.js"></script>
+    <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
+    <script type="text/javascript" src="js/rtsp_ffmpeg_config.js"></script>
+    <script type="application/javascript" src="./webrtc-streamer/webrtcstreamer.js"></script>
+    <script type="application/javascript" src="./webrtc-streamer/adapter.min.js"></script>
+    <script type="application/javascript" src="./webrtc-streamer/request.min.js"></script>
+
+
+    <style type="text/css">
+        .layui-layer-shade{
+            opacity: 0 !important;
+        }
+        .layui-layer{
+            box-shadow: 0px 6px 50px rgba(0,0,0,0.4) !important;
+        }
+        .layer-anim{
+            animation:none !important;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="videoSourceInClass-video" id="rtsp_preview_container">
+    <canvas width="848px" height="480px" autoplay id="rtsp_preview_canvas"></canvas>
+    <span class="preview_videoName til_hidden" id="video_name"></span>
+</div>
+
+</body>
+
+<script type="text/javascript">
+    var client = new ExRTC();
+    var localStream;
+    var jsmepgPlayer = null;
+
+    var vid = Service.getQueryString("vid");
+    var userName = Service.getQueryString("userName");
+    var rtspUrl = Service.getQueryString("rtspUrl");
+    var wsPort = Service.getQueryString("wsPort");
+    var from = Service.getQueryString("from");
+    var userId = Service.getQueryString("userId");
+    userId = from=="master"?random(-10000000,-20000000):userId;
+
+    var audioDeviceId = Service.getQueryString("audioDeviceId");
+
+    audioDeviceId = (audioDeviceId == null || audioDeviceId == undefined || audioDeviceId == "")?false:audioDeviceId;
+
+    var ipc = window.top.require('electron').ipcRenderer;
+
+    var webRtcServer;
+
+    $(document).ready(function(){
+        $("#video_name").text(userName);
+        var publish = Service.getQueryString("publish");
+        if(publish == "true"){
+            joinRoom();
+        }else{
+            var canvas = $("#rtsp_preview_canvas")[0];
+            if(jsmepgPlayer == null){
+                jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
+
+                var message = {};
+                message.command = "startRtspStream";
+                message.streamUrl = rtspUrl;
+                message.wsPort = wsPort;
+                message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
+                message.malv = RtspFFMPEGConfig.malv;
+                message.zhenlv = RtspFFMPEGConfig.zhenlv;
+                ipc.send('onRendererMessage',message);
+            }
+        }
+    });
+
+    function publish(){
+        // var canvas = $("#rtsp_preview_canvas")[0];
+        // if(jsmepgPlayer == null){
+        //     jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
+        //
+        //     var message = {};
+        //     message.command = "startRtspStream";
+        //     message.streamUrl = rtspUrl;
+        //     message.wsPort = wsPort;
+        //     message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
+        //     message.malv = RtspFFMPEGConfig.malv;
+        //     message.zhenlv = RtspFFMPEGConfig.zhenlv;
+        //     ipc.send('onRendererMessage',message);
+        // }
+        // localStream = canvas.captureStream(25);
+        // console.log('localStream : '+ localStream);
+        //
+        // mixMicStream(localStream,function(){
+        //     client.publish(localStream,"agora_local");
+        // });
+
+        var message = {};
+        message.command = "rtspRepublish";
+        message.rtspUrl = rtspUrl;
+        ipc.send('onRendererMessage',message);
+
+        setTimeout(function () {
+            webrtcStreamerGetStream(rtspUrl);
+        },1000*10);
+    }
+
+    function webrtcStreamerGetStream(rtspUrl){
+        $("#rtsp_preview_canvas").remove();
+        $("#rtsp_preview_container").append("<video id='rtsp_preview_canvas' muted autoplay width='848px' height='480px'></video>");
+        var vTag = "stream1";
+        if(rtspUrl == "rtsp://admin:excoord123@192.168.2.64:554/h264/ch1/main/av_stream"){
+            vTag = "stream1";
+        }else if(rtspUrl == "rtsp://192.168.0.233:554/live/av0"){
+            vTag = "stream2";
+        }
+
+        var options = "rtptransport=tcp&timeout=60";
+        options += "&width=848&height=480";
+        webRtcServer      = new WebRtcStreamer("rtsp_preview_canvas","http://59.110.6.123:8000/");
+        webRtcServer.connect(vTag,undefined,options);
+        var firstPlay = true;
+
+        var videoElement = $("#rtsp_preview_canvas")[0];
+        videoElement.onplaying = function() {
+            if(!firstPlay){
+                return;
+            }
+            localStream = videoElement.srcObject;
+            firstPlay = false;
+            mixMicStream(localStream,function(){
+                client.publish(localStream,"agora_local");
+            });
+        };
+    }
+
+    function mixMicStream(tabStream,onfinish){
+
+        var micConstraints = {
+            audio: true,
+            video: false
+        };
+        if(audioDeviceId){
+            micConstraints = {
+                audio: {deviceId: audioDeviceId ? {exact: audioDeviceId} : undefined},
+                video: false
+            };
+        };
+        navigator.mediaDevices.getUserMedia(micConstraints).then(function(micStream) {
+            var cts = {
+                autoGainControl:true,//自动增益控制
+                noiseSuppression:true,//噪声抑制
+                echoCancellation:true//回声消除
+            };
+
+            var audioTracks = micStream.getAudioTracks();
+            try{
+                if(audioTracks && audioTracks.length && audioTracks.length > 0){
+                    var audioTrack = audioTracks[0];
+                    audioTrack.applyConstraints(cts);
+                }
+            }catch (e){
+
+            }
+
+            var speakers = new MediaStream();
+            tabStream.getAudioTracks().forEach(function(track) {
+                speakers.addTrack(track);
+                tabStream.removeTrack(track);
+            });
+
+            var mixer = new MultiStreamsMixer([speakers, micStream]);
+            mixer.getMixedStream().getAudioTracks().forEach(function(track) {
+                tabStream.addTrack(track);
+            });
+            onfinish();
+        }).catch(function(err) {
+            console.log(err);
+            onfinish();
+        });
+    }
+
+    function unpublish(){
+        if(jsmepgPlayer != null){
+            jsmepgPlayer.destroy();
+            jsmepgPlayer = null;
+        }
+        try{
+            client.unpublish(localStream);
+            localStream.close();
+        }catch(e){
+            console.log(e);
+        }
+        localStream = null;
+
+        var message = {};
+        message.command = "stopRtspStream";
+        message.wsPort = wsPort;
+        ipc.send('onRendererMessage',message);
+
+        var msg = {};
+        msg.command = "stopRtspRepublish";
+        msg.rtspUrl = rtspUrl;
+        ipc.send('onRendererMessage',msg);
+        if(webRtcServer){
+            webRtcServer.disconnect();
+        }
+        removeIpCameraInfo();
+    }
+
+    function removeIpCameraInfo(){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
+
+        if(savedList){
+            var tobeDeleteIndex = -1;
+            savedList.forEach(function(device,index){
+                if(device.type == "ipCamera" && device.rtspUrl == rtspUrl && device.userName == userName){
+                    tobeDeleteIndex = index;
+                }
+            });
+            if(tobeDeleteIndex >= 0){
+                savedList.splice(tobeDeleteIndex,1);
+            }
+            localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
+        }
+    }
+
+    function random(lower, upper) {
+        return Math.floor(Math.random() * (upper - lower+1)) + lower;
+    }
+
+    function joinRoom(){
+        console.log('joinRoom .....');
+        client = new ExRTC();
+
+        client.join(vid+"", userId,userName, function() {
+            console.log('joinRoom success');
+            publish();
+        }, function() {
+            console.log("Join channel failed");
+        });
+    }
+
+</script>
+
+</html>

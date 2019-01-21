@@ -312,7 +312,8 @@
             defaultPort = defaultPort + 1;
             port = defaultPort;
         }
-        var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from+"&audioDeviceId="+audioDeviceId;
+        //var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from+"&audioDeviceId="+audioDeviceId;
+        var src = "videoSourceRtspInClass_webrtc_streamer.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from+"&audioDeviceId="+audioDeviceId;
         $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>关闭视频源</span></div>");
     }
 

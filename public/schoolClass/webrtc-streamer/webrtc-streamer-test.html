@@ -18,7 +18,8 @@
     options += "&width=848&height=480";
     var webRtcServer      = new WebRtcStreamer("video","http://59.110.6.123:8000/");
     window.onload         = function() {
-        webRtcServer.connect("stream2",undefined,options)
+        webRtcServer.connect("stream1",undefined,options);
+        console.log("connecting to stream1");
     }
     window.onbeforeunload = function() {
         webRtcServer.disconnect()
