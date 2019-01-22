@@ -314,7 +314,7 @@
         }
         //var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from+"&audioDeviceId="+audioDeviceId;
         var src = "videoSourceRtspInClass_webrtc_streamer.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from+"&audioDeviceId="+audioDeviceId;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>关闭视频源</span></div>");
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开</span></div>");
     }
 
     function addUsingIpCameraInfo(userName,rtspUrl,audioDeviceId){
@@ -368,7 +368,7 @@
     function innerUseUsbCamera(videoDeviceId,audioDeviceId,nick){
         var publish = Service.getQueryString("publish");
         var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick+"&publish="+publish+"&userId="+teacherId+"&from="+from;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>关闭视频源</span></div>");
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开</span></div>");
     }
 
     function deleteVideoSource(span) {
@@ -425,7 +425,7 @@
     function innerUseScreenInclass(nick){
         var publish = Service.getQueryString("publish");
         var src = "screenVideoInClass.html?vid=" + vid + "&userName=" + nick+"&publish="+publish+"&userId="+teacherId+"&from="+from;
-        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>关闭视频源</span></div>");
+        $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开</span></div>");
     }
 
     function addUsingScreenInfo(){

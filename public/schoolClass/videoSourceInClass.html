@@ -53,7 +53,7 @@
             var videoSource = videoDeviceId;
             var constraints = {
                 audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-                video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+                video: {deviceId: videoSource ? {exact: videoSource} : undefined,width:1920,height:1080}
             };
             navigator.mediaDevices.getUserMedia(constraints).
             then(function(stream){
@@ -68,7 +68,7 @@
         var videoSource = videoDeviceId;
         var constraints = {
             audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-            video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+            video: {deviceId: videoSource ? {exact: videoSource} : undefined,width:1920,height:1080}
         };
         navigator.mediaDevices.getUserMedia(constraints).
         then(function(stream){

@@ -29,6 +29,11 @@
         .layer-anim{
             animation:none !important;
         }
+        #rtsp_preview_canvas{
+            width: 100%;
+            height:100%;
+            object-fit: cover;
+        }
     </style>
 
 </head>
@@ -60,7 +65,7 @@
 
     var ipc = window.top.require('electron').ipcRenderer;
 
-    var webRtcServer;
+    var webRtcServer = null;
 
     $(document).ready(function(){
         $("#video_name").text(userName);
@@ -112,7 +117,7 @@
 
         setTimeout(function () {
             webrtcStreamerGetStream(rtspUrl);
-        },1000*10);
+        },500);
     }
 
     function webrtcStreamerGetStream(rtspUrl){
@@ -127,7 +132,11 @@
 
         var options = "rtptransport=tcp&timeout=60";
         options += "&width=848&height=480";
-        webRtcServer      = new WebRtcStreamer("rtsp_preview_canvas","http://59.110.6.123:8000/");
+        if(webRtcServer != null){
+            webRtcServer.disconnect();
+            webRtcServer = null;
+        }
+        webRtcServer = new WebRtcStreamer("rtsp_preview_canvas","http://59.110.6.123:8000/");
         webRtcServer.connect(vTag,undefined,options);
         var firstPlay = true;
 
@@ -191,6 +200,10 @@
     }
 
     function unpublish(){
+        if(webRtcServer != null){
+            webRtcServer.disconnect();
+            webRtcServer = null;
+        }
         if(jsmepgPlayer != null){
             jsmepgPlayer.destroy();
             jsmepgPlayer = null;
@@ -212,9 +225,7 @@
         msg.command = "stopRtspRepublish";
         msg.rtspUrl = rtspUrl;
         ipc.send('onRendererMessage',msg);
-        if(webRtcServer){
-            webRtcServer.disconnect();
-        }
+
         removeIpCameraInfo();
     }
 
