@@ -177,7 +177,7 @@
         if(selected && selected.length > 0){
             selectedClazzId = $(selected[0]).attr("clazzId");
         }
-        window.parent.joinCheck(vid,password,selectedClazzId);
+        window.parent.document.getElementById("classInfo_iframe").contentWindow.joinCheck(vid,password,selectedClazzId);
     }
 
     function changeClazzSelected(element,clazzId){

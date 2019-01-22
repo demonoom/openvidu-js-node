@@ -20,6 +20,7 @@
     <script type="text/javascript" src="js/MultiStreamsMixer.js"></script>
     <script type="text/javascript" src="js/ServerRecord.js"></script>
     <script type="text/javascript" src="js/rtsp_ffmpeg_config.js"></script>
+    <script type="text/javascript" src="js/AppUtils.js"></script>
     <style type="text/css">
         .layui-layer {
             box-shadow: 0px 6px 50px rgba(0, 0, 0, 0.4) !important;
@@ -275,21 +276,43 @@
             return;
         }
 
-        rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
-        
-        if ($.trim($("#rtsp_url").val()) != "" || $("#rtsp_url").val() != undefined) {
-            rtspUrlArr.push(
-                {
-                    url: $.trim($("#rtsp_url").val())
+        //获取转推地址
+        var service = new Service();
+        var data = {};
+        data.method = "applyRtspRepublishStream";
+        data.macAddress = AppUtils.getMacAddress();
+        data.rtspUrl = rtspUrl;
+        service.doWebService(data,{
+            onResponse : function(result) {
+                if(!result.success){
+                    layer.msg("申请stream失败");
+                    return;
                 }
-            )
-        }
-        rtspUrlArr = makeArr(rtspUrlArr, "url")
-        localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
-        layer.closeAll();
+                var stream = result.response;
+                if(stream == null){
+                    layer.msg("申请stream失败");
+                }else{
+                    layer.msg("stream id :" + stream);
 
-        addUsingIpCameraInfo(nick,rtspUrl,audioDeviceId);
-        innerUseIpCamera(nick,rtspUrl,audioDeviceId);
+                    rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
+                    if ($.trim($("#rtsp_url").val()) != "" || $("#rtsp_url").val() != undefined) {
+                        rtspUrlArr.push(
+                            {
+                                url: $.trim($("#rtsp_url").val())
+                            }
+                        )
+                    }
+                    rtspUrlArr = makeArr(rtspUrlArr, "url")
+                    localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
+                    layer.closeAll();
+                    addUsingIpCameraInfo(nick,rtspUrl,audioDeviceId);
+                    innerUseIpCamera(nick,rtspUrl,audioDeviceId);
+                }
+            },
+            onError : function(error) {
+                layer.msg("申请stream失败");
+            }
+        });
     }
 
     function innerUseIpCamera(nick,rtspUrl,audioDeviceId){

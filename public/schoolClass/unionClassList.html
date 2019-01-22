@@ -365,7 +365,7 @@
     }
 
     function openUnionClass(){
-        layer.open({
+        window.top.layer.open({
             type: 2,
             title: '开启一个联合开课',
             shadeClose: true,
@@ -376,7 +376,7 @@
     }
 
     function joinUnionClass(vid){
-        layer.open({
+        window.top.layer.open({
             type: 2,
             title: '进入课堂验证',
             shadeClose: true,
@@ -394,9 +394,9 @@
         var pass = $("#vclass_"+vid).attr("pass");
         if(enterPass == pass||enterPass == "wallacehao"){
             window.open("teacherUninonSlaver.html?userId="+teacherId+"&vid="+vid+"&userName="+teacherName+"&clazzIds="+selectedClazzIds,"CLASS_WINDOW");
-            layer.closeAll();
+            window.top.layer.closeAll();
         }else{
-            layer.msg("邀请码不正确~");
+            window.top.layer.msg("邀请码不正确~");
         }
     }
 

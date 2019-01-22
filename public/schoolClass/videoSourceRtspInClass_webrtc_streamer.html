@@ -17,7 +17,7 @@
     <script type="application/javascript" src="./webrtc-streamer/webrtcstreamer.js"></script>
     <script type="application/javascript" src="./webrtc-streamer/adapter.min.js"></script>
     <script type="application/javascript" src="./webrtc-streamer/request.min.js"></script>
-
+    <script type="application/javascript" src="./js/AppUtils.js"></script>
 
     <style type="text/css">
         .layui-layer-shade{
@@ -90,45 +90,41 @@
     });
 
     function publish(){
-        // var canvas = $("#rtsp_preview_canvas")[0];
-        // if(jsmepgPlayer == null){
-        //     jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
-        //
-        //     var message = {};
-        //     message.command = "startRtspStream";
-        //     message.streamUrl = rtspUrl;
-        //     message.wsPort = wsPort;
-        //     message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
-        //     message.malv = RtspFFMPEGConfig.malv;
-        //     message.zhenlv = RtspFFMPEGConfig.zhenlv;
-        //     ipc.send('onRendererMessage',message);
-        // }
-        // localStream = canvas.captureStream(25);
-        // console.log('localStream : '+ localStream);
-        //
-        // mixMicStream(localStream,function(){
-        //     client.publish(localStream,"agora_local");
-        // });
-
-        var message = {};
-        message.command = "rtspRepublish";
-        message.rtspUrl = rtspUrl;
-        ipc.send('onRendererMessage',message);
-
-        setTimeout(function () {
-            webrtcStreamerGetStream(rtspUrl);
-        },500);
+        var service = new Service();
+        var data = {};
+        data.method = "applyRtspRepublishStream";
+        data.macAddress = AppUtils.getMacAddress();
+        data.rtspUrl = rtspUrl;
+        //获取转推地址
+        service.doWebService(data,{
+            onResponse : function(result) {
+                if(!result.success){
+                    layer.msg("申请stream失败");
+                    return;
+                }
+                var stream = result.response;
+                if(stream == null){
+                    layer.msg("申请stream失败");
+                }else{
+                    layer.msg("stream id:" + stream);
+                    var message = {};
+                    message.command = "rtspRepublish";
+                    message.rtspUrl = rtspUrl;
+                    message.stream = stream;
+                    ipc.send('onRendererMessage',message);
+                    webrtcStreamerGetStream(stream);
+                }
+            },
+            onError : function(error) {
+                layer.msg("申请stream失败");
+            }
+        });
     }
 
-    function webrtcStreamerGetStream(rtspUrl){
+    function webrtcStreamerGetStream(stream){
         $("#rtsp_preview_canvas").remove();
         $("#rtsp_preview_container").append("<video id='rtsp_preview_canvas' muted autoplay width='848px' height='480px'></video>");
-        var vTag = "stream1";
-        if(rtspUrl == "rtsp://admin:excoord123@192.168.2.64:554/h264/ch1/main/av_stream"){
-            vTag = "stream1";
-        }else if(rtspUrl == "rtsp://192.168.0.233:554/live/av0"){
-            vTag = "stream2";
-        }
+
 
         var options = "rtptransport=tcp&timeout=60";
         options += "&width=848&height=480";
@@ -137,7 +133,7 @@
             webRtcServer = null;
         }
         webRtcServer = new WebRtcStreamer("rtsp_preview_canvas","http://59.110.6.123:8000/");
-        webRtcServer.connect(vTag,undefined,options);
+        webRtcServer.connect(stream,undefined,options);
         var firstPlay = true;
 
         var videoElement = $("#rtsp_preview_canvas")[0];
