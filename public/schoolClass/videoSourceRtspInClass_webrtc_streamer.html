@@ -145,7 +145,7 @@
             webRtcServer.disconnect();
             webRtcServer = null;
         }
-        webRtcServer = new WebRtcStreamer("rtsp_preview_canvas","http://59.110.6.123:8000/");
+        webRtcServer = new WebRtcStreamer("rtsp_preview_canvas","http://files.maaee.com:8000");
         webRtcServer.connect(stream,undefined,options);
         var firstPlay = true;
 
