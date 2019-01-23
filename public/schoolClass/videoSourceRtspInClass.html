@@ -168,7 +168,7 @@
     }
 
     function removeIpCameraInfo(){
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
 
         if(savedList){
             var tobeDeleteIndex = -1;
@@ -180,7 +180,7 @@
             if(tobeDeleteIndex >= 0){
                 savedList.splice(tobeDeleteIndex,1);
             }
-            localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
+            localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
         }
     }
 

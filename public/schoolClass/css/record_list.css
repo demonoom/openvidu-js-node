@@ -829,7 +829,7 @@ img{
 	font-size:1.3rem;
 }
   ::-webkit-scrollbar{
-		  width: 8px;
+		  width: 4px;
 		  height:8px;
 	} /* 这是针对缺省样式 (必须的) */
 
@@ -4916,17 +4916,17 @@ br{
     float: right;
     color: #222;
 }
-.videoSource{
+.videoSource, .videoSource-b{
 	color: #333;
 	font-size: 13px;
 	line-height: 1;
 	width: 100% !important;
 	height: 400px !important;
 }
-.videoSource ::-webkit-scrollbar{
+.videoSource ::-webkit-scrollbar, .videoSource-b ::-webkit-scrollbar{
 	width: 4px;
 }
-.videoSource .layui-layer-title{
+.videoSource .layui-layer-title, .videoSource-b .layui-layer-title{
 	padding: 0 80px 0 20px;
 	height: 42px;
 	line-height: 42px;
@@ -4938,11 +4938,11 @@ br{
 	border-radius: 2px 2px 0 0;
 }
 
-.videoSource .layui-layer-content{
+.videoSource .layui-layer-content, .videoSource-b .layui-layer-content{
 	padding:20px 0 20px 20px;
 	overflow: hidden !important;
 }
-.videoSource .list-item{
+.videoSource .list-item, .videoSource-b .list-item{
 	margin-bottom: 20px;
 	clear: both;
 	display:-webkit-box;
@@ -4964,23 +4964,24 @@ br{
 	height: 130px;
 	overflow: hidden;
 	position: relative;
+	background: rgba(0,0,0,0.7);
 }
-.videoSource .list-item-video video, .videoSource .list-item-video canvas, .videoSourceInClass-video canvas{
+.videoSource .list-item-video video, .videoSource .list-item-video canvas, .videoSourceInClass-video canvas, .videoSource-b .list-item-video video, .videoSource-b .list-item-video canvas, .videoSource-b .videoSourceInClass-video canvas{
 	object-fit: cover;
 	width: 100%;
 	height: 100%;
 }
-.videoSource .list-item .left{
+.videoSource .list-item .left, .videoSource-b .list-item .left{
 	color: #333;
 	font-size: 13px;
 	width: 60px;
 	text-align: left;
 	display: inline-block;
 }
-.videoSource .list-item .left2{
+.videoSource .list-item .left2, .videoSource-b .list-item .left2{
 	width: 45px;
 }
-.videoSource .list-item .right-item{
+.videoSource .list-item .right-item, .videoSource-b .list-item .right-item{
 	width:calc(100% - 45px);
 	margin-left:0;
 	display: inline-block;
@@ -5014,7 +5015,7 @@ br{
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-.videoSource .btn-cont{
+.videoSource .btn-cont, .videoSource-b .btn-cont{
 	height: 34px;
 	display:-webkit-box;
 	display: -moz-box;
@@ -5035,7 +5036,7 @@ br{
 	box-sizing: border-box;
 	padding-top: 18px;
 }
-.videoSource .btn-blue{
+.videoSource .btn-blue, .videoSource-b .btn-blue{
 	width:74px;
 	height:30px;
 	border-radius:4px;
@@ -5045,7 +5046,7 @@ br{
 	text-align: center;
 	box-sizing: border-box;
 }
-.videoSource .Ghost-btn{
+.videoSource .Ghost-btn, .videoSource-b .Ghost-btn{
 	border-color: #4285F4;
 	color:#4285F4;
 }
@@ -5101,6 +5102,26 @@ br{
 	float: right;
 	text-align: left;
 
+}
+.videoSource-b{
+	color: #333;
+	font-size: 13px;
+	line-height: 1;
+	width: 100% !important;
+	height: 320px !important;
+}
+.videoSource-b .list-content{
+	height: 206px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+.videoSource-b .list-item-video{
+	height: 150px;
+	overflow: hidden;
+	margin-left: 0;
+	margin-right: 20px;
+	margin-bottom: 0;
+	margin-top: 20px;
 }
 .videoSource-wrap{
 	width: 100%;
@@ -5195,11 +5216,15 @@ br{
 	overflow-x: hidden;
 	overflow-y: auto;
 }
+
 .videoSource_content-video{
 	height: 130px;
 	border-bottom: 1px solid #E5E5E5;
 	padding: 8px 0 8px 26px;
 	position: relative;
+}
+.videoSource_content .videoSource_content-video:last-child{
+	border-bottom: none;
 }
 .videoSource_content-video-left{
 	width: 230px;
@@ -5241,6 +5266,7 @@ br{
 	height: 127px;
 	position: relative;
 	overflow: hidden;
+	background: rgba(0,0,0,0.7);
 }
 .preview_videoName{
 	position: absolute;
@@ -5307,4 +5333,18 @@ span.justify > span {
 	font-size: 42px;
 	color: #666;
 	margin-top: 15px;
+}
+.not_lianmai_tip{
+	text-align: center;
+	line-height: 130px;
+	color: #fff;
+	font-size: 12px;
+}
+.not_lianmai_view{
+	margin-left: 30px;
+	color: #339cff;
+	cursor: pointer;
+}
+.not_lianmai_view:hover{
+	color: #50aaff
 }

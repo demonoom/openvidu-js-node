@@ -68,24 +68,28 @@
     var webRtcServer = null;
 
     $(document).ready(function(){
-        $("#video_name").text(userName);
+        $("#video_name").text(userName+"-网络摄像头");
         var publish = Service.getQueryString("publish");
         if(publish == "true"){
             joinRoom();
         }else{
-            var canvas = $("#rtsp_preview_canvas")[0];
-            if(jsmepgPlayer == null){
-                jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
-
-                var message = {};
-                message.command = "startRtspStream";
-                message.streamUrl = rtspUrl;
-                message.wsPort = wsPort;
-                message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
-                message.malv = RtspFFMPEGConfig.malv;
-                message.zhenlv = RtspFFMPEGConfig.zhenlv;
-                ipc.send('onRendererMessage',message);
-            }
+            // var canvas = $("#rtsp_preview_canvas")[0];
+            // if(jsmepgPlayer == null){
+            //     jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
+            //
+            //     var message = {};
+            //     message.command = "startRtspStream";
+            //     message.streamUrl = rtspUrl;
+            //     message.wsPort = wsPort;
+            //     message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
+            //     message.malv = RtspFFMPEGConfig.malv;
+            //     message.zhenlv = RtspFFMPEGConfig.zhenlv;
+            //     ipc.send('onRendererMessage',message);
+            // }
+            //用于未被连麦时候的提示
+            $("#rtsp_preview_canvas").remove();
+            $("#not_lianmai_tip").remove();
+            $("#rtsp_preview_container").append("<div id='not_lianmai_tip' class='not_lianmai_tip'><span>等待被连麦</span><span onclick='parentOnlyPreviewRtsp();' class='not_lianmai_view'>预览</span></div>");
         }
     });
 
@@ -99,14 +103,17 @@
         service.doWebService(data,{
             onResponse : function(result) {
                 if(!result.success){
-                    layer.msg("申请stream失败");
+                    $("#rtsp_preview_canvas").remove();
+                    $("#aplly_failed_tip").remove();
+                    $("#rtsp_preview_container").append("<div id='aplly_failed_tip' class='not_lianmai_tip'><span>申请流地址失败，请稍后重试</span></div>");
                     return;
                 }
                 var stream = result.response;
                 if(stream == null){
-                    layer.msg("申请stream失败");
+                    $("#rtsp_preview_canvas").remove();
+                    $("#aplly_failed_tip").remove();
+                    $("#rtsp_preview_container").append("<div id='aplly_failed_tip' class='not_lianmai_tip'><span>申请流地址失败，请稍后重试</span></div>");
                 }else{
-                    layer.msg("stream id:" + stream);
                     var message = {};
                     message.command = "rtspRepublish";
                     message.rtspUrl = rtspUrl;
@@ -116,9 +123,15 @@
                 }
             },
             onError : function(error) {
-                layer.msg("申请stream失败");
+                $("#rtsp_preview_canvas").remove();
+                $("#aplly_failed_tip").remove();
+                $("#rtsp_preview_container").append("<div id='aplly_failed_tip' class='not_lianmai_tip'><span>申请流地址失败，请稍后重试</span></div>");
             }
         });
+    }
+
+    function parentOnlyPreviewRtsp(){
+        window.parent.onlyPreviewRtsp(rtspUrl);
     }
 
     function webrtcStreamerGetStream(stream){
@@ -226,7 +239,7 @@
     }
 
     function removeIpCameraInfo(){
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
 
         if(savedList){
             var tobeDeleteIndex = -1;
@@ -238,7 +251,7 @@
             if(tobeDeleteIndex >= 0){
                 savedList.splice(tobeDeleteIndex,1);
             }
-            localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
+            localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
         }
     }
 

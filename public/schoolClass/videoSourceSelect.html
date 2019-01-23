@@ -189,10 +189,10 @@
 
 
     function cancelUseRtsp() {
-        var rtspUrl = $("#rtsp_url").val();
-        if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
-            return;
-        }
+        // var rtspUrl = $("#rtsp_url").val();
+        // if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
+        //     return;
+        // }
 
         if (jsmpegPlayer) {
             var message = {};
@@ -228,6 +228,11 @@
             defaultPort = defaultPort + 1;
             port = defaultPort;
         }
+
+        if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
+            return;
+        }
+
         var message = {};
         message.command = "startRtspStream";
         message.streamUrl = rtspUrl;
@@ -239,6 +244,41 @@
 
         var canvas = $("#rtsp_preview_canvas")[0];
         jsmpegPlayer = new JSMpeg.Player('ws://localhost:' + port, { loop: true, autoplay: true, canvas: canvas, audio: false });
+    }
+
+    function onlyPreviewRtsp(rtspUrl){
+        if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
+            return;
+        }
+        var html = "<div class='list-content'><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span></div>";
+
+        layer.open({
+            type: 1,
+            title: "网络摄像头预览",
+            closeBtn: 0,
+            skin: "videoSource-b",
+            area: ['100%', '380px'], //宽高
+            offset: 'b',
+            content: html
+        });
+        setTimeout(function(){
+            var port = rtspPortMap.get(rtspUrl);
+            if(port == null || port == undefined || port == ""){
+                defaultPort = defaultPort + 1;
+                port = defaultPort;
+            }
+            var message = {};
+            message.command = "startRtspStream";
+            message.streamUrl = rtspUrl;
+            message.wsPort = port;
+            message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
+            message.malv = RtspFFMPEGConfig.malv;
+            message.zhenlv = RtspFFMPEGConfig.zhenlv;
+            ipc.send('onRendererMessage', message);
+
+            var canvas = $("#rtsp_preview_canvas")[0];
+            jsmpegPlayer = new JSMpeg.Player('ws://localhost:' + port, { loop: true, autoplay: true, canvas: canvas, audio: false });
+        },800);
     }
 
     /**
@@ -292,8 +332,6 @@
                 if(stream == null){
                     layer.msg("申请stream失败");
                 }else{
-                    layer.msg("stream id :" + stream);
-
                     rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
                     if ($.trim($("#rtsp_url").val()) != "" || $("#rtsp_url").val() != undefined) {
                         rtspUrlArr.push(
@@ -346,12 +384,12 @@
         device.rtspUrl = ""+rtspUrl;
         device.audioDeviceId = audioDeviceId;
         device.userName = userName;
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
         if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
     }
 
     function preView() {
@@ -373,6 +411,33 @@
             }).catch(function (e) {
                 console.log(e);
             });
+    }
+
+    function onlyUsbCameraPreview(videoDeviceId,audioDeviceId){
+        layer.open({
+            type: 1,
+            closeBtn: 0,
+            title: "摄像头预览",
+            skin: "videoSource-b",
+            area: ['100%', '380px'], //宽高
+            offset: 'b',
+            content: "<div class='list-content'><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span></div>"
+        });
+
+        setTimeout(function(){
+            var audioSource = audioDeviceId;
+            var videoSource = videoDeviceId;
+            var constraints = {
+                audio: { deviceId: audioSource ? { exact: audioSource } : undefined },
+                video: { deviceId: videoSource ? { exact: videoSource } : undefined }
+            };
+            navigator.mediaDevices.getUserMedia(constraints).
+            then(function (stream) {
+                $("#preview_video")[0].srcObject = stream;
+            }).catch(function (e) {
+                console.log(e);
+            });
+        },200);
     }
 
     function useInclass() {
@@ -408,12 +473,12 @@
         device.videoDeviceId = ""+videoDeviceId;
         device.audioDeviceId = ""+audioDeviceId;
         device.userName = userName;
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
         if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
     }
 
     function addScreen(){
@@ -454,12 +519,12 @@
     function addUsingScreenInfo(){
         var device = {};
         device.type = "screen";
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
         if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
     }
 
     function screenVideoPreview(){
@@ -496,7 +561,7 @@
         if(from == "master"){
             $("#screen_menu").show();
         }
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
         if(savedList){
             savedList.forEach(function(device){
                 var type = device.type;

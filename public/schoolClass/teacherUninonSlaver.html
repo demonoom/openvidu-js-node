@@ -1135,7 +1135,7 @@
     function shangmai(){
         var browser = platform.name;
         if(browser.indexOf("Electron") != -1){
-            var savedList = JSON.parse(localStorage.getItem("usingDeviceList_slaver"));
+            var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_slaver"));
             if(!savedList){
                 layer.msg("请先设置视频源~~~");
 			}else{
@@ -1293,7 +1293,7 @@
     function checkApplyMaiDevice(){
             var browser = platform.name;
 			if(browser.indexOf("Electron") != -1){
-				var savedList = JSON.parse(localStorage.getItem("usingDeviceList_slaver"));
+				var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_slaver"));
 				if(!savedList || !(savedList instanceof Array) || savedList.length <= 0){
 					layer.msg("请先设置视频源~~~");
 				}else{

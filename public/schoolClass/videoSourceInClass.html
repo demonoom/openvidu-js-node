@@ -25,7 +25,7 @@
 </head>
 <body>
 
- <div class="preview_video-cont">
+ <div class="preview_video-cont" id="preview_video_container">
      <video width="230px" height="127px" autoplay class="preview_video" id="preview_video" muted></video>
      <span class="preview_videoName til_hidden" id="video_name">前置摄像头</span>
  </div>
@@ -44,24 +44,30 @@
     userId = from=="master"?random(-10000000,-20000000):userId;
 
     $(document).ready(function(){
-        $("#video_name").text(userName);
+        $("#video_name").text(userName+"-本地摄像头");
         var publish = Service.getQueryString("publish");
         if(publish == "true"){
             joinRoom();
         }else{
-            var audioSource = audioDeviceId;
-            var videoSource = videoDeviceId;
-            var constraints = {
-                audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
-                video: {deviceId: videoSource ? {exact: videoSource} : undefined,width:1920,height:1080}
-            };
-            navigator.mediaDevices.getUserMedia(constraints).
-            then(function(stream){
-                $("#preview_video")[0].srcObject = stream;
-            }).catch(function(e){
-            });
+            // var audioSource = audioDeviceId;
+            // var videoSource = videoDeviceId;
+            // var constraints = {
+            //     audio: {deviceId: audioSource ? {exact: audioSource} : undefined},
+            //     video: {deviceId: videoSource ? {exact: videoSource} : undefined,width:1920,height:1080}
+            // };
+            // navigator.mediaDevices.getUserMedia(constraints).
+            // then(function(stream){
+            //     $("#preview_video")[0].srcObject = stream;
+            // }).catch(function(e){
+            // });
+            $("#preview_video").remove();
+            $("#preview_video_container").append("<div class='not_lianmai_tip'><span>等待被连麦</span><span onclick='parentOnlyUsbCameraPreview();' class='not_lianmai_view'>预览</span></div>");
         }
     });
+
+    function parentOnlyUsbCameraPreview(){
+        window.parent.onlyUsbCameraPreview(videoDeviceId,audioDeviceId);
+    }
 
     function publish(){
         var audioSource = audioDeviceId;
@@ -92,7 +98,7 @@
     }
 
     function removeUsbCameraInfo(){
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_"+from));
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
 
         if(savedList){
             var tobeDeleteIndex = -1;
@@ -106,7 +112,7 @@
             if(tobeDeleteIndex >= 0){
                 savedList.splice(tobeDeleteIndex,1);
             }
-            localStorage.setItem("usingDeviceList_"+from,JSON.stringify(savedList));
+            localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
         }
     }
 
