@@ -73,19 +73,6 @@
         if(publish == "true"){
             joinRoom();
         }else{
-            // var canvas = $("#rtsp_preview_canvas")[0];
-            // if(jsmepgPlayer == null){
-            //     jsmepgPlayer = new JSMpeg.Player('ws://localhost:'+wsPort,{loop: true, autoplay: true,canvas:canvas,audio :false});
-            //
-            //     var message = {};
-            //     message.command = "startRtspStream";
-            //     message.streamUrl = rtspUrl;
-            //     message.wsPort = wsPort;
-            //     message.fenbianlv = RtspFFMPEGConfig.fenbianlv;
-            //     message.malv = RtspFFMPEGConfig.malv;
-            //     message.zhenlv = RtspFFMPEGConfig.zhenlv;
-            //     ipc.send('onRendererMessage',message);
-            // }
             //用于未被连麦时候的提示
             $("#rtsp_preview_canvas").remove();
             $("#not_lianmai_tip").remove();
@@ -139,8 +126,8 @@
         $("#rtsp_preview_container").append("<video id='rtsp_preview_canvas' muted autoplay width='848px' height='480px'></video>");
 
 
-        var options = "rtptransport=tcp&timeout=60";
-        options += "&width=848&height=480";
+        var options = "rtptransport=udp&timeout=60";
+        options += "&width=848&height=480&time="+new Date().getTime();
         if(webRtcServer != null){
             webRtcServer.disconnect();
             webRtcServer = null;

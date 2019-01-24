@@ -14,7 +14,7 @@
 
 <script>
 
-    var options = "rtptransport=tcp&timeout=60";
+    var options = "rtptransport=udp&timeout=60";
     options += "&width=848&height=480";
     var webRtcServer      = new WebRtcStreamer("video","http://59.110.6.123:8000/");
     window.onload         = function() {
