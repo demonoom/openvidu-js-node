@@ -139,7 +139,7 @@
         $("#rtsp_preview_container").append("<video id='rtsp_preview_canvas' muted autoplay width='848px' height='480px'></video>");
 
 
-        var options = "rtptransport=udp&timeout=60";
+        var options = "rtptransport=tcp&timeout=60";
         options += "&width=848&height=480";
         if(webRtcServer != null){
             webRtcServer.disconnect();
