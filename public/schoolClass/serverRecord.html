@@ -61,7 +61,8 @@
 
 <script type="text/javascript">
     function startServerRecord() {
-        var teacherId = Service.getQueryString("teacherId");
+        //var teacherId = Service.getQueryString("teacherId");
+        var pushUrl = Service.getQueryString("pushUrl");
         var config = {};
         config.maxWidth = 1280;
         config.minWidth = 1280;
@@ -69,7 +70,7 @@
         config.minHeight = 720;
         config.maxFrameRate = 30;
         config.minFrameRate = 30;
-        config.pushUrl = "rtmp://60.205.86.217:19350/live4/"+teacherId;
+        config.pushUrl = pushUrl;
         config.webSocketUrl = "https://jiaoxue.maaee.com:9003/";
         config.timeSlice = 1500;
         config.recordingTipTextId = "recordingTipText",
