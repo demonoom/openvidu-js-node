@@ -184,7 +184,7 @@
                     actData.splice(i, 1);
                     $("#actData").html("");
                     actData.forEach(function (v, i) {
-                        $("#actData").append(`<div><span onClick='getInputValue("${v.account}","${v.password}")'>${v.account}</span><span onClick='deleteData("${v.account}")'>删除</span></div>`)
+                        $("#actData").append(`<div class="listCont"><span class="text" onClick='getInputValue("${v.account}","${v.password}")'>${v.account}</span><span class="close" onClick='deleteData("${v.account}")'>删除</span></div>`)
                     })
                     localStorage.setItem('accountData', JSON.stringify(actData));
 
@@ -219,7 +219,7 @@
         }
         accountArr = makeArr(accountArr, "account")
         accountArr.forEach(function (v, i) {
-            $("#actData").append(`<div><span onClick='getInputValue("${v.account}","${v.password}")'>${v.account}</span><span onClick='deleteData("${v.account}")'>删除</span></div>`)
+            $("#actData").append(`<div class="listCont"><span class="text" onClick='getInputValue("${v.account}","${v.password}")'>${v.account}</span><span class="close" onClick='deleteData("${v.account}")'>删除</span></div>`)
         })
         $("#act").blur(function () {
             setTimeout(function () {

@@ -155,7 +155,7 @@
                         console.log(urlData)
                         $("#rtsUrl").html("");
                         urlData.forEach(function (v, i) {
-                            $("#rtsUrl").append(`<div onClick='getRtsUrl("${v.url}")'><span>${v.url}</span><span onClick='deleteRtsUrl("${v.url}")'>删除</span></div>`)
+                            $("#rtsUrl").append(`<div class="listCont" onClick='getRtsUrl("${v.url}")'><span class="text">${v.url}</span><span class="close" onClick='deleteRtsUrl("${v.url}")'>删除</span></div>`)
                         })
                         localStorage.setItem('rtspUrl', JSON.stringify(urlData));
 
@@ -165,7 +165,7 @@
             rtspUrlArr = makeArr(rtspUrlArr, "url")
             //显示输入过的值
             rtspUrlArr.forEach(function (v, i) {
-                $("#rtsUrl").append(`<div onClick='getRtsUrl("${v.url}")'><span>${v.url}</span><span onClick='deleteRtsUrl("${v.url}")'>删除</span></div>`)
+                $("#rtsUrl").append(`<div class="listCont" onClick='getRtsUrl("${v.url}")'><span class="text">${v.url}</span><span class="close" onClick='deleteRtsUrl("${v.url}")'>删除</span></div>`)
             })
             $("#rtsp_url").focus(function () {
                 $("#rtsUrl").css("display", "block");

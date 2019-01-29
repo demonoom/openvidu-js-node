@@ -104,16 +104,7 @@ input:-webkit-autofill{
 ::-webkit-scrollbar-button {
     background-color: initial;
 }
-.inputWrap #actData > div{
-    padding: 5px 15px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #666;
-}
-.inputWrap #actData > div:hover{
-    background-color: #edf2ff;
-    color: #333;
-}
+
 input{
     border: 1px #D2D2D2 solid;
     line-height: 20px;
@@ -131,6 +122,36 @@ input:focus{
 }
 input#act{
     margin-top: 30px;
+}
+.inputWrap .listCont{
+    position: relative;
+    padding: 5px 15px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+.inputWrap #actData .listCont:hover{
+    background-color: #edf2ff;
+    color: #333;
+}
+.inputWrap .listCont .text {
+    line-height: 28px;
+    display: block;
+    width: calc(100% - 20px);
+}
+.listCont .close {
+    display: block;
+    width: 28px;
+    height: 28px;
+    background:url("../../images/icon_close.png") no-repeat center center;
+    background-size: 12px;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 0;
 }
 #login{
     line-height: 48px;
