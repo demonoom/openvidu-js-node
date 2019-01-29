@@ -25,8 +25,9 @@
         .layui-layer {
             box-shadow: 0px 6px 50px rgba(0, 0, 0, 0.4) !important;
         }
-        .layer-anim{
-            animation:none !important;
+
+        .layer-anim {
+            animation: none !important;
         }
     </style>
 </head>
@@ -62,10 +63,10 @@
     var ipc = window.top.require('electron').ipcRenderer;
     var rtspPortMap = new HashMap();
     var from = Service.getQueryString("from");
-     
+
     function addLocalCamera() {
         var childrenSize = $("#video_sources").children().length;
-        if(from == "slaver" &&childrenSize > 1){
+        if (from == "slaver" && childrenSize > 1) {
             layer.msg("请先移除已添加视频源");
             return;
         }
@@ -81,7 +82,7 @@
                         return;
                     }
                     if (device.kind == 'audioinput') {
-                        if(device.deviceId != "communications"){
+                        if (device.deviceId != "communications") {
                             audios.push(device);
                             audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
                         }
@@ -112,21 +113,21 @@
 
     function addIpCamera() {
         var browser = platform.name;
-        if(browser.indexOf("Electron") == -1){
-            layer.msg("请在pc客户端中使用此功能~~");
-            return;
-        }
+        // if(browser.indexOf("Electron") == -1){
+        //     layer.msg("请在pc客户端中使用此功能~~");
+        //     return;
+        // }
         var childrenSize = $("#video_sources").children().length;
-        if(from == "slaver" &&childrenSize > 1){
+        if (from == "slaver" && childrenSize > 1) {
             layer.msg("请先移除已添加视频源");
             return;
         }
-        detectRtspCameraAudio(function(audios,audioHtml){
+        detectRtspCameraAudio(function (audios, audioHtml) {
             var html = "";
-            if(audios.length > 0){
-                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'>"+audioHtml+"</div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
+            if (audios.length > 0) {
+                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
                     ">使用</span></div>";
-            }else{
+            } else {
                 html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
                     ">使用</span></div>";
             }
@@ -144,10 +145,27 @@
             getRtsUrl = function (url) {
                 $("#rtsp_url").val(url)
             }
+
+            deleteRtsUrl = function (url) {
+                console.log(url)
+                var urlData = JSON.parse(localStorage.getItem("rtspUrl")) == null ? accountArr : JSON.parse(localStorage.getItem("rtspUrl"))
+                urlData.forEach((v, i) => {
+                    if (v.url == url) {
+                        urlData.splice(i, 1);
+                        console.log(urlData)
+                        $("#rtsUrl").html("");
+                        urlData.forEach(function (v, i) {
+                            $("#rtsUrl").append(`<div onClick='getRtsUrl("${v.url}")'><span>${v.url}</span><span onClick='deleteRtsUrl("${v.url}")'>删除</span></div>`)
+                        })
+                        localStorage.setItem('rtspUrl', JSON.stringify(urlData));
+
+                    }
+                })
+            }
             rtspUrlArr = makeArr(rtspUrlArr, "url")
             //显示输入过的值
             rtspUrlArr.forEach(function (v, i) {
-                $("#rtsUrl").append(`<div onClick='getRtsUrl("${v.url}")'>${v.url}</div>`)
+                $("#rtsUrl").append(`<div onClick='getRtsUrl("${v.url}")'><span>${v.url}</span><span onClick='deleteRtsUrl("${v.url}")'>删除</span></div>`)
             })
             $("#rtsp_url").focus(function () {
                 $("#rtsUrl").css("display", "block");
@@ -162,7 +180,7 @@
     }
 
 
-    function detectRtspCameraAudio(onDetectFinish){
+    function detectRtspCameraAudio(onDetectFinish) {
         var audios = new Array();
         var audioHtml = "<span class='left'>音&nbsp&nbsp&nbsp&nbsp&nbsp频\n</span><div class='right-item right-item-2' style='margin-left: 1px'>";
         navigator.mediaDevices.enumerateDevices()
@@ -172,7 +190,7 @@
                         return;
                     }
                     if (device.kind == 'audioinput') {
-                        if(device.deviceId != "communications"){
+                        if (device.deviceId != "communications") {
                             audios.push(device);
                             audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
                         }
@@ -180,10 +198,10 @@
                     console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
                 });
                 audioHtml = audioHtml + "</div>";
-                onDetectFinish(audios,audioHtml);
+                onDetectFinish(audios, audioHtml);
             }).catch(function (err) {
                 console.log(err.name + ": " + err.message);
-                onDetectFinish(audios,audioHtml);
+                onDetectFinish(audios, audioHtml);
             });
     }
 
@@ -200,9 +218,9 @@
             message.wsPort = defaultPort;
             ipc.send('onRendererMessage', message);
 
-            try{
+            try {
                 jsmpegPlayer.destroy();
-            }catch (e) {
+            } catch (e) {
                 console.log(e);
             }
             jsmpegPlayer = null;
@@ -224,12 +242,12 @@
         rtspUrlArr = makeArr(rtspUrlArr, "url")
         localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
         var port = rtspPortMap.get(rtspUrl);
-        if(port == null || port == undefined || port == ""){
+        if (port == null || port == undefined || port == "") {
             defaultPort = defaultPort + 1;
             port = defaultPort;
         }
 
-        if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
+        if (rtspUrl == null || rtspUrl == undefined || rtspUrl == "") {
             return;
         }
 
@@ -246,8 +264,8 @@
         jsmpegPlayer = new JSMpeg.Player('ws://localhost:' + port, { loop: true, autoplay: true, canvas: canvas, audio: false });
     }
 
-    function onlyPreviewRtsp(rtspUrl){
-        if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
+    function onlyPreviewRtsp(rtspUrl) {
+        if (rtspUrl == null || rtspUrl == undefined || rtspUrl == "") {
             return;
         }
         var html = "<div class='list-content'><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span></div>";
@@ -261,9 +279,9 @@
             offset: 'b',
             content: html
         });
-        setTimeout(function(){
+        setTimeout(function () {
             var port = rtspPortMap.get(rtspUrl);
-            if(port == null || port == undefined || port == ""){
+            if (port == null || port == undefined || port == "") {
                 defaultPort = defaultPort + 1;
                 port = defaultPort;
             }
@@ -278,7 +296,7 @@
 
             var canvas = $("#rtsp_preview_canvas")[0];
             jsmpegPlayer = new JSMpeg.Player('ws://localhost:' + port, { loop: true, autoplay: true, canvas: canvas, audio: false });
-        },800);
+        }, 800);
     }
 
     /**
@@ -307,7 +325,7 @@
             layer.msg("请输入网络摄像头流地址~~");
             return;
         }
-        if(audioDeviceId == undefined || audioDeviceId == ""){
+        if (audioDeviceId == undefined || audioDeviceId == "") {
             layer.msg("请选择音频设备~~");
             return;
         }
@@ -322,16 +340,16 @@
         data.method = "applyRtspRepublishStream";
         data.macAddress = AppUtils.getMacAddress();
         data.rtspUrl = rtspUrl;
-        service.doWebService(data,{
-            onResponse : function(result) {
-                if(!result.success){
+        service.doWebService(data, {
+            onResponse: function (result) {
+                if (!result.success) {
                     layer.msg("申请stream失败");
                     return;
                 }
                 var stream = result.response;
-                if(stream == null){
+                if (stream == null) {
                     layer.msg("申请stream失败");
-                }else{
+                } else {
                     rtspUrlArr = JSON.parse(localStorage.getItem("rtspUrl")) == null ? rtspUrlArr : JSON.parse(localStorage.getItem("rtspUrl"))
                     if ($.trim($("#rtsp_url").val()) != "" || $("#rtsp_url").val() != undefined) {
                         rtspUrlArr.push(
@@ -343,53 +361,53 @@
                     rtspUrlArr = makeArr(rtspUrlArr, "url")
                     localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
                     layer.closeAll();
-                    addUsingIpCameraInfo(nick,rtspUrl,audioDeviceId);
-                    innerUseIpCamera(nick,rtspUrl,audioDeviceId);
+                    addUsingIpCameraInfo(nick, rtspUrl, audioDeviceId);
+                    innerUseIpCamera(nick, rtspUrl, audioDeviceId);
                 }
             },
-            onError : function(error) {
+            onError: function (error) {
                 layer.msg("申请stream失败");
             }
         });
     }
 
-    function innerUseIpCamera(nick,rtspUrl,audioDeviceId){
+    function innerUseIpCamera(nick, rtspUrl, audioDeviceId) {
         if (jsmpegPlayer) {
             var message = {};
             message.command = "stopRtspStream";
             message.wsPort = defaultPort;
             ipc.send('onRendererMessage', message);
 
-            try{
+            try {
                 jsmpegPlayer.destroy();
-            }catch (e) {
+            } catch (e) {
                 console.log(e);
             }
             jsmpegPlayer = null;
         }
         var publish = Service.getQueryString("publish");
         var port = rtspPortMap.get(rtspUrl);
-        if(port == null || port == undefined || port == ""){
+        if (port == null || port == undefined || port == "") {
             defaultPort = defaultPort + 1;
             port = defaultPort;
         }
         //var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from+"&audioDeviceId="+audioDeviceId;
-        var src = "videoSourceRtspInClass_webrtc_streamer.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from+"&audioDeviceId="+audioDeviceId;
+        var src = "videoSourceRtspInClass_webrtc_streamer.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl + "&publish=" + publish + "&userId=" + teacherId + "&from=" + from + "&audioDeviceId=" + audioDeviceId;
         $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开</span></div>");
     }
 
-    function addUsingIpCameraInfo(userName,rtspUrl,audioDeviceId){
+    function addUsingIpCameraInfo(userName, rtspUrl, audioDeviceId) {
         var device = {};
         device.type = "ipCamera";
-        device.rtspUrl = ""+rtspUrl;
+        device.rtspUrl = "" + rtspUrl;
         device.audioDeviceId = audioDeviceId;
         device.userName = userName;
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
-        if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_" + from));
+        if (savedList == null || savedList == undefined || !(savedList instanceof Array)) {
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_new_" + from, JSON.stringify(savedList));
     }
 
     function preView() {
@@ -413,7 +431,7 @@
             });
     }
 
-    function onlyUsbCameraPreview(videoDeviceId,audioDeviceId){
+    function onlyUsbCameraPreview(videoDeviceId, audioDeviceId) {
         layer.open({
             type: 1,
             closeBtn: 0,
@@ -424,7 +442,7 @@
             content: "<div class='list-content'><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span></div>"
         });
 
-        setTimeout(function(){
+        setTimeout(function () {
             var audioSource = audioDeviceId;
             var videoSource = videoDeviceId;
             var constraints = {
@@ -432,12 +450,12 @@
                 video: { deviceId: videoSource ? { exact: videoSource } : undefined }
             };
             navigator.mediaDevices.getUserMedia(constraints).
-            then(function (stream) {
-                $("#preview_video")[0].srcObject = stream;
-            }).catch(function (e) {
-                console.log(e);
-            });
-        },200);
+                then(function (stream) {
+                    $("#preview_video")[0].srcObject = stream;
+                }).catch(function (e) {
+                    console.log(e);
+                });
+        }, 200);
     }
 
     function useInclass() {
@@ -449,13 +467,13 @@
             return;
         }
         layer.closeAll();
-        addUsingUsbCameraInfo(videoDeviceId,audioDeviceId,nick);
-        innerUseUsbCamera(videoDeviceId,audioDeviceId,nick);
+        addUsingUsbCameraInfo(videoDeviceId, audioDeviceId, nick);
+        innerUseUsbCamera(videoDeviceId, audioDeviceId, nick);
     }
 
-    function innerUseUsbCamera(videoDeviceId,audioDeviceId,nick){
+    function innerUseUsbCamera(videoDeviceId, audioDeviceId, nick) {
         var publish = Service.getQueryString("publish");
-        var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick+"&publish="+publish+"&userId="+teacherId+"&from="+from;
+        var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick + "&publish=" + publish + "&userId=" + teacherId + "&from=" + from;
         $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开</span></div>");
     }
 
@@ -467,23 +485,23 @@
         }, 100);
     }
 
-    function addUsingUsbCameraInfo(videoDeviceId,audioDeviceId,userName){
+    function addUsingUsbCameraInfo(videoDeviceId, audioDeviceId, userName) {
         var device = {};
         device.type = "usbCamera";
-        device.videoDeviceId = ""+videoDeviceId;
-        device.audioDeviceId = ""+audioDeviceId;
+        device.videoDeviceId = "" + videoDeviceId;
+        device.audioDeviceId = "" + audioDeviceId;
         device.userName = userName;
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
-        if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_" + from));
+        if (savedList == null || savedList == undefined || !(savedList instanceof Array)) {
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_new_" + from, JSON.stringify(savedList));
     }
 
-    function addScreen(){
+    function addScreen() {
         var childrenSize = $("#video_sources").children().length;
-        if(from == "slaver" &&childrenSize > 1){
+        if (from == "slaver" && childrenSize > 1) {
             layer.msg("请先移除已添加视频源");
             return;
         }
@@ -499,9 +517,9 @@
         });
     }
 
-    function useScreenVideoInclass(){
+    function useScreenVideoInclass() {
         var nick = $("#layer_screen_nick").val();
-        if(typeof(nick) == "undefined" || nick == null || nick == ""){
+        if (typeof (nick) == "undefined" || nick == null || nick == "") {
             layer.msg("请输入昵称~~");
             return;
         }
@@ -510,80 +528,80 @@
         innerUseScreenInclass(nick);
     }
 
-    function innerUseScreenInclass(nick){
+    function innerUseScreenInclass(nick) {
         var publish = Service.getQueryString("publish");
-        var src = "screenVideoInClass.html?vid=" + vid + "&userName=" + nick+"&publish="+publish+"&userId="+teacherId+"&from="+from;
+        var src = "screenVideoInClass.html?vid=" + vid + "&userName=" + nick + "&publish=" + publish + "&userId=" + teacherId + "&from=" + from;
         $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开</span></div>");
     }
 
-    function addUsingScreenInfo(){
+    function addUsingScreenInfo() {
         var device = {};
         device.type = "screen";
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
-        if(savedList == null || savedList == undefined || !(savedList instanceof Array)){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_" + from));
+        if (savedList == null || savedList == undefined || !(savedList instanceof Array)) {
             savedList = [];
         }
         savedList.push(device);
-        localStorage.setItem("usingDeviceList_new_"+from,JSON.stringify(savedList));
+        localStorage.setItem("usingDeviceList_new_" + from, JSON.stringify(savedList));
     }
 
-    function screenVideoPreview(){
+    function screenVideoPreview() {
         const constraints = {
-           audio: {
-               mandatory: {
-                   chromeMediaSource: 'desktop'
-               }
-           },
+            audio: {
+                mandatory: {
+                    chromeMediaSource: 'desktop'
+                }
+            },
             video: {
                 mandatory: {
                     chromeMediaSource: 'desktop',
-                    maxWidth:1280,
-                    minWidth:1280,
-                    maxHeight:720,
-                    minHeight:720,
-                    maxFrameRate:30,
-                    minFrameRate:30
+                    maxWidth: 1280,
+                    minWidth: 1280,
+                    maxHeight: 720,
+                    minHeight: 720,
+                    maxFrameRate: 30,
+                    minFrameRate: 30
                 }
             }
         };
 
         navigator.mediaDevices.getUserMedia(constraints)
-            .then(function(stream){
+            .then(function (stream) {
                 document.getElementById("layer_screen_video").srcObject = stream;
             })
-            .catch(function(e){
+            .catch(function (e) {
                 console.log(e);
             });
     }
 
-    function init(){
+    function init() {
         var from = Service.getQueryString("from");
-        if(from == "master"){
+        if (from == "master") {
             $("#screen_menu").show();
         }
-        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_"+from));
-        if(savedList){
-            savedList.forEach(function(device){
+        var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_" + from));
+        if (savedList) {
+            savedList.forEach(function (device) {
                 var type = device.type;
-                if(type == "usbCamera"){
-                    innerUseUsbCamera(device.videoDeviceId,device.audioDeviceId,device.userName);
-                }else if(type == "ipCamera"){
+                if (type == "usbCamera") {
+                    innerUseUsbCamera(device.videoDeviceId, device.audioDeviceId, device.userName);
+                } else if (type == "ipCamera") {
                     var audioDeviceId = "";
-                    if(device.audioDeviceId){
+                    if (device.audioDeviceId) {
                         audioDeviceId = device.audioDeviceId;
                     }
-                    innerUseIpCamera(device.userName,device.rtspUrl,audioDeviceId);
-                }else if(type == "screen"){
+                    innerUseIpCamera(device.userName, device.rtspUrl, audioDeviceId);
+                } else if (type == "screen") {
                     innerUseScreenInclass("桌面");
                 }
             });
         }
     }
 
-    $(document).ready(function(){
-        setTimeout(function(){
+    $(document).ready(function () {
+        setTimeout(function () {
             init();
-        },500);
+        }, 500);
     });
 </script>
 
