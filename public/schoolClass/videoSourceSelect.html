@@ -113,10 +113,10 @@
 
     function addIpCamera() {
         var browser = platform.name;
-        // if(browser.indexOf("Electron") == -1){
-        //     layer.msg("请在pc客户端中使用此功能~~");
-        //     return;
-        // }
+        if(browser.indexOf("Electron") == -1){
+            layer.msg("请在pc客户端中使用此功能~~");
+            return;
+        }
         var childrenSize = $("#video_sources").children().length;
         if (from == "slaver" && childrenSize > 1) {
             layer.msg("请先移除已添加视频源");
