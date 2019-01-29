@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>同步课堂登录</title>
     <link rel="icon" href="img/logo_title.png" type="image/x-icon">
-    <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon" />
     <link rel="stylesheet" href="./css/login.css">
     <script type="application/javascript" src="js/platform.js"></script>
 </head>
@@ -38,7 +38,8 @@
             </div>
 
             <!--下载客户端 -->
-            <a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.3.6.exe" class="downPc" style="display: none;" id="download_pc">下载PC客户端</a>
+            <a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.3.6.exe" class="downPc" style="display: none;"
+                id="download_pc">下载PC客户端</a>
         </div>
     </div>
 
@@ -108,33 +109,33 @@
             }
 
             var service = new Service();
-                   var data = {
-                       "method": "login",
-                       "username": $('#act').val().trim(),
-                       "password": $('#pwd').val().trim()
-                   };
-                   service.doWebService(data,{
-                       onResponse:(res) => {
-                           if (res.success) {
-                           if ($("#act").val() !== "" && $("#pwd").val() !== "") {
-                               accountArr.push({
-                                   account: $("#act").val(),
-                                   password: $("#pwd").val()
-                               });
-                           }
-                           accountArr = makeArr(accountArr, "account")
-                           localStorage.setItem('accountData', JSON.stringify(accountArr));
-                           console.log('登录成功');
-                           window.location.href = 'syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
-                                                   // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
-                                                   // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+            var data = {
+                "method": "login",
+                "username": $('#act').val().trim(),
+                "password": $('#pwd').val().trim()
+            };
+            service.doWebService(data, {
+                onResponse: (res) => {
+                    if (res.success) {
+                        if ($("#act").val() !== "" && $("#pwd").val() !== "") {
+                            accountArr.push({
+                                account: $("#act").val(),
+                                password: $("#pwd").val()
+                            });
+                        }
+                        accountArr = makeArr(accountArr, "account")
+                        localStorage.setItem('accountData', JSON.stringify(accountArr));
+                        console.log('登录成功');
+                        window.location.href = 'syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+                        // window.location.href = 'http://127.0.0.1:5000/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
+                        // window.location.href = 'https://www.maaee.com/openvidu/schoolClass/syncClassroom.html?teacherId=' + res.response.colUid + '&teacherName=' + res.response.userName + '';
 
-                       } else {
-                           layer.msg(res.msg);
-                       }
-                       },
-                       onError:function(error){}
-                   });
+                    } else {
+                        layer.msg(res.msg);
+                    }
+                },
+                onError: function (error) { }
+            });
         })
 
 
@@ -158,38 +159,53 @@
         function getLoginTeachSystemEwm() {
             var service = new Service();
             var data = {
-                "method":'getLoginTeachSystemEwm',
+                "method": 'getLoginTeachSystemEwm',
                 "uuid": machineId,
             };
-            service.doWebService(data,{
-                onResponse:(res) => {
+            service.doWebService(data, {
+                onResponse: (res) => {
                     if (res.success) {
-                       $('#scan_image').attr('src', res.response);
+                        $('#scan_image').attr('src', res.response);
                     }
                 },
-                onError:function(error){}
+                onError: function (error) { }
             });
         }
-        
+
         getInputValue = function (account, password) {
             $("#act").val(account);
             $("#pwd").val(password);
         }
+        //删除
+        deleteData = function (account) {
+            var actData = JSON.parse(localStorage.getItem("accountData")) == null ? accountArr : JSON.parse(localStorage.getItem("accountData"))
+            actData.forEach((v, i) => {
+                if (v.account == account) {
+                    actData.splice(i, 1);
+                    $("#actData").html("");
+                    actData.forEach(function (v, i) {
+                        $("#actData").append(`<div class="listCont"><span class="text" onClick='getInputValue("${v.account}","${v.password}")'>${v.account}</span><span class="close" onClick='deleteData("${v.account}")'>删除</span></div>`)
+                    })
+                    localStorage.setItem('accountData', JSON.stringify(actData));
 
-        function checkShowPcDownload(){
+                }
+            })
+        }
+
+        function checkShowPcDownload() {
             var browser = platform.name;
-            if(browser.indexOf("Electron") == -1){
+            if (browser.indexOf("Electron") == -1) {
                 $("#download_pc").show();
-            }else{
+            } else {
                 $("#download_pc").hide();
             }
         }
 
         /**
-   * 去重
-   * @param arr
-   * @returns {*}
-   */
+ * 去重
+ * @param arr
+ * @returns {*}
+ */
         makeArr = function (arr, properties) {
             for (var i = 0; i < arr.length - 1; i++) {
                 for (var j = i + 1; j < arr.length; j++) {
@@ -203,7 +219,7 @@
         }
         accountArr = makeArr(accountArr, "account")
         accountArr.forEach(function (v, i) {
-            $("#actData").append(`<div onClick='getInputValue("${v.account}","${v.password}")'>${v.account}</div>`)
+            $("#actData").append(`<div class="listCont"><span class="text" onClick='getInputValue("${v.account}","${v.password}")'>${v.account}</span><span class="close" onClick='deleteData("${v.account}")'>删除</span></div>`)
         })
         $("#act").blur(function () {
             setTimeout(function () {

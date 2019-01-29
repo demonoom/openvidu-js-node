@@ -5315,6 +5315,7 @@ span.justify > span {
 	word-break: break-all;
 	border-bottom: 1px #eee solid;
 	cursor: pointer;
+	position: relative;
 }
 .inputWrap #rtsUrl > div:last-child{
 	border-bottom: 0;
@@ -5322,6 +5323,24 @@ span.justify > span {
 .inputWrap #rtsUrl > div:hover{
 	background-color: #edf2ff;
 	color: #333;
+}
+.inputWrap #rtsUrl .listCont .text {
+	display: block;
+	width: calc(100% - 30px);
+}
+.inputWrap #rtsUrl .close {
+	display: block;
+	width: 28px;
+	height: 28px;
+	background:url("../../images/icon_close.png") no-repeat center center;
+	background-size: 12px;
+	position: absolute;
+	right: 0;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	font-size: 0;
 }
 .admin_empty{
 	background: url("../img/admin_empty.png") no-repeat;
