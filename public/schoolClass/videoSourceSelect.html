@@ -103,7 +103,7 @@
                     skin: "videoSource",
                     area: ['100%', '480px'], //宽高
                     offset: 'b',
-                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='left left2'>昵称</span><div class='inputWrap inputWrap-3'><input id='nick'  class='right nickname' /></div></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
+                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='left left2'>昵称</span><div class='inputWrap inputWrap-3'><input id='nick' autocomplete='off'  class='right nickname' /></div></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
                 });
 
             }).catch(function (err) {
@@ -113,10 +113,10 @@
 
     function addIpCamera() {
         var browser = platform.name;
-        if(browser.indexOf("Electron") == -1){
-            layer.msg("请在pc客户端中使用此功能~~");
-            return;
-        }
+        // if(browser.indexOf("Electron") == -1){
+        //     layer.msg("请在pc客户端中使用此功能~~");
+        //     return;
+        // }
         var childrenSize = $("#video_sources").children().length;
         if (from == "slaver" && childrenSize > 1) {
             layer.msg("请先移除已添加视频源");
@@ -125,10 +125,10 @@
         detectRtspCameraAudio(function (audios, audioHtml) {
             var html = "";
             if (audios.length > 0) {
-                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
+                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' autocomplete='off' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' autocomplete='off' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
                     ">使用</span></div>";
             } else {
-                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
+                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' autocomplete='off' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' autocomplete='off' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
                     ">使用</span></div>";
             }
 
@@ -192,7 +192,7 @@
                     if (device.kind == 'audioinput') {
                         if (device.deviceId != "communications") {
                             audios.push(device);
-                            audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
+                            audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' autocomplete='off' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
                         }
                     }
                     console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
@@ -505,7 +505,7 @@
             layer.msg("请先移除已添加视频源");
             return;
         }
-        var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
+        var html = "<div class='list-content'><div class='list-item'><span class='left'>课堂昵称</span><div class='inputWrap'><input id='layer_screen_nick' autocomplete='off' class='right nickname'/></div></div><div class='list-item list-item-video'><video id='layer_screen_video' width='229' height='161' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn'>取消</span><span id='layer_screen_preview' onclick='screenVideoPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useScreenVideoInclass();' class='btn-blue Solid-btn'>使用</span></div>";
         layer.open({
             type: 1,
             title: "桌面视频源",
