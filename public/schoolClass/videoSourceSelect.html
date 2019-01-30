@@ -113,10 +113,10 @@
 
     function addIpCamera() {
         var browser = platform.name;
-        // if(browser.indexOf("Electron") == -1){
-        //     layer.msg("请在pc客户端中使用此功能~~");
-        //     return;
-        // }
+        if(browser.indexOf("Electron") == -1){
+            layer.msg("请在pc客户端中使用此功能~~");
+            return;
+        }
         var childrenSize = $("#video_sources").children().length;
         if (from == "slaver" && childrenSize > 1) {
             layer.msg("请先移除已添加视频源");
@@ -192,7 +192,7 @@
                     if (device.kind == 'audioinput') {
                         if (device.deviceId != "communications") {
                             audios.push(device);
-                            audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' autocomplete='off' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
+                            audioHtml = audioHtml + "<label class='right'><input class='a-radio' name='audioinput' type='radio' value='" + device.deviceId + "' />" + "<span class='b-radio'></span><span class='b-ridioText'>" + device.label + "</span></label>";
                         }
                     }
                     console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
