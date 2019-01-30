@@ -23,11 +23,14 @@
             <!--账号登录 -->
             <div class="account">
                 <div class="inputWrap">
-                    <input id='act' type="text" placeholder="请输入小蚂蚁账号" autocomplete="off">
+                    <input type="text" name="old_acc" style="display: none">
+                    <input id='act' type="text" name="old_acc"  placeholder="请输入小蚂蚁账号" autocomplete="off">
                     <!--存输入的用户名 -->
                     <div style="display:none" id="actData"></div>
                 </div>
-                <input id="pwd" type="password" placeholder="请输入密码" autocomplete="off">
+                <input type="password" name="old_password" disabled style="display: none">
+                <input id="pwd" name="old_password" type="password"  placeholder="请输入密码" autocomplete="off">
+                <input type="password" name="old_password" disabled style="display: none">
                 <button id="login">登录</button>
             </div>
 
@@ -50,6 +53,13 @@
 <script type="text/javascript" src="js/service.js"></script>
 <script type="text/javascript">
     $(function () {
+        $("#pwd").on("input",function(){
+            if($("#pwd").val().length == 0){
+
+            }
+            console.log( document.getElementById("pwd"))
+        })
+      
         checkShowPcDownload();
         var machineId = '';
         var simple = new SimpleWebsocketConnection();
@@ -227,6 +237,8 @@
             }, 300)
         });
         $("#act").focus(function () {
+            $("#placeholder").hide()
+            // console.log($("#placeholder").hide())
             accountArr = JSON.parse(localStorage.getItem("accountData")) == null ? accountArr : JSON.parse(localStorage.getItem("accountData"))
             $("#actData").css("display", "block");
         });
