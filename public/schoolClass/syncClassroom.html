@@ -76,7 +76,7 @@
     </div>
 </div>
 </body>
-<script src="./js/jquery.min.js"></script>
+<script src="./js/jquery-3.2.1.min.js"></script>
 <script type="application/javascript" src="js/layer/layer.js"></script>
 <script type="application/javascript" src="js/service.js"></script>
 <script type="application/javascript" src="js/simple_websocket_connection.js"></script>
@@ -217,7 +217,8 @@
                 $('.review_iframe_box').show();
                 $('.mask').show();
                 $('.review_iframe_title').text(res.name);
-                $('#review_iframe').attr('src', 'https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
+//                $('#review_iframe').attr('src', 'https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
+                $('#review_iframe').attr('src', 'http://192.168.50.188:7093/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
             } else if (res.method == "watchFiles") {
                 var obj = res.data
                 var type = obj.suffix
@@ -235,6 +236,42 @@
                 setTimeout(() => {
                     $("<iframe class='iframeBox' src=" + url + "></iframe>").prependTo($(".calm"))
                 }, 300)
+            }else if(res.method == 'fullScreen'){
+                console.log(res,'全屏事件data');
+                    let index = layer.open({
+                      type: 2,
+                      title:  $('.review_iframe_title').text(),
+                      shadeClose: true,
+                      shade: false,
+                      maxmin: true, //开启最大化最小化按钮
+                      area: 'auto',
+                      content: "http://192.168.50.188:7093/#/cloundSchoolFullScreen?videoSrc="+encodeURIComponent(res.src) + "&currentTime="+res.currentTime,
+                      move:'.layui-layer-title',
+                      success: function(layero, index) {
+                          $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
+                          layer.full(index);
+                          layer.iframeAuto(index);
+                      },
+                      offset: 'lb',
+                      min: function() { //点击最小化后的回调函数
+                      },
+
+                      full: function() { //点击最大化后的回调函数
+                      console.log(document.body.clientHeight,'document.body.clientHeight')
+                      //随意设置的最大化 800px 大小
+                      $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
+
+                      },
+
+                      restore: function() { //点击还原后的回调函数
+                      //固定 150 px 的最小化窗口大小
+                      $('.layui-layer-content iframe')[0].style = 'height: 150px';
+                      // 设置全屏高度后导致拖动窗口高度发生变化,重置窗口高度
+                      $('.layui-layer')[0].style.height = '150px';
+                      }
+
+                    });
+
             }
         });
 
