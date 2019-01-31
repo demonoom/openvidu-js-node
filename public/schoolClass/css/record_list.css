@@ -4979,10 +4979,10 @@ br{
 	display: inline-block;
 }
 .videoSource .list-item .left2, .videoSource-b .list-item .left2{
-	width: 45px;
+	width: 52px;
 }
 .videoSource .list-item .right-item, .videoSource-b .list-item .right-item{
-	width:calc(100% - 45px);
+	width:calc(100% - 52px);
 	margin-left:0;
 	display: inline-block;
 	float: right;
