@@ -58,7 +58,7 @@ video{
 	object-fit:cover;
 }
 #big_video video{
-	object-fit:cover !important;
+	object-fit:cover;
 }
 .video_nocover{
 	object-fit:none;
@@ -667,9 +667,11 @@ video{
                   $("#big_video").append("<video autoplay width='100%' height='100%' muted></video>");
                   $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
 
-                  if(stream.getId() <=2 ){
+                  if(stream.user.userName == "桌面"){
                       $("#big_video").find("video").css("object-fit","contain");
-                  }
+                  }else{
+                      $("#big_video").find("video").css("object-fit","cover");
+				  }
 		    	  if(sendCommand){
 		    		  //告诉学生显示大视频
 			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':1}}" + ')');
@@ -1746,7 +1748,7 @@ video{
 	    client.on('stream-removed', function (evt) {
 		      var stream = evt.stream;
 			  $('#agora_remote' + stream.getId()).remove();
-			  console.log("Remote stream is removed " + stream.getId());
+			  console.log("Remote stream is removed " + stream.getId()+" name:"+stream.user.userName);
 			  showBigVideo(stream,false,false);
 			  //stream.stop();
 

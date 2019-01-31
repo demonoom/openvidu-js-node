@@ -73,7 +73,7 @@
    }
 
    #big_video video{
-  	 object-fit:cover !important;
+  	 object-fit:cover;
    }
 
    .imgBox{
@@ -1009,7 +1009,6 @@
 	  if(show){
 		  var current_stream = $("#big_video").attr("current_stream");
 		  if(fromTeacher){
-			  
 			  if(current_stream == stream.getId()){
 				  return;
 			  }
@@ -1039,6 +1038,11 @@
                   $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
 		      }
 		  }
+          if(stream.user.userName == "桌面"){
+              $("#big_video").find("video").css("object-fit","contain");
+          }else{
+              $("#big_video").find("video").css("object-fit","cover");
+          }
 	  }else{
 		  if(fromTeacher){
 			  $("#big_video").empty();

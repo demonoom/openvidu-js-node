@@ -5,6 +5,10 @@ body,html{
     overflow: hidden;
     font-family: "Microsoft YaHei", "Hiragino Sans GB",  Arial,Helvetica;
 }
+::-webkit-scrollbar {
+    width: 4px!important;
+    height: 6px!important;
+}
 input:-webkit-autofill{
     box-shadow: 0 0 0px 1000px transparent inset !important;
 }
