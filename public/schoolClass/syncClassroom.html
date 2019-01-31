@@ -87,6 +87,10 @@
 <script type="application/javascript" src="js/service.js"></script>
 <script type="application/javascript" src="js/simple_websocket_connection.js"></script>
 <script>
+
+var debug = true;
+var iframeOrgrin = debug?'http://192.168.50.188:7093':'https://jiaoxue.maaee.com:9093';
+
     function checkShowRecord(){
         var browser = platform.name;
         if(browser.indexOf("Electron") != -1){
@@ -224,7 +228,7 @@
                 $('.mask').show();
                 $('.review_iframe_title').text(res.name);
 //                $('#review_iframe').attr('src', 'https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
-                $('#review_iframe').attr('src', 'http://192.168.50.188:7093/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
+                $('#review_iframe').attr('src', iframeOrgrin+'/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
             } else if (res.method == "watchFiles") {
                 var obj = res.data
                 var type = obj.suffix
@@ -251,12 +255,12 @@
                       shade: false,
                       maxmin: true, //开启最大化最小化按钮
                       area: 'auto',
-                      content: "http://192.168.50.188:7093/#/cloundSchoolFullScreen?videoSrc="+encodeURIComponent(res.src) + "&currentTime="+res.currentTime,
+                      content: iframeOrgrin+"/#/cloundSchoolFullScreen?videoSrc="+encodeURIComponent(res.src) + "&currentTime="+res.currentTime+"&isPlay="+res.isPlay,
                       move:'.layui-layer-title',
                       success: function(layero, index) {
                           $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
-                          layer.full(index);
-                          layer.iframeAuto(index);
+//                          layer.full(index);
+//                          layer.iframeAuto(index);
                       },
                       offset: 'lb',
                       min: function() { //点击最小化后的回调函数
@@ -274,10 +278,23 @@
                       $('.layui-layer-content iframe')[0].style = 'height: 150px';
                       // 设置全屏高度后导致拖动窗口高度发生变化,重置窗口高度
                       $('.layui-layer')[0].style.height = '150px';
+                      },
+                      cancel: function(){
+//                      let fullVideo = $('.layui-layer-content iframe').get(0).contentWindow.document.getElementById('fullVideo');
+//                          console.log(fullVideo,'点击了关闭');
+                      let data = {
+                          method: 'willCancel',
                       }
-
+                      $('.layui-layer-content iframe').get(0).contentWindow.postMessage(data,'*');
+                      console.log('执行完毕')
+                      }
                     });
+                    $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
+                    layer.full(index);
 
+            }else if(res.method == 'didCancel'){
+                console.log('中控收到关闭窗口信息');
+                $('#review_iframe').get(0).contentWindow.postMessage(res,'*');
             }
         });
 
