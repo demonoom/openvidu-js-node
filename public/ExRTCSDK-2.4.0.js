@@ -175,6 +175,7 @@ function ExRTC(){
         if(videoProfile == "" || videoProfile == undefined || videoProfile == "undefined" || videoProfile == null){
             videoProfile = "720p";
         }
+        videoProfile = videoProfile.toLowerCase();
         mediaStream.elmentId = elmentId;
         mediaStream.videoProfile = videoProfile;
         _this.mediaStream = mediaStream;
