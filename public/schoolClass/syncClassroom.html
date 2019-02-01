@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="./css/syncClassroom.css">
     <script type="application/javascript" src="js/platform.js"></script>
     <style type="text/css">
+        .amplification{
+            border: none !important;
+            box-shadow: none !important;
+        }
         .layui-layer-content{
             color: #fff !important;
             font-size: 12px !important;
@@ -196,7 +200,8 @@ var iframeOrgrin = debug?'http://192.168.50.188:7093':'https://jiaoxue.maaee.com
 
         $('.exit').on('click', function () {
             layer.confirm('您确定要退出登录?', {
-                btn: ['确定', '取消'] //按钮
+                btn: ['确定', '取消'], //按钮
+                skin:'amplification',
             }, function () {
                 window.location.href = 'login.html'
             }, function () {
@@ -253,6 +258,7 @@ var iframeOrgrin = debug?'http://192.168.50.188:7093':'https://jiaoxue.maaee.com
                       title:  $('.review_iframe_title').text(),
                       shadeClose: true,
                       shade: false,
+                      skin:'amplification',
                       maxmin: true, //开启最大化最小化按钮
                       area: 'auto',
                       content: iframeOrgrin+"/#/cloundSchoolFullScreen?videoSrc="+encodeURIComponent(res.src) + "&currentTime="+res.currentTime+"&isPlay="+res.isPlay,
