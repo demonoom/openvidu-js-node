@@ -251,7 +251,6 @@ var iframeOrgrin = debug?'http://192.168.50.188:7093':'https://jiaoxue.maaee.com
                     $("<iframe class='iframeBox' src=" + url + "></iframe>").prependTo($(".calm"))
                 }, 300)
             }else if(res.method == 'fullScreen'){
-                console.log(res,'全屏事件data');
                 var left = 0;
                 var top = document.body.clientHeight - 150 - 42;
                     let index = layer.open({
@@ -266,15 +265,12 @@ var iframeOrgrin = debug?'http://192.168.50.188:7093':'https://jiaoxue.maaee.com
                       move:'.layui-layer-title',
                       success: function(layero, index) {
                           $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
-//                          layer.full(index);
-//                          layer.iframeAuto(index);
                       },
                       offset: 'lb',
                       min: function() { //点击最小化后的回调函数
                       },
 
                       full: function() { //点击最大化后的回调函数
-                      console.log(document.body.clientHeight,'document.body.clientHeight')
                       //随意设置的最大化 800px 大小
                       $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
 
@@ -289,32 +285,24 @@ var iframeOrgrin = debug?'http://192.168.50.188:7093':'https://jiaoxue.maaee.com
                       $('.layui-layer').get(0).style.top = top +'px';
                       },
                       cancel: function(){
-//                      let fullVideo = $('.layui-layer-content iframe').get(0).contentWindow.document.getElementById('fullVideo');
-//                          console.log(fullVideo,'点击了关闭');
                       let data = {
                           method: 'willCancel',
                       }
                       $('.layui-layer-content iframe').get(0).contentWindow.postMessage(data,'*');
-                      console.log('执行完毕')
                       },
                       moveEnd: function(layero){
-                                              // console.log($('.layui-layer').get(0).style.left,'$(\'.layui-layer\').get(0).style.left');
-                                              // console.log($('.layui-layer').get(0).style.top,'$(\'.layui-layer\').get(0).style.top');
                                               left = $('.layui-layer').get(0).style.left.toString().substring($('.layui-layer').get(0).style.left.toString().length - 2,$('.layui-layer').get(0).style.left.toString().length);
                                               top = $('.layui-layer').get(0).style.top.toString().substring($('.layui-layer').get(0).style.top.toString().length - 2,$('.layui-layer').get(0).style.top.toString().length);
                        }
                     });
                     $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
-                    console.log('123123123');
                     $('.layui-layer').get(0).style.left = left;
                     layer.full(index,function(){
-                        console.log('!!!!!!!!!!!!!!!!!!!!!!!!!');
                         $('.layui-layer').show();
                     });
                     $('.layui-layer').get(0).style.left = left;
 
             }else if(res.method == 'didCancel'){
-                console.log('中控收到关闭窗口信息');
                 $('#review_iframe').get(0).contentWindow.postMessage(res,'*');
             }
         });
