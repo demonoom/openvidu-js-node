@@ -172,6 +172,8 @@ function ExRTC(){
 
     this.publish = function(mediaStream,elmentId,videoProfile){
 
+        var settings = mediaStream.getVideoTracks()[0].getSettings();
+
         if(videoProfile == "" || videoProfile == undefined || videoProfile == "undefined" || videoProfile == null){
             videoProfile = "720p";
         }
