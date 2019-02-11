@@ -1,10 +1,10 @@
 
 修改openvidu-browser-*.*.js
 
-OpenVidu.prototype.checkSystemRequirements
+1:OpenVidu.prototype.checkSystemRequirements
 方法中增加:&&(browser !== 'Electron') 逻辑
 
-WebRtcPeer.prototype.start
+2:WebRtcPeer.prototype.start
 
   if (!!_this.configuration.mediaStream) {
                   for (var _i = 0, _a = _this.configuration.mediaStream.getTracks(); _i < _a.length; _i++) {
@@ -27,3 +27,49 @@ WebRtcPeer.prototype.start
                   }
                   resolve();
   }
+
+  3:在2.8.0以上版本 OpenVidu.prototype.reconnectedCallback
+    OpenVidu.prototype.reconnectedCallback = function () {
+            var _this = this;
+            console.warn('Websocket reconnected');
+            if (this.isRoomAvailable()) {
+                this.sendRequest('connect', { sessionId: this.session.connection.rpcSessionId }, function (error, response) {
+                     if (!!error) {
+                         console.error(error);
+                         _this.session.onLostConnection("networkDisconnect");
+                         _this.jsonRpcClient.close(4101, "Reconnection fault");
+                     }
+                     else {
+                         _this.jsonRpcClient.resetPing();
+                         _this.session.onRecoveredConnection();
+                     }
+                });
+            }
+            else {
+                alert('Connection error. Please reload page.');
+            }
+        };
+
+     改为:
+
+     OpenVidu.prototype.reconnectedCallback = function () {
+             var _this = this;
+             console.warn('Websocket reconnected');
+             if (this.isRoomAvailable()) {
+                 // this.sendRequest('connect', { sessionId: this.session.connection.rpcSessionId }, function (error, response) {
+                 //     if (!!error) {
+                 //         console.error(error);
+                 //         _this.session.onLostConnection("networkDisconnect");
+                 //         _this.jsonRpcClient.close(4101, "Reconnection fault");
+                 //     }
+                 //     else {
+                 //         _this.jsonRpcClient.resetPing();
+                 //         _this.session.onRecoveredConnection();
+                 //     }
+                 // });
+                 _this.session.ee.emitEvent('connectionRecovered', []);
+             }
+             else {
+                 alert('Connection error. Please reload page.');
+             }
+         };

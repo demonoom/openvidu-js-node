@@ -3841,17 +3841,18 @@ var OpenVidu = (function () {
         var _this = this;
         console.warn('Websocket reconnected');
         if (this.isRoomAvailable()) {
-            this.sendRequest('connect', { sessionId: this.session.connection.rpcSessionId }, function (error, response) {
-                if (!!error) {
-                    console.error(error);
-                    _this.session.onLostConnection("networkDisconnect");
-                    _this.jsonRpcClient.close(4101, "Reconnection fault");
-                }
-                else {
-                    _this.jsonRpcClient.resetPing();
-                    _this.session.onRecoveredConnection();
-                }
-            });
+            // this.sendRequest('connect', { sessionId: this.session.connection.rpcSessionId }, function (error, response) {
+            //     if (!!error) {
+            //         console.error(error);
+            //         _this.session.onLostConnection("networkDisconnect");
+            //         _this.jsonRpcClient.close(4101, "Reconnection fault");
+            //     }
+            //     else {
+            //         _this.jsonRpcClient.resetPing();
+            //         _this.session.onRecoveredConnection();
+            //     }
+            // });
+            _this.session.ee.emitEvent('connectionRecovered', []);
         }
         else {
             alert('Connection error. Please reload page.');

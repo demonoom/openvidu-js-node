@@ -98,7 +98,10 @@ function ExRTC(){
                 //链接恢复后的回调
                 _this.session.on('connectionRecovered', (event) => {
                     console.log("connectionRecovered  rejoinRoom ....");
-                    _this.session.disconnect();
+                    try{
+                        _this.session.disconnect();
+                    }catch (e){
+                    }
                     setTimeout(function () {
                         _this.httpPostRequest(
                             'api-sessions/get-token',
@@ -125,7 +128,6 @@ function ExRTC(){
                     },1500);
 
                 });
-
                 _this.userId = uid;
                 _this.userName = userName;
                 _this.session.connect(_this.token, { clientData: _this.userId ,clientUser:{userId:_this.userId,userName:_this.userName}})
@@ -288,12 +290,6 @@ function ExRTC(){
     }
 
     this.httpPostRequest = function(url, body, errorMsg, callback) {
-        // var protocal = window.location.protocol;
-        // var host = window.location.host;
-        // if(host.indexOf("maaee.com") != -1){
-        //     url = "openvidu/"+url;
-        // }
-        // url = protocal+"//"+host+"/"+url;
         url = "https://www.maaee.com/openvidu/"+url;
         var http = new XMLHttpRequest();
         http.open('POST', url, true);
