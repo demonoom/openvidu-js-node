@@ -211,6 +211,10 @@ function stopCapture(){
     }
     streams = new Array();
     $(".audioCanvas").remove();
+
+    var remote = require('electron').remote;
+    electronEinwindow = remote.getCurrentWindow();
+    electronEinwindow.webContents.executeJavaScript("loadActionBarIfameUrl('');");
 }
 
 function stopMediaRecorder(){
@@ -235,7 +239,7 @@ function stopMediaRecorder(){
             savedVideoInfos.splice( 0, 0, item );
             localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
             //关闭录制窗口
-            window.close();
+            //window.close();
         },1000);
     }
 }

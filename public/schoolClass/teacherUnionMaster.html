@@ -2238,7 +2238,8 @@ video{
               var remote = require('electron').remote;
               electronEinwindow = remote.getCurrentWindow();
           }
-          //electronEinwindow.setFullScreen(false);
+          electronEinwindow.webContents.executeJavaScript('showActionBarIframe(false);');
+          electronEinwindow.setFullScreen(false);
           electronEinwindow.setSize($("#left").width()-1,$("#left").height());
           electronEinwindow.webContents.executeJavaScript("setTitle('您正在桌面讲课中~~~');");
           electronEinwindow.webContents.executeJavaScript('showActionBarRefresh(false);');
@@ -2266,13 +2267,14 @@ video{
           electronEinwindow = remote.getCurrentWindow();
       }
       electronEinwindow.webContents.executeJavaScript("setTitle('同步课堂-主讲');");
+      electronEinwindow.webContents.executeJavaScript('showActionBarIframe(true);');
       electronEinwindow.webContents.executeJavaScript('showActionBarRefresh(true);');
       electronEinwindow.webContents.executeJavaScript('showActionBarMin(true);');
       electronEinwindow.webContents.executeJavaScript('showActionBarMax(true);');
       electronEinwindow.webContents.executeJavaScript('showActionBarClose(true);');
       electronEinwindow.setAlwaysOnTop(false);
       electronEinwindow.setResizable(true);
-      //electronEinwindow.setFullScreen(true);
+      electronEinwindow.setFullScreen(true);
   }
 
   function goVideoManaerPage(){
@@ -2285,11 +2287,28 @@ video{
   }
 
   function goPushRtmp(){
-      window.open("serverRecord.html?teacherId="+userId+"&pushUrl="+pushUrl,"SERVER_RECORD");
+	  var url = "";
+	  if(window.location.href.indexOf("openvidu") != -1){
+          url = url + window.location.origin+"/openvidu/schoolClass/"+"serverRecord.html?teacherId="+userId+"&pushUrl="+pushUrl;
+	  }else{
+          url = url + window.location.origin+"/schoolClass/"+"serverRecord.html?teacherId="+userId+"&pushUrl="+pushUrl;
+	  }
+      var remote = require('electron').remote;
+      electronEinwindow = remote.getCurrentWindow();
+      electronEinwindow.webContents.executeJavaScript("loadActionBarIfameUrl('"+url+"');");
   }
 
   function goLocalRecordPage(){
-      window.open("localRecord.html?teacherId="+userId+"&clazzName="+title,"SERVER_RECORD");
+      //window.open("localRecord.html?teacherId="+userId+"&clazzName="+title,"SERVER_RECORD");
+      var url = "";
+      if(window.location.href.indexOf("openvidu") != -1){
+          url = url + window.location.origin+"/openvidu/schoolClass/"+"localRecord.html?teacherId="+userId+"&clazzName="+title;
+      }else{
+          url = url + window.location.origin+"/schoolClass/"+"localRecord.html?teacherId="+userId+"&clazzName="+title;
+      }
+      var remote = require('electron').remote;
+      electronEinwindow = remote.getCurrentWindow();
+      electronEinwindow.webContents.executeJavaScript("loadActionBarIfameUrl('"+url+"');");
   }
 
   function hideVideoSourceSelectDialog(){

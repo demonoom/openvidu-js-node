@@ -38,10 +38,14 @@ function stopCapture(){
         });
     }catch (e){
     }
+
     streams = new Array();
     reconnectCount = 0;
     $(".audioCanvas").remove();
-    window.close();
+    //window.close();
+    var remote = require('electron').remote;
+    electronEinwindow = remote.getCurrentWindow();
+    electronEinwindow.webContents.executeJavaScript("loadActionBarIfameUrl('');");
 }
 
 
