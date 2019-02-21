@@ -25,13 +25,12 @@
         .recording-btn{
             padding: 0;
             line-height: 1;
-            margin: 0 auto;
-            width: 92px;
+            margin: 4px auto 0 auto;
+            width: 87px;
             text-align: center;
             height: 22px;
-            background: #e0e0e0;
+            background: rgba(0,0,0,0.1);
             border-radius: 22px;
-            margin-top: 4px;
         }
         .videoSource-red{
             width: 18px;
@@ -40,12 +39,12 @@
         }
         .recordingTipText{
             background: transparent;
-            color: #666;
+            color: #000;
             font-size: 12px;
             line-height: 22px;
             height: 22px;
-            width: 70px;
-            padding-left: 3px;
+            width: 46px;
+            padding-left: 10px;
             box-sizing: border-box;
             display: inline-block;
             z-index: 11;
@@ -54,23 +53,34 @@
             text-align: center;
         }
         .recordingTipTextStop{
-            height: 22px;
-            width: 22px;
+            height: 14px;
+            width: 14px;
             border-radius: 22px;
             display: inline-block;
             z-index: 11;
             position: relative;
             float: right;
-            background: url("img/suspended-icon.png") no-repeat;
-            background-size: 22px;
+            background: url(img/suspended-icon.png?v=1) no-repeat;
+            background-size: 14px;
+            margin-top: 4px;
+            margin-right: 10px;
         }
-        .recordingTipTextStop:hover{
-            height: 22px;
-            width: 22px;
-            background: url("img/suspended-iconHover.png") no-repeat;
-            background-size: 22px;
+        .recording-line{
+            height: 12px;
+            width: 0;
+            position: relative;
+            top: 6px;
+            margin: 0 8px;
+            float: left;
         }
+        .recording-line:after{
+            content: "";
+            border-left: 1px solid rgba(255,255,255,0.5);
+            transform: translateX(0.5);
+            height: 100%;
+            width: 1px;
 
+        }
     </style>
 </head>
 
@@ -80,6 +90,7 @@
         <i class="videoSource-red" id="recordingTipImg"><img src="images/play-red-icon.gif" width="100%" /></i>
         -->
         <span id="recordingTipText" class="recordingTipText" style="-webkit-app-region: drag;">推流中</span>
+        <span class="recording-line"></span>
         <span class="recordingTipTextStop" onclick="stopCapture();" title="点击可停止录制" style="cursor:pointer"></span>
     </div>
 </body>
