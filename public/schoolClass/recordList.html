@@ -24,7 +24,6 @@
             <div class="list_titleItem fileName">文件名</div>
         </div>
         <div class="list_titleItem time">创建时间</div>
-        <div class="list_titleItem size">大小</div>
         <div class="list_titleItem option">操作</div>
     </div>
     <div class="list_body">
@@ -99,7 +98,7 @@ function appendToList(obj) {
     var html = "<div class='list_item my_flex'>" +
         "<div class='noomWidth my_flex'><div class='list_bodyItem courseName text_hidden'><img class='filePic' src='img/icon_recordFile.png'/>" + obj.className + "</div><div class='list_bodyItem fileName text_hidden'>" + obj.fileName + "</div></div>"+
         "<div class='list_bodyItem time'>" + obj.fileTime + "</div>"+
-        "<div class='list_bodyItem size'>" + obj.fileSize + "</div>"+
+        /*"<div class='list_bodyItem size'>" + obj.fileSize + "</div>"+*/
         "<div class='list_bodyItem option'>" +
         "    <button class='playBtn' onclick='openFile(\""+obj.filePath+"\")'>播放</button>" +
         "    <button class='deleteBtn' onclick='deleteFile(\""+obj.id+"\",\""+obj.filePath+"\")'>删除</button>" +

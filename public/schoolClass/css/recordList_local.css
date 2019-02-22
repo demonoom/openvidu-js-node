@@ -104,7 +104,7 @@ body,html{
     vertical-align: middle;
 }
 .noomWidth{
-    width: calc(100% - 324px);
+    width: calc(100% - 284px);
     padding-left: 30px;
     box-sizing: border-box;
 }
@@ -121,13 +121,13 @@ body,html{
     color: #333;
 }
 .time{
-    width: 160px;
+    width: 200px;
 }
 .size{
     width: 110px;
 }
 .option{
-    width: 54px;
+    width: 84px;
 }
 .option button{
     width: 15px;

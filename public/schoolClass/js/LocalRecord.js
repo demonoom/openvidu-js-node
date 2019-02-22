@@ -14,6 +14,7 @@ var startTime ;
 var teacherId;
 var videoSize = 0;
 var filePath;
+var isSavedInfoToLocalStory = false;
 
 function onRecording() {
     if(!recording){
@@ -135,7 +136,6 @@ function onTabStream(tabStream,config){
                 };
             });
         }
-
         gotStream(tabStream);
 
     }).catch(function(err) {
@@ -193,6 +193,25 @@ function appendDataToDiskFile(saveFolder,reader){
         var file = saveFolder+startTime+".mp4";
         filePath = file;
         electronFsPromises.appendFile(file, buffer);
+        if(!isSavedInfoToLocalStory){
+            isSavedInfoToLocalStory = true;
+
+            var savedVideoInfos = localStorage.getItem(teacherId+"_savedVideoInfos");
+            if(savedVideoInfos == null || savedVideoInfos == undefined){
+                savedVideoInfos = new Array();
+            }else{
+                savedVideoInfos = JSON.parse(savedVideoInfos);
+            }
+            var item = {};
+            item.id = guid();
+            item.clazzName = clazzName;
+            item.createTime = startTime;
+            item.filePath = filePath;
+            item.fileName = startTime+".mp4";
+            item.size = videoSize;
+            savedVideoInfos.splice( 0, 0, item );
+            localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
+        }
     }
 }
 
@@ -215,32 +234,11 @@ function stopCapture(){
 
 function stopMediaRecorder(){
     if(mediaRecorder){
-        $(recordingTipText).text("正在保存...");
         mediaRecorder.stop();
         mediaRecorder = null;
-        setTimeout(function () {
-            var savedVideoInfos = localStorage.getItem(teacherId+"_savedVideoInfos");
-            if(savedVideoInfos == null || savedVideoInfos == undefined){
-                savedVideoInfos = new Array();
-            }else{
-                savedVideoInfos = JSON.parse(savedVideoInfos);
-            }
-            var item = {};
-            item.id = guid();
-            item.clazzName = clazzName;
-            item.createTime = startTime;
-            item.filePath = filePath;
-            item.fileName = startTime+".mp4";
-            item.size = videoSize;
-            savedVideoInfos.splice( 0, 0, item );
-            localStorage.setItem(teacherId+"_savedVideoInfos",JSON.stringify(savedVideoInfos));
-            //关闭录制窗口
-            //window.close();
-
-            var remote = require('electron').remote;
-            electronEinwindow = remote.getCurrentWindow();
-            electronEinwindow.webContents.executeJavaScript("loadActionBarIfameUrl('');");
-        },1000);
+        var remote = require('electron').remote;
+        electronEinwindow = remote.getCurrentWindow();
+        electronEinwindow.webContents.executeJavaScript("loadActionBarIfameUrl('');");
     }
 }
 
