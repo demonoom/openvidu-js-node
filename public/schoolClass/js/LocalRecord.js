@@ -215,7 +215,7 @@ function stopCapture(){
 
 function stopMediaRecorder(){
     if(mediaRecorder){
-        $(recordingTipText).text("正在保存视频..");
+        $(recordingTipText).text("正在保存...");
         mediaRecorder.stop();
         mediaRecorder = null;
         setTimeout(function () {
