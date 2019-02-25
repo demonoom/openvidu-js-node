@@ -25,9 +25,36 @@
         .layui-layer {
             box-shadow: 0px 6px 50px rgba(0, 0, 0, 0.4) !important;
         }
-
         .layer-anim {
             animation: none !important;
+        }
+        .fenbianlv_select{
+            margin-bottom: 10px;
+        }
+        .fenbianlv_select span{
+            margin-right: 10px;
+            padding: 0 8px;
+            border-radius: 2px;
+            border: 1px solid #e5e5e5;
+            color: #666;
+            height: 20px;
+            line-height: 20px;
+            display: inline-block;
+        }
+        .fenbianlv_tips{
+            margin-right: 0;
+            border: none;
+            color: #666;
+            font-size: 11px;
+            margin-top: 15px;
+        }
+        .fenbianlv_selected{
+            color: #4285F4 !important;
+            border: 1px solid #4285F4 !important;
+            height: 20px;
+            line-height: 20px;
+            padding: 0 8px;
+            border-radius: 2px;
         }
     </style>
 </head>
@@ -64,6 +91,11 @@
     var rtspPortMap = new HashMap();
     var from = Service.getQueryString("from");
 
+    function changeFenbianlv(element){
+        $(".fenbianlv_selected").removeClass("fenbianlv_selected");
+        $(element).addClass("fenbianlv_selected");
+    }
+
     function addLocalCamera() {
         var childrenSize = $("#video_sources").children().length;
         if (from == "slaver" && childrenSize > 1) {
@@ -74,8 +106,9 @@
             .then(function (devices) {
                 var audios = new Array();
                 var videos = new Array();
-                var audioHtml = "<span class='left left2'>音频\n</span><div class='right-item'>";
-                var videoHtml = "<span class='left left2'>视频\n</span><div class='right-item'>";
+                var audioHtml = "<span class='left left2'>音&nbsp&nbsp&nbsp&nbsp频\n</span><div class='right-item'>";
+                var videoHtml = "<span class='left left2'>视&nbsp&nbsp&nbsp&nbsp频\n</span><div class='right-item'>";
+                var fenbianlvHtml = "<span class='left left2'>分辨率</span><div class='fenbianlv_select'><span onclick='changeFenbianlv(this);'>480p</span><span class='fenbianlv_selected' onclick='changeFenbianlv(this);'>720p</span><span onclick='changeFenbianlv(this);'>1080p</span><br><div class='fenbianlv_tips'>清晰度越高，会占用更多的宽带和CPU</div></div>";
 
                 devices.forEach(function (device) {
                     if (device.deviceId == 'default') {
@@ -103,7 +136,7 @@
                     skin: "videoSource",
                     area: ['100%', '480px'], //宽高
                     offset: 'b',
-                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='left left2'>昵称</span><div class='inputWrap inputWrap-3'><input id='nick' autocomplete='off'  class='right nickname' /></div></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
+                    content: "<div class='list-content'><div class='list-item'>" + videoHtml + "</div><div class='list-item'>" + audioHtml + "</div><div class='list-item'>"+fenbianlvHtml+"</div><div class='list-item'><span class='left left2'>昵&nbsp&nbsp&nbsp&nbsp称</span><div class='inputWrap inputWrap-3'><input id='nick' autocomplete='off'  class='right nickname' /></div></div><div class='list-item list-item-video'><video id='preview_video' width='254px' height='150px' autoplay muted></video></div></div><div class='btn-cont'><span onclick='layer.closeAll();' class='btn-blue Ghost-btn' >取消</span><span onclick='preView();' class='btn-blue Solid-btn'>预览</span><span onclick='useInclass();' class='btn-blue Solid-btn'>使用</span></div>"
                 });
 
             }).catch(function (err) {
@@ -124,11 +157,12 @@
         }
         detectRtspCameraAudio(function (audios, audioHtml) {
             var html = "";
+            var fenbianlvHtml = "<span class='left'>分&nbsp辨&nbsp率</span><div class='inputWrap fenbianlv_select'><span onclick='changeFenbianlv(this);'>480p</span><span class='fenbianlv_selected' onclick='changeFenbianlv(this);'>720p</span><span onclick='changeFenbianlv(this);'>1080p</span><br><div class='fenbianlv_tips'>清晰度越高，会占用更多的宽带和CPU</div></div>";
             if (audios.length > 0) {
-                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' autocomplete='off' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'>" + audioHtml + "</div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' autocomplete='off' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
+                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' autocomplete='off' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'>" + audioHtml + "</div><div class='list-item'>"+fenbianlvHtml+"</div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' autocomplete='off' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
                     ">使用</span></div>";
             } else {
-                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' autocomplete='off' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' autocomplete='off' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
+                html = "<div class='list-content'><div class='list-item'><span class='left'>rtsp地址</span><div class='inputWrap'><input id='rtsp_url' autocomplete='off' class='right nickname' value='rtsp://184.72.239.149/vod/mp4:BigBuckBunny_115k.mov'/><div style='display:none' id='rtsUrl'></div></div></div><div class='list-item'>"+fenbianlvHtml+"</div><div class='list-item'><span class='justify left'>课堂昵称<span></span></span><div class='inputWrap'><input id='nick' autocomplete='off' class='right nickname'/></div></div><div class='list-item list-item-video'><canvas id='rtsp_preview_canvas' width='299px' height='161px'></canvas></div></div><div class='btn-cont'><span onclick='cancelUseRtsp();' class='btn-blue Ghost-btn'>取消</span><span onclick='rtspPreview();' class='btn-blue Solid-btn'>预览</span><span onclick='useRtspInclass(this)' id='useBtn' class='btn-blue Solid-btn'" +
                     ">使用</span></div>";
             }
 
@@ -207,11 +241,6 @@
 
 
     function cancelUseRtsp() {
-        // var rtspUrl = $("#rtsp_url").val();
-        // if(rtspUrl == null || rtspUrl == undefined || rtspUrl == ""){
-        //     return;
-        // }
-
         if (jsmpegPlayer) {
             var message = {};
             message.command = "stopRtspStream";
@@ -321,6 +350,7 @@
         var nick = $("#nick").val();
         var rtspUrl = $("#rtsp_url").val();
         var audioDeviceId = $("[name='audioinput']").filter(":checked").val();
+        var fenbianlv = $(".fenbianlv_selected").text();
         if (rtspUrl == undefined || rtspUrl == "") {
             layer.msg("请输入网络摄像头流地址~~");
             return;
@@ -361,8 +391,8 @@
                     rtspUrlArr = makeArr(rtspUrlArr, "url")
                     localStorage.setItem("rtspUrl", JSON.stringify(rtspUrlArr));
                     layer.closeAll();
-                    addUsingIpCameraInfo(nick, rtspUrl, audioDeviceId);
-                    innerUseIpCamera(nick, rtspUrl, audioDeviceId);
+                    addUsingIpCameraInfo(nick, rtspUrl, audioDeviceId,fenbianlv);
+                    innerUseIpCamera(nick, rtspUrl, audioDeviceId,fenbianlv);
                 }
             },
             onError: function (error) {
@@ -371,7 +401,7 @@
         });
     }
 
-    function innerUseIpCamera(nick, rtspUrl, audioDeviceId) {
+    function innerUseIpCamera(nick, rtspUrl, audioDeviceId,fenbianlv) {
         if (jsmpegPlayer) {
             var message = {};
             message.command = "stopRtspStream";
@@ -391,17 +421,17 @@
             defaultPort = defaultPort + 1;
             port = defaultPort;
         }
-        //var src = "videoSourceRtspInClass.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl+"&publish="+publish+"&userId="+teacherId+"&from="+from+"&audioDeviceId="+audioDeviceId;
-        var src = "videoSourceRtspInClass_webrtc_streamer.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl + "&publish=" + publish + "&userId=" + teacherId + "&from=" + from + "&audioDeviceId=" + audioDeviceId;
+        var src = "videoSourceRtspInClass_webrtc_streamer.html?vid=" + vid + "&userName=" + nick + "&wsPort=" + port + "&rtspUrl=" + rtspUrl + "&publish=" + publish + "&userId=" + teacherId + "&from=" + from + "&audioDeviceId=" + audioDeviceId+"&fenbianlv="+fenbianlv;
         $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开</span></div>");
     }
 
-    function addUsingIpCameraInfo(userName, rtspUrl, audioDeviceId) {
+    function addUsingIpCameraInfo(userName, rtspUrl, audioDeviceId,fenbianlv) {
         var device = {};
         device.type = "ipCamera";
         device.rtspUrl = "" + rtspUrl;
         device.audioDeviceId = audioDeviceId;
         device.userName = userName;
+        device.fenbianlv = fenbianlv;
         var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_" + from));
         if (savedList == null || savedList == undefined || !(savedList instanceof Array)) {
             savedList = [];
@@ -461,19 +491,21 @@
     function useInclass() {
         var videoDeviceId = $("[name='videoinput']").filter(":checked").val();
         var audioDeviceId = $("[name='audioinput']").filter(":checked").val();
+        var fenbianlv = $(".fenbianlv_selected").text();
+
         var nick = $("#nick").val();
         if (typeof (nick) == "undefined" || nick == "") {
             layer.msg("请输入此设备在课堂中的昵称~~");
             return;
         }
         layer.closeAll();
-        addUsingUsbCameraInfo(videoDeviceId, audioDeviceId, nick);
-        innerUseUsbCamera(videoDeviceId, audioDeviceId, nick);
+        addUsingUsbCameraInfo(videoDeviceId, audioDeviceId, nick,fenbianlv);
+        innerUseUsbCamera(videoDeviceId, audioDeviceId, nick,fenbianlv);
     }
 
-    function innerUseUsbCamera(videoDeviceId, audioDeviceId, nick) {
+    function innerUseUsbCamera(videoDeviceId, audioDeviceId, nick,fenbianlv) {
         var publish = Service.getQueryString("publish");
-        var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick + "&publish=" + publish + "&userId=" + teacherId + "&from=" + from;
+        var src = "videoSourceInClass.html?videoDeviceId=" + videoDeviceId + "&audioDeviceId=" + audioDeviceId + "&vid=" + vid + "&userName=" + nick + "&publish=" + publish + "&userId=" + teacherId + "&from=" + from+"&fenbianlv="+fenbianlv;
         $("#video_sources").append("<div class='videoSource_content-video'><div class='videoSource_content-video-left'><iframe src='" + src + "'></iframe></div><span class='videoSource_content-video-right' onclick='deleteVideoSource(this);'><i></i>离开</span></div>");
     }
 
@@ -485,12 +517,13 @@
         }, 100);
     }
 
-    function addUsingUsbCameraInfo(videoDeviceId, audioDeviceId, userName) {
+    function addUsingUsbCameraInfo(videoDeviceId, audioDeviceId, userName,fenbianlv) {
         var device = {};
         device.type = "usbCamera";
         device.videoDeviceId = "" + videoDeviceId;
         device.audioDeviceId = "" + audioDeviceId;
         device.userName = userName;
+        device.fenbianlv = fenbianlv;
         var savedList = JSON.parse(localStorage.getItem("usingDeviceList_new_" + from));
         if (savedList == null || savedList == undefined || !(savedList instanceof Array)) {
             savedList = [];
@@ -584,13 +617,13 @@
             savedList.forEach(function (device) {
                 var type = device.type;
                 if (type == "usbCamera") {
-                    innerUseUsbCamera(device.videoDeviceId, device.audioDeviceId, device.userName);
+                    innerUseUsbCamera(device.videoDeviceId, device.audioDeviceId, device.userName,device.fenbianlv);
                 } else if (type == "ipCamera") {
                     var audioDeviceId = "";
                     if (device.audioDeviceId) {
                         audioDeviceId = device.audioDeviceId;
                     }
-                    innerUseIpCamera(device.userName, device.rtspUrl, audioDeviceId);
+                    innerUseIpCamera(device.userName, device.rtspUrl, audioDeviceId,device.fenbianlv);
                 } else if (type == "screen") {
                     innerUseScreenInclass("桌面");
                 }

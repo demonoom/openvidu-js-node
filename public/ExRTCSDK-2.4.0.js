@@ -66,7 +66,7 @@ function ExRTC(){
 
                     var reason = event.reason;
 
-                    var serverData = JSON.parse(event.stream.connection.data.split('%/%')[1]).serverData;
+                    var serverData = JSON.parse(event.stream.connection.data.split('%/%')[0]).clientUser;
 
                     var user = {userId:serverData.userId,userName:serverData.userName};
 
@@ -110,7 +110,7 @@ function ExRTC(){
                                     .then(() => {
                                         if(_this.mediaStream){
                                             $("#"+_this.mediaStream.elmentId).find("video").remove();
-                                            _this.publish(_this.mediaStream,_this.mediaStream.elmentId);
+                                            _this.publish(_this.mediaStream,_this.mediaStream.elmentId,_this.mediaStream.videoProfile);
                                         }else{
                                             onSuccess();
                                         }
@@ -161,15 +161,25 @@ function ExRTC(){
     }
 
     this.leave = function(){
-        _this.session.disconnect();
-        _this.session.leave(false,"");
-        _this.session = null;
+        try{
+            _this.session.disconnect();
+            _this.session.leave(false,"");
+            _this.session = null;
+        }catch (e) {
+            console.log(e);
+        }
     }
 
-    this.publish = function(mediaStream,elmentId){
+    this.publish = function(mediaStream,elmentId,videoProfile){
 
-        var setting = mediaStream.getVideoTracks()[0].getSettings();
+        var settings = mediaStream.getVideoTracks()[0].getSettings();
+
+        if(videoProfile == "" || videoProfile == undefined || videoProfile == "undefined" || videoProfile == null){
+            videoProfile = "720p";
+        }
+        videoProfile = videoProfile.toLowerCase();
         mediaStream.elmentId = elmentId;
+        mediaStream.videoProfile = videoProfile;
         _this.mediaStream = mediaStream;
 
         var useMediaStream = new MediaStream();
@@ -177,9 +187,21 @@ function ExRTC(){
             useMediaStream.addTrack(track.clone());
         });
 
+        var vWidth = 640;
+        var vHeight = 360;
+        if(videoProfile == "480p"){
+            vWidth = 640;
+            vHeight = 360;
+        }else if(videoProfile == "720p"){
+            vWidth = 848;
+            vHeight = 480;
+        }else if(videoProfile == "1080p"){
+            vWidth = 1280;
+            vHeight = 720;
+        }
         const constraints = {
-           width: 1280 ,
-           height: 720,
+           width: vWidth ,
+           height: vHeight,
            frameRate:15
         };
 
@@ -192,7 +214,7 @@ function ExRTC(){
             videoSource: videoSource, // The source of video. If undefined default webcam
             publishAudio: true,  	// Whether you want to start publishing with your audio unmuted or not
             publishVideo: true,  	// Whether you want to start publishing with your video enabled or not
-            resolution: '1280x720',  // The resolution of your video
+            resolution: vWidth+'x'+vHeight,  // The resolution of your video
             frameRate: 15,			// The frame rate of your video
             insertMode: 'APPEND',	// How the video is inserted in the target element 'video-container'
             mirror: false       	// Whether to mirror your local video or not
@@ -218,9 +240,13 @@ function ExRTC(){
     }
 
     this.unpublish = function(rtcStream){
-        _this.mediaStream = false;
-        _this.session.unpublish(_this.publisher);
-        _this.emit("stream-removed",{stream:rtcStream,user:rtcStream.user});
+        try{
+            _this.mediaStream = false;
+            _this.session.unpublish(_this.publisher);
+            _this.emit("stream-removed",{stream:rtcStream,user:rtcStream.user});
+        }catch (e) {
+            console.log(e);
+        }
     }
 
     this.on = function(type,callback){

@@ -7,6 +7,15 @@
     <link rel="shortcut icon" href="img/logo_title.png" type="image/x-icon"/>
     <link rel="stylesheet" href="./css/syncClassroom.css">
     <script type="application/javascript" src="js/platform.js"></script>
+    <style type="text/css">
+        .amplification{
+            border: none !important;
+            box-shadow: none !important;
+        }
+        .amplification{
+            display: none;
+        }
+    </style>
 </head>
 <body>
 <div class="mask" style="opacity: 0"></div>
@@ -81,6 +90,10 @@
 <script type="application/javascript" src="js/service.js"></script>
 <script type="application/javascript" src="js/simple_websocket_connection.js"></script>
 <script>
+
+var debug = false;
+var iframeOrgrin = debug?'http://192.168.50.188:7093':'https://jiaoxue.maaee.com:9093';
+
     function checkShowRecord(){
         var browser = platform.name;
         if(browser.indexOf("Electron") != -1){
@@ -186,7 +199,7 @@
 
         $('.exit').on('click', function () {
             layer.confirm('您确定要退出登录?', {
-                btn: ['确定', '取消'] //按钮
+                btn: ['确定', '取消'], //按钮
             }, function () {
                 window.location.href = 'login.html'
             }, function () {
@@ -217,7 +230,8 @@
                 $('.review_iframe_box').show();
                 $('.mask').show();
                 $('.review_iframe_title').text(res.name);
-                $('#review_iframe').attr('src', 'https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
+//                $('#review_iframe').attr('src', 'https://jiaoxue.maaee.com:9093/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
+                $('#review_iframe').attr('src', iframeOrgrin+'/#/cloundSchoolDetail?vid=' + res.vid + '&userId=' + res.userId + '&type=3&name=' + res.name);
             } else if (res.method == "watchFiles") {
                 var obj = res.data
                 var type = obj.suffix
@@ -235,6 +249,60 @@
                 setTimeout(() => {
                     $("<iframe class='iframeBox' src=" + url + "></iframe>").prependTo($(".calm"))
                 }, 300)
+            }else if(res.method == 'fullScreen'){
+                var left = 0;
+                var top = document.body.clientHeight - 150 - 42;
+                    let index = layer.open({
+                      type: 2,
+                      title:  $('.review_iframe_title').text(),
+                      shadeClose: true,
+                      shade: false,
+                      skin:'amplification',
+                      maxmin: true, //开启最大化最小化按钮
+                      area: 'auto',
+                      content: iframeOrgrin+"/#/cloundSchoolFullScreen?videoSrc="+encodeURIComponent(res.src) + "&currentTime="+res.currentTime+"&isPlay="+res.isPlay,
+                      move:'.layui-layer-title',
+                      success: function(layero, index) {
+                          $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
+                      },
+                      offset: 'lb',
+                      min: function() { //点击最小化后的回调函数
+                      },
+
+                      full: function() { //点击最大化后的回调函数
+                      //随意设置的最大化 800px 大小
+                      $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
+
+                      },
+
+                      restore: function() { //点击还原后的回调函数
+                      //固定 150 px 的最小化窗口大小
+                      $('.layui-layer-content iframe')[0].style = 'height: 150px';
+                      // 设置全屏高度后导致拖动窗口高度发生变化,重置窗口高度
+                      $('.layui-layer')[0].style.height = '150px';
+                      $('.layui-layer').get(0).style.left = left + 'px';
+                      $('.layui-layer').get(0).style.top = top +'px';
+                      },
+                      cancel: function(){
+                      let data = {
+                          method: 'willCancel',
+                      }
+                      $('.layui-layer-content iframe').get(0).contentWindow.postMessage(data,'*');
+                      },
+                      moveEnd: function(layero){
+                                              left = $('.layui-layer').get(0).style.left.toString().substring($('.layui-layer').get(0).style.left.toString().length - 2,$('.layui-layer').get(0).style.left.toString().length);
+                                              top = $('.layui-layer').get(0).style.top.toString().substring($('.layui-layer').get(0).style.top.toString().length - 2,$('.layui-layer').get(0).style.top.toString().length);
+                       }
+                    });
+                    $('.layui-layer-content iframe')[0].style = 'height: '+(document.body.clientHeight - 43)+'px';
+                    $('.layui-layer').get(0).style.left = left;
+                    layer.full(index,function(){
+                        $('.layui-layer').show();
+                    });
+                    $('.layui-layer').get(0).style.left = left;
+
+            }else if(res.method == 'didCancel'){
+                $('#review_iframe').get(0).contentWindow.postMessage(res,'*');
             }
         });
 

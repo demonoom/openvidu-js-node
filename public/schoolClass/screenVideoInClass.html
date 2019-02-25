@@ -92,7 +92,7 @@
             .then(function(stream){
                 $("#preview_video")[0].srcObject = stream;
                 localStream = stream;
-                client.publish(localStream,"agora_local");
+                client.publish(localStream,"agora_local","1080p");
             })
             .catch(function(e){
                 console.log(e);
