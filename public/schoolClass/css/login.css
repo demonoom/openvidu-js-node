@@ -233,6 +233,54 @@ input#act{
     letter-spacing: 0.5px;
     text-decoration: none;
 }
+.downPc.left{
+    left: 0;
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+    transform: translateX(0);
+}
 .downPc:hover{
     text-decoration: underline;
 }
+/*下载手机端*/
+.downPhone{
+    color: white;
+    font-size: 14px;
+    background: url("../img/icon_down.png") no-repeat left center;
+    background-size: 16px;
+    position: absolute;
+    bottom: -35px;
+    right: 0;
+    line-height: 15px;
+    padding-left: 21px;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.downPhone .download-pop-up{
+    width: 145px;
+    height: 145px;
+    background: url(../img/down-pop-up.png) center center;
+    padding: 18px 18px 29px 18px;
+    position: absolute;
+    top: -145px;
+    z-index: 100;
+    transform: translateX(-50%);
+    left: 50%;
+    box-sizing: border-box;
+    display: none;
+}
+.downPhone .download-pop-up img{
+    width: 100%;
+    height: 100%;
+}
+.downPhone:hover a{
+    text-decoration: underline;
+}
+.downPhone:hover .download-pop-up{
+    display: block;
+}
+
