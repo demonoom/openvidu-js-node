@@ -13,43 +13,64 @@
 <body>
 
     <div class="content">
-        <div class="login_box">
-            <div class="logo"><img src="img/logo.png" />同步课堂</div>
-            <div class="tab my_flex">
-                <div class="btn_left active" id="account">账号登录</div>
-                <div class="btn_right" id="scan">扫码登录</div>
-            </div>
-
-            <!--账号登录 -->
-            <div class="account">
-                <div class="inputWrap">
-                    <input type="text" name="old_acc" style="display: none">
-                    <input id='act' type="text" name="old_acc"  placeholder="请输入小蚂蚁账号" autocomplete="off">
-                    <!--存输入的用户名 -->
-                    <div style="display:none" id="actData"></div>
+        <div class="new_box">
+            <div class="login_box">
+                <div class="logo"><img src="img/logo.png" />同步课堂</div>
+                <div class="tab my_flex">
+                    <div class="btn_left active" id="account">账号登录</div>
+                    <div class="btn_right" id="scan">扫码登录</div>
                 </div>
-                <input type="password" name="old_password" disabled style="display: none">
-                <input id="pwd" name="old_password" type="password"  placeholder="请输入密码" autocomplete="off">
-                <input type="password" name="old_password" disabled style="display: none">
-                <button id="login">登录</button>
-            </div>
 
-            <!--扫码登录 -->
-            <div class="scan">
-                <img id="scan_image" src="./img/school.png" alt="">
-                <div>打开手机小蚂蚁教师端扫一扫</div>
-            </div>
+                <!--账号登录 -->
+                <div class="account">
+                    <div class="inputWrap">
+                        <input type="text" name="old_acc" style="display: none">
+                        <input id='act' type="text" name="old_acc"  placeholder="请输入小蚂蚁账号" autocomplete="off">
+                        <!--存输入的用户名 -->
+                        <div style="display:none" id="actData"></div>
+                    </div>
+                    <input type="password" name="old_password" disabled style="display: none">
+                    <input id="pwd" name="old_password" type="password"  placeholder="请输入密码" autocomplete="off">
+                    <input type="password" name="old_password" disabled style="display: none">
+                    <button id="login">登录</button>
+                </div>
 
-            <!--下载客户端 -->
-            <a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.3.6.exe" class="downPc left" style="display: none;"
-                id="download_pc">下载PC客户端</a>
-            <div class="downPhone">
-                <a>下载手机客户端</a>
-                <div class="download-pop-up">
-                    <img src="http://60.205.86.217/upload9/2019-02-25/15/c00bda4e-bc11-419b-9b4a-f8a1bd36e861.png" alt="">
+                <!--扫码登录 -->
+                <div class="scan">
+                    <img id="scan_image" src="./img/school.png" alt="">
+                    <div>打开手机小蚂蚁教师端扫一扫</div>
                 </div>
             </div>
         </div>
+
+        <!--下载客户端 -->
+        <div class="downApp">
+            <div class="downInner">
+                <div class="downPhone">
+                    <img src="img/icon_ios.png" alt="">
+                    <a>苹果客户端下载</a>
+                    <div class="download-pop-up">
+                        <img src="http://60.205.86.217/upload9/2019-02-26/21/d07c11de-e041-41be-84b7-f96f1ca349eb.png" alt="">
+                    </div>
+                </div>
+                <div  class="downPhone">
+                    <img src="img/icon_android.png" alt="">
+                    <a>安卓客户端下载</a>
+                    <div class="download-pop-up">
+                        <img src="http://60.205.86.217/upload9/2019-02-26/21/eaa4e923-0cc2-4609-bdef-1df15d8d425a.png" alt="">
+                    </div>
+                </div>
+                <div class="downPcNew">
+
+                    <a href="http://60.205.86.217/upload5/winRelease/小蚂蚁同步课堂 Setup 1.3.6.exe" class="downPcNew" style="display: none;"
+                       id="download_pc">
+                        <img src="img/icon_pc.png" alt="">PC客户端下载</a>
+                </div>
+            </div>
+
+
+        </div>
+
     </div>
 
 </body>

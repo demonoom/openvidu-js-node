@@ -35,6 +35,10 @@ input:-webkit-autofill{
     padding: 0 35px;
     box-sizing: border-box;
 }
+.new_box{
+    position: relative;
+    height: calc(100% - 105px);
+}
 .logo{
     font-size: 28px;
     color: #666;
@@ -246,20 +250,9 @@ input#act{
 }
 /*下载手机端*/
 .downPhone{
-    color: white;
-    font-size: 14px;
-    background: url("../img/icon_down.png") no-repeat left center;
-    background-size: 16px;
-    position: absolute;
-    bottom: -35px;
-    right: 0;
-    line-height: 15px;
-    padding-left: 21px;
-    letter-spacing: 0.5px;
-    text-decoration: none;
+    position: relative;
     cursor: pointer;
 }
-
 .downPhone .download-pop-up{
     width: 145px;
     height: 145px;
@@ -284,3 +277,42 @@ input#act{
     display: block;
 }
 
+.downApp{
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 105px;
+    background: rgba(0,0,0,0.4);
+    color: #999;
+    font-size: 14px;
+}
+.downInner{
+    width: 412px;
+    margin: 0 auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+    -webkit-align-items:center;
+    align-items: center;
+    height: 100%;
+}
+.downInner img{
+    display: block;
+    padding-bottom: 10px;
+    margin: 0 auto;
+
+}
+.downInner a{
+    color: #999;
+    text-decoration: none;
+}
+.downPcNew{
+    cursor: pointer;
+}
+.downPcNew:hover a{
+    text-decoration:underline;
+}
