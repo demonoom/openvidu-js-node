@@ -120,7 +120,7 @@ input:-webkit-autofill{
     width: 100%;
     position: absolute;
     left: 0;
-    top: 74px;
+    top: 82px;
     box-sizing: border-box;
     border: 1px #e5e5e5 solid;
     background: white;
@@ -286,22 +286,27 @@ input#act{
     padding: 0 15px;
 }
 .downPhone .download-pop-up{
-    width: 115px;
-    height: 145px;
+    width: 143px;
+    height: 172px;
     background: url(../img/down-pop-up.png) center center;
     background-size: cover;
-    padding: 10px 10px 38px 10px;
+    padding: 5px 10px 44px 10px;
     position: absolute;
-    top: -155px;
+    top: -182px;
     z-index: 100;
     transform: translateX(-50%);
     left: 50%;
     box-sizing: border-box;
     display: none;
-    font-size: 12px;
+    font-size: 13px;
 }
 .downPhone .download-pop-up > div{
-    margin-top: 3px;
+    margin-bottom: 7px;
+}
+.downPhone .download-pop-up span{
+    font-size: 12px;
+    line-height: 24px;
+    color: #e5e5e5;
 }
 .downPhone .download-pop-up img{
     width: 100%;
@@ -310,12 +315,26 @@ input#act{
 .downPhone:hover .download-pop-up{
     display: block;
 }
+.downPhone.android .download-pop-up{
+    /*width: 121px;*/
+    /*height: 160px;*/
+    /*top: -170px;*/
+    /*padding: 10px 10px 55px 10px;*/
+
+    width: 143px;
+    height: 188px;
+    top: -198px;
+    padding: 5px 10px 60px 10px;
+}
 .downPcNew.downPhone .download-pop-up{
-    height: 30px;
-    top: -40px;
+    height: 34px;
+    top: -44px;
     padding: 0;
     background: url(../img/down-pop-up.png) center bottom;
     background-size: auto;
+}
+.downPcNew.downPhone .download-pop-up > div{
+    padding-top: 3px;
 }
 .downApp{
     color: #fff;
