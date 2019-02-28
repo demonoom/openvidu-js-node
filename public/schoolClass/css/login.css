@@ -56,9 +56,9 @@ input:-webkit-autofill{
 }
 .logo i{
     width:60px;
-    height: 60px;
+    height:100%;
     display: block;
-    background: url("../img/icon_classLogo.png") no-repeat left 10px;
+    background: url("../img/icon_classLogo.png") no-repeat left center;
     background-size: 48px;
     position: absolute;
     left:48px;
