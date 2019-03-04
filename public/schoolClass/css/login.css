@@ -25,26 +25,61 @@ input:-webkit-autofill{
     background-size: cover;
 }
 .login_box{
-    position: absolute;
-    width: 412px;
-    height: 480px;
+    width: 350px;
+    height: 100%;
     background: white;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    padding: 0 35px;
+    padding: 70px 26px 0;
     box-sizing: border-box;
 }
 .new_box{
-    position: relative;
-    height: calc(100% - 105px);
+    position: absolute;
+    height: 437px;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+    justify-content: center;
 }
 .logo{
-    font-size: 28px;
-    color: #666;
+    margin-top: 45px;
+    font-size: 36px;
+    color: #fff;
     font-weight: bold;
-    margin: 37px 0 48px;
     text-align: center;
+    position: relative;
+    line-height: 54px;
+    padding-left: 54px;
+
+}
+.logo i{
+    width:60px;
+    height:100%;
+    display: block;
+    background: url("../img/icon_classLogo.png") no-repeat left center;
+    background-size: 48px;
+    position: absolute;
+    left:48px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+
+}
+.down_box{
+    text-align: center;
+    margin-right: 112px;
+    min-width: 310px;
+}
+.down_box .text{
+    color: white;
+    font-size: 18px;
+    line-height: 44px;
+    margin: 35px 0 65px;
 
 }
 .my_flex{
@@ -54,11 +89,7 @@ input:-webkit-autofill{
     -o-display: flex;
     display: flex;
 }
-.logo img{
-    width: 48px;
-    margin-right: 12px;
-    vertical-align: text-bottom;
-}
+
 .tab{
     font-size: 19px;
     cursor: pointer;
@@ -89,7 +120,7 @@ input:-webkit-autofill{
     width: 100%;
     position: absolute;
     left: 0;
-    top: 74px;
+    top: 83px;
     box-sizing: border-box;
     border: 1px #e5e5e5 solid;
     background: white;
@@ -129,7 +160,7 @@ input:focus{
     border-color: #1757FB;
 }
 input#act{
-    margin-top: 30px;
+    margin-top: 40px;
 }
 .inputWrap .listCont{
     position: relative;
@@ -172,7 +203,7 @@ input#act{
     border: 0;
     cursor: pointer;
     font-size: 16px;
-    margin-top: 50px;
+    margin-top: 43px;
     font-family: "Helvetica Neue","Microsoft Yahei",Helvetica,Arial,"Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
 }
 #login:hover{
@@ -252,67 +283,69 @@ input#act{
 .downPhone{
     position: relative;
     cursor: pointer;
+    padding: 15px 15px 0;
 }
 .downPhone .download-pop-up{
-    width: 145px;
-    height: 145px;
     background: url(../img/down-pop-up.png) center center;
-    padding: 18px 18px 29px 18px;
+    background-size: cover;
+    padding: 5px 10px 15px 10px;
     position: absolute;
-    top: -145px;
+    top: -167px;
     z-index: 100;
     transform: translateX(-50%);
     left: 50%;
     box-sizing: border-box;
     display: none;
+    font-size: 13px;
+}
+
+.downPhone .download-pop-up > div{
+    margin-bottom: 7px;
+}
+.downPhone .download-pop-up span{
+    font-size: 12px;
+    color: #e5e5e5;
 }
 .downPhone .download-pop-up img{
-    width: 100%;
-    height: 100%;
-}
-.downPhone:hover a{
-    text-decoration: underline;
+    width: 123px;
+    height: 123px;
 }
 .downPhone:hover .download-pop-up{
     display: block;
 }
+.downPhone.android .download-pop-up{
+    top: -181px;
+    padding: 5px 10px 13px 10px;
+}
+.downPcNew.downPhone .download-pop-up{
+    width: 143px;
+    top: -36px;
+    padding: 7px 0 15px 0;
+    background: url(../img/down-pop-up.png) center bottom;
+    background-size: auto;
 
+}
+.downPcNew.downPhone .download-pop-up > div{
+   margin-bottom: 0;
+}
 .downApp{
-    width: 100%;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 105px;
-    background: rgba(0,0,0,0.4);
-    color: #999;
+    color: #fff;
     font-size: 14px;
 }
 .downInner{
-    width: 412px;
-    margin: 0 auto;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-justify-content: space-between;
-    justify-content: space-between;
-    -webkit-align-items:center;
-    align-items: center;
-    height: 100%;
+    padding-top: 10px;
+    justify-content: center;
 }
-.downInner img{
-    display: block;
-    padding-bottom: 10px;
-    margin: 0 auto;
 
-}
 .downInner a{
     color: #999;
     text-decoration: none;
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 .downPcNew{
     cursor: pointer;
+    padding: 15px 15px 0;
 }
-.downPcNew:hover a{
-    text-decoration:underline;
-}
+

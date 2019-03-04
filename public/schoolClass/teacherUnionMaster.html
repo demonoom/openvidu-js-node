@@ -338,9 +338,6 @@ video{
 					  </div>
 					  <a  class="phoneHelp operation_menu_t_btn"  >课堂助手</a>
 				  </div>
-				  <!--
-				  <a href="javascript:goVideoManaerPage();" class="operation_menu_t_btn" >辅助功能</a>
-				  -->
 				  <a id="video_source_peizhi" href="javascript:showVideoSourceSelectDialog();" class="operation_menu_t_btn" style="display: none;">视频源配置</a>
 				  <a id="video_srouce_push_rtmp" href="javascript:goPushRtmp();" class="operation_menu_t_btn" style="display: none;">开启推流</a>
 				  <a id="video_local_record" href="javascript:goLocalRecordPage();" class="operation_menu_t_btn" style="display: none;">本地录制</a>
@@ -665,13 +662,19 @@ video{
 		    	  $("#big_video").show();
 
                   $("#big_video").append("<video autoplay width='100%' height='100%' muted></video>");
+
+                  $("#big_video").find("video").get(0).addEventListener('loadeddata', function(){
+                      var bigVideoElement = $("#big_video").find("video").get(0);
+                      if(stream.user.userName == "桌面"){
+                          $("#big_video").find("video").css("object-fit","contain");
+                      }else if(bigVideoElement.videoWidth >= bigVideoElement.videoHeight){
+                          $("#big_video").find("video").css("object-fit","cover");
+                      }else{
+                          $("#big_video").find("video").css("object-fit","contain");
+                      }
+				  });
                   $("#big_video").find("video").get(0).srcObject = stream.videoElement.srcObject;
 
-                  if(stream.user.userName == "桌面"){
-                      $("#big_video").find("video").css("object-fit","contain");
-                  }else{
-                      $("#big_video").find("video").css("object-fit","cover");
-				  }
 		    	  if(sendCommand){
 		    		  //告诉学生显示大视频
 			    	  var protocal = eval('(' + "{'command':'show_elearning_big_video','data':{'streamId':"+stream.getId()+",'openState':1}}" + ')');
@@ -1175,10 +1178,6 @@ video{
 	  }
   }
 
-  function cancel(){
-	  var lay=parent.layer;
-	  parent.layer.close(0);
-  }
 
   function listCloudFile(cloudFileId){
 	  var data = null;
@@ -2277,11 +2276,6 @@ video{
       electronEinwindow.setFullScreen(true);
   }
 
-  function goVideoManaerPage(){
-      window.open("playLocalFile.html?vid="+vid,"_blank");
-  }
-
-
   function showVideoSourceSelectDialog(){
       $("#videoSourceSelect_container").css({"left":"50%","top":"50%"});
   }
@@ -2490,6 +2484,7 @@ video{
 	}
 
 	function updateOnlineNumber(number){
+
 	}
 
 </script>
