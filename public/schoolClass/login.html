@@ -284,8 +284,8 @@
         $("#act").focus(function () {
             $("#placeholder").hide()
             // console.log($("#placeholder").hide())
-            accountArr = JSON.parse(localStorage.getItem("accountData")) == null ? accountArr : JSON.parse(localStorage.getItem("accountData"))
-            $("#actData").css("display", "block");
+            accountArr = JSON.parse(localStorage.getItem("accountData")) == null ? accountArr : JSON.parse(localStorage.getItem("accountData"));
+            accountArr.length !=0 ? $("#actData").css("display", "block"):$("#actData").css("display", "none");
         });
     })
 </script>
