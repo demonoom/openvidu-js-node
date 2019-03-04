@@ -952,7 +952,7 @@ iframe{
     left: 240px;
     top: 0;
     overflow: hidden;
-    background: url("../img/book2.png") no-repeat;
+    background: url("../img/book1.png") no-repeat;
     background-size: 100% 100%;
     object-fit: cover;
 }
