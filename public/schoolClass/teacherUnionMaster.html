@@ -2240,10 +2240,10 @@ video{
           }
           electronEinwindow.webContents.executeJavaScript('showActionBarIframe(false);');
           electronEinwindow.setFullScreen(false);
-          electronEinwindow.setSize($("#left").width()-1,$("#left").height());
+          electronEinwindow.setSize($("#left").width()-1,0,true);
           electronEinwindow.webContents.executeJavaScript("setTitle('您正在桌面讲课中~~~');");
           electronEinwindow.webContents.executeJavaScript('showActionBarRefresh(false);');
-          electronEinwindow.webContents.executeJavaScript('showActionBarMin(false);');
+          electronEinwindow.webContents.executeJavaScript('showActionBarMin(true);');
           electronEinwindow.webContents.executeJavaScript('showActionBarMax(true);');
           electronEinwindow.webContents.executeJavaScript('showActionBarClose(false);');
           electronEinwindow.setAlwaysOnTop(true);
