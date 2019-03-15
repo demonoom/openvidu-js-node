@@ -1,5 +1,5 @@
 var isDebug = false;
-var domain = "192.168.50.15";
+var domain = "192.168.50.172";
 //云校的api地址
 var elearning_api_local = "http://"+domain+":9007/elearning/elearningControl/";
 var elearning_api_remote = "https://www.maaee.com/elearning/elearningControl/";
