@@ -2239,7 +2239,9 @@ video{
           }
           electronEinwindow.webContents.executeJavaScript('showActionBarIframe(false);');
           electronEinwindow.setFullScreen(false);
-          electronEinwindow.setSize($("#left").width()-1,0,true);
+          electronEinwindow.setPosition(electronEinwindow.getPosition()[0],0);
+		  electronEinwindow.setSize($("#left").width()-1,0,true);
+
           electronEinwindow.webContents.executeJavaScript("setTitle('您正在桌面讲课中~~~');");
           electronEinwindow.webContents.executeJavaScript('showActionBarRefresh(false);');
           electronEinwindow.webContents.executeJavaScript('showActionBarMin(true);');
